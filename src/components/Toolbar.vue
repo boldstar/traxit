@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar fixed-top bg-light flex-md-nowrap shadow-sm justify-content-between text-secondary">
+    <nav class="navbar fixed-top bg-light flex-md-nowrap shadow-sm justify-content-between">
         <button class="bg-light">
             <i class="fas fa-bars"></i>
         </button>

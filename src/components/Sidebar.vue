@@ -13,22 +13,22 @@
 
                 <ul class="nav nav-fill flex-column align-items-start mt-5">
                   <li class="nav-item w-100"  v-bind:class="{ 'is-active': isActive }">                                        
-                      <router-link class="nav-link border-right text-left pl-5" to="/"><span><i class="fas fa-tachometer-alt"></i></span>Dashboard</router-link>    
+                      <router-link class="nav-link border-right text-left pl-4" to="/"><span><i class="fas fa-tachometer-alt"></i></span>Dashboard</router-link>    
                   </li>
                   <li class="nav-item w-100"  v-bind:class="{ 'is-active': isActive }">                                        
-                      <router-link class="nav-link border-right text-left pl-5" to="/tasks"><span><i class="fas fa-list-ul"></i></span>Tasks</router-link>  
+                      <router-link class="nav-link border-right text-left pl-4" to="/tasks"><span><i class="fas fa-list-ul"></i></span>Tasks</router-link>  
                   </li>
                   <li class="nav-item w-100"  v-bind:class="{ 'is-active': isActive }">                                        
-                      <router-link class="nav-link border-right text-left pl-5" to="/firm"><span><i class="fas fa-home"></i></span>Firm</router-link>    
+                      <router-link class="nav-link border-right text-left pl-4" to="/firm"><span><i class="fas fa-home"></i></span>Firm</router-link>    
                   </li>
                   <li class="nav-item w-100"  v-bind:class="{ 'is-active': isActive }">                                  
-                      <router-link class="nav-link border-right text-left pl-5" to="/accounts"><span><i class="far fa-folder-open"></i></span>Accounts</router-link>  
+                      <router-link class="nav-link border-right text-left pl-4" to="/accounts"><span><i class="far fa-folder-open"></i></span>Accounts</router-link>  
                   </li>
                   <li class="nav-item w-100"  v-bind:class="{ 'is-active': isActive }">                                  
-                      <router-link class="nav-link border-right text-left pl-5" to="/clients"><span><i class="fas fa-users"></i></span>Contacts</router-link>  
+                      <router-link class="nav-link border-right text-left pl-4" to="/clients"><span><i class="fas fa-users"></i></span>Contacts</router-link>  
                   </li>
                   <li class="nav-item w-100"  v-bind:class="{ 'is-active': isActive }">                                  
-                      <router-link class="nav-link border-right text-left pl-5" to="/add"><span><i class="far fa-plus-square"></i></span>Onboard</router-link>  
+                      <router-link class="nav-link border-right text-left pl-4" to="/add"><span><i class="far fa-plus-square"></i></span>Onboard</router-link>  
                   </li>
                 </ul>
               </div>
@@ -123,7 +123,6 @@ export default {
 
     .is-active {
         background:rgb(231, 237, 241);
-        border-left: 5px solid #0077ff;
 
         i {
             color: #0077ff;

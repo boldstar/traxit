@@ -169,7 +169,7 @@ export default {
 
 .active {
   border-bottom: 3px solid #0077ff;
-  color: #0077ff;
+  color: #181818;
 }
 
 

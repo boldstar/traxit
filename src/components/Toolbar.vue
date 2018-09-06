@@ -1,7 +1,11 @@
 <template>
-    <nav class="navbar navbar-dark fixed-top bg-light flex-md-nowrap pt-3 shadow-sm justify-content-between text-secondary">
-        <i class="ml-2 h5 fas fa-bars"></i>
-        <i class="ml-2 h5 fas fa-bars"></i>
+    <nav class="navbar fixed-top bg-light flex-md-nowrap shadow-sm justify-content-between text-secondary">
+        <button class="bg-light">
+            <i class="fas fa-bars"></i>
+        </button>
+        <button class="bg-light">
+            <i class="fas fa-bars"></i>
+        </button>
     </nav>
 </template>
 
@@ -22,6 +26,19 @@ nav {
     height: 40px;
     margin-top: 52px; //space for the navbar
     z-index: 0;
+}
+
+button {
+    display: inline-block;
+    border: none;
+    text-decoration: none;
+    color: #a1a1a1;
+    font-size: 1.0rem;
+    text-align: center;
+
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 </style>

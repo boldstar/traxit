@@ -2,7 +2,7 @@
     <nav class="navbar navbar-dark fixed-top bg-primary flex-md-nowrap p-0 shadow-sm">
         <a class="navbar-brand col-sm-3 col-md-2 ml-3 text-left" href="/"><i class="far fa-compass mr-1"></i>TRAXIT</a>
         <!-- bread crumbs to go here -->
-        <ul class="navbar-nav pr-4">
+        <ul class="navbar-nav pr-3">
         <ul class="navbar-nav pr-3 d-flex flex-row">
             <li v-if="!loggedIn" class="pr-4" v-bind:class="{ 'is-active': isActive }">
             <router-link class="h6 link" to="/register">Sign Up</router-link>

@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrapper mt-3">
+  <div class="page-wrapper mt-1">
 <!-- this is the user tasks header -->
       <div class="card bg-light mb-3">
         <div class="d-flex justify-content-between card-body">

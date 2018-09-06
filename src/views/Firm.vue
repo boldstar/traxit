@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrapper mt-3">
+  <div class="page-wrapper mt-1">
     <!-- this is the header section of the firm overview -->
     <div class="card bg-light w-100 mb-3">
       <div class="card-body d-flex justify-content-between">

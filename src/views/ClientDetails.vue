@@ -1,5 +1,5 @@
 <template>
-<div class="page-wrapper mt-3">
+<div class="page-wrapper mt-1">
 <!-- this is the go back button -->
   <div>
     <router-link class="float-left btn btn-secondary btn-sm mt-3" to="/clients"><i class="far fa-arrow-alt-circle-left mr-2"></i>Go Back</router-link>  

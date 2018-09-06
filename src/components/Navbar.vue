@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-dark fixed-top bg-primary flex-md-nowrap p-0 shadow">
+    <nav class="navbar navbar-dark fixed-top bg-primary flex-md-nowrap p-0 shadow-sm">
         <a class="navbar-brand col-sm-3 col-md-2 ml-3 text-left" href="/"><i class="far fa-compass mr-1"></i>TRAXIT</a>
         <!-- bread crumbs to go here -->
         <ul class="navbar-nav pr-4">

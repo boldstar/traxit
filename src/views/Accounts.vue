@@ -1,7 +1,6 @@
 <template>
 
-    <!-- the clients data is imported from client info file -->
-    <div>
+    <div class="mt-1">
         <h1>Accounts List</h1>
     </div>
 

@@ -3,6 +3,8 @@
 
     <Navbar />
 
+    <Toolbar class="col-lg-10 ml-auto" />
+
     <Sidebar v-show="loggedIn" />
 
 <!-- this section is controling the main content section -->
@@ -22,11 +24,13 @@
 <script>
 import Navbar from '@/components/Navbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
+import Toolbar from '@/components/Toolbar.vue'
 
 export default {
   components: {
     Navbar,
     Sidebar,
+    Toolbar,
   },
   computed: {
     loggedIn() {

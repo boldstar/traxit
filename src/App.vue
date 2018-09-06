@@ -48,7 +48,7 @@ export default {
     */
 
     [role="main"] {
-        padding-top: 68px; /* Space for fixed navbar/ adds space below navbar */
+        padding-top: 120px; /* Space for fixed navbar and toolbar / adds space below navbar */
     }
 
 

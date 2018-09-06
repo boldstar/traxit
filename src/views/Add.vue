@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrapper mt-3">
+  <div class="page-wrapper mt-1">
     <AddClient />
   </div>
 </template>

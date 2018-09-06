@@ -1,7 +1,7 @@
 <template>
 
     <!-- the clients data is imported from client info file -->
-    <div class="page-wrapper mt-3">
+    <div class="page-wrapper mt-1">
         <client-info :clients="allClients"></client-info>
     </div>
 

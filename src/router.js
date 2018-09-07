@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+
 Vue.use(Router)
 
 
@@ -38,6 +39,7 @@ export default new Router({
       component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue'),
       meta: {
         requiresAuth: true,
+        breadCrumb: 'Dashboard'
       }
     },
     {

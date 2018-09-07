@@ -3,6 +3,7 @@
         <button class="bg-light">
             <i class="fas fa-bars"></i>
         </button>
+
         <button class="bg-light">
             <i class="fas fa-bars"></i>
         </button>
@@ -10,12 +11,14 @@
 </template>
 
 <script>
+
+
 export default {
     name: 'toolbar',
     computed: {
         loggedIn() {
         return this.$store.getters.loggedIn
-        }
+        },
     },
 }
 </script>
@@ -25,12 +28,12 @@ export default {
 nav {
     height: 40px;
     margin-top: 52px; //space for the navbar
-    z-index: 0;
+    z-index: 1;
 }
 
 button {
-    display: inline-block;
-    border: none;
+    border: 1px solid rgba(128, 128, 128, 0.322);
+    border-radius: 3px;
     text-decoration: none;
     color: #a1a1a1;
     font-size: 1.0rem;

@@ -5,10 +5,10 @@
         <ul class="navbar-nav pr-3">
         <ul class="navbar-nav pr-3 d-flex flex-row">
             <li v-if="!loggedIn" class="pr-4" v-bind:class="{ 'is-active': isActive }">
-            <router-link class="h6 link" to="/register">Sign Up</router-link>
+                <router-link class="h6 link" to="/register">Sign Up</router-link>
             </li>
             <li v-if="!loggedIn" v-bind:class="{ 'is-active': isActive }">
-            <router-link class="h6 link"  to="/login">Login</router-link>
+                <router-link class="h6 link"  to="/login">Login</router-link>
             </li>
         </ul>
         <li v-if="loggedIn" class="dropdown"> 

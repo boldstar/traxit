@@ -10,20 +10,27 @@ export default new Vuex.Store({
     clients: [],
     client:[],
     token: localStorage.getItem('access_token') || null,
+    sidebarOpen: true,
     loading: false,
   },
   getters: {
+    sidebarOpen(state) {
+      return state.sidebarOpen
+    },
     loggedIn(state) {
       return state.token != null
     },
     allClients(state) {
       return state.clients;
     },
-    client: function(state) {
+    client(state) {
       return state.client;
     },
   },
   mutations: {
+    toggleSidebar(state) {
+      state.sidebarOpen = !state.sidebarOpen
+    },
     retrieveClients(state, clients) {
       state.clients = clients
     },
@@ -52,6 +59,9 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    toggleSidebar({commit, state}) {
+      commit('toggleSidebar')
+    },
     retrieveName(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 

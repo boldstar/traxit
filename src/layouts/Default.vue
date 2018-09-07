@@ -5,7 +5,7 @@
 
     <Toolbar class="col-lg-10 ml-auto" />
 
-    <Sidebar v-show="loggedIn" />
+    <Sidebar v-if="toggleSidebar" />
 
 <!-- this section is controling the main content section -->
     <div class="d-flex col-lg-10 ml-auto page-wrapper">
@@ -32,11 +32,25 @@ export default {
     Toolbar,
     Sidebar,
   },
+  data () {
+    return {
+      active: true
+    }
+  },
   computed: {
     loggedIn() {
       return this.$store.getters.loggedIn
+    },
+    toggleSidebar() {
+      return this.$store.getters.sidebarOpen
     }
   },
+  mounted () {
+    this.$parent.$on('toggleSide', () => {
+      console.log('received')
+      this.active = !this.active
+    })
+  }
 }
 </script>
 

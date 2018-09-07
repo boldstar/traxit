@@ -1,6 +1,6 @@
 <template>
     <nav class="navbar fixed-top bg-light flex-md-nowrap shadow-sm justify-content-between">
-        <button class="bg-light">
+        <button class="bg-light" @click="handleClick">
             <i class="fas fa-bars"></i>
         </button>
 
@@ -16,10 +16,15 @@
 export default {
     name: 'toolbar',
     computed: {
-        loggedIn() {
-        return this.$store.getters.loggedIn
-        },
+        open () {
+            return this.$store.state.sidebarOpen
+        }
     },
+    methods: {
+        handleClick () {
+            this.$store.dispatch('toggleSidebar')
+        }
+    }
 }
 </script>
 

@@ -1,9 +1,15 @@
 <template>
     <nav class="navbar fixed-top bg-light flex-md-nowrap shadow-sm justify-content-between">
-        <button class="bg-light" @click="handleClick">
-            <i class="fas fa-bars"></i>
-        </button>
-
+        <div class="d-flex">
+            <div class="align-self-center">
+                <button class="bg-light" @click="handleClick">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <div>
+                <breadcrumb class="mt-3 ml-3 p-2" :route="route"></breadcrumb>
+            </div>
+        </div>
         <button class="bg-light">
             <i class="fas fa-bars"></i>
         </button>
@@ -11,10 +17,16 @@
 </template>
 
 <script>
-
+import Breadcrumb from '@/components/Breadcrumb.vue'
 
 export default {
     name: 'toolbar',
+    components: {
+        Breadcrumb
+    },
+    props: [
+        'route'
+    ],
     computed: {
         open () {
             return this.$store.state.sidebarOpen

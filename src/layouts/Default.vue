@@ -3,12 +3,12 @@
 
     <Navbar />
 
-    <Toolbar class="col-lg-10 ml-auto" />
+    <Toolbar class="ml-auto" v-bind:class="[!toggleSidebar ? closedSidebar : '', openSidebar]" />
 
     <Sidebar v-if="toggleSidebar" />
 
 <!-- this section is controling the main content section -->
-    <div class="d-flex col-lg-10 ml-auto page-wrapper">
+    <div class="d-flex ml-auto page-wrapper" v-bind:class="[!toggleSidebar ? closedSidebar : '', openSidebar]">
       <main role="main" class="col-lg-12 col-md-8 ml-sm-auto px-3">   
         <!-- this is where the pages are being rendered -->
         <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
@@ -34,7 +34,9 @@ export default {
   },
   data () {
     return {
-      active: true
+      sidebarToggle: false,
+      closedSidebar: 'col-lg-12',
+      openSidebar: 'col-lg-10'
     }
   },
   computed: {
@@ -45,12 +47,6 @@ export default {
       return this.$store.getters.sidebarOpen
     }
   },
-  mounted () {
-    this.$parent.$on('toggleSide', () => {
-      console.log('received')
-      this.active = !this.active
-    })
-  }
 }
 </script>
 

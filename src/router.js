@@ -39,7 +39,9 @@ export default new Router({
       component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue'),
       meta: {
         requiresAuth: true,
-        breadCrumb: 'Dashboard'
+        breadCrumb: [
+          { name: 'Dashboard' }
+        ]
       }
     },
     {
@@ -48,6 +50,9 @@ export default new Router({
       component: () => import(/* webpackChunkName: "firm" */ './views/Firm.vue'),
       meta: {
         requiresAuth: true,
+        breadCrumb: [
+          { name: 'Firm' }
+        ]
       }
     },
     {
@@ -59,6 +64,9 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/Clients.vue'),
       meta: {
         requiresAuth: true,
+        breadCrumb: [
+          { name: 'Contacts' }
+        ]
       }
     },
     {
@@ -70,6 +78,9 @@ export default new Router({
       component: () => import(/* webpackChunkName: "client-details" */ './views/ClientDetails.vue'),
       meta: {
         requiresAuth: true,
+        breadCrumb: [
+          { name: 'Contact Details' }
+        ]
       }
     },
     {
@@ -81,6 +92,9 @@ export default new Router({
       component: () => import(/* webpackChunkName: "add" */ './views/Add.vue'),
       meta: {
         requiresAuth: true,
+        breadCrumb: [
+          { name: 'Add Contact' }
+        ]
       }
     },
     {
@@ -92,6 +106,9 @@ export default new Router({
       component: () => import(/* webpackChunkName: "tasks" */ './views/Tasks.vue'),
       meta: {
         requiresAuth: true,
+        breadCrumb: [
+          { name: 'Tasks' }
+        ]
       }
     },
     {
@@ -103,6 +120,9 @@ export default new Router({
     component: () => import(/* webpackChunkName: "accounts" */ './views/Accounts.vue'),
     meta: {
       requiresAuth: true,
+      breadCrumb: [
+        { name: 'Accounts' }
+      ]
     }
     },
   ],

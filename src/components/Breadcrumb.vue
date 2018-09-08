@@ -1,30 +1,68 @@
 <template>
-    <span>
+  <div class="breadcrumb">
+    <ul class="d-flex m-0 p-0">
+      <li
+        v-for="(breadcrumb, idx) in breadcrumbList"
+        :key="idx"
+        @click="routeTo(idx)"
+        :class="{'linked': !!breadcrumb.link}">
 
-        <component :is="breadCrumb" />
- 
-  </span>
+        {{ breadcrumb.name }}
+
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
 export default {
-    name: 'breadcrumb',
-    data () {
-        return {
-            name: '',
-        }
+  name: 'Breadcrumb',
+  data () {
+    return {
+      breadcrumbList: []
+    }
+  },
+  mounted () { this.updateList() },
+  watch: { '$route' () { this.updateList() } },
+  methods: {
+    routeTo (pRouteTo) {
+      if (this.breadcrumbList[pRouteTo].link) this.$router.push(this.breadcrumbList[pRouteTo].link)
     },
-    props: [
-        'route'
-    ],
-    computed: {
-        breadCrumb() { 
-            return this.route.meta.breadCrumb(this.value)
-        },
-    },
+    updateList () { this.breadcrumbList = this.$route.meta.breadCrumb }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 
+  ul {
+    list-style-type: none;
+  }
+
+  ul > li {
+    display: flex;
+    float: left;
+    height: 10px;
+    width: auto;
+    color: black;
+    font-weight: bold;
+    font-size: .8em;
+    cursor: default;
+    align-items: center;
+  }
+
+  ul > li:not(:last-child)::after {
+    content: '/';
+    float: right;
+    font-size: .8em;
+    margin: 0 .5em;
+    color: gray;
+    cursor: default;
+  }
+
+  .linked {
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: normal;
+  }
 </style>

@@ -150,7 +150,7 @@ export default new Vuex.Store({
     },
     retrieveClients(context) {
       this.loading = true
-      axios.get('/clients')
+      axios.get('http://traxit.test/api/clients')
       .then(response => {
         this.loading = false
         context.commit('retrieveClients', response.data)

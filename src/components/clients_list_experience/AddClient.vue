@@ -122,6 +122,7 @@ export default {
       e.preventDefault();
       this.client = "" 
       this.idForClient++
+      this.$router.push('/clients')
     }
   }
 }

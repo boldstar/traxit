@@ -3,7 +3,7 @@
 
 <!-- this is the row of buttons above the clients list -->
     <div class="d-flex mb-3">.
-      <input class="form-control w-25" placeholder="Filter By Name" v-model="searchClient" type="search">
+      <input class="form-control w-25" placeholder="Filter By Last Name" v-model="searchClient" type="search">
       <div class="mr-auto ml-2">
         <button class="btn btn-outline-primary dropdown-toggle dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span>Type:</span>
@@ -30,21 +30,23 @@
     <table class="table table-bordered table-light table-striped table-hover text-left">
         <thead class="thead-primary hover">
             <tr>
-                <th scope="col">#</th>
                 <th scope="col" @click="sort('name')">Name</th>
-                <th scope="col" @click="sort('type')">Type</th>
-                <th scope="col">Email</th>
-                <th scope="col">Phone</th>
-                <th scope="col" class="text-center">Account</th>
+                <th scope="col" @click="sort('type')">Category</th>
+                <th scope="col">Taxpayer Email</th>
+                <th scope="col">Taxpayer Phone</th>
+                <th scope="col">Spouse Email</th>
+                <th scope="col">Spouse Phone</th>
+                <th scope="col" class="text-center">Details</th>
             </tr>
         </thead> 
         <tbody class="client-info">
             <tr v-for="(client, index) in sortedClients"  :key="index">
-                <td>{{ index }}</td>
-                <td>{{ client.name }}</td>
-                <td>{{ client.type }}</td>
+                <td>{{ client.last_name }}, {{client.first_name}} & {{ client.spouse_first_name }}</td>
+                <td>{{ client.category }}</td>
                 <td>{{ client.email }}</td>
-                <td>{{ client.phone }}</td>
+                <td>{{ client.cell_phone }}</td>
+                <td>{{ client.spouse_email }}</td>
+                <td>{{ client.spouse_cell_phone }}</td>
                 <td class="text-center"><router-link v-bind:to="'/client/'+client.id"><i class="far fa-eye"></i></router-link></td>
             </tr>
         </tbody>
@@ -110,7 +112,7 @@ export default {
             let end = this.currentPage*this.pageSize;
             if(index >= start && index < end) return true;
             }).filter( client => {
-            return !this.searchClient || client.name.toLowerCase().indexOf(this.searchClient.toLowerCase()) >= 0 }); 
+            return !this.searchClient || client.last_name.toLowerCase().indexOf(this.searchClient.toLowerCase()) >= 0 }); 
         }
     },
     methods:{

@@ -1,75 +1,56 @@
 <template>
   <div class="add container">
     <form @submit.prevent="addClient" class="d-flex-column justify-content-center">
-      <div class="form-group">      
-        <input type="text" class="form-control" placeholder="Category" v-model="client.category">
-      </div>
-      <div class="form-group">      
-        <input type="text" class="form-control" placeholder="Referral Type" v-model="client.referral_type">
-      </div>
-      <div class="form-group">      
-        <input type="text" class="form-control" placeholder="First Name" v-model="client.first_name">
-      </div>
-      <div class="form-group">      
-        <input type="text" class="form-control" placeholder="Middle Initial" v-model="client.middle_initial">
-      </div>
-      <div class="form-group">      
-        <input type="text" class="form-control" placeholder="Last Name" v-model="client.last_name">
-      </div>
-      <div class="form-group">      
-        <input type="text" class="form-control" placeholder="Occupation" v-model="client.occupation">
-      </div>
-      <div class="form-group">      
-        <input type="text" class="form-control" placeholder="DOB" v-model="client.dob">
-      </div>
-      <div class="form-group">     
-        <input type="text" class="form-control" placeholder="email@example.com" v-model="client.email">
-      </div>
-      <div class="form-group">      
-        <input type="text" class="form-control" placeholder="###-###-####" v-model="client.cell_phone">
-      </div>
-      <div class="form-group">      
-        <input type="text" class="form-control" placeholder="###-###-####" v-model="client.work_phone">
-      </div>
+      <div class="form-group">
+        <input type="text" class="form-control mb-3" placeholder="Category" v-model="client.category">
+        <input type="text" class="form-control mb-3" placeholder="Referral Type" v-model="client.referral_type">
 
-       <div class="form-group">      
-        <input type="text" class="form-control" placeholder="First Name" v-model="client.spouse_first_name">
-      </div>
-      <div class="form-group">      
-        <input type="text" class="form-control" placeholder="Middle Initial" v-model="client.spouse_middle_initial">
-      </div>
-      <div class="form-group">      
-        <input type="text" class="form-control" placeholder="Last Name" v-model="client.spouse_last_name">
-      </div>
-      <div class="form-group">      
-        <input type="text" class="form-control" placeholder="Occupation" v-model="client.spouse_occupation">
-      </div>
-      <div class="form-group">      
-        <input type="text" class="form-control" placeholder="DOB" v-model="client.spouse_dob">
-      </div>
-      <div class="form-group">     
-        <input type="text" class="form-control" placeholder="email@example.com" v-model="client.spouse_email">
-      </div>
-      <div class="form-group">      
-        <input type="text" class="form-control" placeholder="###-###-####" v-model="client.spouse_cell_phone">
-      </div>
-      <div class="form-group">      
-        <input type="text" class="form-control" placeholder="###-###-####" v-model="client.spouse_work_phone">
-      </div>
+        <h4 class="text-left mb-3">Taxpayer:</h4>
+        <div class="d-flex mb-3">
+          <input type="text" class="form-control col-5" placeholder="First Name" v-model="client.first_name">
+          <input type="text" class="form-control mx-2" placeholder="Middle Initial" v-model="client.middle_initial">
+          <input type="text" class="form-control col-5" placeholder="Last Name" v-model="client.last_name">
+        </div>      
+ 
+        <div class="d-flex mb-3">
+          <input type="text" class="form-control mr-2" placeholder="Occupation" v-model="client.occupation">
+          <input type="text" class="form-control" placeholder="00/00/0000" v-model="client.dob">
+        </div>
 
-      <div class="form-group">      
-        <input type="text" class="form-control" placeholder="Street Address" v-model="client.street_address">
-      </div>
-      <div class="form-group">      
-        <input type="text" class="form-control" placeholder="City" v-model="client.city">
-      </div>
-      <div class="form-group">      
-        <input type="text" class="form-control" placeholder="State" v-model="client.state">
-      </div>
-      <div class="form-group">      
-        <input type="text" class="form-control" placeholder="Postal Code" v-model="client.postal_code">
-      </div>
+        <div class="d-flex mb-3">
+          <input type="text" class="form-control" placeholder="email@example.com" v-model="client.email">
+          <input type="text" class="form-control mx-2" placeholder="###-###-####" v-model="client.cell_phone">
+          <input type="text" class="form-control" placeholder="###-###-####" v-model="client.work_phone">
+        </div>
+
+        <h4 class="text-left mb-3">Spouse:</h4>
+        <div class="d-flex mb-3">
+          <input type="text" class="form-control col-5" placeholder="First Name" v-model="client.spouse_first_name">
+          <input type="text" class="form-control mx-2" placeholder="Middle Initial" v-model="client.spouse_middle_initial">
+          <input type="text" class="form-control col-5" placeholder="Last Name" v-model="client.spouse_last_name">
+        </div>
+
+        <div class="d-flex mb-3">
+          <input type="text" class="form-control mr-2" placeholder="Occupation" v-model="client.spouse_occupation">
+          <input type="text" class="form-control" placeholder="00/00/0000" v-model="client.spouse_dob">
+        </div>
+
+        <div class="d-flex mb-3">
+          <input type="text" class="form-control" placeholder="email@example.com" v-model="client.spouse_email">
+          <input type="text" class="form-control mx-2" placeholder="###-###-####" v-model="client.spouse_cell_phone">
+          <input type="text" class="form-control" placeholder="###-###-####" v-model="client.spouse_work_phone">
+        </div>
+
+        <h4 class="text-left mb-3">Address:</h4>
+        <div class="d-flex mb-4">
+          <input type="text" class="form-control" placeholder="Street Address" v-model="client.street_address">
+          <input type="text" class="form-control ml-2 mr-1" placeholder="City" v-model="client.city">
+          <input type="text" class="form-control ml-1 mr-2" placeholder="State" v-model="client.state">
+          <input type="text" class="form-control" placeholder="Postal Code" v-model="client.postal_code">
+        </div>
+
       <button type="submit" class="btn btn-sm d-flex justify-content-start">Submit</button>
+      </div>
     </form>
   </div>  
 </template>

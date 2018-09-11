@@ -6,12 +6,12 @@
       <input class="form-control w-25" placeholder="Filter By Last Name" v-model="searchClient" type="search">
       <div class="mr-auto ml-2">
         <button class="btn btn-outline-primary dropdown-toggle dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span>Type:</span>
+        <span>Category:</span>
           All
         </button>
         <div class="dropdown-menu dropdown-menu-left">
-          <a class="dropdown-item" href="#">Business</a>
-          <a class="dropdown-item" href="#">Individual</a>
+          <a class="dropdown-item" href="#">Client</a>
+          <a class="dropdown-item" href="#">Prospect</a>
         </div>
       </div>         
 

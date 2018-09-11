@@ -2,7 +2,9 @@
   <div class="add container">
     <form @submit.prevent="addClient" class="d-flex-column justify-content-center">
       <div class="form-group">
-        <input type="text" class="form-control mb-3" placeholder="Category" v-model="client.category">
+        <select class="form-control mb-3" id="category" v-model="client.category">
+          <option v-for="category in categories" :key="category.id" :value="category">{{ category }}</option>
+        </select>
         <input type="text" class="form-control mb-3" placeholder="Referral Type" v-model="client.referral_type">
 
         <h4 class="text-left mb-3">Taxpayer:</h4>
@@ -14,13 +16,13 @@
  
         <div class="d-flex mb-3">
           <input type="text" class="form-control mr-2" placeholder="Occupation" v-model="client.occupation">
-          <input type="text" class="form-control" placeholder="00/00/0000" v-model="client.dob">
+          <input type="text" class="form-control" placeholder="Date Of Birth" v-model="client.dob">
         </div>
 
         <div class="d-flex mb-3">
           <input type="text" class="form-control" placeholder="email@example.com" v-model="client.email">
-          <input type="text" class="form-control mx-2" placeholder="###-###-####" v-model="client.cell_phone">
-          <input type="text" class="form-control" placeholder="###-###-####" v-model="client.work_phone">
+          <input type="text" class="form-control mx-2" placeholder="Cell Phone #" v-model="client.cell_phone">
+          <input type="text" class="form-control" placeholder="Work Phone #" v-model="client.work_phone">
         </div>
 
         <h4 class="text-left mb-3">Spouse:</h4>
@@ -32,13 +34,13 @@
 
         <div class="d-flex mb-3">
           <input type="text" class="form-control mr-2" placeholder="Occupation" v-model="client.spouse_occupation">
-          <input type="text" class="form-control" placeholder="00/00/0000" v-model="client.spouse_dob">
+          <input type="text" class="form-control" placeholder="Date Of Birth" v-model="client.spouse_dob">
         </div>
 
         <div class="d-flex mb-3">
           <input type="text" class="form-control" placeholder="email@example.com" v-model="client.spouse_email">
-          <input type="text" class="form-control mx-2" placeholder="###-###-####" v-model="client.spouse_cell_phone">
-          <input type="text" class="form-control" placeholder="###-###-####" v-model="client.spouse_work_phone">
+          <input type="text" class="form-control mx-2" placeholder="Cell Phone #" v-model="client.spouse_cell_phone">
+          <input type="text" class="form-control" placeholder="Work Phone #" v-model="client.spouse_work_phone">
         </div>
 
         <h4 class="text-left mb-3">Address:</h4>
@@ -62,7 +64,7 @@ export default {
     return {
       client: {
         id: '',
-        category: '',
+        category: null,
         referral_type: '',
         first_name: '',
         middle_initial: '',
@@ -84,7 +86,8 @@ export default {
         city: '',
         state: '',
         postal_code: '',
-      }
+      },
+        categories: [ 'Choose Category...', 'Client', 'Prospect'],
     }
   },
   methods: {
@@ -123,7 +126,10 @@ export default {
       this.client = "" 
       this.idForClient++
       this.$router.push('/clients')
-    }
+    },
+  },
+  created: function() {
+    this.client.category = this.categories[0]
   }
 }
 </script>

@@ -1,5 +1,8 @@
 <template>
   <div class="add container">
+    <div class="card-body bg-light border-primary mb-2">
+      <h4 class="text-left text-primary m-0"><i class="far fa-address-book mr-2"></i>New Contact</h4>
+    </div>
     <form @submit.prevent="addClient" class="d-flex-column justify-content-center">
       <div class="form-group">
         <select class="form-control mb-3" id="category" v-model="client.category">
@@ -51,7 +54,7 @@
           <input type="text" class="form-control" placeholder="Postal Code" v-model="client.postal_code">
         </div>
 
-      <button type="submit" class="btn btn-sm d-flex justify-content-start">Submit</button>
+      <button type="submit" class="btn btn-lg btn-primary d-flex justify-content-start">Create</button>
       </div>
     </form>
   </div>  
@@ -135,8 +138,6 @@ export default {
 </script>
 
 <style scoped>
-    .btn {
-      background-color: #42f47d;
-    }
+
 </style>
 

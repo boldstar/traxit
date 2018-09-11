@@ -41,8 +41,8 @@
         </thead> 
         <tbody class="client-info">
             <tr v-for="(client, index) in sortedClients"  :key="index">
-                <td>{{ client.last_name }}, {{client.first_name}} & {{ client.spouse_first_name }}</td>
-                <td>{{ client.category }}</td>
+                <td class="text-capitalize">{{ client.last_name }}, {{client.first_name}} & {{ client.spouse_first_name }}</td>
+                <td class="text-capitalize">{{ client.category }}</td>
                 <td>{{ client.email }}</td>
                 <td>{{ client.cell_phone }}</td>
                 <td>{{ client.spouse_email }}</td>

@@ -1,25 +1,39 @@
 <template>
     <div class="row">
-        <div class="col-lg-12 col-md-3">
+        <div class="col-lg-6 col-md-3">
             <div class="card mr-md-1">
                 <div class="card-header text-left">
                     <strong>Tax Payer</strong>
-                    <h6 class="float-right">Status: <span class="badge badge-danger">Status</span></h6>
                     </div>
                     <div class="card-body h5">
                     <i class="fas fa-user-circle fa-5x"></i>
-                    <h5 class="card-title mt-3">{{ client.name }}</h5>
-                    <p class="card-text h6">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <h5 class="card-title mt-3 text-capitalize">{{ client.first_name }} {{client.middle_initial}} {{client.last_name}}</h5>
                     </div>
                     <ul class="list-group list-group-flush h6 text-left">
-                    <li class="list-group-item">{{client.type}}</li>
-                    <li class="list-group-item">{{client.email}}</li>
-                    <li class="list-group-item">{{client.phone}}</li>
-                    <li class="list-group-item">{{client.address}}</li>
+                        <li class="list-group-item"><span class="font-weight-bold">Date Of Birth: </span>{{client.dob}}</li>
+                        <li class="list-group-item text-capitalize"><span class="font-weight-bold">Occupation: </span>{{client.occupation}}</li>
+                        <li class="list-group-item"><span class="font-weight-bold">Email: </span>{{client.email}}</li>
+                        <li class="list-group-item"><span class="font-weight-bold">Cell Phone: </span>{{client.cell_phone}}</li>
+                        <li class="list-group-item"><span class="font-weight-bold">Work Phone: </span>{{client.work_phone}}</li>
                     </ul>
-                    <div class="card-body mr-auto">
-                    <a href="#" class="btn btn-sm btn-outline-secondary card-link">Edit</a>
-                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-3">
+            <div class="card mr-md-1">
+                <div class="card-header text-left">
+                    <strong>Spouse</strong>
+                    </div>
+                    <div class="card-body h5">
+                    <i class="fas fa-user-circle fa-5x"></i>
+                    <h5 class="card-title mt-3 text-capitalize">{{ client.spouse_first_name }} {{client.spouse_middle_initial}} {{client.spouse_last_name}}</h5>
+                    </div>
+                    <ul class="list-group list-group-flush h6 text-left">
+                        <li class="list-group-item"><span class="font-weight-bold">Date Of Birth: </span> {{client.spouse_dob}}</li>
+                        <li class="list-group-item text-capitalize"><span class="font-weight-bold">Occupation: </span> {{client.spouse_occupation}}</li>
+                        <li class="list-group-item"><span class="font-weight-bold">Email: </span> {{client.spouse_email}}</li>
+                        <li class="list-group-item"><span class="font-weight-bold">Cell Phone: </span> {{client.spouse_cell_phone}}</li>
+                        <li class="list-group-item"><span class="font-weight-bold">Work Phone: </span> {{client.spouse_work_phone}}</li>
+                    </ul>
             </div>
         </div>
     </div>

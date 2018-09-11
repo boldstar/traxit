@@ -13,7 +13,7 @@
         Settings
       </button>
       <div class="dropdown-menu dropdown-menu-right mr-0" aria-labelledby="dropdownMenu2">
-        <button class="dropdown-item" type="button"><i class="fas fa-pencil-alt"></i><span class="ml-2 pl-4">Edit Client</span></button>
+        <button class="dropdown-item" type="button"><i class="fas fa-pencil-alt"></i><span class="ml-2 pl-4">Edit Contact</span></button>
         <button class="dropdown-item" type="button"><i class="far fa-pause-circle"></i><span class="ml-2 pl-4">Deactivate</span></button>
         <div class="dropdown-divider"></div>
         <b-btn class="dropdown-item text-danger" v-b-modal.myModal><i class="fas fa-trash"></i><span class="ml-2">Delete Account</span></b-btn>

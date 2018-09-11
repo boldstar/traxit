@@ -161,7 +161,7 @@ export default new Vuex.Store({
       })
     },
     getDetails({commit}, id) {
-      axios.get('/clients/'+id)
+      axios.get('http://traxit.test/api/clients/'+id)
       .then(response => {
         // console.log(response.data)
         commit('getDetails', response.data)

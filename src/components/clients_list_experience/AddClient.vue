@@ -10,7 +10,7 @@
         </select>
         <input type="text" class="form-control mb-3" placeholder="Referral Type" v-model="client.referral_type">
 
-        <h4 class="text-left mb-3">Taxpayer:</h4>
+        <h5 class="text-left mb-3">Taxpayer:</h5>
         <div class="d-flex mb-3">
           <input type="text" class="form-control col-5" placeholder="First Name" v-model="client.first_name">
           <input type="text" class="form-control mx-2" placeholder="Middle Initial" v-model="client.middle_initial">
@@ -28,7 +28,7 @@
           <input type="text" class="form-control" placeholder="Work Phone #" v-model="client.work_phone">
         </div>
 
-        <h4 class="text-left mb-3">Spouse:</h4>
+        <h5 class="text-left mb-3">Spouse:</h5>
         <div class="d-flex mb-3">
           <input type="text" class="form-control col-5" placeholder="First Name" v-model="client.spouse_first_name">
           <input type="text" class="form-control mx-2" placeholder="Middle Initial" v-model="client.spouse_middle_initial">
@@ -46,7 +46,7 @@
           <input type="text" class="form-control" placeholder="Work Phone #" v-model="client.spouse_work_phone">
         </div>
 
-        <h4 class="text-left mb-3">Address:</h4>
+        <h5 class="text-left mb-3">Address:</h5>
         <div class="d-flex mb-4">
           <input type="text" class="form-control" placeholder="Street Address" v-model="client.street_address">
           <input type="text" class="form-control ml-2 mr-1" placeholder="City" v-model="client.city">

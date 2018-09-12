@@ -19,7 +19,7 @@
         <button class="btn btn-outline-secondary"><i class="fas fa-print"></i></button>
         <button class="btn btn-outline-success">Import <span><i class="fas fa-download"></i></span></button>
         <button class="btn btn-outline-danger">Export <span><i class="fas fa-upload"></i></span></button>
-        <router-link to="/add" class="btn btn-primary pt-2">Add Client</router-link>
+        <router-link to="/add" class="btn btn-primary pt-2">Contact<i class="ml-2 fas fa-plus"></i></router-link>
       </div>
 
     </div>
@@ -30,8 +30,8 @@
     <table class="table table-bordered table-light table-striped table-hover text-left">
         <thead class="thead-primary hover">
             <tr>
-                <th scope="col" @click="sort('name')">Name</th>
-                <th scope="col" @click="sort('type')">Category</th>
+                <th scope="col" @click="sort('last_name')">Name</th>
+                <th scope="col" @click="sort('category')">Category</th>
                 <th scope="col">Taxpayer Email</th>
                 <th scope="col">Taxpayer Phone</th>
                 <th scope="col">Spouse Email</th>

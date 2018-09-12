@@ -1,4 +1,5 @@
 <template>
+    <div>
     <div class="row">
         <div class="col-lg-6 col-md-3">
             <div class="card mr-md-1">
@@ -18,8 +19,8 @@
                     </ul>
             </div>
         </div>
-        <div class="col-lg-6 col-md-3">
-            <div class="card mr-md-1">
+        <div class="col-lg-6 col-md-3 mb-3">
+            <div class="card">
                 <div class="card-header text-left">
                     <strong>Spouse</strong>
                     </div>
@@ -36,6 +37,13 @@
                     </ul>
             </div>
         </div>
+    </div>
+    <ul class="list-group mb-3">
+        <li class="list-group-item text-left justify-content-between d-flex">
+            <div><span class="font-weight-bold">Address: </span>{{ client.street_address }}, {{ client.city }}, {{ client.state }} {{ client.postal_code }}</div>
+            <div class="text-capitalize"><span class="font-weight-bold">Referred By: </span>{{ client.referral_type }}</div>  
+        </li>
+    </ul>
     </div>
 </template>
 

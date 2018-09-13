@@ -8,6 +8,7 @@ axios.defaults.baseURL = 'http://client-api.test/api'
 export default new Vuex.Store({
   state: {
     clients: [],
+    engagements: [],
     client:[],
     token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
@@ -23,6 +24,9 @@ export default new Vuex.Store({
     allClients(state) {
       return state.clients;
     },
+    allEngagements(state) {
+      return state.engagements;
+    },
     client(state) {
       return state.client;
     },
@@ -33,6 +37,9 @@ export default new Vuex.Store({
     },
     retrieveClients(state, clients) {
       state.clients = clients
+    },
+    retrieveEngagements(state, engagements) {
+      state.engagements = engagements
     },
     addClient(state, client) {
       state.clients.push({
@@ -157,6 +164,15 @@ export default new Vuex.Store({
       })
       .catch(error => {
         this.loading = false
+        console.log(error)
+      })
+    },
+    retrieveEngagements(context) {
+      axios.get('http://traxit.test/api/engagements')
+      .then(response => {
+        context.commit('retrieveEngagements', response.data)
+      })
+      .catch(error => {
         console.log(error)
       })
     },

@@ -112,16 +112,16 @@ export default new Router({
       }
     },
     {
-    path: '/accounts',
-    name: 'accounts',
+    path: '/engagements',
+    name: 'engagements',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "accounts" */ './views/Accounts.vue'),
+    component: () => import(/* webpackChunkName: "accounts" */ './views/Engagements.vue'),
     meta: {
       requiresAuth: true,
       breadCrumb: [
-        { name: 'Accounts' }
+        { name: 'Engagements' }
       ]
     }
     },

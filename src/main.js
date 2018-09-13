@@ -32,7 +32,7 @@ router.beforeEach((to, from, next) => {
     }
   } else if (to.matched.some(record => record.meta.requiresVisitor)) {
     // this route requires auth, check if logged in
-    // if not, redirect to login page.
+    // if yes, redirect to home page.
     if (store.getters.loggedIn) {
       next({
         path: '/',

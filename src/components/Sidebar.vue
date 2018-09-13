@@ -3,14 +3,6 @@
         <div class="row">
             <nav class="col-md-2 d-none d-md-block bg-light sidebar">
               <div class="sidebar-sticky">
-
-                <!-- <div class="input-group input-group-lg my-4 mx-2 pr-3 pt-3">
-                  <input type="text" class="search form-control" placeholder="Quick Search">
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-primary" type="button"><i class="fab fa-searchengin mr-0"></i></button>
-                  </div>
-                </div> -->
-
                 <ul class="nav nav-fill flex-column align-items-start mt-5">
                   <li class="nav-item w-100"  v-bind:class="{ 'is-active': isActive }">                                        
                       <router-link class="nav-link border-right text-left pl-4" to="/"><span><i class="fas fa-tachometer-alt"></i></span>Dashboard</router-link>    
@@ -77,19 +69,6 @@ export default {
         .title {
             font-size: 16px;
         }
-
-        input {
-            background:white;
-        }
-        
-        .fa-searchengin {
-            font-size: 30px;
-            color: #1639ffb6;
-
-            // &:hover {
-            //   color: white;
-            // }
-        }
     }
 
     @supports ((position: -webkit-sticky) or (position: sticky)) {
@@ -122,7 +101,7 @@ export default {
     }
 
     .is-active {
-        background:rgb(231, 237, 241);
+        background:rgb(223, 231, 253);
 
         i {
             color: #0077ff;

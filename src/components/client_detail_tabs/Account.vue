@@ -4,7 +4,7 @@
         <div class="col-lg-6 col-md-3">
             <div class="card mr-md-1">
                 <div class="card-header text-left">
-                    <strong>Tax Payer</strong>
+                    <strong>Taxpayer</strong>
                     </div>
                     <div class="card-body h5">
                     <i class="fas fa-user-circle fa-5x"></i>

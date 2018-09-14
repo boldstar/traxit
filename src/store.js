@@ -10,6 +10,7 @@ export default new Vuex.Store({
     clients: [],
     engagements: [],
     client:[],
+    engagement: [],
     token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
     loading: false,
@@ -30,6 +31,9 @@ export default new Vuex.Store({
     client(state) {
       return state.client;
     },
+    engagement(state) {
+      return state.engagement;
+    }
   },
   mutations: {
     toggleSidebar(state) {
@@ -74,6 +78,9 @@ export default new Vuex.Store({
     },
     getDetails(state, client) {
       state.client = client
+    },
+    getClientEngagement(state, engagement) {
+      state.engagement = engagement
     },
     retrieveToken(state, token) {
       state.token = token
@@ -179,8 +186,17 @@ export default new Vuex.Store({
     getDetails({commit}, id) {
       axios.get('http://traxit.test/api/clients/'+id)
       .then(response => {
-        // console.log(response.data)
         commit('getDetails', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    getClientEngagement({commit}, id) {
+      axios.get('http://traxit.test/api/client-engagements/'+id)
+      .then(response => {
+        console.log(response.data)
+        commit('getClientEngagement', response.data)
       })
       .catch(error => {
         console.log(error)

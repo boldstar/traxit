@@ -29,13 +29,16 @@
         <a v-bind:class="{ active: isActive('account') }" class="nav-link active mx-3" data-toggle="tab" href="#account" role="tab" aria-controls="account" aria-selected="true"><i class="pr-2 far fa-address-card"></i>Account</a>
       </li>
       <li class="nav-item">
+        <a v-bind:class="{ active: isActive('engagements') }" class="nav-link mx-3" data-toggle="tab" href="#engagements" role="tab" aria-controls="engagements" aria-selected="false"><i class="pr-2 far fa-folder-open"></i>Engagements</a>
+      </li>
+      <li class="nav-item">
         <a v-bind:class="{ active: isActive('pending') }" class="nav-link mx-3" data-toggle="tab" href="#pending" role="tab" aria-controls="pending" aria-selected="false"><i class="pr-2 far fa-question-circle"></i>Pending</a>
       </li>
       <li class="nav-item">
         <a v-bind:class="{ active: isActive('notes') }" class="nav-link mx-3" data-toggle="tab" href="#notes" role="tab" aria-controls="notes" aria-selected="false"><i class="pr-2 far fa-clipboard"></i>Notes</a>
       </li>
       <li class="nav-item"> 
-        <a v-bind:class="{ active: isActive('files') }" class="nav-link mx-3" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false"><i class="pr-2 far fa-folder-open"></i>Files</a>
+        <a v-bind:class="{ active: isActive('files') }" class="nav-link mx-3" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false"><i class="pr-2 fas fa-file-download"></i>Files</a>
       </li>
       <li class="nav-item">
         <a v-bind:class="{ active: isActive('portal') }" class="nav-link mx-3" data-toggle="tab" href="#portal" role="tab" aria-controls="portal" aria-selected="false"><i class="pr-2 fas fa-sign-in-alt"></i>Portal</a>
@@ -61,6 +64,10 @@
     <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
     <!-- this is the account section of the client details view -->
         <account></account>
+    </div>
+    <div class="tab-pane fade" id="engagements" role="tabpanel">
+    <!-- this is the pending section of the client details view -->
+      <client-engagements></client-engagements>
     </div>
     <div class="tab-pane fade" id="pending" role="tabpanel">
     <!-- this is the pending section of the client details view -->
@@ -88,6 +95,7 @@ import { mapGetters } from 'vuex'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 import Account from '@/components/client_detail_tabs/Account.vue'
+import ClientEngagements from '@/components/client_detail_tabs/ClientEngagements.vue'
 import Pending from '@/components/client_detail_tabs/Pending.vue'
 import Notes from '@/components/client_detail_tabs/Notes.vue'
 import Files from '@/components/client_detail_tabs/Files.vue'
@@ -106,12 +114,14 @@ export default {
           'files',
           'notes',
           'pending',
+          'engagements',
           'account',
         ]
     }
   },
   components:{
     Account,
+    ClientEngagements,
     Pending,
     Notes,
     Files,
@@ -123,7 +133,12 @@ export default {
     'b-modal': bModalDirective
   },
   computed: {
-    ...mapGetters(['client'])
+    ...mapGetters(
+      [
+        'client',
+        'engagement'
+      ]
+      )
   },
   methods: {
     deleteClient(id) {
@@ -151,7 +166,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 
-#account, #pending, #notes, #files, #portal {
+#account, #engagements, #pending, #notes, #files, #portal {
   border: none;
   color:  rgb(29, 29, 29);
 }

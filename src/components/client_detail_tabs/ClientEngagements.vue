@@ -1,16 +1,26 @@
 <template>
     <div>
-        <div class="card-header p-0 d-flex flex-row justify-content-between mb-3 shadow">
+        <div class="header p-0 d-flex flex-row justify-content-between mt-2 mb-4 shadow-sm">
             <i class="ml-3 pr-2 far fa-folder-open h3 text-primary align-self-center m-0"></i>
-            <h5 class="m-0 align-self-center">Engagements | 2</h5>
-            <router-link to="#" class="mr-3 btn btn-success btn-sm m-0 align-self-center">New Engagement</router-link>
+            <router-link to="#" class="mr-3 btn btn-success btn-sm m-0 align-self-center"><i class="mr-2 fas fa-plus-square"></i>Engagement</router-link>
         </div>
 
-        <div class="card-body mb-3 shadow-sm d-flex justify-content-around" v-for="(engagement, index) in engagement" :key="index">
-            <h3>{{ index + 1 }}</h3>
-            <h3><span>Return Type: </span> {{ engagement.return_type }} </h3>
-            <h3><span>Assigned To: </span> {{ engagement.assigned_to }} </h3>
-            <h3><span>Status: </span> {{ engagement.status}} </h3>
+        <div class="row mx-1">
+            <div class="card mb-3 mr-3 shadow-sm col-4 p-0" v-for="(engagement, index) in engagement" :key="index">
+                <div class="d-flex justify-content-between card-header">
+                    <h3 class="m-0 text-muted">{{ index + 1 }}</h3>
+                    <h5 class="align-self-center m-0"><span>Return Type: </span> {{ engagement.return_type }} </h5>
+                </div>
+                <div class="card-body text-left p-0 my-1">
+                    <h5 class="p-4"><span>Assigned To: </span> {{ engagement.assigned_to }} </h5>
+                    <hr class="my-1">
+                    <h5 class="p-4"><span>Status: </span> {{ engagement.status}} </h5>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <router-link to="#" class="btn">View</router-link>
+                    <router-link to="#" class="btn">Edit</router-link>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -31,7 +41,7 @@ export default {
 
 <style lang="scss">
 
-    .card-header {
+    .header {
         height: 4em;
     }
 

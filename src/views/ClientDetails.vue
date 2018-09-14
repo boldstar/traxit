@@ -49,7 +49,7 @@
 <!-- this is the modal popup for confirming the delete action -->
   <b-modal id="myModal" ref="myModalRef" hide-footer title="Delete Client">
     <div class="d-block text-left">
-      <h5>Are you sure you want to delete, {{client.name}}?</h5>
+      <h5>Are you sure you want to delete, {{client.last_name}}?</h5>
       <br>
       <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
     </div>
@@ -178,13 +178,17 @@ export default {
  color: rgb(185, 179, 179);
 
  &:hover {
-   border-bottom: 3px solid rgb(150, 227, 255);
+   border-bottom: 3px solid #0077ff;
  }
 }
 
 .active {
-  border-bottom: 3px solid #0077ff;
+  border-bottom: 3px solid transparent;
   color: #181818;
+
+  i {
+    color: #0077ff;
+  }
 }
 
 

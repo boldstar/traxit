@@ -72,6 +72,15 @@ export default new Vuex.Store({
         postal_code: client.postal_code,
       })
     },
+    addEngagement(state, engagement) {
+      state.engagements.push ({
+        id: engagement.id,
+        return_type: engagement.return_type,
+        year: engagement.year,
+        status: engagement.status,
+        assigned_to: engagement.assigned_to,
+      })
+    },
     deleteClient(state, id) {
       const index = state.clients.findIndex(client => client.id == id);
       state.clients.splice(index, 1);
@@ -243,6 +252,21 @@ export default new Vuex.Store({
       .catch(error => {
           console.log(error)
       })                
+    },
+    addEngagement(context, engagement) {
+      axios.post('http://traxit.test/api/engagements', {
+        id: engagement.id,
+        return_type: engagement.return_type,
+        year: engagement.year,
+        status: engagement.status,
+        assigned_to: engagement.assigned_to,
+      })
+      .then(response => {
+        context.commit('getClientEngagement', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
     },
   }
 })

@@ -66,7 +66,7 @@
         <account></account>
     </div>
     <div class="tab-pane fade" id="engagements" role="tabpanel">
-    <!-- this is the pending section of the client details view -->
+    <!-- this is the engagements section of the client details view -->
       <client-engagements></client-engagements>
     </div>
     <div class="tab-pane fade" id="pending" role="tabpanel">

@@ -125,6 +125,20 @@ export default new Router({
       ]
     }
     },
+    {
+      path: '/add-engagement',
+      name: 'add-engagement',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "add-engagment" */ './views/AddEngagement.vue'),
+      meta: {
+        requiresAuth: true,
+        breadCrumb: [
+          { name: 'Start Engagement' }
+        ]
+      }
+    },
   ],
   mode: 'history',
 })

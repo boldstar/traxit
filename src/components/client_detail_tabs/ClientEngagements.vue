@@ -2,7 +2,7 @@
     <div>
         <div class="header p-0 d-flex flex-row justify-content-between mt-2 mb-4 shadow-sm">
             <i class="ml-3 pr-2 far fa-folder-open h3 text-primary align-self-center m-0"></i>
-            <router-link to="/add-engagement" class="mr-3 btn btn-success btn-sm m-0 align-self-center"><i class="mr-2 fas fa-plus-square"></i>Engagement</router-link>
+            <router-link v-bind:to="'/add-engagement/' +client.id" class="mr-3 btn btn-success btn-sm m-0 align-self-center"><i class="mr-2 fas fa-plus-square"></i>Engagement</router-link>
         </div>
 
         <div class="row mx-1">
@@ -31,7 +31,7 @@ import { mapGetters } from 'vuex'
 export default {
     name: 'client-engagements',
     computed: {
-    ...mapGetters(['engagement'])
+    ...mapGetters(['engagement', 'client'])
     },
     created() {
         this.$store.dispatch('getClientEngagement', this.$route.params.id)

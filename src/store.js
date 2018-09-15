@@ -3,13 +3,13 @@ import Vuex from 'vuex'
 import axios from 'axios'
 
 Vue.use(Vuex)
-axios.defaults.baseURL = 'http://client-api.test/api'
+axios.defaults.baseURL = 'http://traxit.test/api'
 
 export default new Vuex.Store({
   state: {
     clients: [],
-    engagements: [],
     client:[],
+    engagements: [],
     engagement: [],
     token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
@@ -33,7 +33,7 @@ export default new Vuex.Store({
     },
     engagement(state) {
       return state.engagement;
-    }
+    },
   },
   mutations: {
     toggleSidebar(state) {
@@ -75,10 +75,12 @@ export default new Vuex.Store({
     addEngagement(state, engagement) {
       state.engagements.push ({
         id: engagement.id,
+        client_id: engagement.client_id,
         return_type: engagement.return_type,
         year: engagement.year,
-        status: engagement.status,
         assigned_to: engagement.assigned_to,
+        status: engagement.status,
+        done: false
       })
     },
     deleteClient(state, id) {
@@ -96,7 +98,7 @@ export default new Vuex.Store({
     },
     destroyToken(state) {
       state.token = null
-    }
+    },
   },
   actions: {
     toggleSidebar({commit, state}) {
@@ -107,7 +109,7 @@ export default new Vuex.Store({
 
 
         return new Promise((resolve, reject) => {
-          axios.get('http://traxit.test/api/user')
+          axios.get('/user')
           .then(response => {
             resolve(response)
           })
@@ -118,7 +120,7 @@ export default new Vuex.Store({
     },
     register(context, data) {
       return new Promise((resolve, reject) => {
-        axios.post('http://traxit.test/api/register', {
+        axios.post('/register', {
           name: data.name,
           email: data.email,
           password: data.password,
@@ -136,7 +138,7 @@ export default new Vuex.Store({
 
       if (context.getters.loggedIn) {
         return new Promise((resolve, reject) => {
-          axios.post('http://traxit.test/api/logout')
+          axios.post('/logout')
           .then(response => {
             
             localStorage.removeItem('access_token')
@@ -154,7 +156,7 @@ export default new Vuex.Store({
     retrieveToken(context, credentials) {
 
       return new Promise((resolve, reject) => {
-          axios.post('http://traxit.test/api/login', {
+          axios.post('/login', {
               username: credentials.username,
               password: credentials.password,
           })
@@ -173,7 +175,7 @@ export default new Vuex.Store({
     },
     retrieveClients(context) {
       this.loading = true
-      axios.get('http://traxit.test/api/clients')
+      axios.get('/clients')
       .then(response => {
         this.loading = false
         context.commit('retrieveClients', response.data)
@@ -184,7 +186,7 @@ export default new Vuex.Store({
       })
     },
     retrieveEngagements(context) {
-      axios.get('http://traxit.test/api/engagements')
+      axios.get('/engagements')
       .then(response => {
         context.commit('retrieveEngagements', response.data)
       })
@@ -193,7 +195,7 @@ export default new Vuex.Store({
       })
     },
     getDetails({commit}, id) {
-      axios.get('http://traxit.test/api/clients/'+id)
+      axios.get('/clients/'+id)
       .then(response => {
         commit('getDetails', response.data)
       })
@@ -202,7 +204,7 @@ export default new Vuex.Store({
       })
     },
     getClientEngagement({commit}, id) {
-      axios.get('http://traxit.test/api/client-engagements/'+id)
+      axios.get('/engagements/'+id)
       .then(response => {
         console.log(response.data)
         commit('getClientEngagement', response.data)
@@ -212,7 +214,7 @@ export default new Vuex.Store({
       })
     },
     addClient(context, client) {
-      axios.post('http://traxit.test/api/clients', {
+      axios.post('/clients', {
         id: client.id,
         category: client.category,
         referral_type: client.referral_type,
@@ -254,12 +256,13 @@ export default new Vuex.Store({
       })                
     },
     addEngagement(context, engagement) {
-      axios.post('http://traxit.test/api/engagements', {
-        id: engagement.id,
+      axios.post(('/engagements'), {
+        client_id: engagement.client_id,
         return_type: engagement.return_type,
         year: engagement.year,
-        status: engagement.status,
         assigned_to: engagement.assigned_to,
+        status: engagement.status,
+        done: false
       })
       .then(response => {
         context.commit('getClientEngagement', response.data)

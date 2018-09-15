@@ -126,7 +126,7 @@ export default new Router({
     }
     },
     {
-      path: '/add-engagement',
+      path: '/add-engagement/:id',
       name: 'add-engagement',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route

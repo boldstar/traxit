@@ -6,7 +6,6 @@
       </div>
         <form @submit.prevent="addEngagement" class="d-flex-column justify-content-center">
           <div class="form-group">
-            <input class="form-control mb-3" type="number" v-model="engagement.client_id">
             <select class="form-control mb-3" id="type" v-model="engagement.return_type">
               <option v-for="type in types" :key="type.id" :value="type">{{ type }}</option>
             </select>
@@ -22,14 +21,13 @@
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'add-engagement',
   data() {
     return {
       engagement: {
-        client_id: '',
         return_type: null,
         year: '',
         assigned_to: '',
@@ -42,14 +40,21 @@ export default {
       ],
     }
   },
-   methods: {
+  computed: {
+    ...mapGetters(
+        [
+          'client',
+        ]
+      )
+  },
+  methods: {
     addEngagement(e) {
       if(!this.engagement.return_type || !this.engagement.year ){
         return
       } else {
         this.$store.dispatch('addEngagement', {
           id: this.idForEngagement,
-          client_id: this.engagement.client_id,
+          client_id: this.client.id,
           return_type: this.engagement.return_type,
           year: this.engagement.year,
           assigned_to: this.engagement.assigned_to,
@@ -60,16 +65,15 @@ export default {
       e.preventDefault();
       this.engagement = "" 
       this.idForEngagement++
-      this.$router.push('/engagements')
+      this.$router.push('/client/' + client.id)
     },
+  },
+  created: function() {
+    this.$store.dispatch('getDetails', this.$route.params.id)
   },
   created: function() {
     this.engagement.return_type = this.types[0]
   },
-
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>

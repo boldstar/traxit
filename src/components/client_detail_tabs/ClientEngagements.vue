@@ -2,16 +2,19 @@
     <div>
         <div class="header p-0 d-flex flex-row justify-content-between mt-2 mb-4 shadow-sm">
             <i class="ml-3 pr-2 far fa-folder-open h3 text-primary align-self-center m-0"></i>
-            <router-link v-bind:to="'/add-engagement/' +client.id" class="mr-3 btn btn-success btn-sm m-0 align-self-center"><i class="mr-2 fas fa-plus-square"></i>Engagement</router-link>
+            <router-link :to=" { path: '/client/' + client.id + '/add-engagement' }" class="mr-3 btn btn-success btn-sm m-0 align-self-center"><i class="mr-2 fas fa-plus-square"></i>Engagement</router-link>
         </div>
 
-        <div class="row mx-1">
-            <div class="card mb-3 mr-3 shadow-sm col-4 p-0" v-for="(engagement, index) in engagement" :key="index">
+            <router-view></router-view>
+        <div class="row mx-3 px-2 justify-content-between">
+            <div class="card mb-3 shadow-sm col-lg-5 col-md-3 p-0" v-for="(engagement, index) in engagement" :key="index">
                 <div class="d-flex justify-content-between card-header">
                     <h3 class="m-0 text-muted">{{ index + 1 }}</h3>
                     <h5 class="align-self-center m-0"><span>Return Type: </span> {{ engagement.return_type }} </h5>
                 </div>
                 <div class="card-body text-left p-0 my-1">
+                    <h5 class="p-4"><span class="desc">Year: </span> {{ engagement.year }} </h5>
+                    <hr class="my-1">
                     <h5 class="p-4"><span class="desc">Assigned To: </span> {{ engagement.assigned_to }} </h5>
                     <hr class="my-1">
                     <h5 class="p-4"><span class="desc">Status: </span> {{ engagement.status}} </h5>
@@ -35,7 +38,7 @@ export default {
     },
     created() {
         this.$store.dispatch('getClientEngagement', this.$route.params.id)
-    },    
+    },   
 }
 </script>
 

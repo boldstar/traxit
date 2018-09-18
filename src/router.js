@@ -72,16 +72,25 @@ export default new Router({
     {
       path: '/client/:id',
       name: 'client-details',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "client-details" */ './views/ClientDetails.vue'),
+      component: () => import('./views/ClientDetails.vue'),
       meta: {
         requiresAuth: true,
         breadCrumb: [
           { name: 'Contact Details' }
         ]
-      }
+      },
+      children: [
+        {
+          path: 'add-engagement',
+          component: () => import('./views/AddEngagement.vue'),
+          meta: {
+            requiresAuth: true,
+            breadCrumb: [
+              { name: 'Add Engagement' }
+            ]
+          },
+        }
+      ],
     },
     {
       path: '/add',
@@ -119,23 +128,9 @@ export default new Router({
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "accounts" */ './views/Engagements.vue'),
     meta: {
-      requiresAuth: true,
-      breadCrumb: [
-        { name: 'Engagements' }
-      ]
-    }
-    },
-    {
-      path: '/add-engagement/:id',
-      name: 'add-engagement',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "add-engagment" */ './views/AddEngagement.vue'),
-      meta: {
         requiresAuth: true,
         breadCrumb: [
-          { name: 'Start Engagement' }
+          { name: 'Engagements' }
         ]
       }
     },

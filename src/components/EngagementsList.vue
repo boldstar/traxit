@@ -5,6 +5,7 @@
                 <tr>
                     <th scope="col" @click="sort('category')">Client</th>
                     <th scope="col" @click="sort('last_name')">Return Type</th>
+                    <th scope="col">Year</th>
                     <th scope="col">Assigned To</th>
                     <th scope="col">Status</th>
                     <th scope="col" class="text-center">Details</th>
@@ -14,6 +15,7 @@
                 <tr v-for="(engagement, index) in engagements"  :key="index">
                     <td>{{ engagement.client.last_name }}, {{ engagement.client.first_name }} & {{ engagement.client.spouse_first_name }}</td>
                     <td>{{ engagement.return_type }}</td>
+                    <td>{{ engagement.year }}</td>
                     <td>{{ engagement.assigned_to }}</td>
                     <td>{{ engagement.status }}</td>
                     <td class="text-center"><router-link to="/engagements"><i class="far fa-eye"></i></router-link></td>

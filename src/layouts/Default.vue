@@ -5,7 +5,9 @@
 
     <Toolbar class="ml-auto" v-bind:class="[!toggleSidebar ? closedSidebar : '', openSidebar]" />
 
-    <Sidebar v-if="toggleSidebar" />
+    <transition name="router-animation" enter-active-class="animated slideInLeft" leave-active-class="animated slideOutLeft">
+      <Sidebar v-if="toggleSidebar" />
+    </transition>
 
 <!-- this section is controling the main content section -->
     <div class="d-flex ml-auto page-wrapper" v-bind:class="[!toggleSidebar ? closedSidebar : '', openSidebar]">

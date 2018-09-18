@@ -1,8 +1,8 @@
 <template>
-  <div class="page-wrapper mt-1">
-    <div class="add-engagement container">
+  <div class="mt-1">
+    <div class="add-engagement">
       <div class="card-body bg-light border-primary mb-2">
-        <h4 class="text-left text-primary m-0"><i class="mr-3 far fa-folder-open"></i>New Engagement</h4>
+        <h4 class="text-left text-primary m-0">New Engagement</h4>
       </div>
         <form @submit.prevent="addEngagement" class="d-flex-column justify-content-center">
           <div class="form-group">
@@ -13,7 +13,10 @@
             <input type="text" class="form-control mb-3" placeholder="Assign To" v-model="engagement.assigned_to">
             <input type="text" class="form-control mb-3" placeholder="Status" v-model="engagement.status">
 
-            <button type="submit" class="btn btn-lg btn-primary d-flex justify-content-start">Create</button>
+            <div class="d-flex justify-content-between">
+              <button type="submit" class="btn btn-primary d-flex justify-content-start">Create</button>
+              <router-link v-bind:to="'/client/'+client.id" class="btn btn-secondary float-right">Dismiss</router-link>
+            </div>
           </div>
         </form>
       </div>  
@@ -62,10 +65,9 @@ export default {
         })
         e.preventDefault();
       }
-      e.preventDefault();
       this.engagement = "" 
       this.idForEngagement++
-      this.$router.push('/client/' + client.id)
+      this.$router.go(-2)
     },
   },
   created: function() {

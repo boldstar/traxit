@@ -10,6 +10,7 @@ export default new Router({
   linkExactActiveClass: 'is-active',
   routes: [
     {
+      // this is the route for logging in to the app
       path: '/login',
       name: 'login',
       component: () => import(/* webpackChunkName: "login" */ './views/Login.vue'),
@@ -20,6 +21,7 @@ export default new Router({
       },
     },
     {
+      // this is the route to the register form
       path: '/register',
       name: 'register',
       component: () => import(/* webpackChunkName: "login" */ './views/Register.vue'),
@@ -29,11 +31,13 @@ export default new Router({
       }
     },
     {
+      // this is the route to logout of the app
       path: '/logout',
       name: 'logout',
       component: () => import(/* webpackChunkName: "logout" */ './views/Logout.vue'),
     },
     {
+      // this is the dashboard view
       path: '/',
       name: 'dashboard',
       component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue'),
@@ -45,6 +49,7 @@ export default new Router({
       }
     },
     {
+      // this is the firm overview view
       path: '/firm',
       name: 'firm',
       component: () => import(/* webpackChunkName: "firm" */ './views/Firm.vue'),
@@ -56,6 +61,7 @@ export default new Router({
       }
     },
     {
+      // this is the list of all clients view
       path: '/clients',
       name: 'clients',
       // route level code-splitting
@@ -70,6 +76,7 @@ export default new Router({
       }
     },
     {
+      // this is the client account page with tabbable children routes
       path: '/client/:id',
       name: 'client-details',
       component: () => import('./views/ClientDetails.vue'),
@@ -80,19 +87,87 @@ export default new Router({
         ]
       },
       children: [
-        {
+          {
+          // this is the path to add an engagement to singel client
           path: 'add-engagement',
           component: () => import('./views/AddEngagement.vue'),
-          meta: {
-            requiresAuth: true,
-            breadCrumb: [
-              { name: 'Add Engagement' }
-            ]
+            meta: {
+              requiresAuth: true,
+              breadCrumb: [
+                { name: 'Add Engagement' }
+              ]
+            },
           },
-        }
+          {
+          // this is the path to view the account of the client
+          path: 'account',
+          component: () => import('@/components/client_detail_tabs/Account.vue'),
+            meta: {
+              requiresAuth: true,
+              breadCrumb: [
+                { name: 'Account' }
+              ]
+            },
+          },
+          {
+          // this is the path to view the engagements that belong to the client
+          path: 'engagements',
+          component: () => import('@/components/client_detail_tabs/ClientEngagements.vue'),
+            meta: {
+              requiresAuth: true,
+              breadCrumb: [
+                { name: 'Engagements' }
+              ]
+            },
+          },
+          {
+          // this is the path to view the files belonging to client
+          path: 'files',
+          component: () => import('@/components/client_detail_tabs/Files.vue'),
+            meta: {
+              requiresAuth: true,
+              breadCrumb: [
+                { name: 'Files' }
+              ]
+            },
+          },
+          {
+          // this is the path to view the notes belonging to client
+            path: 'notes',
+            component: () => import('@/components/client_detail_tabs/Notes.vue'),
+            meta: {
+              requiresAuth: true,
+              breadCrumb: [
+                { name: 'Notes' }
+              ]
+            },
+          },
+          {
+          // this is the path to view the pending belonging to the client
+          path: 'pending',
+          component: () => import('@/components/client_detail_tabs/Pending.vue'),
+            meta: {
+              requiresAuth: true,
+              breadCrumb: [
+                { name: 'Pending' }
+              ]
+            },
+          },
+          {
+            // this is the path to view the portal belonging to the client
+            path: 'portal',
+            component: () => import('@/components/client_detail_tabs/Portal.vue'),
+            meta: {
+              requiresAuth: true,
+              breadCrumb: [
+                { name: 'Portal' }
+              ]
+            },
+          }
       ],
     },
     {
+      // this is the path for adding a client or engagement globally
       path: '/add',
       name: 'add',
       // route level code-splitting
@@ -107,6 +182,7 @@ export default new Router({
       }
     },
     {
+      // this is the path to view the tasks belonging to a user
       path: '/tasks',
       name: 'tasks',
       // route level code-splitting
@@ -121,6 +197,7 @@ export default new Router({
       }
     },
     {
+      // this is the path to view the list of all engagements
     path: '/engagements',
     name: 'engagements',
     // route level code-splitting

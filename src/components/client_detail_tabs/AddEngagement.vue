@@ -4,7 +4,7 @@
       <div class="card-body bg-light border-primary mb-2">
         <h4 class="text-left text-primary m-0">New Engagement</h4>
       </div>
-        <form @submit.prevent="addEngagement" class="d-flex-column justify-content-center">
+        <form @submit.prevent="addNewEngagement" class="d-flex-column justify-content-center">
           <div class="form-group">
             <select class="form-control mb-3" id="type" v-model="engagement.return_type">
               <option v-for="type in types" :key="type.id" :value="type">{{ type }}</option>
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'add-engagement',
@@ -48,27 +48,27 @@ export default {
         [
           'client',
         ]
-      )
+      ),
   },
   methods: {
-    addEngagement(e) {
-      if(!this.engagement.return_type || !this.engagement.year ){
-        return
-      } else {
-        this.$store.dispatch('addEngagement', {
-          id: this.idForEngagement,
-          client_id: this.client.id,
-          return_type: this.engagement.return_type,
-          year: this.engagement.year,
-          assigned_to: this.engagement.assigned_to,
-          status: this.engagement.status,
-        })
-        e.preventDefault();
-      }
-      e.preventDefault();
-      this.engagement = "" 
-      this.idForEngagement++
-      this.$router.go(-1);
+    ...mapActions(['addEngagement']),
+    addNewEngagement() {
+      if(!this.engagement.return_type || !this.engagement.year ) return;
+      
+      this.addEngagement({
+        id: this.idForEngagement,
+        client_id: this.client.id,
+        return_type: this.engagement.return_type,
+        year: this.engagement.year,
+        assigned_to: this.engagement.assigned_to,
+        status: this.engagement.status,
+      })   
+      .then(() => {
+        this.engagement = "" 
+        this.idForEngagement++
+        Vue.set(this.engagement, 1,  'engagement')
+        this.$router.go(-1);
+      })
     },
   },
   created: function() {

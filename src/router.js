@@ -86,18 +86,7 @@ export default new Router({
           { name: 'Contact Details' }
         ]
       },
-      children: [
-          {
-          // this is the path to add an engagement to singel client
-          path: 'add-engagement',
-          component: () => import('./views/AddEngagement.vue'),
-            meta: {
-              requiresAuth: true,
-              breadCrumb: [
-                { name: 'Add Engagement' }
-              ]
-            },
-          },
+      children: [          
           {
           // this is the path to view the account of the client
           path: 'account',
@@ -119,6 +108,19 @@ export default new Router({
                 { name: 'Engagements' }
               ]
             },
+            children: [
+              {
+                // this is the path to add an engagement to singel client
+                path: 'add-engagement',
+                component: () => import('@/components/client_detail_tabs/AddEngagement.vue'),
+                  meta: {
+                    requiresAuth: true,
+                    breadCrumb: [
+                      { name: 'Add Engagement' }
+                    ]
+                  },
+                },
+            ],
           },
           {
           // this is the path to view the files belonging to client

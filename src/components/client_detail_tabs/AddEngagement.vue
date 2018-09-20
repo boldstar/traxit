@@ -15,7 +15,7 @@
 
             <div class="d-flex justify-content-between">
               <button type="submit" class="btn btn-primary d-flex justify-content-start">Create</button>
-              <router-link v-bind:to="'/client/'+client.id" class="btn btn-secondary float-right">Dismiss</router-link>
+              <router-link v-bind:to="'/client/' +client.id+ '/engagements'" class="btn btn-secondary float-right">Dismiss</router-link>
             </div>
           </div>
         </form>
@@ -65,13 +65,11 @@ export default {
         })
         e.preventDefault();
       }
+      e.preventDefault();
       this.engagement = "" 
       this.idForEngagement++
-      this.$router.go(-2)
+      this.$router.go(-1);
     },
-  },
-  created: function() {
-    this.$store.dispatch('getDetails', this.$route.params.id)
   },
   created: function() {
     this.engagement.return_type = this.types[0]

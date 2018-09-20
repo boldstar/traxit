@@ -25,23 +25,23 @@
 <!-- this is the tab links for the different views -->
   <div class="d-flex justify-content-center">
     <ul class="nav mb-3" id="myTab" role="tablist">
-      <li class="nav-item">
-        <a v-bind:class="{ active: isActive('account') }" class="nav-link active mx-3" data-toggle="tab" href="#account" role="tab" aria-controls="account" aria-selected="true"><i class="pr-2 far fa-address-card"></i>Account</a>
+      <li class="nav-item" v-bind:class="{ 'is-active' : isClicked }" >
+        <router-link :to="{ path: 'account' }" class="nav-link mx-3" data-toggle="tab" href="#account" role="tab"><i class="pr-2 far fa-address-card"></i>Account</router-link>
       </li>
-      <li class="nav-item">
-        <a v-bind:class="{ active: isActive('engagements') }" class="nav-link mx-3" data-toggle="tab" href="#engagements" role="tab" aria-controls="engagements" aria-selected="false"><i class="pr-2 far fa-folder-open"></i>Engagements</a>
+      <li class="nav-item" v-bind:class="{ 'is-active' : isClicked }">
+        <router-link  :to="{ path: 'engagements' }" class="nav-link mx-3" data-toggle="tab" href="#engagements" role="tab" ><i class="pr-2 far fa-folder-open"></i>Engagements</router-link>
       </li>
-      <li class="nav-item">
-        <a v-bind:class="{ active: isActive('pending') }" class="nav-link mx-3" data-toggle="tab" href="#pending" role="tab" aria-controls="pending" aria-selected="false"><i class="pr-2 far fa-question-circle"></i>Pending</a>
+      <li class="nav-item" v-bind:class="{ 'is-active' : isClicked }">
+        <router-link  :to="{ path: 'pending' }" class="nav-link mx-3" data-toggle="tab" href="#pending" role="tab"><i class="pr-2 far fa-question-circle"></i>Pending</router-link>
       </li>
-      <li class="nav-item">
-        <a v-bind:class="{ active: isActive('notes') }" class="nav-link mx-3" data-toggle="tab" href="#notes" role="tab" aria-controls="notes" aria-selected="false"><i class="pr-2 far fa-clipboard"></i>Notes</a>
+      <li class="nav-item" v-bind:class="{ 'is-active' : isClicked }">
+        <router-link  :to="{ path: 'notes' }" class="nav-link mx-3" data-toggle="tab" href="#notes" role="tab"><i class="pr-2 far fa-clipboard"></i>Notes</router-link>
       </li>
-      <li class="nav-item"> 
-        <a v-bind:class="{ active: isActive('files') }" class="nav-link mx-3" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false"><i class="pr-2 fas fa-file-download"></i>Files</a>
+      <li class="nav-item" v-bind:class="{ 'is-active' : isClicked }"> 
+        <router-link  :to="{ path: 'files' }" class="nav-link mx-3" data-toggle="tab" href="#files" role="tab"><i class="pr-2 fas fa-file-download"></i>Files</router-link>
       </li>
-      <li class="nav-item">
-        <a v-bind:class="{ active: isActive('portal') }" class="nav-link mx-3" data-toggle="tab" href="#portal" role="tab" aria-controls="portal" aria-selected="false"><i class="pr-2 fas fa-sign-in-alt"></i>Portal</a>
+      <li class="nav-item" v-bind:class="{ 'is-active' : isClicked }">
+        <router-link  :to="{ path: 'portal' }" class="nav-link mx-3" data-toggle="tab" href="#portal" role="tab"><i class="pr-2 fas fa-sign-in-alt"></i>Portal</router-link>
       </li>
     </ul>
   </div>
@@ -61,29 +61,8 @@
 
   <div class="tab-content" id="myTabContent">   
     <!-- these are the panes for the different tab views -->
-    <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
-    <!-- this is the account section of the client details view -->
-        <account></account>
-    </div>
-    <div class="tab-pane fade" id="engagements" role="tabpanel">
-    <!-- this is the engagements section of the client details view -->
-      <client-engagements></client-engagements>
-    </div>
-    <div class="tab-pane fade" id="pending" role="tabpanel">
-    <!-- this is the pending section of the client details view -->
-      <pending></pending>
-    </div>
-    <div class="tab-pane fade" id="notes" role="tabpanel">
-    <!-- this is the notes section of the client details view -->
-      <notes></notes>
-    </div>
-    <div class="tab-pane fade" id="files" role="tabpanel">
-    <!-- this is the files section of the client details view -->
-      <files></files>
-    </div>
-    <div class="tab-pane fade" id="portal" role="tabpanel">
-    <!-- this is the portal section of the client details view -->
-      <portal></portal>
+    <div class="tab-pane fade show active" role="tabpanel">
+       <router-view></router-view>
     </div>
   </div>
 
@@ -94,12 +73,6 @@
 import { mapGetters } from 'vuex'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
-import Account from '@/components/client_detail_tabs/Account.vue'
-import ClientEngagements from '@/components/client_detail_tabs/ClientEngagements.vue'
-import Pending from '@/components/client_detail_tabs/Pending.vue'
-import Notes from '@/components/client_detail_tabs/Notes.vue'
-import Files from '@/components/client_detail_tabs/Files.vue'
-import Portal from '@/components/client_detail_tabs/Portal.vue'
 
 
 
@@ -108,25 +81,10 @@ export default {
   name: 'ClientDetails',
   data () {
     return {
-      activeItem: 
-        [
-          'portal',
-          'files',
-          'notes',
-          'pending',
-          'engagements',
-          'account',
-        ]
+      isClicked: false
     }
   },
   components:{
-    Account,
-    ClientEngagements,
-    Pending,
-    Notes,
-    Files,
-    Portal,
-    //  Modal
     'b-modal': bModal
   },
   directives: {
@@ -134,10 +92,10 @@ export default {
   },
   computed: {
     ...mapGetters(
-      [
-        'client',
-        'engagement'
-      ]
+        [
+          'client',
+          'engagement'
+        ]
       )
   },
   methods: {
@@ -182,7 +140,7 @@ export default {
  }
 }
 
-.active {
+.is-active {
   border-bottom: 3px solid transparent;
   color: #181818;
 

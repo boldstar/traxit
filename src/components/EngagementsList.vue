@@ -11,7 +11,7 @@
                     <th scope="col" class="text-center">Details</th>
                 </tr>
             </thead> 
-            <tbody class="client-info">
+            <tbody class="client-info" v-if="!tableLoaded">
                 <tr v-for="(engagement, index) in engagements"  :key="index">
                     <td>{{ engagement.client.last_name }}, {{ engagement.client.first_name }} & {{ engagement.client.spouse_first_name }}</td>
                     <td>{{ engagement.return_type }}</td>
@@ -22,6 +22,9 @@
                 </tr>
             </tbody>
         </table>
+        
+        <div v-if="tableLoaded" class="lds-dual-ring justify-content-center"></div>
+
     </div>
 </template>
 
@@ -36,8 +39,18 @@ export default {
             default: () => []
         }
     },
+    data() {
+        return {
+            tableLoaded: false
+        }
+    },
     created() {
         this.$store.dispatch('retrieveEngagements')
+        this.tableLoaded = true;
+        var self = this;
+        setTimeout(() => {
+            self.tableLoaded = false;
+        }, 3000)
     },
 }
 </script>

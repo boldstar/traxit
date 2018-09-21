@@ -67,8 +67,15 @@
             <button class="page-link" @click="nextPage">Next</button>           
             </li>
         </ul>
-        <div class="align-self-center h6 pl-3">
-           Per Page: {{ pageSize }}
+        <div class="pl-3">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="option">Per Page:</label>
+                </div>
+                <select class="custom-select" id="option" v-model="pageSize">
+                    <option v-for="option in options" :key="option.id" :value="option">{{ option }}</option>
+                </select>
+            </div>
         </div>
         
     </nav>
@@ -93,13 +100,15 @@ export default {
             searchClient: '',
             currentSort: 'name',
             currentSortDir: 'asc',
-            pageSize: 10,
             currentPage: 1,
+            pageSize: null,
+            options: ['10', '25', '50', '100']
         }
     },
     created() {
         this.$store.dispatch('retrieveClients');
         this.tableLoaded = true;
+        this.pageSize = this.options[1]
         var self = this;
         setTimeout(() => {
             self.tableLoaded = false;
@@ -147,6 +156,14 @@ export default {
     }
 }
 
+.input-group {
+        font-size: 14px;
+        height: 35px;
+
+        select {
+            height: 35px;
+        }
+    }
 
 </style>
 

@@ -52,6 +52,7 @@ export default {
   },
   methods: {
     ...mapActions(['addEngagement']),
+    
     addNewEngagement() {
       if(!this.engagement.return_type || !this.engagement.year ) return;
       
@@ -66,7 +67,6 @@ export default {
       .then(() => {
         this.engagement = "" 
         this.idForEngagement++
-        Vue.set(this.engagement, 1,  'engagement')
         this.$router.go(-1);
       })
     },

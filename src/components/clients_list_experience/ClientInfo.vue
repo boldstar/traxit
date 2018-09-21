@@ -53,7 +53,7 @@
         <div v-if="tableLoaded" class="lds-dual-ring justify-content-center"></div>
 
 
-    <nav aria-label="pagination" class="d-flex">
+    <nav aria-label="pagination" class="d-flex" v-if="!tableLoaded">
         <ul class="pagination">
             <li class="page-item">
             <button class="page-link" @click="prevPage">Previous</button>            

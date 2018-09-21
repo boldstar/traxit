@@ -11,7 +11,7 @@
         </transition>
 
         <div class="row mx-2 px-2 justify-content-between engagements" v-if="!engagementLoaded">
-            <div class="card mb-3 shadow-sm col-lg-5 col-md-3 p-0" v-for="(engagement, index) in engagement" :key="index">
+            <div class="card mb-3 shadow-sm col-lg-5 col-md-3 p-0" v-for="(engagement, index) in clientEngagements" :key="index">
                 <div class="d-flex justify-content-between card-header">
                     <h3 class="m-0 text-muted">{{ index + 1 }}</h3>
                     <h5 class="align-self-center m-0"><span>Return Type: </span> {{ engagement.return_type }} </h5>
@@ -49,10 +49,10 @@ export default {
         }
     },
     computed: {
-    ...mapGetters(['engagement', 'client']),
+    ...mapGetters(['clientEngagements', 'client']),
     },
     created() {
-        this.$store.dispatch('getClientEngagement', this.$route.params.id);
+        this.$store.dispatch('getClientEngagements', this.$route.params.id);
         this.engagementLoaded = true;
         var self = this;
         setTimeout(() => {
@@ -68,9 +68,13 @@ export default {
         height: 4em;
     }
 
+    .card {
+        height: 375px;
+    }
+
     .engagements {
         overflow-y: scroll;
-        height: 100vh;
+        height: 80vh;
     }
 
      //this is the css for the loading spinner

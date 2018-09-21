@@ -11,6 +11,7 @@ export default new Vuex.Store({
     client:[],
     engagements: [],
     engagement: [],
+    clientengagements: [],
     token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
     loading: false,
@@ -34,6 +35,9 @@ export default new Vuex.Store({
     engagement(state) {
       return state.engagement;
     },
+    clientEngagements(state) {
+      return state.clientengagements
+    },
   },
   mutations: {
     toggleSidebar(state) {
@@ -44,6 +48,9 @@ export default new Vuex.Store({
     },
     retrieveEngagements(state, engagements) {
       state.engagements = engagements
+    },
+    getClientEngagements(state, clientengagements) {
+      state.clientengagements = clientengagements
     },
     addClient(state, client) {
       state.clients.push({
@@ -83,15 +90,15 @@ export default new Vuex.Store({
         done: false
       })
     },
+    addClientEngagement(state, engagement) {
+      state.clientengagements.push(engagement)
+    },
     deleteClient(state, id) {
       const index = state.clients.findIndex(client => client.id == id);
       state.clients.splice(index, 1);
     },
     getDetails(state, client) {
       state.client = client
-    },
-    getClientEngagement(state, engagement) {
-      state.engagement = engagement
     },
     retrieveToken(state, token) {
       state.token = token
@@ -203,11 +210,11 @@ export default new Vuex.Store({
         console.log(error)
       })
     },
-    getClientEngagement({commit}, id) {
+    getClientEngagements({commit}, id) {
       axios.get('/engagements/'+id)
       .then(response => {
         console.log(response.data)
-        commit('getClientEngagement', response.data)
+        commit('getClientEngagements', response.data)
       })
       .catch(error => {
         console.log(error)
@@ -265,7 +272,7 @@ export default new Vuex.Store({
         done: false
       })
       .then(response => {
-        context.commit('getClientEngagement', response.data)
+        context.commit('addClientEngagement', response.data)
       })
       .catch(error => {
         console.log(error)

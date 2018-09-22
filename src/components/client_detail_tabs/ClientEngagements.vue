@@ -24,7 +24,7 @@
                     <h5 class="p-4"><span>Status: </span> {{ engagement.status}} </h5>
                 </div>
                 <div class="card-footer d-flex justify-content-between">
-                    <router-link to="#" class="btn">View</router-link>
+                    <router-link v-bind:to="'/engagement/' + engagement.id " class="btn">View</router-link>
                     <router-link to="#" class="btn">Edit</router-link>
                 </div>
             </div>

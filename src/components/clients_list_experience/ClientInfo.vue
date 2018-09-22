@@ -1,7 +1,7 @@
 <template>
 <div>
 
-<!-- this is the row of buttons above the clients list -->
+    <!-- this is the row of buttons above the clients list -->
     <div class="d-flex mb-3">.
       <input class="form-control w-25" placeholder="Filter By Last Name" v-model="searchClient" type="search">
       <div class="mr-auto ml-2">
@@ -53,6 +53,7 @@
         <div v-if="tableLoaded" class="lds-dual-ring justify-content-center"></div>
 
 
+    <!-- this is the pagination and dropdown for per page option -->
     <nav aria-label="pagination" class="d-flex" v-if="!tableLoaded">
         <ul class="pagination">
             <li class="page-item">

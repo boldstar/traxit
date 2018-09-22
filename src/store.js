@@ -46,9 +46,11 @@ export default new Vuex.Store({
     retrieveClients(state, clients) {
       state.clients = clients
     },
+    //this is for all engagements
     retrieveEngagements(state, engagements) {
       state.engagements = engagements
     },
+    //this is for all engagements belonging to client
     getClientEngagements(state, clientengagements) {
       state.clientengagements = clientengagements
     },
@@ -79,6 +81,7 @@ export default new Vuex.Store({
         postal_code: client.postal_code,
       })
     },
+    //this is to create new engagement
     addEngagement(state, engagement) {
       state.engagements.push ({
         id: engagement.id,
@@ -90,6 +93,7 @@ export default new Vuex.Store({
         done: false
       })
     },
+    //this is to push client engagement into the client engagements view
     addClientEngagement(state, engagement) {
       state.clientengagements.push(engagement)
     },
@@ -99,6 +103,14 @@ export default new Vuex.Store({
     },
     getDetails(state, client) {
       state.client = client
+    },
+    // this is to view the engagement
+    getEngagement(state, engagement) {
+      state.engagement = engagement
+    },
+    deleteEngagement(state, id) {
+      const index = state.engagements.findIndex(engagement => engagement.id == id);
+      state.engagements.splice(index, 1);
     },
     retrieveToken(state, token) {
       state.token = token
@@ -210,10 +222,19 @@ export default new Vuex.Store({
         console.log(error)
       })
     },
+    getEngagement({commit}, id) {
+      axios.get('/clientengagement/'+id)
+      .then(response => {
+        console.log(response.data)
+        commit('getEngagement', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
     getClientEngagements({commit}, id) {
       axios.get('/engagements/'+id)
       .then(response => {
-        console.log(response.data)
         commit('getClientEngagements', response.data)
       })
       .catch(error => {
@@ -277,6 +298,15 @@ export default new Vuex.Store({
       .catch(error => {
         console.log(error)
       })
+    },
+    deleteEngagement(context, id) {
+      axios.delete('/engagements/' + id)
+      .then(response => {
+          context.commit('deleteEngagement', id)
+      })
+      .catch(error => {
+          console.log(error)
+      })                
     },
   }
 })

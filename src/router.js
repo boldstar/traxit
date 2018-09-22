@@ -213,6 +213,21 @@ export default new Router({
         ]
       }
     },
+    {
+    //this is the route to view single engagement
+    path: '/engagement/:id',
+    name: 'engagement-details',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "accounts" */ './views/EngagementDetails.vue'),
+    meta: {
+        requiresAuth: true,
+        breadCrumb: [
+          { name: 'Engagement Details' }
+        ]
+      }
+    },
   ],
   mode: 'history',
 })

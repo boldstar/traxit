@@ -19,7 +19,7 @@
                 <button class="btn btn-outline-secondary"><i class="fas fa-print"></i></button>
                 <button class="btn btn-outline-success">Import <span><i class="fas fa-download"></i></span></button>
                 <button class="btn btn-outline-danger">Export <span><i class="fas fa-upload"></i></span></button>
-                <router-link to="/add" class="btn btn-primary pt-2">Contact<i class="ml-2 fas fa-plus"></i></router-link>
+                <router-link to="/add" class="btn btn-primary pt-2">Engagement<i class="ml-2 fas fa-plus"></i></router-link>
             </div>
 
         </div>
@@ -42,7 +42,7 @@
                     <td>{{ engagement.year }}</td>
                     <td>{{ engagement.assigned_to }}</td>
                     <td>{{ engagement.status }}</td>
-                    <td class="text-center"><router-link to="/engagements"><i class="far fa-eye"></i></router-link></td>
+                    <td class="text-center"><router-link v-bind:to="'/engagement/' + engagement.id"><i class="far fa-eye"></i></router-link></td>
                 </tr>
             </tbody>
         </table>

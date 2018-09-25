@@ -64,9 +64,6 @@ export default new Router({
       // this is the list of all clients view
       path: '/clients',
       name: 'clients',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './views/Clients.vue'),
       meta: {
         requiresAuth: true,
@@ -169,27 +166,45 @@ export default new Router({
       ],
     },
     {
-      // this is the path for adding a client or engagement globally
+      // this is the path for adding a contact or engagement globally
       path: '/add',
       name: 'add',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "add" */ './views/Add.vue'),
       meta: {
         requiresAuth: true,
         breadCrumb: [
-          { name: 'Add Contact' }
+          { name: 'Add New' }
         ]
-      }
+      },
+      children: [
+        {
+          // this is the children route for adding a new contact
+          path: 'contact',
+          component: () => import('@/components/ContactForm.vue'),
+            meta: {
+              requiresAuth: true,
+              breadCrumb: [
+                { name: 'New Contact' }
+            ]
+          },
+        },
+        {
+          // this is the children route for adding a new engagement
+          path: 'engagement',
+          component: () => import('@/components/EngagementForm.vue'),
+            meta: {
+              requiresAuth: true,
+              breadCrumb: [
+                { name: 'New Engagement' }
+            ]
+          },
+        }
+      ]
     },
     {
       // this is the path to view the tasks belonging to a user
       path: '/tasks',
       name: 'tasks',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "tasks" */ './views/Tasks.vue'),
       meta: {
         requiresAuth: true,
@@ -202,9 +217,6 @@ export default new Router({
       // this is the path to view the list of all engagements
     path: '/engagements',
     name: 'engagements',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "accounts" */ './views/Engagements.vue'),
     meta: {
         requiresAuth: true,
@@ -217,9 +229,6 @@ export default new Router({
     //this is the route to view single engagement
     path: '/engagement/:id',
     name: 'engagement-details',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "accounts" */ './views/EngagementDetails.vue'),
     meta: {
         requiresAuth: true,

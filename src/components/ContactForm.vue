@@ -1,5 +1,8 @@
 <template>
   <div class="page-wrapper">
+    <div class="justify-content-start d-flex mb-3">
+      <router-link to="/add" class="btn btn-sm btn-outline-secondary"><i class="fas fa-arrow-circle-left mr-2"></i>Back</router-link>
+    </div>
     <div class="card-body bg-light border-primary mb-2">
       <h4 class="text-left text-primary m-0"><i class="far fa-address-book mr-2"></i>New Contact</h4>
     </div>
@@ -62,7 +65,7 @@
 
 <script>
 export default {
-  name: 'contact-form',
+  name: 'contact',
   data () {
     return {
       client: {

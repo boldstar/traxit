@@ -46,7 +46,7 @@
                 <td>{{ client.cell_phone }}</td>
                 <td>{{ client.spouse_email }}</td>
                 <td>{{ client.spouse_cell_phone }}</td>
-                <td class="text-center"><router-link v-bind:to="'/client/'+ client.id + '/account'"><i class="far fa-eye"></i></router-link></td>
+                <td class="text-center"><router-link v-bind:to="'/contact/'+ client.id + '/account'"><i class="far fa-eye"></i></router-link></td>
             </tr>
         </tbody>
     </table>

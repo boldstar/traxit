@@ -2,20 +2,20 @@
 
     <!-- the clients data is imported from client info file -->
     <div class="page-wrapper mt-1">
-        <client-info :clients="allClients"></client-info>
+        <contacts-list :clients="allClients"></contacts-list>
     </div>
 
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import ClientInfo from '@/components/clients_list_experience/ClientInfo'
+import ContactsList from '@/components/ContactsList'
 
 
 export default {
-name: 'ClientsList',
+name: 'Contacts',
   components: {
-    ClientInfo,
+    ContactsList,
   },
   computed: {
     ...mapGetters(['allClients']),

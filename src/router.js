@@ -62,9 +62,9 @@ export default new Router({
     },
     {
       // this is the list of all clients view
-      path: '/clients',
-      name: 'clients',
-      component: () => import(/* webpackChunkName: "about" */ './views/Clients.vue'),
+      path: '/contacts',
+      name: 'contacts',
+      component: () => import(/* webpackChunkName: "about" */ './views/Contacts.vue'),
       meta: {
         requiresAuth: true,
         breadCrumb: [
@@ -74,9 +74,9 @@ export default new Router({
     },
     {
       // this is the client account page with tabbable children routes
-      path: '/client/:id',
-      name: 'client-details',
-      component: () => import('./views/ClientDetails.vue'),
+      path: '/contact/:id',
+      name: 'contact-details',
+      component: () => import('./views/ContactDetails.vue'),
       meta: {
         requiresAuth: true,
         breadCrumb: [
@@ -98,7 +98,7 @@ export default new Router({
           {
           // this is the path to view the engagements that belong to the client
           path: 'engagements',
-          component: () => import('@/components/client_detail_tabs/ClientEngagements.vue'),
+          component: () => import('@/components/client_detail_tabs/ContactEngagements.vue'),
             meta: {
               requiresAuth: true,
               breadCrumb: [

@@ -2,7 +2,7 @@
 <div class="page-wrapper mt-1">
 <!-- this is the go back button -->
   <div>
-    <router-link class="float-left btn btn-secondary btn-sm mt-3" to="/clients"><i class="far fa-arrow-alt-circle-left mr-2"></i>Go Back</router-link>  
+    <router-link class="float-left btn btn-secondary btn-sm mt-3" to="/contacts"><i class="far fa-arrow-alt-circle-left mr-2"></i>Go Back</router-link>  
   </div>
 
 <!-- this is the setting dropdown -->
@@ -78,7 +78,7 @@ import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 
 
 export default {
-  name: 'ClientDetails',
+  name: 'ContactDetails',
   data () {
     return {
       isClicked: false
@@ -102,7 +102,7 @@ export default {
     deleteClient(id) {
       this.$store.dispatch('deleteClient', id)
       .then(() => {
-        this.$router.push({path: '/clients'});
+        this.$router.push({path: '/contacts'});
       })
     },
     showModal () {

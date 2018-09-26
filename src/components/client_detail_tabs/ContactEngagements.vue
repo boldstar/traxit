@@ -42,7 +42,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
-    name: 'client-engagements',
+    name: 'contact-engagements',
     data() {
         return {
             engagementLoaded: false,

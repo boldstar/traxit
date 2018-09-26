@@ -17,7 +17,7 @@
                       <router-link class="nav-link border-right text-left pl-4" to="/engagements"><span><i class="far fa-folder-open"></i></span>Engagements</router-link>  
                   </li>
                   <li class="nav-item w-100"  v-bind:class="{ 'is-active': isActive }">                                  
-                      <router-link class="nav-link border-right text-left pl-4" to="/clients"><span><i class="fas fa-users"></i></span>Contacts</router-link>  
+                      <router-link class="nav-link border-right text-left pl-4" to="/contacts"><span><i class="fas fa-users"></i></span>Contacts</router-link>  
                   </li>
                   <li class="nav-item w-100"  v-bind:class="{ 'is-active': isActive }">                                  
                       <router-link class="nav-link border-right text-left pl-4" to="/add"><span><i class="far fa-plus-square"></i></span>Add New</router-link>  

@@ -131,7 +131,7 @@ export default {
       e.preventDefault();
       this.client = "" 
       this.idForClient++
-      this.$router.push('/clients')
+      this.$router.push({path: '/contacts', query: {alert: 'Contact Added'}})
     },
   },
   created: function() {

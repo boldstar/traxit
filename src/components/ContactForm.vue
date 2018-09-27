@@ -6,7 +6,7 @@
     <div class="card-body bg-light border-primary mb-2">
       <h4 class="text-left text-primary m-0"><i class="far fa-address-book mr-2"></i>New Contact</h4>
     </div>
-    <form @submit.prevent="addClient" class="d-flex-column justify-content-center">
+    <form @submit.prevent="addNewClient" class="d-flex-column justify-content-center">
       <div class="form-group">
         <select class="form-control mb-3" id="category" v-model="client.category">
           <option v-for="category in categories" :key="category.id" :value="category">{{ category }}</option>
@@ -64,6 +64,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'contact',
   data () {
@@ -97,11 +99,12 @@ export default {
     }
   },
   methods: {
-    addClient(e) {
-      if(!this.client.first_name || !this.client.email || !this.client.cell_phone ){
-        return
-      } else {
-        this.$store.dispatch('addClient', {
+    ...mapActions(['addClient']),
+
+    addNewClient() {
+      if(!this.client.first_name || !this.client.email || !this.client.cell_phone ) return;
+      
+        this.addClient( {
           id: this.idForClient,
           category: this.client.category,
           referral_type: this.client.referral_type,
@@ -126,12 +129,11 @@ export default {
           state: this.client.state,
           postal_code: this.client.postal_code,
         })
-        e.preventDefault();
-      }
-      e.preventDefault();
-      this.client = "" 
-      this.idForClient++
-      this.$router.push({path: '/contacts', query: {alert: 'Contact Added'}})
+        .then(() => {
+          this.client = "" 
+          this.idForClient++
+          this.$router.push({path: '/contacts', query: {alert: 'The Contact Has Been Added Succesfully!'}})
+        })
     },
   },
   created: function() {

@@ -15,7 +15,7 @@
 
             <div class="d-flex justify-content-between">
               <button type="submit" class="btn btn-primary d-flex justify-content-start">Create</button>
-              <router-link v-bind:to="'/client/' +client.id+ '/engagements'" class="btn btn-secondary float-right">Dismiss</router-link>
+              <router-link v-bind:to="'/contact/' +client.id+ '/engagements'" class="btn btn-secondary float-right">Dismiss</router-link>
             </div>
           </div>
         </form>

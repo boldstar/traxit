@@ -1,6 +1,15 @@
 <template>
   <div class="page-wrapper mt-1">
-  <div class="card bg-light flex-row justify-content-between py-2 px-3">
+
+  <div class="flex-row justify-content-between d-flex my-3">
+    <router-link to="/contacts" class="btn btn-outline-secondary"><i class="fas fa-arrow-circle-left mr-2"></i>Back</router-link>
+    <div>
+    <button class="btn btn-primary mr-3"><i class="far fa-edit mr-2"></i>Edit</button> 
+    <b-btn class="outline-secondary" v-b-modal.myModal><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
+    </div>
+  </div>  
+
+  <div class="card bg-light flex-row justify-content-between mt-4 py-2 px-3">
     <h2 class="m-0">{{ engagement.return_type}}</h2>  
     <h2 class="m-0">{{ engagement.year }}</h2>
   </div> 
@@ -11,10 +20,6 @@
     <h2 class="">Currently Assigned: {{ engagement.assigned_to}} </h2>  
   </div>
 
-  <div class="flex-row justify-content-between d-flex my-5">
-    <button class="btn btn-primary">Edit</button> 
-    <b-btn class="outline-secondary" v-b-modal.myModal><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
-  </div>   
 
   <b-modal id="myModal" ref="myModalRef" hide-footer title="Delete Client">
     <div class="d-block text-left">

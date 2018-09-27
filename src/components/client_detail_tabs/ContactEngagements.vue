@@ -2,7 +2,7 @@
     <div>
         <div class="header p-0 d-flex flex-row justify-content-between mt-2 mb-4 shadow-sm">
             <i class="ml-3 pr-2 far fa-folder-open h3 text-primary align-self-center m-0"></i>
-            <router-link :to=" { path: '/client/' + client.id + '/engagements/add-engagement' }" class="mr-3 btn btn-primary btn-sm m-0 align-self-center"><i class="mr-2 fas fa-plus-square"></i>Engagement</router-link>
+            <router-link :to=" { path: '/contact/' + client.id + '/engagements/add-engagement' }" class="mr-3 btn btn-primary btn-sm m-0 align-self-center"><i class="mr-2 fas fa-plus-square"></i>Engagement</router-link>
         </div>
 
         <!-- this is where the add-engagement route shows up if route is matched -->
@@ -10,8 +10,8 @@
             <router-view></router-view>
         </transition>
 
-        <div class="row mx-2 px-2 justify-content-between engagements" v-if="!engagementLoaded">
-            <div class="card mb-3 shadow-sm col-lg-5 col-md-3 p-0" v-for="(engagement, index) in clientEngagements" :key="index">
+        <div v-if="!engagementLoaded">
+            <div class="card mb-3 shadow-sm p-0" v-for="(engagement, index) in clientEngagements" :key="index">
                 <div class="d-flex justify-content-between card-header">
                     <h3 class="m-0 text-muted">{{ index + 1 }}</h3>
                     <h5 class="align-self-center m-0"><span>Return Type: </span> {{ engagement.return_type }} </h5>
@@ -24,8 +24,7 @@
                     <h5 class="p-4"><span>Status: </span> {{ engagement.status}} </h5>
                 </div>
                 <div class="card-footer d-flex justify-content-between">
-                    <router-link v-bind:to="'/engagement/' + engagement.id " class="btn">View</router-link>
-                    <router-link to="#" class="btn">Edit</router-link>
+                    <router-link v-bind:to="'/engagement/' + engagement.id " class="btn btn-secondary ml-auto"><i class="far fa-eye mr-2"></i>View</router-link>
                 </div>
             </div>
         </div>
@@ -74,7 +73,6 @@ export default {
 
     .engagements {
         overflow-y: scroll;
-        height: 80vh;
     }
 
      //this is the css for the loading spinner

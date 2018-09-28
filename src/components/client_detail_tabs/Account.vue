@@ -1,6 +1,6 @@
 <template>
     <div>
-    <div class="row">
+    <div class="row" v-if="$route.name == 'account'">
         <div class="col-lg-6 col-md-3">
             <div class="card mr-md-1">
                 <div class="card-header text-left">
@@ -37,13 +37,15 @@
                     </ul>
             </div>
         </div>
-    </div>
     <ul class="list-group mb-3">
         <li class="list-group-item text-left justify-content-between d-flex">
             <div><span class="font-weight-bold">Address: </span>{{ client.street_address }}, {{ client.city }}, {{ client.state }} {{ client.postal_code }}</div>
             <div class="text-capitalize"><span class="font-weight-bold">Referred By: </span>{{ client.referral_type }}</div>  
         </li>
     </ul>
+    </div>
+
+    <router-view ></router-view>
     </div>
 </template>
 

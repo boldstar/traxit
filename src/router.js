@@ -87,6 +87,7 @@ export default new Router({
           {
           // this is the path to view the account of the client
           path: 'account',
+          name: 'account',
           component: () => import('@/components/client_detail_tabs/Account.vue'),
             meta: {
               requiresAuth: true,
@@ -94,6 +95,19 @@ export default new Router({
                 { name: 'Account' }
               ]
             },
+            children: [
+              {
+                 // this is the path to edit contact
+                 path: 'edit',
+                 component: () => import('@/components/EditContact.vue'),
+                   meta: {
+                     requiresAuth: true,
+                     breadCrumb: [
+                       { name: 'Edit Contact' }
+                     ]
+                   },
+              }
+            ]
           },
           {
           // this is the path to view the engagements that belong to the client

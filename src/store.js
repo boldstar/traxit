@@ -104,6 +104,34 @@ export default new Vuex.Store({
     getDetails(state, client) {
       state.client = client
     },
+    updateClient(state, client) {
+      const index = state.clients.findIndex(item => item.id == client.id);
+      state.clients.splice(index, 1, {
+        'id': client.id,
+        'category': client.category,
+        'referral_type': client.referral_type,
+        'first_name': client.first_name,
+        'middle_initial': client.middle_initial,
+        'last_name': client.last_name,
+        'occupation': client.occupation,
+        'dob': client.dob,
+        'email': client.email,
+        'cell_phone': client.cell_phone,
+        'work_phone': client.work_phone,
+        'spouse_first_name': client.spouse_first_name,
+        'spouse_middle_initial': client.spouse_middle_initial,
+        'spouse_last_name': client.spouse_last_name,
+        'spouse_occupation': client.spouse_occupation,
+        'spouse_dob': client.spouse_dob,
+        'spouse_email': client.spouse_email,
+        'spouse_cell_phone': client.spouse_cell_phone,
+        'spouse_work_phone': client.spouse_work_phone,
+        'street_address': client.street_address,
+        'city': client.city,
+        'state': client.state,
+        'postal_code': client.postal_code,           
+      })
+    },
     // this is to view the engagement
     getEngagement(state, engagement) {
       state.engagement = engagement
@@ -237,7 +265,6 @@ export default new Vuex.Store({
     getEngagement({commit}, id) {
       axios.get('/clientengagement/'+id)
       .then(response => {
-        console.log(response.data)
         commit('getEngagement', response.data)
       })
       .catch(error => {
@@ -285,6 +312,39 @@ export default new Vuex.Store({
       .catch(error => {
         console.log(error)
       })
+    },
+    updateClient(context, client) {
+      axios.patch('/clients/' + client.id, {
+        id: client.id,
+        category: client.category,
+        referral_type: client.referral_type,
+        first_name: client.first_name,
+        middle_initial: client.middle_initial,
+        last_name: client.last_name,
+        occupation: client.occupation,
+        dob: client.dob,
+        email: client.email,
+        cell_phone: client.cell_phone,
+        work_phone: client.work_phone,
+        spouse_first_name: client.spouse_first_name,
+        spouse_middle_initial: client.spouse_middle_initial,
+        spouse_last_name: client.spouse_last_name,
+        spouse_occupation: client.spouse_occupation,
+        spouse_dob: client.spouse_dob,
+        spouse_email: client.spouse_email,
+        spouse_cell_phone: client.spouse_cell_phone,
+        spouse_work_phone: client.spouse_work_phone,
+        street_address: client.street_address,
+        city: client.city,
+        state: client.state,
+        postal_code: client.postal_code,
+      })
+      .then(response => {
+          context.commit('updateClient', response.data)
+      })
+      .catch(error => {
+          console.log(error)
+      })           
     },
     deleteClient(context, id) {
       axios.delete('/clients/' + id)

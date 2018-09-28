@@ -2,25 +2,40 @@
   <div class="page-wrapper mt-1">
 
   <div class="flex-row justify-content-between d-flex my-3">
-    <router-link v-bind:to="'/engagement/' +this.engagement.id" class="btn btn-outline-secondary"><i class="fas fa-arrow-circle-left mr-2"></i>Back</router-link>
+    <router-link v-bind:to="'/engagement/' +this.engagement.id" class="btn btn-outline-secondary"><i class="fas fa-arrow-circle-left mr-2"></i>Cancel</router-link>
     <div>
       <b-btn class="outline-secondary" v-b-modal.myModal><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn> 
     </div>
   </div>  
 
+  <hr>
+
+  <div class="d-flex justify-content-start my-4 h4">
+    <div>
+      <span class="mr-3"><i class="fas fa-user-edit"></i> </span>
+      {{ engagement.client.last_name }}, {{ engagement.client.first_name }} & {{ engagement.client.spouse_first_name }}
+    </div>
+  </div>
+
+  <hr>
+
   <form @submit.prevent="editThisEngagement" class="d-flex-column justify-content-center">
       <div class="form-group">
-     
-          <input type="text" class="form-control mb-3" placeholder="Client" v-model="engagement.client_id">
-
+        <label class="justify-content-start d-flex">Year:</label>
         <input type="text" class="form-control mb-3" placeholder="Year" v-model="engagement.year">
+
+        <label class="justify-content-start d-flex">Return Type:</label>
         <select class="form-control mb-3" id="type" v-model="engagement.return_type">
             <option v-for="type in types" :key="type.id" :value="type">{{ type }}</option>
         </select>
 
+        <label class="justify-content-start d-flex">Assign To:</label>
         <input type="text" class="form-control mb-3" placeholder="Assign To" v-model="engagement.assigned_to">
+
+        <label class="justify-content-start d-flex">Status:</label>
         <input type="text" class="form-control mb-3" placeholder="Status" v-model="engagement.status">
-      <button type="submit" class="btn btn-lg btn-primary d-flex justify-content-start">Create</button>
+
+      <button type="submit" class="btn btn-lg btn-primary d-flex justify-content-start">Save Changes</button>
       </div>
     </form>
 
@@ -48,7 +63,7 @@ import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 
 export default {
-  name: 'EngagementDetails',
+  name: 'EditEngagement',
   data() {
     return {
       types: [ 

@@ -2,7 +2,7 @@
 <div class="page-wrapper mt-1">
 <!-- this is the go back button -->
   <div>
-    <router-link class="float-left btn btn-secondary btn-sm mt-3" to="/contacts"><i class="far fa-arrow-alt-circle-left mr-2"></i>Go Back</router-link>  
+    <router-link class="float-left btn btn-secondary btn-sm mt-3" to="/contacts"><i class="far fa-arrow-alt-circle-left mr-2"></i>Contacts</router-link>  
   </div>
 
 <!-- this is the setting dropdown -->
@@ -13,7 +13,7 @@
         Settings
       </button>
       <div class="dropdown-menu dropdown-menu-right mr-0" aria-labelledby="dropdownMenu2">
-        <button class="dropdown-item" type="button"><i class="fas fa-pencil-alt"></i><span class="ml-2 pl-4">Edit Contact</span></button>
+        <router-link :to="'/contact/' + client.id + '/account/' + 'edit'" class="dropdown-item"><i class="fas fa-pencil-alt"></i><span class="ml-2 pl-4">Edit Contact</span></router-link>
         <button class="dropdown-item" type="button"><i class="far fa-pause-circle"></i><span class="ml-2 pl-4">Deactivate</span></button>
         <div class="dropdown-divider"></div>
         <b-btn class="dropdown-item text-danger" v-b-modal.myModal><i class="fas fa-trash"></i><span class="ml-2">Delete Account</span></b-btn>

@@ -29,7 +29,7 @@
     <table class="table table-bordered table-light table-striped table-hover text-left">
         <thead class="thead-primary hover">
             <tr>
-                <th scope="col" @click="sort('last_name')">Name</th>
+                <th scope="col">Name</th>
                 <th scope="col" @click="sort('category')">Category</th>
                 <th scope="col">Taxpayer Email</th>
                 <th scope="col">Taxpayer Phone</th>

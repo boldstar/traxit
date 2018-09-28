@@ -91,6 +91,7 @@ export default {
       if(!this.client.first_name || !this.client.email || !this.client.cell_phone ) return;
       
         this.updateClient( {
+          id: this.client.id,
           category: this.client.category,
           referral_type: this.client.referral_type,
           first_name: this.client.first_name,

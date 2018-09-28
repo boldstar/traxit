@@ -27,7 +27,7 @@
         <table class="table table-bordered table-light table-striped table-hover text-left">
             <thead class="thead-primary hover">
                 <tr>
-                    <th scope="col" @click="sort('last_name')">Client</th>
+                    <th scope="col">Client</th>
                     <th scope="col" @click="sort('return_type')">Return Type</th>
                     <th scope="col" @click="sort('year')">Year</th>
                     <th scope="col" @click="sort('assigned_to')">Assigned To</th>
@@ -147,6 +147,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.hover {
+
+    &:hover {
+        cursor: pointer;
+    }
+}
 
     .input-group {
         font-size: 14px;

@@ -235,7 +235,19 @@ export default new Router({
         breadCrumb: [
           { name: 'Engagement Details' }
         ]
+      },
+    children: [
+      {
+        path: 'edit',
+        component: () => import('@/components/EditEngage.vue'),
+          meta: {
+            requiresAuth: true,
+            breadCrumb: [
+              { name: 'Edit Engagement' }
+          ]
+        },
       }
+    ]
     },
   ],
   mode: 'history',

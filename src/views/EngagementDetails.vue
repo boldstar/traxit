@@ -1,39 +1,42 @@
 <template>
   <div class="page-wrapper mt-1">
+    <!-- this is to view the details of the engagement and will be hidden if the following route does not match -->
+    <div v-if="$route.name == 'engagement-details'">
+      <div class="flex-row justify-content-between d-flex my-3" >
+        <router-link to="/contacts" class="btn btn-outline-secondary"><i class="fas fa-arrow-circle-left mr-2"></i>Back</router-link>
+        <div>
+        <router-link class="btn btn-primary mr-3" :to="'/engagement/' +this.engagement.id+ '/edit'"><i class="far fa-edit mr-2"></i>Edit</router-link> 
+        <b-btn class="outline-secondary" v-b-modal.myModal><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
+        </div>
+      </div>  
 
-  <div class="flex-row justify-content-between d-flex my-3">
-    <router-link to="/contacts" class="btn btn-outline-secondary"><i class="fas fa-arrow-circle-left mr-2"></i>Back</router-link>
-    <div>
-    <button class="btn btn-primary mr-3"><i class="far fa-edit mr-2"></i>Edit</button> 
-    <b-btn class="outline-secondary" v-b-modal.myModal><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
+      <div class="card bg-light flex-row justify-content-between mt-4 py-2 px-3">
+        <h2 class="m-0">{{ engagement.return_type}}</h2>  
+        <h2 class="m-0">{{ engagement.year }}</h2>
+      </div> 
+
+      <div class="text-left ml-2">
+        <h2 class="mt-5">Client: </h2>
+        <h2 class="my-5">Status: {{ engagement.status }}</h2>
+        <h2 class="">Currently Assigned: {{ engagement.assigned_to}} </h2>  
+      </div>
+
+
+      <b-modal id="myModal" ref="myModalRef" hide-footer title="Delete Client">
+        <div class="d-block text-left">
+          <h5>Are you sure you want to delete engagement?</h5>
+          <br>
+          <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
+        </div>
+        <div class="d-flex">
+          <b-btn class="mt-3" variant="danger" @click="hideModal">Cancel</b-btn>
+          <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteEngagement(engagement.id)">Confirm</b-btn>
+        </div>
+      </b-modal>
     </div>
-  </div>  
 
-  <div class="card bg-light flex-row justify-content-between mt-4 py-2 px-3">
-    <h2 class="m-0">{{ engagement.return_type}}</h2>  
-    <h2 class="m-0">{{ engagement.year }}</h2>
-  </div> 
-
-  <div class="text-left ml-2">
-    <h2 class="mt-5">Client: </h2>
-    <h2 class="my-5">Status: {{ engagement.status }}</h2>
-    <h2 class="">Currently Assigned: {{ engagement.assigned_to}} </h2>  
-  </div>
-
-
-  <b-modal id="myModal" ref="myModalRef" hide-footer title="Delete Client">
-    <div class="d-block text-left">
-      <h5>Are you sure you want to delete engagement?</h5>
-      <br>
-      <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
-    </div>
-    <div class="d-flex">
-      <b-btn class="mt-3" variant="danger" @click="hideModal">Cancel</b-btn>
-      <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteEngagement(engagement.id)">Confirm</b-btn>
-    </div>
-  </b-modal>
-
-
+<!-- this will show the edit view if the route matches the v-if below -->
+  <router-view v-if="$route.path == '/engagement/' +this.engagement.id+ '/edit'"></router-view>
   </div>
 </template>
 

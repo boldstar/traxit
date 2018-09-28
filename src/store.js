@@ -108,6 +108,18 @@ export default new Vuex.Store({
     getEngagement(state, engagement) {
       state.engagement = engagement
     },
+    updateEngagement(state, engagement) {
+      const index = state.engagements.findIndex(item => item.id == engagement.id);
+      state.engagements.splice(index, 1, {
+        'id': engagement.id,
+        'client_id': engagement.client_id,
+        'return_type': engagement.return_type,
+        'year': engagement.year,
+        'assigned_to': engagement.assigned_to,
+        'status': engagement.status,
+        'done': false           
+      })
+    },
     deleteEngagement(state, id) {
       const index = state.engagements.findIndex(engagement => engagement.id == id);
       state.engagements.splice(index, 1);
@@ -298,6 +310,22 @@ export default new Vuex.Store({
       .catch(error => {
         console.log(error)
       })
+    },
+    updateEngagement(context, engagement) {
+      axios.patch('/engagements/' + engagement.id, {
+        client_id: engagement.client_id,
+        return_type: engagement.return_type,
+        year: engagement.year,
+        assigned_to: engagement.assigned_to,
+        status: engagement.status,
+        done: false
+      })
+      .then(response => {
+          context.commit('updateEngagement', response.data)
+      })
+      .catch(error => {
+          console.log(error)
+      })           
     },
     deleteEngagement(context, id) {
       axios.delete('/engagements/' + id)

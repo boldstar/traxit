@@ -116,7 +116,7 @@ export default {
           postal_code: this.client.postal_code,
         })
         .then(() => {
-          this.$router.go(-1)
+          this.$router.push({path: '/contact/' +this.client.id+ '/account', query: {alert: 'The Contact Has Been Updated'}})
         })
     },
     },

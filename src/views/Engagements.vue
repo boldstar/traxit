@@ -32,8 +32,13 @@ export default {
     },
     created: function() {
     if(this.$route.query.alert) {
-      this.alert  = this.$route.query.alert;
+        this.alert  = this.$route.query.alert;
     }
+    this.$router.replace({ path: '/engagements'})
+    var self = this;
+    setTimeout(() => {
+      self.alert = '';
+    }, 7000)
   }
 
 }

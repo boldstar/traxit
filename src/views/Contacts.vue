@@ -36,6 +36,11 @@ name: 'Contacts',
     if(this.$route.query.alert) {
       this.alert  = this.$route.query.alert;
     }
+    this.$router.replace({ path: '/contacts'})
+    var self = this;
+    setTimeout(() => {
+      self.alert = '';
+    }, 7000)
   }
 }
 </script>

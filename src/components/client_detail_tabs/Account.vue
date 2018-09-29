@@ -1,5 +1,8 @@
 <template>
     <div>
+        
+
+        <!-- this is the details of the account -->
     <div class="row" v-if="$route.name == 'account'">
         <div class="col-lg-6 col-md-3">
             <div class="card mr-md-1">
@@ -37,14 +40,16 @@
                     </ul>
             </div>
         </div>
-    <ul class="list-group mb-3">
+    </div>
+    <!-- this is the address of the account contact -->
+    <ul class="list-group mb-3" v-if="$route.name == 'account'">
         <li class="list-group-item text-left justify-content-between d-flex">
             <div><span class="font-weight-bold">Address: </span>{{ client.street_address }}, {{ client.city }}, {{ client.state }} {{ client.postal_code }}</div>
             <div class="text-capitalize"><span class="font-weight-bold">Referred By: </span>{{ client.referral_type }}</div>  
         </li>
     </ul>
-    </div>
 
+<!-- this is where the edit contact child view shows up -->
     <router-view ></router-view>
     </div>
 </template>
@@ -52,11 +57,18 @@
 <script>
 import { mapGetters } from 'vuex'
 
+
 export default {
     name: 'account',
+    data() {
+        return {
+            alert: ''
+        }
+    },
     computed: {
     ...mapGetters(['client'])
     },
+    // this will get the message from the url
     created: function(){
     this.$store.dispatch('getDetails', this.$route.params.id);
   }

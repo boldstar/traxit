@@ -81,11 +81,11 @@ export default {
 
 
     .sidebar .nav-link {
-        font-size: 20px;
+        font-size: 19px;
         font-weight: 600;
         color: rgb(0, 0, 0);
         list-style: none;
-        letter-spacing: .1em;
+        letter-spacing: .05em;
         transition-duration: .3s;
         padding-top: 20px;
         padding-bottom: 20px;

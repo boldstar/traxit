@@ -102,7 +102,7 @@ export default {
     deleteEngagement(id) {
       this.$store.dispatch('deleteEngagement', id)
       .then(() => {
-        this.$router.push({path: '/engagements'});
+        this.$router.push({path: '/engagements', query: {alert: 'Engagement Was Succesfully Deleted'}});
       })
     },
     showModal () {

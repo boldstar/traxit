@@ -9,8 +9,8 @@
 
 <script>
 export default {
-    name: 'alert',
-    props: ['message']
+    name: 'Alert',
+    props: ['message'],
 }
 </script>
 

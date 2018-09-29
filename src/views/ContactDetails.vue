@@ -1,6 +1,7 @@
 <template>
 <div class="page-wrapper mt-1">
 <!-- this is the go back button -->
+<Alert v-if="alert" v-bind:message="alert" />
   <div>
     <router-link class="float-left btn btn-secondary btn-sm mt-3" to="/contacts"><i class="far fa-arrow-alt-circle-left mr-2"></i>Contacts</router-link>  
   </div>
@@ -71,6 +72,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import Alert from '@/components/Alert.vue'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 
@@ -81,11 +83,13 @@ export default {
   name: 'ContactDetails',
   data () {
     return {
-      isClicked: false
+      isClicked: false,
+      alert: ''
     }
   },
   components:{
-    'b-modal': bModal
+    'b-modal': bModal,
+    Alert,
   },
   directives: {
     'b-modal': bModalDirective
@@ -115,9 +119,20 @@ export default {
       return this.activeItem === menuItem
     },
   },
+  watch: {
+      $route (to, from) {
+        if(this.$route.query.alert) {
+          this.alert  = this.$route.query.alert;
+          this.$router.replace({path: '/contact/' +this.client.id+ '/account'});
+          setTimeout(() => {
+            this.alert = '';
+          }, 10000)
+        }    
+    }
+  },
   created: function(){
-    this.$store.dispatch('getDetails', this.$route.params.id);
-  }
+    this.$store.dispatch('getDetails', this.$route.params.id)
+    }
 }
 </script>
 

@@ -10,25 +10,37 @@
             <router-view></router-view>
         </transition>
 
-        <div v-if="!engagementLoaded">
-            <div class="card mb-3 shadow-sm p-0" v-for="(engagement, index) in clientEngagements" :key="index">
-                <div class="d-flex justify-content-between card-header">
-                    <h3 class="m-0 text-muted">{{ index + 1 }}</h3>
-                    <h5 class="align-self-center m-0"><span>Return Type: </span> {{ engagement.return_type }} </h5>
-                </div>
-                <div class="card-body text-left p-0 my-1">
-                    <h5 class="p-4"><span>Year: </span> {{ engagement.year }} </h5>
-                    <hr class="my-1">
-                    <h5 class="p-4"><span>Assigned To: </span> {{ engagement.assigned_to }} </h5>
-                    <hr class="my-1">
-                    <h5 class="p-4"><span>Status: </span> {{ engagement.status}} </h5>
-                </div>
-                <div class="card-footer d-flex justify-content-between">
-                    <router-link v-bind:to="'/engagement/' + engagement.id " class="btn btn-secondary ml-auto"><i class="far fa-eye mr-2"></i>View</router-link>
-                </div>
-            </div>
+        <!-- this will show if there is no engagements only -->
+        <div v-if="noEngagements & !engagementLoaded" class="mt-5">
+            This Contact Has No Engagements...
         </div>
 
+        <!-- this shows if there is engagements -->
+        <div v-else>
+
+            <div v-if="!engagementLoaded">
+                <div class="card mb-3 shadow-sm p-0" v-for="(engagement, index) in clientEngagements" :key="index">
+                    <div class="d-flex justify-content-between card-header">
+                        <h3 class="m-0 text-muted">{{ index + 1 }}</h3>
+                        <h5 class="align-self-center m-0"><span>Return Type: </span> {{ engagement.return_type }} </h5>
+                    </div>
+                    <div class="card-body text-left p-0 my-1">
+                        <h5 class="p-4"><span>Year: </span> {{ engagement.year }} </h5>
+                        <hr class="my-1">
+                        <h5 class="p-4"><span>Assigned To: </span> {{ engagement.assigned_to }} </h5>
+                        <hr class="my-1">
+                        <h5 class="p-4"><span>Status: </span> {{ engagement.status}} </h5>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <router-link v-bind:to="'/engagement/' + engagement.id " class="btn btn-secondary ml-auto"><i class="far fa-eye mr-2"></i>View</router-link>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        
+    <!-- this is the loading ring for the engagements -->
     <div v-if="engagementLoaded" class="lds-dual-ring justify-content-center"></div>
 
     </div>
@@ -45,6 +57,7 @@ export default {
     data() {
         return {
             engagementLoaded: false,
+            noEngagements: false,
         }
     },
     computed: {
@@ -53,9 +66,15 @@ export default {
     created() {
         this.$store.dispatch('getClientEngagements', this.$route.params.id);
         this.engagementLoaded = true;
+        this.noEngagements = false;
         var self = this;
         setTimeout(() => {
             self.engagementLoaded = false;
+            if(self.clientEngagements == 0){
+                 self.noEngagements = true
+            } else {
+                self.noEngagements = false
+            }
         }, 3000);
     },   
 }

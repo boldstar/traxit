@@ -4,6 +4,10 @@ import router from './router'
 import store from './store'
 import { Button } from 'bootstrap-vue/es/components'
 import VeeValidate from 'vee-validate'
+import jQuery from 'jquery'
+import 'bootstrap/dist/css/bootstrap.css'
+global.jQuery = jQuery
+let Bootstrap = require('bootstrap')
 
 
 
@@ -18,6 +22,7 @@ Vue.component('breadcrumb', Breadcrumb)
 Vue.config.productionTip = false
 Vue.use(Button);
 Vue.use(VeeValidate);
+
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {

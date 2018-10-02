@@ -45,10 +45,28 @@
           <div>    
               Questions
           </div>
-          <span><router-link :to="'/contact/' +engagement.client.id + '/account'"><i class="far fa-plus-square"></i></router-link></span>
+          <span><router-link :to="'/engagement/' + engagement.id + '/add-question'"><i class="far fa-plus-square"></i></router-link></span>
       </div>
 
       <hr>
+
+      <div class="card mb-3"  v-for="(question, index) in engagement.questions" :key="index">
+        <div class="card-header">
+          <div class="h6 m-0 justify-content-between d-flex">
+            <router-link class="btn btn-sm btn-primary mr-3" to="#" ><i class="far fa-edit mr-2"></i>Edit</router-link> 
+            <b-btn class="outline-secondary" size="sm" v-b-modal.myQuestion><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
+          </div>
+        </div>
+        <div class="card-body bg-light d-flex justify-content-between">
+          <div class="h4 mr-5 text-left">
+            {{ question.question }}
+          </div>
+          <div class="ml-5 d-flex align-self-center">
+            <span class="font-weight-bold mr-2">Answered: </span>
+            <input class="mt-2" type="checkbox" v-model="question.answered">
+          </div>
+        </div>
+      </div>
     </div>
 
 
@@ -64,12 +82,25 @@
           <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteEngagement(engagement.id)">Confirm</b-btn>
         </div>
       </b-modal>
+
+<!-- this is the modal for deleting a question -->
+      <b-modal id="myQuestion" ref="myModalRef" hide-footer title="Delete Question">
+        <div class="d-block text-left">
+          <h5>Are you sure you want to delete question?</h5>
+          <br>
+          <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
+        </div>
+        <div class="d-flex">
+          <b-btn class="mt-3" variant="danger" @click="hideModal">Cancel</b-btn>
+          <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteQuestion(question.id)">Confirm</b-btn>
+        </div>
+      </b-modal>
     </div>
 
     <div v-if="detailsLoaded" class="lds-dual-ring justify-content-center"></div>
 
-<!-- this will show the edit view if the route matches the v-if below -->
-  <router-view v-if="$route.path == '/engagement/' +this.engagement.id+ '/edit'"></router-view>
+<!-- this will show the child view if the route matches-->
+  <router-view ></router-view>
   </div>
 </template>
 
@@ -80,6 +111,12 @@ import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 
 export default {
   name: 'EngagementDetails',
+  props: {
+        questions: {
+            type: Array,
+            default: () => []
+        }
+    },
   data() {
     return {
       detailsLoaded: false,
@@ -94,15 +131,22 @@ export default {
   computed: {
     ...mapGetters(
         [
-          'engagement'
+          'engagement',
+          'question'
         ]
-      )
+      ),
   },
   methods: {
     deleteEngagement(id) {
       this.$store.dispatch('deleteEngagement', id)
       .then(() => {
         this.$router.push({path: '/engagements', query: {alert: 'Engagement Was Succesfully Deleted'}});
+      })
+    },
+    deleteQuestion(id) {
+      this.$store.dispatch('deleteQuestion', id)
+      .then(() => {
+        this.$router.push({path: '/engagement/' +this.engagement.id , query: {alert: 'The Question Was Succesfully Deleted'}});
       })
     },
     showModal () {

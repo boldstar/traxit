@@ -260,6 +260,16 @@ export default new Router({
               { name: 'Edit Engagement' }
           ]
         },
+      },
+      {
+        path: 'add-question',
+        component: () => import('@/components/AddQuestion.vue'),
+          meta: {
+            requiresAuth: true,
+            breadCrumb: [
+              { name: 'Add Question' }
+          ]
+        },
       }
     ]
     },

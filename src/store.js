@@ -12,6 +12,8 @@ export default new Vuex.Store({
     engagements: [],
     engagement: [],
     clientengagements: [],
+    questions: [],
+    question: [],
     token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
     loading: false,
@@ -38,6 +40,12 @@ export default new Vuex.Store({
     clientEngagements(state) {
       return state.clientengagements
     },
+    question(state) {
+      return state.question;
+    },
+    engagementQuestions(state) {
+      return state.questions;
+    }
   },
   mutations: {
     toggleSidebar(state) {
@@ -53,6 +61,9 @@ export default new Vuex.Store({
     //this is for all engagements belonging to client
     getClientEngagements(state, clientengagements) {
       state.clientengagements = clientengagements
+    },
+    getEngagementQuestions(state, questions) {
+      state.questions = questions
     },
     addClient(state, client) {
       state.clients.push({
@@ -152,6 +163,18 @@ export default new Vuex.Store({
       const index = state.engagements.findIndex(engagement => engagement.id == id);
       state.engagements.splice(index, 1);
     },
+    addQuestion(state, question) {
+      state.questions.push ({
+        id: question.id,
+        engagement_id: question.engagement_id,
+        question: question.question,
+        answered: false
+      })
+    },
+    deleteQuestion(state, id) {
+      const index = state.questions.findIndex(question => question.id == id);
+      state.questions.splice(index, 1);
+    },
     retrieveToken(state, token) {
       state.token = token
     },
@@ -244,19 +267,19 @@ export default new Vuex.Store({
         console.log(error)
       })
     },
-    retrieveEngagements(context) {
-      axios.get('/engagements')
+    getDetails({commit}, id) {
+      axios.get('/clients/'+id)
       .then(response => {
-        context.commit('retrieveEngagements', response.data)
+        commit('getDetails', response.data)
       })
       .catch(error => {
         console.log(error)
       })
     },
-    getDetails({commit}, id) {
-      axios.get('/clients/'+id)
+    retrieveEngagements(context) {
+      axios.get('/engagements')
       .then(response => {
-        commit('getDetails', response.data)
+        context.commit('retrieveEngagements', response.data)
       })
       .catch(error => {
         console.log(error)
@@ -391,6 +414,28 @@ export default new Vuex.Store({
       axios.delete('/engagements/' + id)
       .then(response => {
           context.commit('deleteEngagement', id)
+      })
+      .catch(error => {
+          console.log(error)
+      })                
+    },
+    addQuestion(context, question) {
+      axios.post(('/questions'), {
+        engagement_id: question.engagement_id,
+        question: question.question,
+        answered: false
+      })
+      .then(response => {
+        context.commit('addQuestion', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    deleteQuestion(context, id) {
+      axios.delete('/questions/' + id)
+      .then(response => {
+          context.commit('deleteQuestion', id)
       })
       .catch(error => {
           console.log(error)

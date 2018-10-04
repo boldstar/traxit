@@ -50,7 +50,7 @@ export default {
       .then(() => {
         this.question = "" 
         this.idForQuestion++
-        this.$router.go(-1);
+        this.$router.push({path: '/engagement/' +this.engagement.id, query: {alert: 'A new question has been added!'}});
       })
     },
   },

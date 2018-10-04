@@ -97,15 +97,26 @@ export default new Router({
             },
             children: [
               {
-                 // this is the path to edit contact
-                 path: 'edit',
-                 component: () => import('@/components/EditContact.vue'),
-                   meta: {
-                     requiresAuth: true,
-                     breadCrumb: [
-                       { name: 'Edit Contact' }
-                     ]
-                   },
+              // this is the path to edit contact
+              path: 'edit',
+              component: () => import('@/components/EditContact.vue'),
+                meta: {
+                  requiresAuth: true,
+                  breadCrumb: [
+                    { name: 'Edit Contact' }
+                  ]
+                },
+              },
+              {
+              // this is the path to edit contact
+              path: 'add-dependent',
+              component: () => import('@/components/AddDependent.vue'),
+                meta: {
+                  requiresAuth: true,
+                  breadCrumb: [
+                    { name: 'Add Dependent' }
+                  ]
+                },
               }
             ]
           },

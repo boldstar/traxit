@@ -12,6 +12,8 @@ export default new Vuex.Store({
     engagements: [],
     engagement: [],
     clientengagements: [],
+    dependent: [],
+    dependents: [],
     questions: [],
     question: [],
     token: localStorage.getItem('access_token') || null,
@@ -33,6 +35,12 @@ export default new Vuex.Store({
     },
     client(state) {
       return state.client;
+    },
+    dependent(state) {
+      return state.dependent;
+    },
+    clientDependents(state) {
+      return state.dependents
     },
     engagement(state) {
       return state.engagement;
@@ -163,17 +171,19 @@ export default new Vuex.Store({
       const index = state.engagements.findIndex(engagement => engagement.id == id);
       state.engagements.splice(index, 1);
     },
+    addDependent(state, dependent) {
+      state.client.dependents.push(dependent);
+    },
+    deleteDependent(state, id) {
+      const index = state.dependents.findIndex(dependent => dependent.id == id);
+      state.dependents.splice(index, 1);
+    },
     addQuestion(state, question) {
-      state.questions.push ({
-        id: question.id,
-        engagement_id: question.engagement_id,
-        question: question.question,
-        answered: false
-      })
+      state.engagement.questions.push(question);
     },
     deleteQuestion(state, id) {
-      const index = state.questions.findIndex(question => question.id == id);
-      state.questions.splice(index, 1);
+      const index = state.engagement.questions.findIndex(question => question.id == id);
+      state.engagement.questions.splice(index, 1);
     },
     retrieveToken(state, token) {
       state.token = token
@@ -414,6 +424,30 @@ export default new Vuex.Store({
       axios.delete('/engagements/' + id)
       .then(response => {
           context.commit('deleteEngagement', id)
+      })
+      .catch(error => {
+          console.log(error)
+      })                
+    },
+    addDependent(context, dependent) {
+      axios.post(('/dependents'), {
+        client_id: dependent.client_id,
+        first_name: dependent.first_name,
+        middle_name: dependent.middle_name,
+        last_name: dependent.last_name,
+        dob: dependent.dob,
+      })
+      .then(response => {
+        context.commit('addDependent', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    deleteDependent(context, id) {
+      axios.delete('/dependents/' + id)
+      .then(response => {
+          context.commit('deleteDependent', id)
       })
       .catch(error => {
           console.log(error)

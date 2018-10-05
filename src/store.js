@@ -175,8 +175,8 @@ export default new Vuex.Store({
       state.client.dependents.push(dependent);
     },
     deleteDependent(state, id) {
-      const index = state.dependents.findIndex(dependent => dependent.id == id);
-      state.dependents.splice(index, 1);
+      const index = state.client.dependents.findIndex(dependent => dependent.id == id);
+      state.client.dependents.splice(index, 1);
     },
     addQuestion(state, question) {
       state.engagement.questions.push(question);

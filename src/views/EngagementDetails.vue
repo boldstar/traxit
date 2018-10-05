@@ -43,12 +43,14 @@
       <!-- this is the section where the qustions will go -->
       <hr>
 
-      <div class="d-flex justify-content-between h3">
-          <span><i class="far fa-question-circle text-primary"></i></span>
-          <div>    
-              Questions
+      <div class="d-flex justify-content-between h4">
+          <div>
+            <span>
+              Questions |
+            </span>
+            <span class="text-primary font-weight-bold">{{ engagement.questions.length }}</span>    
           </div>
-          <span><router-link :to="'/engagement/' + engagement.id + '/add-question'"><i class="far fa-plus-square"></i></router-link></span>
+          <span><router-link :to="'/engagement/' + engagement.id + '/add-question'" class="btn btn-sm btn-primary"><i class="far fa-plus-square mr-2"></i>Question</router-link></span>
       </div>
 
       <hr class="mb-4">

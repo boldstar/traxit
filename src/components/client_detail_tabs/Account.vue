@@ -67,8 +67,14 @@
 
             <!-- this is the dependents belonging to the client -->
             <div class="card mb-3" v-for="dependent in client.dependents" :key="dependent.id" v-if="$route.name == 'account'">
-                <div class="card-header text-left text-primary font-weight-bold">
-                    Dependent
+                <div class="card-header text-left text-primary font-weight-bold d-flex justify-content-between">
+                    <span>
+                        Dependent
+                    </span>
+                    <div>
+                        <router-link class="btn btn-sm btn-outline-primary mr-2" to="#">Edit</router-link> 
+                        <b-btn class="outline-secondary" size="sm" @click="modalShow = !modalShow"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn> 
+                    </div>
                 </div>
                 <div class="list-group">
                     <div class="list-group-item text-left justify-content-between d-flex">
@@ -88,6 +94,20 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- this is the modal for deleting a dependent -->
+                <b-modal v-model="modalShow" id="myModal" ref="myModal" hide-footer title="Delete Dependent">
+                <div class="d-block text-left">
+                    <h5>Are you sure you want to delete {{dependent.first_name}}?</h5>
+                    <br>
+                    <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
+                </div>
+                <div class="d-flex">
+                    <b-btn class="mt-3" variant="danger" @click="modalShow = false">Cancel</b-btn>
+                    <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteDependent(client, dependent.id)">Confirm</b-btn>
+                </div>
+                </b-modal>
+
             </div>
         </div>
 
@@ -98,17 +118,44 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import bModal from 'bootstrap-vue/es/components/modal/modal'
+import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 
 
 export default {
     name: 'account',
     data() {
         return {
-            alert: ''
+            alert: '',
+            modalShow: false,
         }
+    },
+     components:{
+        'b-modal': bModal,
+    },
+    directives: {
+        'b-modal': bModalDirective
     },
     computed: {
     ...mapGetters(['client'])
+    },
+    methods: {
+        deleteDependent(client, id) {
+            this.$store.dispatch('deleteDependent', id)
+            .then(() => {
+                this.modalShow = false
+                this.$router.push({path: '/contact/' +this.client.id+ '/account', query: { alert: 'The dependent was succesfully deleted' }})
+            })
+        },
+        showModal () {
+            this.$refs.myModal.show()
+        },
+        hideModal () {
+            this.$refs.myModal.hide()
+        },
+        isActive: function (menuItem) {
+            return this.activeItem === menuItem
+        },
     },
     // this will get the message from the url
     created: function(){

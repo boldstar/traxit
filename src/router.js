@@ -120,7 +120,7 @@ export default new Router({
               },
               {
               // this is the path to edit dependent
-              path: 'edit-dependent',
+              path: 'edit-dependent/:dependent',
               component: () => import('@/components/EditDepend.vue'),
                 meta: {
                   requiresAuth: true,
@@ -294,7 +294,7 @@ export default new Router({
         },
       },
       {
-        path: 'edit-question',
+        path: 'edit-question/:question',
         component: () => import('@/components/EditQuest.vue'),
           meta: {
             requiresAuth: true,

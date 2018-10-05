@@ -171,6 +171,9 @@ export default new Vuex.Store({
       const index = state.engagements.findIndex(engagement => engagement.id == id);
       state.engagements.splice(index, 1);
     },
+    getDependent(state, dependent){
+      state.dependent = dependent
+    },
     addDependent(state, dependent) {
       state.client.dependents.push(dependent);
     },
@@ -179,15 +182,18 @@ export default new Vuex.Store({
       state.client.dependents.splice(index, 1);
     },
     updateDependent(state, dependent) {
-      const index = state.dependents.findIndex(item => item.id == dependent.id);
-      state.dependents.splice(index, 1, {
+      const index = state.client.dependents.findIndex(item => item.id == dependent.id);
+      state.client.dependents.splice(index, 1, {
         'id': dependent.id,
         'client_id': dependent.client_id,
-        'first_name': engagement.first_name,
+        'first_name': dependent.first_name,
         'middle_name': dependent.middle_name,
         'last_name': dependent.last_name,
         'dob': dependent.dob,      
       })
+    },
+    getQuestion(state, question) {
+      state.question = question
     },
     addQuestion(state, question) {
       state.engagement.questions.push(question);
@@ -197,8 +203,8 @@ export default new Vuex.Store({
       state.engagement.questions.splice(index, 1);
     },
     updateQuestion(state, question) {
-      const index = state.questions.findIndex(item => item.id == question.id);
-      state.questions.splice(index, 1, {
+      const index = state.engagement.questions.findIndex(item => item.id == question.id);
+      state.engagement.questions.splice(index, 1, {
         'id': question.id,
         'engagement_id': question.engagement_id,
         'question': question.question,
@@ -306,33 +312,6 @@ export default new Vuex.Store({
         console.log(error)
       })
     },
-    retrieveEngagements(context) {
-      axios.get('/engagements')
-      .then(response => {
-        context.commit('retrieveEngagements', response.data)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    },
-    getEngagement({commit}, id) {
-      axios.get('/clientengagement/'+id)
-      .then(response => {
-        commit('getEngagement', response.data)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    },
-    getClientEngagements({commit}, id) {
-      axios.get('/engagements/'+id)
-      .then(response => {
-        commit('getClientEngagements', response.data)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    },
     addClient(context, client) {
       axios.post('/clients', {
         id: client.id,
@@ -408,6 +387,34 @@ export default new Vuex.Store({
           console.log(error)
       })                
     },
+    retrieveEngagements(context) {
+      axios.get('/engagements')
+      .then(response => {
+        context.commit('retrieveEngagements', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    getEngagement({commit}, id) {
+      axios.get('/clientengagement/'+id)
+      .then(response => {
+        commit('getEngagement', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    getClientEngagements({commit}, id) {
+      axios.get('/engagements/'+id)
+      .then(response => {
+        commit('getClientEngagements', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+   
     addEngagement(context, engagement) {
       axios.post(('/engagements'), {
         client_id: engagement.client_id,
@@ -449,6 +456,15 @@ export default new Vuex.Store({
           console.log(error)
       })                
     },
+    getDependent({commit}, id) {
+      axios.get('/dependents/'+ id)
+      .then(response => {
+        commit('getDependent', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
     addDependent(context, dependent) {
       axios.post(('/dependents'), {
         client_id: dependent.client_id,
@@ -473,6 +489,30 @@ export default new Vuex.Store({
           console.log(error)
       })                
     },
+    updateDependent(context, dependent) {
+      axios.patch('/dependents/' + dependent.id, {
+        client_id: dependent.client_id,
+        first_name: dependent.first_name,
+        middle_name: dependent.middle_name,
+        last_name: dependent.last_name,
+        dob: dependent.dob,
+      })
+      .then(response => {
+          context.commit('updateDependent', response.data)
+      })
+      .catch(error => {
+          console.log(error)
+      })           
+    },
+    getQuestion({commit}, id) {
+      axios.get('/questions/'+ id)
+      .then(response => {
+        commit('getQuestion', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
     addQuestion(context, question) {
       axios.post(('/questions'), {
         engagement_id: question.engagement_id,
@@ -494,6 +534,19 @@ export default new Vuex.Store({
       .catch(error => {
           console.log(error)
       })                
+    },
+    updateQuestion(context, question) {
+      axios.patch('/questions/' + question.id, {
+        engagement_id: question.engagement_id,
+        question: question.question,
+        answered: false,
+      })
+      .then(response => {
+          context.commit('updateQuestion', response.data)
+      })
+      .catch(error => {
+          console.log(error)
+      })           
     },
   }
 })

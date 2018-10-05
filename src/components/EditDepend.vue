@@ -29,13 +29,6 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
     name: 'AddDependent',
-    data() {
-        return {
-            dependent: {
-            
-            }
-        }
-    },
     computed: {
     ...mapGetters(
         [
@@ -51,8 +44,8 @@ export default {
       if(!this.dependent.first_name || !this.dependent.last_name || !this.dependent.dob ) return;
       
       this.updateDependent({
-        id: this.idForDependent,
-        client_id: this.client.id,
+        id: this.dependent.id,
+        client_id: this.dependent.client_id,
         first_name: this.dependent.first_name,
         middle_name: this.dependent.middle_name,
         last_name: this.dependent.last_name,
@@ -64,7 +57,7 @@ export default {
     },
   },
   created: function(){
-    this.$store.dispatch('getDetails', this.$route.params.id);
+    this.$store.dispatch('getDependent', this.$route.params.dependent);
   }
 
 }

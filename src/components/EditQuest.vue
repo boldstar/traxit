@@ -37,8 +37,8 @@ export default {
       if(!this.question ) return;
       
       this.updateQuestion({
-        id: this.idForQuestion,
-        engagement_id: this.engagement.id,
+        id: this.question.id,
+        engagement_id: this.question.engagement_id,
         question: this.question.question,
       })   
       .then(() => {
@@ -47,7 +47,7 @@ export default {
     },
   },
   created: function(){
-    this.$store.dispatch('getEngagement', this.$route.params.id);
+    this.$store.dispatch('getQuestion', this.$route.params.question);
   }
 
 }

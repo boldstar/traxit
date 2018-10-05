@@ -74,7 +74,7 @@
     <div class="card mb-3"  v-for="(question, index) in engagement.questions" :key="index" v-if="$route.name == 'engagement-details'">
         <div class="card-header">
           <div class="h6 m-0 justify-content-between d-flex">
-            <router-link class="btn btn-sm btn-primary mr-3" to="#" ><i class="far fa-edit mr-2"></i>Edit</router-link> 
+            <router-link class="btn btn-sm btn-primary mr-3" :to="'/engagement/' +engagement.id+ '/edit-question'" ><i class="far fa-edit mr-2"></i>Edit</router-link> 
             <b-btn class="outline-secondary" size="sm" @click="modalShow = !modalShow"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
           </div>
         </div>

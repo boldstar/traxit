@@ -72,7 +72,7 @@
                         Dependent
                     </span>
                     <div>
-                        <router-link class="btn btn-sm btn-outline-primary mr-2" to="#">Edit</router-link> 
+                        <router-link class="btn btn-sm btn-outline-primary mr-2" :to="'/contact/' +client.id+'/account/edit-dependent'">Edit</router-link> 
                         <b-btn class="outline-secondary" size="sm" @click="modalShow = !modalShow"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn> 
                     </div>
                 </div>

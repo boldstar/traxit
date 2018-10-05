@@ -52,7 +52,7 @@ export default new Vuex.Store({
       return state.question;
     },
     engagementQuestions(state) {
-      return state.questions;
+      return state.engagement.questions.question;
     }
   },
   mutations: {
@@ -178,12 +178,32 @@ export default new Vuex.Store({
       const index = state.client.dependents.findIndex(dependent => dependent.id == id);
       state.client.dependents.splice(index, 1);
     },
+    updateDependent(state, dependent) {
+      const index = state.dependents.findIndex(item => item.id == dependent.id);
+      state.dependents.splice(index, 1, {
+        'id': dependent.id,
+        'client_id': dependent.client_id,
+        'first_name': engagement.first_name,
+        'middle_name': dependent.middle_name,
+        'last_name': dependent.last_name,
+        'dob': dependent.dob,      
+      })
+    },
     addQuestion(state, question) {
       state.engagement.questions.push(question);
     },
     deleteQuestion(state, id) {
       const index = state.engagement.questions.findIndex(question => question.id == id);
       state.engagement.questions.splice(index, 1);
+    },
+    updateQuestion(state, question) {
+      const index = state.questions.findIndex(item => item.id == question.id);
+      state.questions.splice(index, 1, {
+        'id': question.id,
+        'engagement_id': question.engagement_id,
+        'question': question.question,
+        'answered': false           
+      })
     },
     retrieveToken(state, token) {
       state.token = token

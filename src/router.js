@@ -108,13 +108,24 @@ export default new Router({
                 },
               },
               {
-              // this is the path to edit contact
+              // this is the path to add dependent
               path: 'add-dependent',
               component: () => import('@/components/AddDependent.vue'),
                 meta: {
                   requiresAuth: true,
                   breadCrumb: [
                     { name: 'Add Dependent' }
+                  ]
+                },
+              },
+              {
+              // this is the path to edit dependent
+              path: 'edit-dependent',
+              component: () => import('@/components/EditDepend.vue'),
+                meta: {
+                  requiresAuth: true,
+                  breadCrumb: [
+                    { name: 'Edit Dependent' }
                   ]
                 },
               }
@@ -279,6 +290,16 @@ export default new Router({
             requiresAuth: true,
             breadCrumb: [
               { name: 'Add Question' }
+          ]
+        },
+      },
+      {
+        path: 'edit-question',
+        component: () => import('@/components/EditQuest.vue'),
+          meta: {
+            requiresAuth: true,
+            breadCrumb: [
+              { name: 'Edit Question' }
           ]
         },
       }

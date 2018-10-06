@@ -28,7 +28,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-    name: 'AddDependent',
+    name: 'EditDependent',
     computed: {
     ...mapGetters(
         [

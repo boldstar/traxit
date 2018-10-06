@@ -3,7 +3,9 @@
 <!-- this is the user tasks header -->
       <div class="card bg-light mb-3">
         <div class="d-flex justify-content-between card-body">
-          <i class="fas fa-tasks h2 align-self-center"></i>
+          <div class="h2 align-self-center">
+            <i class="fas fa-tasks"></i>
+          </div>
           <p class="h2 align-self-center">Tasks | 3</p>
           <button class="btn btn-sm btn-outline-success align-self-center" >Add Task</button>
         </div>

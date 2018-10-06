@@ -67,7 +67,7 @@ export default {
       .then(() => {
         this.engagement = "" 
         this.idForEngagement++
-        this.$router.go(-1);
+        this.$router.push({path: '/contact/' +this.client.id+'/engagements', query : { alert: 'Engagement has been added!'}});
       })
     },
   },

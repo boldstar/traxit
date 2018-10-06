@@ -2,8 +2,9 @@
     <div>
         <!-- this is the header for the contact engagements with the add engagement button -->
         <div class="header p-0 d-flex flex-row justify-content-between mt-2 mb-4 shadow-sm">
-            <div class="ml-3 pr-2  h3 text-primary align-self-center m-0">
-                <i class=" far fa-folder-open"></i>
+            <div class="ml-3 pr-2  h3 align-self-center m-0">
+                <i class=" far fa-folder-open text-primary"></i> |
+                <span>{{ clientEngagements.length }}</span>
             </div>
             <router-link :to=" { path: '/contact/' + client.id + '/engagements/add-engagement' }" class="mr-3 btn btn-primary btn-sm m-0 align-self-center"><i class="mr-2 fas fa-plus-square"></i>Engagement</router-link>
         </div>
@@ -69,7 +70,6 @@ export default {
     created() {
         this.$store.dispatch('getClientEngagements', this.$route.params.id);
         this.engagementLoaded = true;
-        this.noEngagements = false;
         var self = this;
         setTimeout(() => {
             self.engagementLoaded = false;

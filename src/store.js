@@ -12,6 +12,7 @@ export default new Vuex.Store({
     engagements: [],
     engagement: [],
     clientengagements: [],
+    engagementquestions: [],
     dependent: [],
     dependents: [],
     questions: [],
@@ -52,7 +53,7 @@ export default new Vuex.Store({
       return state.question;
     },
     engagementQuestions(state) {
-      return state.engagement.questions.question;
+      return state.engagementquestions
     }
   },
   mutations: {
@@ -70,8 +71,8 @@ export default new Vuex.Store({
     getClientEngagements(state, clientengagements) {
       state.clientengagements = clientengagements
     },
-    getEngagementQuestions(state, questions) {
-      state.questions = questions
+    getEngagementQuestions(state, engagementquestions) {
+      state.engagementquestions = engagementquestions
     },
     addClient(state, client) {
       state.clients.push({
@@ -414,7 +415,15 @@ export default new Vuex.Store({
         console.log(error)
       })
     },
-   
+    getEngagementQuestions({commit}, id) {
+      axios.get('/engagementquestions/'+id)
+      .then(response => {
+        commit('getEngagementQuestions', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
     addEngagement(context, engagement) {
       axios.post(('/engagements'), {
         client_id: engagement.client_id,

@@ -14,11 +14,20 @@
                     <i class="fas fa-user-circle fa-3x mt-2"></i>
                 </div>
                 <ul class="list-group list-group-flush h6 text-left">
-                    <li class="list-group-item"><span class="font-weight-bold">Date Of Birth: </span>{{client.dob}}</li>
-                    <li class="list-group-item text-capitalize"><span class="font-weight-bold">Occupation: </span>{{client.occupation}}</li>
-                    <li class="list-group-item"><span class="font-weight-bold">Email: </span>{{client.email}}</li>
-                    <li class="list-group-item"><span class="font-weight-bold">Cell Phone: </span>{{client.cell_phone}}</li>
-                    <li class="list-group-item"><span class="font-weight-bold">Work Phone: </span>{{client.work_phone}}</li>
+                    <li class="list-group-item justify-content-between d-flex">
+                        <span class="font-weight-bold">Date Of Birth: </span>
+                        {{client.dob}}
+                    </li>
+                    <li class="list-group-item text-capitalize justify-content-between d-flex">
+                        <span class="font-weight-bold">Occupation: </span>
+                        {{client.occupation}}
+                    </li>
+                    <li class="list-group-item justify-content-between d-flex">
+                        <span class="font-weight-bold">Email: </span>
+                        {{client.email}}
+                    </li>
+                    <li class="list-group-item justify-content-between d-flex"><span class="font-weight-bold">Cell Phone: </span>{{client.cell_phone}}</li>
+                    <li class="list-group-item justify-content-between d-flex"><span class="font-weight-bold">Work Phone: </span>{{client.work_phone}}</li>
                 </ul>
             </div>
         </div>
@@ -32,11 +41,11 @@
                     <i class="fas fa-user-circle fa-3x mt-2"></i>
                 </div>
                 <ul class="list-group list-group-flush h6 text-left">
-                    <li class="list-group-item"><span class="font-weight-bold">Date Of Birth: </span> {{client.spouse_dob}}</li>
-                    <li class="list-group-item text-capitalize"><span class="font-weight-bold">Occupation: </span> {{client.spouse_occupation}}</li>
-                    <li class="list-group-item"><span class="font-weight-bold">Email: </span> {{client.spouse_email}}</li>
-                    <li class="list-group-item"><span class="font-weight-bold">Cell Phone: </span> {{client.spouse_cell_phone}}</li>
-                    <li class="list-group-item"><span class="font-weight-bold">Work Phone: </span> {{client.spouse_work_phone}}</li>
+                    <li class="list-group-item justify-content-between d-flex"><span class="font-weight-bold">Date Of Birth: </span> {{client.spouse_dob}}</li>
+                    <li class="list-group-item text-capitalize justify-content-between d-flex"><span class="font-weight-bold">Occupation: </span> {{client.spouse_occupation}}</li>
+                    <li class="list-group-item justify-content-between d-flex"><span class="font-weight-bold">Email: </span> {{client.spouse_email}}</li>
+                    <li class="list-group-item justify-content-between d-flex"><span class="font-weight-bold">Cell Phone: </span> {{client.spouse_cell_phone}}</li>
+                    <li class="list-group-item justify-content-between d-flex"><span class="font-weight-bold">Work Phone: </span> {{client.spouse_work_phone}}</li>
                 </ul>
             </div>
         </div>

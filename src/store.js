@@ -17,6 +17,9 @@ export default new Vuex.Store({
     dependents: [],
     questions: [],
     question: [],
+    note: [],
+    notes: [],
+    clientnotes: [],
     token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
     loading: false,
@@ -54,6 +57,15 @@ export default new Vuex.Store({
     },
     engagementQuestions(state) {
       return state.engagementquestions
+    },
+    clientNotes(state) {
+      return state.clientnotes
+    },
+    note(state) {
+      return state.note
+    },
+    notes(state) {
+      return state.notes
     }
   },
   mutations: {
@@ -210,6 +222,27 @@ export default new Vuex.Store({
         'engagement_id': question.engagement_id,
         'question': question.question,
         'answered': false           
+      })
+    },
+    getClientNotes(state, clientnotes) {
+      state.clientnotes = clientnotes
+    },
+    getNote(state, note) {
+      state.note = note
+    },
+    addNote(state, note) {
+      state.client.notes.push(note);
+    },
+    deleteNote(state, id) {
+      const index = state.client.notes.findIndex(note => note.id == id);
+      state.client.notes.splice(index, 1);
+    },
+    updateNote(state, note) {
+      const index = state.notes.findIndex(item => item.id == note.id);
+      state.notes.splice(index, 1, {
+        'id': note.id,
+        'client_id': note.client_id,
+        'note': note.note,           
       })
     },
     retrieveToken(state, token) {
@@ -552,6 +585,57 @@ export default new Vuex.Store({
       })
       .then(response => {
           context.commit('updateQuestion', response.data)
+      })
+      .catch(error => {
+          console.log(error)
+      })           
+    },
+    getClientNotes({commit}, id) {
+      axios.get('/clientnotes/'+id)
+      .then(response => {
+        commit('getClientNotes', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    getNote({commit}, id) {
+      axios.get('/notes/'+ id)
+      .then(response => {
+        commit('getNote', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    addNote(context, note) {
+      axios.post(('/notes'), {
+        client_id: note.client_id,
+        note: note.note,
+      })
+      .then(response => {
+        context.commit('addNote', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    deleteNote(context, id) {
+      axios.delete('/notes/' + id)
+      .then(response => {
+          context.commit('deleteNote', id)
+      })
+      .catch(error => {
+          console.log(error)
+      })                
+    },
+    updateNote(context, note) {
+      axios.patch('/notes/' + note.id, {
+        client_id: note.client_id,
+        note: note.note,
+      })
+      .then(response => {
+          context.commit('updateNote', response.data)
       })
       .catch(error => {
           console.log(error)

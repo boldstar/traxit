@@ -18,9 +18,22 @@
         <router-link :to="'/contact/' + client.id + '/account/' + 'add-dependent'" class="dropdown-item"><i class="fas fa-plus-square"></i><span class="ml-2 pl-4">Add Dependent</span></router-link>
         <button class="dropdown-item" type="button"><i class="far fa-pause-circle"></i><span class="ml-2 pl-4">Deactivate</span></button>
         <div class="dropdown-divider"></div>
-        <b-btn class="dropdown-item text-danger" v-b-modal.myModal><i class="fas fa-trash"></i><span class="ml-2">Delete Account</span></b-btn>
+        <b-btn class="dropdown-item text-danger" @click="showModal = !showModal"><i class="fas fa-trash"></i><span class="ml-2">Delete Account</span></b-btn>
       </div>
     </div>
+
+      <!-- this is the modal popup for confirming the delete action -->
+    <b-modal v-model="showModal" id="myModal" ref="myModalRef" hide-footer title="Delete Client">
+      <div class="d-block text-left">
+        <h5>Are you sure you want to delete, {{client.last_name}}?</h5>
+        <br>
+        <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
+      </div>
+      <div class="d-flex">
+        <b-btn class="mt-3" variant="danger" @click="showModal = false">Cancel</b-btn>
+        <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteClient(client.id)">Confirm</b-btn>
+      </div>
+    </b-modal>
   </div>
 
 
@@ -48,18 +61,7 @@
     </ul>
   </div>
 
-<!-- this is the modal popup for confirming the delete action -->
-  <b-modal id="myModal" ref="myModalRef" hide-footer title="Delete Client">
-    <div class="d-block text-left">
-      <h5>Are you sure you want to delete, {{client.last_name}}?</h5>
-      <br>
-      <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
-    </div>
-    <div class="d-flex">
-      <b-btn class="mt-3" variant="danger" @click="hideModal">Cancel</b-btn>
-      <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteClient(client.id)">Confirm</b-btn>
-    </div>
-  </b-modal>
+
 
   <div class="tab-content" id="myTabContent">   
     <!-- these are the panes for the different tab views -->
@@ -85,6 +87,7 @@ export default {
   data () {
     return {
       isClicked: false,
+      showModal: false,
       alert: ''
     }
   },
@@ -109,12 +112,6 @@ export default {
       .then(() => {
         this.$router.push({path: '/contacts'});
       })
-    },
-    showModal () {
-      this.$refs.myModalRef.show()
-    },
-    hideModal () {
-      this.$refs.myModalRef.hide()
     },
     isActive: function (menuItem) {
       return this.activeItem === menuItem

@@ -169,13 +169,36 @@ export default new Router({
           {
           // this is the path to view the notes belonging to client
             path: 'notes',
+            name: 'notes',
             component: () => import('@/components/client_detail_tabs/Notes.vue'),
             meta: {
               requiresAuth: true,
               breadCrumb: [
                 { name: 'Notes' }
-              ]
-            },
+                ],
+              },
+              children: [
+                {
+                  path: 'add-note',
+                  component: () => import('@/components/AddNote.vue'),
+                    meta: {
+                      requiresAuth: true,
+                      breadCrumb: [
+                        { name: 'Add Note' }
+                      ]
+                  },
+                },
+                {
+                  path: 'edit-note/:note',
+                  component: () => import('@/components/EditNote.vue'),
+                    meta: {
+                      requiresAuth: true,
+                      breadCrumb: [
+                        { name: 'Edit Note' }
+                      ]
+                  },
+                },
+              ],
           },
           {
           // this is the path to view the pending belonging to the client

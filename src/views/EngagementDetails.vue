@@ -80,7 +80,7 @@
         </div>
         <div class="card-body bg-light d-flex justify-content-between">
           <div class="h4 mr-5 text-left">
-            {{ question.question }}
+            <span v-html="question.question"></span>
           </div>
           <div class="ml-5 d-flex align-self-center">
             <span class="font-weight-bold mr-2">Answered: </span>
@@ -157,12 +157,6 @@ export default {
         this.modalShow = false
         this.$router.push({path: '/engagement/' +this.engagement.id , query: {alert: 'The Question Was Succesfully Deleted'}});
       })
-    },
-    showQuestionModal () {
-      this.$refs.myQuestion.show()
-    },
-    hideQuestionModal () {
-      this.$refs.myQuestion.data.is_hidden = true
     },
     showEngageModal () {
       this.$refs.myEngage.show()

@@ -1,6 +1,6 @@
 <template>
    <div>
-        <!-- this is the header for the contact engagements with the add engagement button -->
+        <!-- this is the header for the contact notes with the add note button -->
         <div class="header p-0 d-flex flex-row justify-content-between mt-2 mb-4 shadow-sm">
             <div class="ml-3 pr-2  h3 align-self-center m-0">
                 <i class=" far fa-clipboard text-primary"></i> |
@@ -9,37 +9,50 @@
             <router-link :to=" '/contact/' + client.id + '/notes/add-note'" class="mr-3 btn btn-primary btn-sm m-0 align-self-center"><i class="mr-2 fas fa-plus-square"></i>Note</router-link>
         </div>
 
-        <!-- this is where the add-engagement route shows up if route is matched -->
+        <!-- this is where the add-note route shows up if route is matched -->
         <transition name="router-animation" enter-active-class="animated bounceInDown" leave-active-class="animated zoomOut" mode="out-in">
             <router-view></router-view>
         </transition>
 
-        <!-- this will show if there is no engagements only -->
+        <!-- this will show if there is no notes only -->
         <div v-if="noNotes & !notesLoaded" class="mt-5">
             This Contact Has No Notes...
         </div>
 
-        <!-- this shows if there is engagements -->
+        <!-- this shows if there is notes -->
         <div v-else>
 
             <div v-if="!notesLoaded">
                 <div class="card mb-3 shadow-sm p-0" v-for="(note, index) in clientNotes" :key="index" v-if="$route.name == 'notes'">
                     <div class="card-header text-left font-weight-bold">
-                        Note
+                        Note:
                     </div>
                     <div class="card-body text-left">
                         <span v-html="note.note"></span>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
-                        <router-link :to="'/contact/' + client.id + '/notes/edit-note/' +note.id " class="btn btn-secondary ml-auto"><i class="far fa-eye mr-2"></i>Edit</router-link>
+                        <router-link :to="'/contact/' + client.id + '/notes/edit-note/' +note.id " class="btn btn-sm btn-primary ml-auto"><i class="far fa-edit mr-2"></i>Edit</router-link>
+                        <button class="btn btn-sm btn-outline-secondary ml-3" @click="modalShow = !modalShow">Delete</button>
                     </div>
+
+                    <b-modal v-model="modalShow" id="myQuestion" ref="myQuestion" hide-footer title="Delete Question">
+                        <div class="d-block text-left">
+                            <h5>Are you sure you want to delete question?</h5>
+                            <br>
+                            <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
+                        </div>
+                        <div class="d-flex">
+                            <b-btn class="mt-3" variant="danger" @click="modalShow = false">Cancel</b-btn>
+                            <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteNote(client, note.id)">Confirm</b-btn>
+                        </div>
+                    </b-modal>
                 </div>
             </div>
 
         </div>
 
         
-    <!-- this is the loading ring for the engagements -->
+    <!-- this is the loading ring for the notes -->
     <div v-if="notesLoaded" class="lds-dual-ring justify-content-center"></div>
 
     </div>
@@ -47,6 +60,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import bModal from 'bootstrap-vue/es/components/modal/modal'
+import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 
 
 export default {
@@ -55,10 +70,29 @@ export default {
         return {
             notesLoaded: false,
             noNotes: false,
+            modalShow: false,
         }
+    },
+    components:{
+        'b-modal': bModal,
+    },
+    directives: {
+        'b-modal': bModalDirective
     },
     computed: {
     ...mapGetters(['clientNotes', 'client']),
+    },
+    methods: {
+        deleteNote(client, id) {
+        this.$store.dispatch('deleteNote', id)
+        .then(() => {
+                this.modalShow = false
+                this.$router.push({path: '/contact/' +this.client.id , query: {alert: 'The Note Was Succesfully Deleted'}});
+            })
+        },
+        isActive: function (menuItem) {
+            return this.activeItem === menuItem
+        },
     },
     created() {
         this.$store.dispatch('getClientNotes', this.$route.params.id);

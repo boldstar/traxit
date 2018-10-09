@@ -3,8 +3,7 @@
         <form @submit.prevent="addNewQuestion" class="d-flex-column justify-content-center">
 
             <div class="form-group">
-                <label for="question" class="d-flex justify-content-start font-weight-bold">Enter Question:</label>
-                <textarea class="form-control" type="text" id="question" rows="5" placeholder="Start typing..." v-model="question.question"></textarea>
+                <vue-editor v-model="question.question"></vue-editor>
             </div>
 
 
@@ -19,9 +18,13 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { VueEditor } from "vue2-editor";
 
 export default {
     name: 'AddQuestion',
+     components: {
+        VueEditor
+    },
     data() {
         return {
             question: {

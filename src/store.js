@@ -113,18 +113,6 @@ export default new Vuex.Store({
         postal_code: client.postal_code,
       })
     },
-    //this is to create new engagement
-    addEngagement(state, engagement) {
-      state.engagements.push ({
-        id: engagement.id,
-        client_id: engagement.client_id,
-        return_type: engagement.return_type,
-        year: engagement.year,
-        assigned_to: engagement.assigned_to,
-        status: engagement.status,
-        done: false
-      })
-    },
     //this is to push client engagement into the client engagements view
     addClientEngagement(state, engagement) {
       state.clientengagements.push(engagement)
@@ -231,11 +219,11 @@ export default new Vuex.Store({
       state.note = note
     },
     addNote(state, note) {
-      state.client.notes.push(note);
+      state.notes.push(note);
     },
     deleteNote(state, id) {
-      const index = state.client.notes.findIndex(note => note.id == id);
-      state.client.notes.splice(index, 1);
+      const index = state.notes.findIndex(note => note.id == id);
+      state.notes.splice(index, 1);
     },
     updateNote(state, note) {
       const index = state.notes.findIndex(item => item.id == note.id);

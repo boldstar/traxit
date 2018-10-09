@@ -3,8 +3,7 @@
         <form @submit.prevent="editThisQuestion" class="d-flex-column justify-content-center">
 
             <div class="form-group">
-                <label for="question" class="d-flex justify-content-start font-weight-bold">Edit Question:</label>
-                <textarea class="form-control" type="text" id="question" rows="5" v-model="question.question"></textarea>
+                <vue-editor v-model="question.question"></vue-editor>
             </div>
 
 
@@ -19,9 +18,13 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { VueEditor } from "vue2-editor";
 
 export default {
     name: 'EditQuestion',
+     components: {
+      VueEditor
+    },
     computed: {
     ...mapGetters(
         [

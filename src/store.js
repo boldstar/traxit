@@ -20,16 +20,25 @@ export default new Vuex.Store({
     note: [],
     notes: [],
     clientnotes: [],
+    users: [],
+    tasks: [],
+    task: [],
     token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
     loading: false,
   },
   getters: {
     sidebarOpen(state) {
-      return state.sidebarOpen
+      return state.sidebarOpen;
     },
     loggedIn(state) {
-      return state.token != null
+      return state.token != null;
+    },
+    users(state) {
+      return state.users;
+    },
+    tasks(state) {
+      return state.tasks;
     },
     allClients(state) {
       return state.clients;
@@ -72,6 +81,16 @@ export default new Vuex.Store({
     toggleSidebar(state) {
       state.sidebarOpen = !state.sidebarOpen
     },
+    retrieveTasks(state, tasks) {
+      state.tasks = tasks
+    },
+    updateTask(state, id) {
+      const index = state.tasks.findIndex(task => task.id == id);
+      state.tasks.splice(index, 1);
+    },
+    retrieveUsers(state, users) {
+      state.users = users
+    },
     retrieveClients(state, clients) {
       state.clients = clients
     },
@@ -87,31 +106,7 @@ export default new Vuex.Store({
       state.engagementquestions = engagementquestions
     },
     addClient(state, client) {
-      state.clients.push({
-        id: client.id,
-        category: client.category,
-        referral_type: client.referral_type,
-        first_name: client.first_name,
-        middle_initial: client.middle_initial,
-        last_name: client.last_name,
-        occupation: client.occupation,
-        dob: client.dob,
-        email: client.email,
-        cell_phone: client.cell_phone,
-        work_phone: client.work_phone,
-        spouse_first_name: client.spouse_first_name,
-        spouse_middle_initial: client.spouse_middle_initial,
-        spouse_last_name: client.spouse_last_name,
-        spouse_occupation: client.spouse_occupation,
-        spouse_dob: client.spouse_dob,
-        spouse_email: client.spouse_email,
-        spouse_cell_phone: client.spouse_cell_phone,
-        spouse_work_phone: client.spouse_work_phone,
-        street_address: client.street_address,
-        city: client.city,
-        state: client.state,
-        postal_code: client.postal_code,
-      })
+      state.clients.push(client)
     },
     //this is to push client engagement into the client engagements view
     addClientEngagement(state, engagement) {
@@ -313,15 +308,45 @@ export default new Vuex.Store({
           })
       })
     },
+    retrieveTasks(context) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
+      axios.get('/tasks')
+      .then(response => {
+        console.log(response.data)
+        context.commit('retrieveTasks', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    updateTask(context, task) {
+      axios.patch('/tasks/' + task.id, {
+        user_id: task.user_id,
+      })
+      .then(response => {
+          context.commit('updateTask', response.data)
+      })
+      .catch(error => {
+          console.log(error)
+      })           
+    },
+    retrieveUsers(context) {
+      axios.get('/users')
+      .then(response => {
+        console.log(response.data)
+        context.commit('retrieveUsers', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
     retrieveClients(context) {
-      this.loading = true
       axios.get('/clients')
       .then(response => {
-        this.loading = false
         context.commit('retrieveClients', response.data)
       })
       .catch(error => {
-        this.loading = false
         console.log(error)
       })
     },

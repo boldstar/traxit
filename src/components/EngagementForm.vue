@@ -17,6 +17,7 @@
             <label class="input-group-text" for="option">Find Contact</label>
           </div>
           <select class="custom-select mb-3" id="client_id" v-model="engagement.client_id">
+            <option disabled>{{ option }}</option>
             <option v-for="client in allClients" :key="client.id" :value="client.id">
               {{ client.last_name }}, {{client.first_name}} & {{client.spouse_first_name }}
             </option>
@@ -55,6 +56,7 @@ export default {
         '1040', 
         '1120',
       ],
+      option: 'Choose...',
     }
   },
   computed: {
@@ -88,6 +90,7 @@ export default {
   created: function() {
     this.$store.dispatch('retrieveClients')
     this.engagement.return_type = this.types[0]
+    this.engagement.client_id = this.option
   },
 }
 </script>

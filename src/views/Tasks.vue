@@ -51,7 +51,7 @@
       </table>
     </div>
           <!-- this is the modal for deleting a question -->
-            <b-modal ref="modal" hide-footer title="Update Engagement">
+            <b-modal ref="modal" hide-footer title="Update Task">
                 <form >
                 <div>
                   <div class="input-group my-3">
@@ -59,8 +59,20 @@
                     <label class="input-group-text font-weight-bold bg-primary text-light" for="option">Assign To</label>
                   </div>
                   <select class="custom-select" id="client_id" v-model.number="task.user_id">
+                    <option  selected disabled>{{ option }}</option>
                     <option v-for="user in users" :key="user.id" :value="user.id">
                       {{ user.name }}
+                    </option>
+                  </select>
+                </div>
+                <div class="input-group my-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text font-weight-bold bg-primary text-light" for="option">Status</label>
+                  </div>
+                  <select class="custom-select" id="status" v-model="task.status">
+                    <option  selected disabled>{{ option }}</option>
+                    <option v-for="status in statuses" :key="status.id" :value="status">
+                      {{ status }}
                     </option>
                   </select>
                 </div>
@@ -90,8 +102,18 @@ export default {
       tasksLoaded: false,
       taskToUpdate: null,
       task: {
-        user_id: 0
-      }
+        user_id: 0,
+        status: null
+      },
+      option: 'Choose...',
+      statuses: [
+        'Recieved',
+        'Scanned',
+        'Preparation',
+        'Review',
+        '2nd Review',
+        'Complete'
+      ]
     }
   },
    components:{
@@ -120,7 +142,8 @@ export default {
           if(!this.task.user_id) return;
           this.updateTask({
             id: this.taskToUpdate,
-            user_id: this.task.user_id
+            user_id: this.task.user_id,
+            status: this.task.status
           }).then(() => {
           this.$refs.modal.hide()
         }) 
@@ -129,6 +152,8 @@ export default {
     requestUpdate(id) {
         this.taskToUpdate = id
         this.$store.dispatch('retrieveUsers');
+        this.task.user_id = this.option
+        this.task.status = this.option
         this.$refs.modal.show()
     },
   },
@@ -148,7 +173,7 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style scoped lang="scss">
   //this is the css for the loading spinner
     .lds-dual-ring {

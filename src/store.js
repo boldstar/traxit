@@ -323,6 +323,7 @@ export default new Vuex.Store({
     updateTask(context, task) {
       axios.patch('/tasks/' + task.id, {
         user_id: task.user_id,
+        status: task.status,
       })
       .then(response => {
           context.commit('updateTask', response.data)

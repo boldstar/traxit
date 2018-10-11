@@ -313,7 +313,6 @@ export default new Vuex.Store({
 
       axios.get('/tasks')
       .then(response => {
-        console.log(response.data)
         context.commit('retrieveTasks', response.data)
       })
       .catch(error => {

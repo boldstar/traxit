@@ -2,10 +2,11 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import { Button } from 'bootstrap-vue/es/components'
 import VeeValidate from 'vee-validate'
+import moment from 'moment'
 import jQuery from 'jquery'
 import 'bootstrap/dist/css/bootstrap.css'
+import { Button } from 'bootstrap-vue/es/components'
 global.jQuery = jQuery
 let Bootstrap = require('bootstrap')
 
@@ -22,6 +23,12 @@ Vue.component('breadcrumb', Breadcrumb)
 Vue.config.productionTip = false
 Vue.use(Button);
 Vue.use(VeeValidate);
+
+Vue.filter('formatDate', function(created_at) {
+  if(created_at) {
+    return moment(String(created_at)).format('MM/DD/YYYY')
+  }
+})
 
 
 router.beforeEach((to, from, next) => {

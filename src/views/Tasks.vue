@@ -15,11 +15,12 @@
          <table class="table table-hover mb-5">
             <thead class="bg-primary text-light">
               <tr>
-                <th scope="col">Title</th>
+                <th scope="col">Task</th>
+                <th scope="col">Client</th>
+                <th scope="col">Created On</th>
                 <th scope="col">Return Type</th>
                 <th scope="col">Year</th>
-                <th scope="col">Status</th>
-                <th scope="col">Update</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
          </table>
@@ -32,20 +33,22 @@
       <table class="table table-hover" v-if="!tasksLoaded">
         <thead class="bg-primary text-light">
           <tr>
-            <th scope="col">Title</th>
+            <th scope="col">Task</th>
+            <th scope="col">Client</th>
+            <th scope="col">Created On</th>
             <th scope="col">Return Type</th>
             <th scope="col">Year</th>
-            <th scope="col">Status</th>
-            <th scope="col">Update</th>
+            <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody class="table-bordered">
           <tr v-for="(task, index) in tasks"  :key="index">
-            <td>{{ task.title }}</td>
+            <th>{{ task.engagements[0].status }}</th>
+            <td>{{ task.engagements[0].client.last_name }}, {{ task.engagements[0].client.first_name }} & {{ task.engagements[0].client.spouse_first_name }}</td>
+            <td>{{ task.created_at | formatDate }}</td>
             <td>{{ task.engagements[0].return_type }}</td>
             <td>{{ task.engagements[0].year }}</td>
-            <td>{{ task.engagements[0].status }}</td>
-            <td><b-btn variant="primary" size="sm" @click="requestUpdate(task.id)">Status</b-btn></td>
+            <td><b-btn variant="primary" size="sm" @click="requestUpdate(task.id)">Update</b-btn></td>
           </tr>
         </tbody>
       </table>

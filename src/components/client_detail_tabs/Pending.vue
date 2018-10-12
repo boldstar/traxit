@@ -24,57 +24,118 @@
                         Created On:
                     </span>
                     <span>
-                        {{ question.created_at }}
+                        {{ question.created_at | formatDate }}
                     </span>
                 </div>
             </div>
             <div class="card-body bg-light d-flex justify-content-between">
                 <div class="h4 mr-5 text-left">
-                    {{ question.question }}
+                    <span v-html="question.question"></span>
                 </div>
                 <div class="ml-5 d-flex align-self-center">
-                    <button class="btn btn-sm btn-primary font-weight-bold">Answer</button>
+                    <button class="btn btn-sm btn-primary font-weight-bold" @click="answerQuestion(question.id)">Answer</button>
                 </div>
             </div>
         </div>
    </div>
+
+   <!-- this is the modal to update the question -->
+            <b-modal ref="modal" hide-footer title="Answer Question" size="lg">
+                    <form>
+                    <div>
+                    <vue-editor v-model="question.answer"></vue-editor>
+                    </div>
+                    <div class="text-left">
+                        <span class="font-weight-bold mr-2">Answered: </span>
+                        <input type="checkbox" v-model="question.answered">
+                    </div>
+                    <div class="d-flex">
+                    <b-btn class="mt-3" variant="secondary" @click="hideModal">Cancel</b-btn>
+                    <b-btn class="mt-3 ml-auto" variant="outline-primary" @click="acceptUpdate">Confirm</b-btn>
+                    </div>
+                    </form>
+            </b-modal>
 
         <div v-if="detailsLoaded" class="lds-dual-ring justify-content-center"></div>
     </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import bModal from 'bootstrap-vue/es/components/modal/modal'
+import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
+import { VueEditor } from "vue2-editor";
 
 export default {
 name: 'Pending',
 data() {
     return {
         detailsLoaded: false,
+        questionToAnswer: null,
+        question: {
+            answer: '',
+            answered: true,
+        }
     }
+},
+components:{
+    'b-modal': bModal,
+    VueEditor
+},
+directives: {
+    'b-modal': bModalDirective
 },
 computed: {
 ...mapGetters(
-    [
-        'engagementQuestions',
-        'engagement'
-    ]
+        [
+            'engagementQuestions',
+            'engagement'
+        ]
     ),
 },
+methods: {
+    showModal() {
+    this.$refs.modal.show()
+    },
+    hideModal() {
+        this.$refs.modal.hide()
+    },
+    ...mapActions(['updateAnswer']),
+
+    acceptUpdate() {
+      if(this.questionToAnswer) {
+          if(!this.question.answer) return;
+          this.updateAnswer({
+            id: this.questionToAnswer,
+            answer: this.question.answer,
+            answered: this.question.answered
+          }).then(() => {
+          this.$refs.modal.hide()
+        }) 
+        }
+      },
+    answerQuestion(id) {
+        console.log(id)
+        this.questionToAnswer = id
+        this.$refs.modal.show()
+    },
+},
 created: function(){
-this.$store.dispatch('getEngagementQuestions', this.$route.params.id);
-this.detailsLoaded = true;
-var self = this;
-setTimeout(() => {
-    self.detailsLoaded = false;
-}, 3000)
+    this.$store.dispatch('getEngagementQuestions', this.$route.params.id);
+    this.detailsLoaded = true;
+    var self = this;
+    setTimeout(() => {
+        self.detailsLoaded = false;
+    }, 3000)
 }
     
 }
 </script>
 
 <style lang="scss" scoped>
-.header {
-        height: 4em;
-    }
+
+    .header {
+            height: 4em;
+        }
+
 </style>

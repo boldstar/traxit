@@ -36,7 +36,7 @@
                         <h5 class="p-4"><span>Status: </span> {{ engagement.status}} </h5>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
-                        <router-link v-bind:to="'/engagement/' + engagement.id " class="btn btn-secondary ml-auto"><i class="far fa-eye mr-2"></i>View</router-link>
+                        <router-link v-bind:to="'/engagement/' + engagement.id " class="btn btn-primary btn-sm ml-auto"><i class="far fa-eye mr-2"></i>View</router-link>
                     </div>
                 </div>
             </div>

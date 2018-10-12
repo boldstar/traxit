@@ -1,12 +1,18 @@
 <template>
   <div class="page-wrapper mt-1">
 <!-- this is the user tasks header -->
-      <div class="card bg-light mb-3">
+      <div class="card mb-3 shadow-sm">
         <div class="d-flex justify-content-between card-body">
-          <div class="h2 align-self-center">
-            <i class="fas fa-tasks"></i>
+          <div class="h2 align-self-center m-0">
+            <i class="fas fa-tasks text-primary"></i> 
           </div>
-          <p class="h2 align-self-center">Tasks | {{ tasks.length }}</p>
+          <p class="h2 align-self-center">Tasks <span>
+             | {{ tasks.length }}
+            </span>
+          </p>
+          <div class="align-self-center">
+            <button class="btn btn-sm btn-outline-primary" @click="refreshTask"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
+          </div>
         </div>
       </div>
 
@@ -48,13 +54,13 @@
             <td>{{ task.created_at | formatDate }}</td>
             <td>{{ task.engagements[0].return_type }}</td>
             <td>{{ task.engagements[0].year }}</td>
-            <td><b-btn variant="primary" size="sm" @click="requestUpdate(task.id)">Update</b-btn></td>
+            <td><b-btn variant="primary" size="sm" @click="requestUpdate(task.id)"><i class="fas fa-pen-square mr-2"></i>Update</b-btn></td>
           </tr>
         </tbody>
       </table>
     </div>
-          <!-- this is the modal for deleting a question -->
-            <b-modal ref="modal" hide-footer title="Update Task">
+          <!-- this is the modal for updating task -->
+            <b-modal ref="modal" hide-footer title="Update">
                 <form >
                 <div>
                   <div class="input-group my-3">
@@ -159,6 +165,19 @@ export default {
         this.task.status = this.option
         this.$refs.modal.show()
     },
+    refreshTask() {
+      this.tasksLoaded = true
+      this.$store.dispatch('retrieveTasks');
+      var self = this;
+      setTimeout(() => {
+        self.tasksLoaded = false;
+        if(self.tasks == 0){
+              self.noTasks = true
+        } else {
+            self.noTasks = false
+        }
+      }, 3000);
+    }
   },
   created() {
   this.$store.dispatch('retrieveTasks');

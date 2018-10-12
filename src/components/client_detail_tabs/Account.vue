@@ -7,11 +7,11 @@
         <div class="">
             <div class="card mb-3">
                 <div class="card-header text-left d-flex justify-content-between py-0">
-                    <div class="d-flex h4 mt-3">
-                        <strong class="card-title mr-3 text-primary">Taxpayer: </strong>
-                        <span class="card-title text-capitalize">{{ client.first_name }} {{client.middle_initial}} {{client.last_name}}</span>
+                    <div class="d-flex h4 mt-2 align-items-center">
+                        <i class="fas fa-user-circle mr-2 fa-2x"></i>
+                        <strong class="card-title text-primary mt-2">Taxpayer: </strong>
                     </div>
-                    <i class="fas fa-user-circle fa-3x mt-2"></i>
+                        <span class="card-title text-capitalize h4 mt-2 align-self-center">{{ client.first_name }} {{client.middle_initial}} {{client.last_name}}</span>
                 </div>
                 <ul class="list-group list-group-flush h6 text-left">
                     <li class="list-group-item justify-content-between d-flex">
@@ -34,11 +34,11 @@
         <div class="mb-3">
             <div class="card">
                 <div class="card-header text-left d-flex justify-content-between py-0">
-                    <div class="d-flex h4 mt-3">
-                        <strong class="card-title mr-3 text-primary">Spouse: </strong>
-                        <span class="card-title text-capitalize">{{ client.spouse_first_name }} {{client.spouse_middle_initial}} {{client.spouse_last_name}}</span>
+                    <div class="d-flex h4 mt-2 align-items-center">
+                        <i class="fas fa-user-circle mr-2 fa-2x"></i>
+                        <strong class="card-title text-primary mt-2">Spouse: </strong>
                     </div>
-                    <i class="fas fa-user-circle fa-3x mt-2"></i>
+                        <span class="card-title text-capitalize h4 mt-2 align-self-center">{{ client.spouse_first_name }} {{client.spouse_middle_initial}} {{client.spouse_last_name}}</span>
                 </div>
                 <ul class="list-group list-group-flush h6 text-left">
                     <li class="list-group-item justify-content-between d-flex"><span class="font-weight-bold">Date Of Birth: </span> {{client.spouse_dob}}</li>

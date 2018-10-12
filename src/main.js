@@ -11,7 +11,6 @@ global.jQuery = jQuery
 let Bootstrap = require('bootstrap')
 
 
-
 import Default from './layouts/Default.vue'
 import Landing from "./layouts/Landing.vue"
 import Breadcrumb from "./components/Breadcrumb.vue"

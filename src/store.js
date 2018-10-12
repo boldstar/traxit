@@ -207,6 +207,14 @@ export default new Vuex.Store({
         'answered': false           
       })
     },
+    updateAnswer(state, question) {
+      const index = state.questions.findIndex(item => item.id == question.id);
+      state.questions.splice(index, 1, {
+        'id': question.id,
+        'answer': question.answer,
+        'answered': question.answered          
+      })
+    },
     getClientNotes(state, clientnotes) {
       state.clientnotes = clientnotes
     },
@@ -236,7 +244,7 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    toggleSidebar({commit, state}) {
+    toggleSidebar({commit}) {
       commit('toggleSidebar')
     },
     retrieveName(context) {
@@ -598,6 +606,18 @@ export default new Vuex.Store({
       })
       .then(response => {
           context.commit('updateQuestion', response.data)
+      })
+      .catch(error => {
+          console.log(error)
+      })           
+    },
+    updateAnswer(context, question) {
+      axios.patch('/questionsanswer/' + question.id, {
+        answer: question.answer,
+        answered: question.answered,
+      })
+      .then(response => {
+          context.commit('updateAnswer', response.data)
       })
       .catch(error => {
           console.log(error)

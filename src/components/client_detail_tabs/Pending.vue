@@ -8,7 +8,7 @@
             </div>
         </div>
 
-        <div v-for="(engagement, index) in engagementQuestions" :key="index" v-if="!detailsLoaded">    
+        <div v-for="(engagement, index) in engagementQuestions" :key="index" v-if="!detailsLoaded"> 
             <div class="card mb-3"  v-for="(question, index) in engagement.questions" :key="index">
             <div class="card-header d-flex justify-content-between">
                 <div class="d-flex">
@@ -89,7 +89,6 @@ computed: {
 ...mapGetters(
         [
             'engagementQuestions',
-            'engagement'
         ]
     ),
 },
@@ -115,7 +114,6 @@ methods: {
         }
       },
     answerQuestion(id) {
-        console.log(id)
         this.questionToAnswer = id
         this.$refs.modal.show()
     },
@@ -127,7 +125,7 @@ created: function(){
     setTimeout(() => {
         self.detailsLoaded = false;
     }, 3000)
-}
+},
     
 }
 </script>

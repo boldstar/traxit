@@ -166,7 +166,6 @@ export default {
             return this.activeItem === menuItem
         },
     },
-    // this will get the message from the url
     created: function(){
     this.$store.dispatch('getDetails', this.$route.params.id);
   }

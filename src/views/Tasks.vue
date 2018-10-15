@@ -45,6 +45,7 @@
             <th scope="col">Return Type</th>
             <th scope="col">Year</th>
             <th scope="col">Action</th>
+            <th scope="col">Engagement</th>
           </tr>
         </thead>
         <tbody class="table-bordered">
@@ -54,7 +55,12 @@
             <td>{{ task.created_at | formatDate }}</td>
             <td>{{ task.engagements[0].return_type }}</td>
             <td>{{ task.engagements[0].year }}</td>
-            <td><b-btn variant="primary" size="sm" @click="requestUpdate(task.id)"><i class="fas fa-pen-square mr-2"></i>Update</b-btn></td>
+            <td class="px-0">
+                <b-btn variant="primary" class="mr-2" size="sm" @click="requestUpdate(task.id)"><i class="fas fa-pen-square mr-2"></i>Update</b-btn>
+            </td>
+            <td class="px-0">
+                <router-link class="btn btn-sm btn-secondary" to="#"><i class="far fa-eye mr-2"></i>View</router-link>
+            </td>
           </tr>
         </tbody>
       </table>

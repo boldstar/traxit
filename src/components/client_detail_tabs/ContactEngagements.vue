@@ -26,20 +26,35 @@
                 <div class="card mb-3 shadow-sm p-0" v-for="(engagement, index) in clientEngagements" :key="index">
                     <div class="d-flex justify-content-between card-header">
                         <h3 class="m-0 text-muted">{{ index + 1 }}</h3>
-                        <h5 class="align-self-center m-0"><span>Return Type: </span> {{ engagement.return_type }} </h5>
+                        <h5 class="align-self-center m-0"><span class="font-weight-bold">Created: </span> {{ engagement.created_at | formatDate }} </h5>
                     </div>
-                    <div class="card-body text-left p-0 my-1">
-                        <h5 class="p-4"><span>Year: </span> {{ engagement.year }} </h5>
-                        <hr class="my-1">
-                        <h5 class="p-4"><span>Assigned To: </span> {{ engagement.assigned_to }} </h5>
-                        <hr class="my-1">
-                        <h5 class="p-4"><span>Status: </span> {{ engagement.status}} </h5>
+                    <div class="card-body px-3"> 
+                        <table class="table table-bordered h3 mt-3">
+                            <thead class="text-primary">
+                                <tr>
+                                <th class="py-3" scope="col">Return Type</th>
+                                <th class="py-3" scope="col">Year</th>
+                                <th class="py-3" scope="col">Assigned To</th>
+                                <th class="py-3" scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                <th class="py-3">{{ engagement.return_type}}</th>
+                                <th class="py-3">{{ engagement.year }}</th>
+                                <th class="py-3">{{ engagement.assigned_to}}</th>
+                                <th class="py-3">{{ engagement.status }}</th>
+                                </tr>
+                            </tbody>
+                        </table> 
                     </div>
                     <div class="card-footer d-flex justify-content-between">
                         <router-link v-bind:to="'/engagement/' + engagement.id " class="btn btn-primary btn-sm ml-auto"><i class="far fa-eye mr-2"></i>View</router-link>
                     </div>
                 </div>
             </div>
+
+            
 
         </div>
 
@@ -87,10 +102,6 @@ export default {
 
     .header {
         height: 4em;
-    }
-
-    .card {
-        height: 375px;
     }
 
     .engagements {

@@ -491,7 +491,7 @@ export default new Vuex.Store({
         context.commit('addClientEngagement', response.data)
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.response.data)
       })
     },
     updateEngagement(context, engagement) {

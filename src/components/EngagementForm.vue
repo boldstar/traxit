@@ -109,8 +109,6 @@ export default {
     
     addNewEngagement() {
       if(!this.engagement.return_type || !this.engagement.year ) return;
-      console.log(this.engagement.return_type)
-      console.log(this.engagement.assigned_to)
       this.addEngagement({
         id: this.idForEngagement,
         client_id: this.engagement.client_id,
@@ -122,7 +120,7 @@ export default {
       .then(() => {
         this.engagement = "" 
         this.idForEngagement++
-        this.$router.go(-1);
+        this.$router.push({path: 'add', query: {alert: 'A new engagement has been added'}});
       })
     },
   },

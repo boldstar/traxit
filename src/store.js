@@ -336,13 +336,12 @@ export default new Vuex.Store({
           context.commit('updateTask', response.data)
       })
       .catch(error => {
-          console.log(error)
+          console.log(error.response.data)
       })           
     },
     retrieveUsers(context) {
       axios.get('/users')
       .then(response => {
-        console.log(response.data)
         context.commit('retrieveUsers', response.data)
       })
       .catch(error => {

@@ -59,7 +59,7 @@
                 <b-btn variant="primary" class="mr-2" size="sm" @click="requestUpdate(task.id)"><i class="fas fa-pen-square mr-2"></i>Update</b-btn>
             </td>
             <td class="px-0">
-                <router-link class="btn btn-sm btn-secondary" to="#"><i class="far fa-eye mr-2"></i>View</router-link>
+                <router-link class="btn btn-sm btn-secondary" :to="'/engagement/' +task.engagements[0].id "><i class="far fa-eye mr-2"></i>View</router-link>
             </td>
           </tr>
         </tbody>

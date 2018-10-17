@@ -5,36 +5,23 @@
             <div class="card-body">
                 <span class="pr-3 h4 text-capitalize text-primary">Welcome, {{ name }}!</span>
             </div>
-            <hr class="mt-0 shadow">
-            <div class="d-flex mb-4 justify-content-around">
-                <div class="card">
-                    <div class="card-body">
-                        <h5>Overview</h5>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <h5>Tasks</h5>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-body">
-                        <h5>Pending</h5>
-                    </div>
-                </div>
-            </div>
         </div>
+
+        <firm-chart></firm-chart>
+
     </div>  
 
 
 </template>
 
 <script>
-
+import FirmChart from '@/components/FirmChart.vue'
 
 export default {
     name: 'dashboard',
+    components: {
+        FirmChart,
+    },
     data () {
         return {
              name: '',
@@ -49,7 +36,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 
 

@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import VeeValidate from 'vee-validate'
 import moment from 'moment'
+import VueCharts from 'vue-chartjs'
 import jQuery from 'jquery'
 import 'bootstrap/dist/css/bootstrap.css'
 import { Button } from 'bootstrap-vue/es/components'
@@ -22,6 +23,7 @@ Vue.component('breadcrumb', Breadcrumb)
 Vue.config.productionTip = false
 Vue.use(Button);
 Vue.use(VeeValidate);
+Vue.use(VueCharts);
 
 Vue.filter('formatDate', function(created_at) {
   if(created_at) {

@@ -28,9 +28,9 @@
                         <h3 class="m-0 text-muted">{{ index + 1 }}</h3>
                         <h5 class="align-self-center m-0"><span class="font-weight-bold">Created: </span> {{ engagement.created_at | formatDate }} </h5>
                     </div>
-                    <div class="card-body px-3"> 
-                        <table class="table table-bordered h3 mt-3">
-                            <thead class="text-primary">
+                    <div class="card-body px-4"> 
+                        <table class="table h3 my-5">
+                            <thead class="text-primary border">
                                 <tr>
                                 <th class="py-3" scope="col">Return Type</th>
                                 <th class="py-3" scope="col">Year</th>
@@ -38,12 +38,12 @@
                                 <th class="py-3" scope="col">Status</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="table-bordered">
                                 <tr>
-                                <th class="py-3">{{ engagement.return_type}}</th>
-                                <th class="py-3">{{ engagement.year }}</th>
-                                <th class="py-3">{{ engagement.assigned_to}}</th>
-                                <th class="py-3">{{ engagement.status }}</th>
+                                <th class="py-4">{{ engagement.return_type}}</th>
+                                <th class="py-4">{{ engagement.year }}</th>
+                                <th class="py-4">{{ engagement.assigned_to}}</th>
+                                <th class="py-4">{{ engagement.status }}</th>
                                 </tr>
                             </tbody>
                         </table> 

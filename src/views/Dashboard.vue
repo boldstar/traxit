@@ -1,21 +1,58 @@
 <template>
 
-    <div>
-        <div class="card shadow-sm mx-auto w-100 bg-light">
-            <div class="card-body">
-                <span class="pr-3 h4 text-capitalize text-primary">Welcome, {{ name }}!</span>
-            </div>
+    <div class="dashboard flex-column justify-content-center">
+
+        <!-- this is the header for the dashboard -->
+        <div class="card mb-5 shadow-sm">
+        <div class="d-flex justify-content-between card-body">
+          <div class="h2 align-self-center m-0">
+            <i class="fas fa-tachometer-alt text-primary"></i> 
+          </div>
+          <p class="h2 align-self-center">Dashboard
+          </p>
+          <div class="align-self-center">
+            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
+          </div>
         </div>
+      </div>
 
-        <div class="row mt-4">
-            <div class="col-4 col-sm-6">
-                <span class="h3 mb-4 text-muted"><i class=" far fa-folder-open mr-3 text-primary"></i>Overview</span>
+        <!-- this is the doughnut chart for the overview of the firm -->
+        <div class="row justify-content-around mt-3">
+            <div class="col-lg-4 col-sm-6">
+                <span class="h3 mb-4"><i class=" far fa-folder-open mr-3 text-primary"></i><router-link to="/firm" class="text-muted">Firm Overview</router-link></span>
                 <br><br>
-                <firm-chart class="" :chart-data="datasetsfull"></firm-chart>
+                <doughnut-chart :chart-data="datasetsfull"></doughnut-chart>
             </div>
 
-            <div class="col-4 col-sm-6"></div>
-            <div class="col-4"></div>
+
+            <!-- this is the simple list of current tasks -->
+            <div class="col-lg-6 col-sm-6">
+                <span class="h3 mb-4"><i class="fas fa-tasks text-primary mr-3"></i><router-link to="/tasks" class="text-muted">Your Tasks</router-link></span>
+                <br><br>
+                 <table class="table table-hover">
+                    <thead class="bg-primary text-light">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Client</th>
+                        <th scope="col">Created On</th>
+                        <th scope="col">Return Type</th>
+                        <th scope="col">Year</th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-bordered">
+                    <tr v-for="(task, index) in tasks"  :key="index">
+                        <th>{{ index + 1 }}</th>
+                        <td>{{ task.engagements[0].client.last_name }}, {{ task.engagements[0].client.first_name }} & {{ task.engagements[0].client.spouse_first_name }}</td>
+                        <td>{{ task.created_at | formatDate }}</td>
+                        <td>{{ task.engagements[0].return_type }}</td>
+                        <td>{{ task.engagements[0].year }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-4">
+
+            </div>
         </div>
 
 
@@ -25,23 +62,22 @@
 </template>
 
 <script>
-import FirmChart from '@/components/FirmChart.vue'
+import DoughnutChart from '@/components/DoughnutChart.vue'
 import { mapGetters } from 'vuex'
 
 export default {
     name: 'dashboard',
     components: {
-        FirmChart,
+        DoughnutChart,
     },
     data () {
         return {
-            name: '',
             scanned: null,
             recieved: null,
             preparation: null,
             review: null,
             secondreview: null,
-            complete: null
+            complete: null,
         }
     },
     computed: {
@@ -76,15 +112,9 @@ export default {
                 ]
             }
         },
-        ...mapGetters([
-            'chartEngagements'
-        ])
+        ...mapGetters(['tasks'])
     },
     created() {
-        this.$store.dispatch('retrieveName')
-        .then(response => {
-            this.name = response.data.name
-        });
         this.$store.dispatch('retrieveEngagementsChartData')
         .then(response => {
             this.scanned = response.data.Scanned.length
@@ -94,11 +124,7 @@ export default {
             this.preparation = response.data.Preparation.length
             this.secondreview = response.data['2nd Review'].length
         });
+        this.$store.dispatch('retrieveTasks')
     },
 }
 </script>
-
-<style scoped lang="scss">
-
-
-</style>

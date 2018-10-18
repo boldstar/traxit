@@ -1,9 +1,9 @@
 <script>
 import { Doughnut, mixins } from 'vue-chartjs'
-import {mapGetters} from 'vuex'
+
 
 export default {
-    name: 'FirmChart',
+    name: 'DoughnutChart',
     extends: Doughnut,
     mixins: [mixins.reactiveProp],
     props: ['options'],
@@ -12,19 +12,17 @@ export default {
             this.chartData, 
             {
                 responsive: true, 
-                maintainAspectRatio: false, 
+                maintainAspectRatio: false,
                 legend: 
                         {
                             position: 'left',
-                            padding: 100
+                            labels: {
+                                padding: 20
+                            }
                         }
                     }
             );
     },
 }
 </script>
-
-<style>
-
-</style>
 

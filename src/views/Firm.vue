@@ -1,13 +1,17 @@
 <template>
   <div class="page-wrapper mt-1">
     <!-- this is the header section of the firm overview -->
-    <div class="card bg-light w-100 mb-3">
-      <div class="card-body d-flex justify-content-between">
-        <strong class="align-self-center h2"><i class="fas fa-home"></i></strong>
-        <strong class="align-self-center h2">Firm | 2018</strong>
-        <button class="btn btn-sm btn-outline-success align-self-center">Start New Year</button>
+    <div class="card mb-3 shadow-sm">
+        <div class="d-flex justify-content-between card-body">
+          <div class="h2 align-self-center m-0">
+            <i class="fas fa-home text-primary"></i>
+          </div>
+          <p class="h2 align-self-center">Firm</p>
+          <div class="align-self-center">
+            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
+          </div>
         </div>
-    </div>
+      </div>
 
 
     <div class="row">
@@ -18,7 +22,7 @@
             <strong>Status</strong>
           </div>
           <ul class="list-group h5">
-            <li class="list-group-item d-flex justify-content-between align-items-center py-3 m-0">
+            <li class="list-group-item d-flex justify-content-between align-items-center py-3 m-0 active">
               <i class="fas fa-exclamation-triangle"></i>Inactive
               <span class="badge badge-danger badge-pill">25</span>
             </li>

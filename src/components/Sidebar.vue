@@ -102,6 +102,7 @@ export default {
 
     .is-active {
         background:rgb(223, 231, 253);
+        border-left: 5px solid #0077ff;
 
         i {
             color: #0077ff;

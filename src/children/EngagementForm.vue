@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container col-6">
     <div class="justify-content-between d-flex mb-3">
       <router-link to="/add" class="btn btn-sm btn-outline-secondary"><i class="fas fa-arrow-circle-left mr-2"></i>Back</router-link>
       <div class="d-flex">
@@ -13,11 +13,13 @@
     <form @submit.prevent="addNewEngagement" class="d-flex-column justify-content-center">
       <div class="form-group">
 
+        <input type="text" class="form-control mb-3" placeholder="Year" v-model="engagement.year">
+
         <div class="input-group my-3">
           <div class="input-group-prepend">
-            <label class="input-group-text" for="option">Find Contact</label>
+            <label class="input-group-text text-primary" for="option">Find Contact</label>
           </div>
-          <select class="custom-select" id="client_id" v-model.number="engagement.client_id">
+          <select class="form-control" id="client_id" v-model.number="engagement.client_id">
             <option disabled>{{ option }}</option>
             <option v-for="client in allClients" :key="client.id" :value="client.id">
               {{ client.last_name }}, {{client.first_name}} & {{client.spouse_first_name }}
@@ -25,11 +27,11 @@
           </select>
         </div>
 
-        <input type="text" class="form-control mb-3" placeholder="Year" v-model="engagement.year">
+        
 
         <div class="input-group my-3">
           <div class="input-group-prepend">
-            <label class="input-group-text" for="option">Return Type</label>
+            <label class="input-group-text text-primary" for="option">Return Type</label>
           </div>
           <select class="form-control" id="type" v-model="engagement.return_type">
               <option  selected disabled>{{ option }}</option>
@@ -39,9 +41,9 @@
 
         <div class="input-group my-3">
         <div class="input-group-prepend">
-          <label class="input-group-text" for="option">Assign To</label>
+          <label class="input-group-text text-primary" for="option">Assign To</label>
         </div>
-        <select class="custom-select" id="user_id" v-model="engagement.assigned_to">
+        <select class="form-control" id="user_id" v-model="engagement.assigned_to">
           <option  selected disabled>{{ option }}</option>
           <option v-for="user in users" :key="user.id" :value="user.id">
             {{ user.name }}
@@ -51,9 +53,9 @@
 
       <div class="input-group my-3">
         <div class="input-group-prepend">
-          <label class="input-group-text" for="option">Status</label>
+          <label class="input-group-text text-primary" for="option">Status</label>
         </div>
-        <select class="custom-select" id="status" v-model="engagement.status">
+        <select class="form-control" id="status" v-model="engagement.status">
           <option  selected disabled>{{ option }}</option>
           <option v-for="status in statuses" :key="status.id" :value="status">
             {{ status }}
@@ -120,7 +122,7 @@ export default {
       .then(() => {
         this.engagement = "" 
         this.idForEngagement++
-        this.$router.push({path: 'add', query: {alert: 'A new engagement has been added'}});
+        this.$router.push({path: '/add', query: {alert: 'A new engagement has been added'}});
       })
     },
   },

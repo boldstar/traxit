@@ -46,6 +46,9 @@ export default new Vuex.Store({
     allEngagements(state) {
       return state.engagements;
     },
+    chartEngagements(state) {
+      return state.engagements;
+    },
     client(state) {
       return state.client;
     },
@@ -96,6 +99,10 @@ export default new Vuex.Store({
     },
     //this is for all engagements
     retrieveEngagements(state, engagements) {
+      state.engagements = engagements
+    },
+    //this is for all engagements
+    retrieveEngagementsChartData(state, engagements) {
       state.engagements = engagements
     },
     //this is for all engagements belonging to client
@@ -261,7 +268,7 @@ export default new Vuex.Store({
           })
         })
     },
-    register(context, data) {
+    register(data) {
       return new Promise((resolve, reject) => {
         axios.post('/register', {
           name: data.name,
@@ -440,6 +447,20 @@ export default new Vuex.Store({
       .catch(error => {
           console.log(error)
       })                
+    },
+    retrieveEngagementsChartData(context) {
+    
+        return new Promise((resolve, reject) => {
+          axios.get('/engagementsdata')
+          .then(response => {
+            resolve(response)
+            context.commit('retrieveEngagementsChartData', response.data)
+          })
+          .catch(error => {
+            reject(error)
+          })
+        })
+
     },
     retrieveEngagements(context) {
       axios.get('/engagements')

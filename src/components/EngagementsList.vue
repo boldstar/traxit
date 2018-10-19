@@ -24,8 +24,8 @@
 
         </div>
 
-        <table class="table table-bordered table-light table-striped table-hover text-left">
-            <thead class="thead-primary hover">
+        <table class="table border table-light table-hover text-left">
+            <thead class="text-primary hover">
                 <tr>
                     <th scope="col">Client</th>
                     <th scope="col" @click="sort('return_type')">Return Type</th>
@@ -35,7 +35,7 @@
                     <th scope="col" class="text-center">Details</th>
                 </tr>
             </thead> 
-            <tbody class="client-info" v-if="!tableLoaded">
+            <tbody class="client-info table-bordered" v-if="!tableLoaded">
                 <tr v-for="(engagement, index) in sortedEngagements"  :key="index">
                     <td>{{ engagement.client.last_name }}, {{ engagement.client.first_name }} & {{ engagement.client.spouse_first_name }}</td>
                     <td>{{ engagement.return_type }}</td>

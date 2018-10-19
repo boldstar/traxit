@@ -58,7 +58,10 @@ export default new Router({
         breadCrumb: [
           { name: 'Firm' }
         ]
-      }
+      },
+      children: [
+        
+      ]
     },
     {
       // this is the list of all clients view

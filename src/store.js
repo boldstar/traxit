@@ -25,11 +25,15 @@ export default new Vuex.Store({
     task: [],
     token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
+    activeTitle: true,
     loading: false,
   },
   getters: {
     sidebarOpen(state) {
       return state.sidebarOpen;
+    },
+    eventTitleClicked(state) {
+      return state.activeTitle;
     },
     loggedIn(state) {
       return state.token != null;
@@ -83,6 +87,9 @@ export default new Vuex.Store({
   mutations: {
     toggleSidebar(state) {
       state.sidebarOpen = !state.sidebarOpen
+    },
+    eventTitleClicked(state) {
+      state.activeTitle = !state.activeTitle
     },
     retrieveTasks(state, tasks) {
       state.tasks = tasks
@@ -253,6 +260,9 @@ export default new Vuex.Store({
   actions: {
     toggleSidebar({commit}) {
       commit('toggleSidebar')
+    },
+    titleClicked({commit}) {
+      commit('eventTitleClicked')
     },
     retrieveName(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token

@@ -26,8 +26,8 @@
 
         
     <!-- this is the table for the list of clients -->
-    <table class="table table-bordered table-light table-striped table-hover text-left">
-        <thead class="thead-primary hover">
+    <table class="table border table-light table-hover text-left">
+        <thead class="text-primary hover">
             <tr>
                 <th scope="col">Name</th>
                 <th scope="col" @click="sort('category')">Category</th>
@@ -38,7 +38,7 @@
                 <th scope="col" class="text-center">Details</th>
             </tr>
         </thead> 
-        <tbody class="client-info"  v-if="!tableLoaded">
+        <tbody class="client-info table-bordered"  v-if="!tableLoaded">
             <tr v-for="(client, index) in sortedClients"  :key="index">
                 <td class="text-capitalize">{{ client.last_name }}, {{client.first_name}} & {{ client.spouse_first_name }}</td>
                 <td class="text-capitalize">{{ client.category }}</td>

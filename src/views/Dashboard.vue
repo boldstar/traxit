@@ -18,7 +18,7 @@
 
         <!-- this is the doughnut chart for the overview of the firm -->
         <div class="row justify-content-around mt-3">
-            <div class="col-lg-4 col-sm-6">
+            <div class="col-4 col-md-5">
                 <span class="h3 mb-4"><i class=" far fa-folder-open mr-3 text-primary"></i><router-link to="/firm" class="text-muted">Firm Overview</router-link></span>
                 <br><br>
                 <doughnut-chart :chart-data="datasetsfull"></doughnut-chart>
@@ -26,7 +26,7 @@
 
 
             <!-- this is the simple list of current tasks -->
-            <div class="col-lg-6 col-sm-6">
+            <div class="col-6">
                 <span class="h3 mb-4"><i class="fas fa-tasks text-primary mr-3"></i><router-link to="/tasks" class="text-muted">Your Tasks</router-link></span>
                 <br><br>
                  <table class="table table-hover">
@@ -36,7 +36,6 @@
                         <th scope="col">Client</th>
                         <th scope="col">Created On</th>
                         <th scope="col">Return Type</th>
-                        <th scope="col">Year</th>
                     </tr>
                     </thead>
                     <tbody class="table-bordered">
@@ -45,7 +44,6 @@
                         <td>{{ task.engagements[0].client.last_name }}, {{ task.engagements[0].client.first_name }} & {{ task.engagements[0].client.spouse_first_name }}</td>
                         <td>{{ task.created_at | formatDate }}</td>
                         <td>{{ task.engagements[0].return_type }}</td>
-                        <td>{{ task.engagements[0].year }}</td>
                     </tr>
                     </tbody>
                 </table>

@@ -131,15 +131,15 @@ export default {
     methods:{
         sort:function(s) {
         //if s == current sort, reverse
-            if(s === this.currentSort) {
+        if(s === this.currentSort) {
             this.currentSortDir = this.currentSortDir==='asc'?'desc':'asc';
         }
-            this.currentSort = s;
+        this.currentSort = s;
         },
-            nextPage:function() {
+        nextPage:function() {
             if((this.currentPage*this.pageSize) < this.engagements.length) this.currentPage++;
         },
-            prevPage:function() {
+        prevPage:function() {
             if(this.currentPage > 1) this.currentPage--;
         }
     },

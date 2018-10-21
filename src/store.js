@@ -177,6 +177,14 @@ export default new Vuex.Store({
         'done': false           
       })
     },
+    updateCheckedEngagements(state, engagement) {
+      const index = state.engagements.findIndex(item => item.id == engagment.id);
+      state.engagements.splice(index, 1, {
+        'id': engagement.id,
+        'assigned_to': engagement.assigned_to,
+        'status': engagement.status,
+      })
+    },
     deleteEngagement(state, id) {
       const index = state.engagements.findIndex(engagement => engagement.id == id);
       state.engagements.splice(index, 1);
@@ -538,6 +546,18 @@ export default new Vuex.Store({
       })
       .catch(error => {
           console.log(error)
+      })           
+    },
+    updateCheckedEngagements(context, engagement) {
+      axios.patch('/engagements/' + engagement.id, {
+        assigned_to: engagement.assigned_to,
+        status: engagement.status,
+      })
+      .then(response => {
+          context.commit('updateCheckedEngagements', response.data)
+      })
+      .catch(error => {
+          console.log(error.response.data)
       })           
     },
     deleteEngagement(context, id) {

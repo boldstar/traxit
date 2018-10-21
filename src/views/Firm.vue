@@ -8,7 +8,7 @@
           </div>
           <p class="h2 align-self-center">Firm</p>
           <div class="align-self-center">
-            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
+            <button class="btn btn-sm btn-outline-primary" @click="refreshList"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
           </div>
         </div>
       </div>
@@ -21,7 +21,7 @@
             <span class="h5 mt-3 font-weight-bold">Event Center</span>
             <hr class="mt-2 mb-0">
             <div class="card-body p-0 d-flex flex-column">
-              <ul class="p-0 m-0 h5">
+              <ul class="p-0 m-0 h6">
                 <li class="d-flex justify-content-between" v-on:click="engagementFilterKey = 'recieved'" :class="{ active: engagementFilterKey == 'recieved' }">
                   <div class="ml-3">
                     <i class="far fa-handshake mr-2"></i>
@@ -60,7 +60,7 @@
                 <li class="d-flex justify-content-between" v-on:click="engagementFilterKey = 'signature'" :class="{ active: engagementFilterKey == 'signature' }">
                   <div class="ml-3">
                     <i class="fas fa-file-signature mr-2"></i>
-                    <span class="text-muted">Waiting Signature</span>
+                    <span class="text-muted">Need Signature</span>
                   </div>
                     <span class="badge badge-primary mr-3">25</span>
                 </li>
@@ -78,9 +78,8 @@
 
         <div class="col-8">
           <div class="card p-0 shadow-sm">
-            <div class="d-flex justify-content-between my-3">
-              <span class="h5 my-0 ml-3 font-weight-bold">Received</span>
-              <span class="mr-3 px-2 table-badge">20</span>
+            <div class="d-flex my-3">
+              <input class="form-control mx-3" placeholder="Filter By Last Name..." v-model="filterList">
             </div>
             </div>
 
@@ -88,17 +87,16 @@
             <table class="table table-hover mb-5">
                 <thead class="bg-primary text-light">
                   <tr>
-                    <th scope="col">Task</th>
                     <th scope="col">Client</th>
-                    <th scope="col">Created On</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Assigned To</th>
                     <th scope="col">Return Type</th>
                     <th scope="col">Year</th>
-                    <th scope="col">Action</th>
                   </tr>
                 </thead>
             </table>
             <span class="mt-5 font-weight-bold">
-                You have no tasks...
+                There are no engagements...
             </span>
           </div>
 
@@ -116,7 +114,7 @@
             </thead>
             <tbody>
               <tr v-for="(engagement, index) in engagementFilter" :key="index">
-                <th scope="row"><input type="checkbox"></th>
+                <th scope="row"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements"></th>
                 <th>{{ engagement.client.last_name}}, {{ engagement.client.first_name}} & {{ engagement.client.spouse_first_name}}</th>
                 <td>{{ engagement.status }}</td>
                 <td>{{ engagement.assigned_to }}</td>
@@ -125,6 +123,39 @@
               </tr>
             </tbody>
           </table>
+
+            <form @submit.prevent="updateChecked" class="d-flex">
+              <div class="input-group my-3 mr-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text font-weight-bold bg-primary text-light" for="option">Status</label>
+                </div>
+                <select class="custom-select" id="status" v-model="engagement.status">
+                  <option  selected disabled>{{ option }}</option>
+                  <option v-for="status in statuses" :key="status.id" :value="status">
+                    {{ status }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="input-group my-3 mr-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text font-weight-bold bg-primary text-light" for="option">Assign To</label>
+                </div>
+                <select class="custom-select" id="client_id" v-model="engagement.assigned_to">
+                  <option  selected disabled>{{ option }}</option>
+                  <option v-for="user in users" :key="user.id" :value="user.id">
+                    {{ user.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="d-flex align-self-center">
+                <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+              </div>
+            </form>
+          
+
+
         </div>
         
       </div>
@@ -138,19 +169,34 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'FirmView',
   data() {
     return {
+      checkedEngagements: [],
+      engagement: {
+        status: null,
+        assigned_to: null,
+      },
       noEngagements: false,
       listLoaded: false,
+      filterList: '',
       engagementFilterKey: 'recieved',
+      option: 'Choose...',
+      statuses: [
+        'Recieved',
+        'Scanned',
+        'Preparation',
+        'Review',
+        '2nd Review',
+        'Complete'
+      ]
     }
   },
   computed: {
-    ...mapGetters(['allEngagements']),
+    ...mapGetters(['allEngagements', 'users']),
     engagementFilter() {
       return this[this.engagementFilterKey]
     },
@@ -177,6 +223,18 @@ export default {
     },
     complete() {
         return this.allEngagements.filter((engagement) => engagement.status == 'Complete')
+    },  
+  },
+  methods: {
+    ...mapActions(['updateCheckedEngagements']),
+    updateChecked() {
+      this.updateCheckedEngagements({
+        id: this.checkedEngagements,
+        assigned_to: this.engagement.assigned_to,
+        status: this.engagement.status
+      }).then(() => {
+
+      }) 
     },
     refreshList() {
       this.listLoaded = true
@@ -195,6 +253,9 @@ export default {
   created() {
     this.listLoaded = true;
     this.$store.dispatch('retrieveEngagements')
+    this.$store.dispatch('retrieveUsers')
+    this.engagement.status = this.option
+    this.engagement.assigned_to = this.option
       var self = this;
         setTimeout(() => {
           self.listLoaded = false;
@@ -213,7 +274,7 @@ export default {
   li {
     list-style: none;
     margin: 0;
-    padding: 20px 0;
+    padding: 15px 0;
 
     &:hover {
       background-color: #aaaaaa34;
@@ -230,7 +291,7 @@ export default {
 
   .active {
     background-color: #aaaaaa34;
-    border: 1px solid #aaaaaac7;
+    border: 1px solid #0077ff;
     color: #0077ff;
   }
 

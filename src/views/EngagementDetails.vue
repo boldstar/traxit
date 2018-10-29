@@ -79,15 +79,24 @@
           </div>
         </div>
         <div class="card-body bg-light d-flex justify-content-between">
-          <div class="h4 mr-5 text-left">
-            <span v-html="question.question"></span>
+          <div class="h5 mr-5 d-flex flex-column text-left">
+            <span class="mb-3">Question</span>
+            <span class="align-self-center h6" v-html="question.question"></span>
           </div>
           <div class="ml-5 d-flex align-self-center">
-            <span class="font-weight-bold mr-2">Answered: </span>
-            <input class="mt-2" type="checkbox" v-model="question.answered">
+            <button class="btn btn-sm btn-primary" v-if="question.answered == 0">Answer</button>
+            <div v-else>
+              <span class="font-weight-bold mr-2">Answered: </span>
+              <input class="mt-2" type="checkbox" v-model="question.answered">
+            </div>
           </div>
         </div>
-
+        <div v-if="question.answered == 1">
+          <div class="card-footer d-flex flex-column text-left h5 mb-0">
+            <span class="mb-3">Answer</span>
+            <span class="h6" v-html="question.answer"></span>
+          </div>
+        </div>
 
           <!-- this is the modal for deleting a question -->
         <b-modal v-model="modalShow" id="myQuestion" ref="myQuestion" hide-footer title="Delete Question">

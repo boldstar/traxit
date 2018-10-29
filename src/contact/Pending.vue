@@ -4,12 +4,12 @@
         <div class="header p-0 d-flex flex-row justify-content-between mt-2 mb-4 shadow-sm">
             <div class="ml-3 pr-2  h3 align-self-center m-0">
                 <span><i class="far fa-question-circle text-primary"></i></span> |
-                <span>{{ engagementQuestions.length }}</span>
+                <span>{{ filteredQuestions.length }}</span>
             </div>
         </div>
 
-        <div v-for="(engagement, index) in engagementQuestions" :key="index" v-if="!detailsLoaded"> 
-            <div class="card mb-3"  v-for="(question, index) in engagement.questions" :key="index">
+        <div v-for="(engagement, index) in filteredQuestions" :key="index" v-if="!detailsLoaded"> 
+            <div class="card mb-3"  v-for="(question, index) in engagement.questions" :key="index" v-if="question.answered == 0">
             <div class="card-header d-flex justify-content-between">
                 <div class="d-flex">
                     <i class="far fa-folder-open align-self-center mr-2 text-primary"></i>
@@ -86,15 +86,17 @@ directives: {
     'b-modal': bModalDirective
 },
 computed: {
-...mapGetters(
-        [
-            'engagementQuestions',
-        ]
-    ),
+    ...mapGetters(['engagementQuestions',]),
+    filteredQuestions () {
+        const engagement =  this.engagementQuestions.filter((engagement) => {
+            return engagement.questions.filter((question) => question.answered === 0).length
+        })
+        return engagement
+    },
 },
 methods: {
     showModal() {
-    this.$refs.modal.show()
+        this.$refs.modal.show()
     },
     hideModal() {
         this.$refs.modal.hide()

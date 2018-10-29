@@ -16,95 +16,42 @@
 
       <div class="row d-flex justify-content-around mt-5" v-if="!listLoaded">
 
-        <div class="col-3">
+        <div class="col-2 col-sm-3">
           <div class="card shadow-sm">
             <span class="h5 mt-3 font-weight-bold">Event Center</span>
             <hr class="mt-2 mb-0">
             <div class="card-body p-0 d-flex flex-column">
               <ul class="p-0 m-0 h6">
-                <li class="d-flex justify-content-between" v-on:click="engagementFilterKey = 'recieved'" :class="{ active: engagementFilterKey == 'recieved' }">
+                <li class="d-flex justify-content-start" v-for="status in engagementStatuses" :key="status" @click="changeEngagementKey(status)" :class="{ active: engagementFilterKey === status }">
                   <div class="ml-3">
-                    <i class="far fa-handshake mr-2"></i>
-                    <span class="text-muted">Received</span>
+                    <span class="text-muted">{{ capitalize(status) }}</span>
                   </div>
-                    <span class="badge badge-primary mr-3">20</span>
-                </li>
-                <li class="d-flex justify-content-between" v-on:click="engagementFilterKey = 'scanned'" :class="{ active: engagementFilterKey == 'scanned' }">
-                  <div class="ml-3">
-                    <i class="fas fa-print mr-2"></i>
-                    <span class="text-muted">Scanned</span>
-                  </div>
-                    <span class="badge badge-primary mr-3">2</span>
-                </li>
-                <li class="d-flex justify-content-between" v-on:click="engagementFilterKey = 'preparation'" :class="{ active: engagementFilterKey == 'preparation' }">
-                  <div class="ml-3">
-                    <i class="fas fa-clipboard-list mr-2"></i>
-                    <span class="text-muted">Preparation</span>
-                  </div>
-                    <span class="badge badge-primary mr-3">33</span>
-                </li>
-                <li class="d-flex justify-content-between" v-on:click="engagementFilterKey = 'review'" :class="{ active: engagementFilterKey == 'review' }">
-                  <div class="ml-3">
-                    <i class="fas fa-search mr-2"></i>
-                    <span class="text-muted">Review</span>
-                  </div>
-                    <span class="badge badge-primary mr-3">15</span>
-                </li>
-                <li class="d-flex justify-content-between" v-on:click="engagementFilterKey = 'secondreview'" :class="{ active: engagementFilterKey == 'secondreview' }"> 
-                  <div class="ml-3">
-                    <i class="fas fa-clipboard-check mr-2"></i>
-                    <span class="text-muted">2nd Review</span>
-                  </div>
-                    <span class="badge badge-primary mr-3">8</span>
-                </li>
-                <li class="d-flex justify-content-between" v-on:click="engagementFilterKey = 'signature'" :class="{ active: engagementFilterKey == 'signature' }">
-                  <div class="ml-3">
-                    <i class="fas fa-file-signature mr-2"></i>
-                    <span class="text-muted">Need Signature</span>
-                  </div>
-                    <span class="badge badge-primary mr-3">25</span>
-                </li>
-                <li class="d-flex justify-content-between" v-on:click="engagementFilterKey = 'complete'" :class="{ active: engagementFilterKey == 'complete' }">
-                  <div class="ml-3">
-                    <i class="fas fa-flag-checkered mr-2"></i>
-                    <span class="text-muted">Complete</span>
-                  </div>
-                    <span class="badge badge-primary mr-3">35</span>
                 </li>
               </ul>
             </div>
           </div>
         </div>
 
-        <div class="col-8">
-          <div class="card p-0 shadow-sm">
-            <div class="d-flex my-3">
-              <input class="form-control mx-3" placeholder="Filter By Last Name..." v-model="filterList">
+        <div class="col-9 col-sm-8">
+          <div class="card p-0 shadow-sm mb-3">
+            <div class="row justify-content-between my-3">
+              <div class="col-lg-3 col-sm-5 d-flex">
+                <span class="mx-3 align-self-center h4 mb-0 table-badge px-3">{{ filteredEngagements.length }}</span>
+                <span class="text-capitalize align-self-center h5 mb-0 font-weight-bold mx-3">
+                  {{ engagementFilterKey }}:
+                </span>
+              </div>
+              <div class="col-lg-8 col-sm-6 mx-3">
+                <input class="form-control" placeholder="Filter By Last Name..." v-model="searchEngagement">
+              </div>             
             </div>
             </div>
-
-            <div v-if="noEngagements & !listLoaded">
-            <table class="table table-hover mb-5">
-                <thead class="bg-primary text-light">
-                  <tr>
-                    <th scope="col">Client</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Assigned To</th>
-                    <th scope="col">Return Type</th>
-                    <th scope="col">Year</th>
-                  </tr>
-                </thead>
-            </table>
-            <span class="mt-5 font-weight-bold">
-                There are no engagements...
-            </span>
-          </div>
 
 
           <table class="table border">
             <thead class="text-primary">
               <tr>
-                <th scope="col"><input type="checkbox"></th>
+                <th scope="col">Batch</th>
                 <th scope="col">Client</th>
                 <th scope="col">Status</th>
                 <th scope="col">Assigned To</th>
@@ -113,8 +60,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(engagement, index) in engagementFilter" :key="index">
-                <th scope="row"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements"></th>
+              <tr v-for="engagement in filteredEngagements" :key="engagement.id">
+                <th scope="row"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements.engagements"></th>
                 <th>{{ engagement.client.last_name}}, {{ engagement.client.first_name}} & {{ engagement.client.spouse_first_name}}</th>
                 <td>{{ engagement.status }}</td>
                 <td>{{ engagement.assigned_to }}</td>
@@ -124,12 +71,12 @@
             </tbody>
           </table>
 
-            <form @submit.prevent="updateChecked" class="d-flex">
-              <div class="input-group my-3 mr-3">
+            <form @submit.prevent="updateChecked" class="d-flex mb-5">
+              <div class="input-group mr-3">
                 <div class="input-group-prepend">
-                  <label class="input-group-text font-weight-bold bg-primary text-light" for="option">Status</label>
+                  <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Status</label>
                 </div>
-                <select class="custom-select" id="status" v-model="engagement.status">
+                <select class="custom-select" id="status" v-model="checkedEngagements.status">
                   <option  selected disabled>{{ option }}</option>
                   <option v-for="status in statuses" :key="status.id" :value="status">
                     {{ status }}
@@ -137,11 +84,11 @@
                 </select>
               </div>
 
-              <div class="input-group my-3 mr-3">
+              <div class="input-group mr-3">
                 <div class="input-group-prepend">
-                  <label class="input-group-text font-weight-bold bg-primary text-light" for="option">Assign To</label>
+                  <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Assign To</label>
                 </div>
-                <select class="custom-select" id="client_id" v-model="engagement.assigned_to">
+                <select class="custom-select" id="client_id" v-model="checkedEngagements.assigned_to">
                   <option  selected disabled>{{ option }}</option>
                   <option v-for="user in users" :key="user.id" :value="user.id">
                     {{ user.name }}
@@ -154,10 +101,7 @@
               </div>
             </form>
           
-
-
-        </div>
-        
+        </div>      
       </div>
 
 
@@ -170,22 +114,31 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { mapOrder } from '@/Utils/index.js'
 
 export default {
   name: 'FirmView',
   data() {
     return {
-      checkedEngagements: [],
-      engagement: {
+      searchEngagement: '',
+      checkedEngagements: {
+        engagements: [],
         status: null,
         assigned_to: null,
       },
       noEngagements: false,
       listLoaded: false,
-      filterList: '',
-      engagementFilterKey: 'recieved',
+      engagementFilterKey: 'Recieved',
       option: 'Choose...',
       statuses: [
+        'Recieved',
+        'Scanned',
+        'Preparation',
+        'Review',
+        '2nd Review',
+        'Complete'
+      ],
+      statusesOrder: [
         'Recieved',
         'Scanned',
         'Preparation',
@@ -197,44 +150,40 @@ export default {
   },
   computed: {
     ...mapGetters(['allEngagements', 'users']),
-    engagementFilter() {
-      return this[this.engagementFilterKey]
+    filteredEngagements () {
+      return this.allEngagements.filter((engagement) => engagement.status === this.engagementFilterKey)
+      .filter( engagement => {
+      return !this.searchEngagement || engagement.client.last_name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 });
     },
-    all() {
-      return this.allEngagements
-    },
-    recieved() {
-        return this.allEngagements.filter((engagement) => engagement.status == 'Recieved')
-    },
-    scanned() {
-        return this.allEngagements.filter((engagement) => engagement.status == 'Scanned')
-    },
-    preparation() {
-        return this.allEngagements.filter((engagement) => engagement.status == 'Preparation')
-    },
-    review() {
-        return this.allEngagements.filter((engagement) => engagement.status == 'Review')
-    },
-    secondreview() {
-        return this.allEngagements.filter((engagement) => engagement.status == '2nd Review')
-    },
-    signature() {
-        return this.allEngagements.filter((engagement) => engagement.status == 'Signature')
-    },
-    complete() {
-        return this.allEngagements.filter((engagement) => engagement.status == 'Complete')
+    engagementStatuses () {
+      const statuses = this.allEngagements.reduce((acc, engagement) => {
+        if (acc.indexOf(engagement.status) === -1) {
+          acc.push(engagement.status)
+        }
+        return acc
+      }, [])
+      const ordered = mapOrder(statuses, this.statusesOrder)
+      return ordered
     },  
   },
   methods: {
     ...mapActions(['updateCheckedEngagements']),
     updateChecked() {
       this.updateCheckedEngagements({
-        id: this.checkedEngagements,
-        assigned_to: this.engagement.assigned_to,
-        status: this.engagement.status
+        engagements: this.checkedEngagements.engagements,
+        assigned_to: this.checkedEngagements.assigned_to,
+        status: this.checkedEngagements.status
       }).then(() => {
-
+        this.checkedEngagements.engagements = '';
+        this.checkedEngagements.assigned_to = this.option;
+        this.checkedEngagements.status = this.option;
       }) 
+    },
+    changeEngagementKey (key) {
+    	this.engagementFilterKey = key
+    },
+    capitalize(string) {
+    	return string.charAt(0).toUpperCase() + string.slice(1)
     },
     refreshList() {
       this.listLoaded = true
@@ -254,8 +203,8 @@ export default {
     this.listLoaded = true;
     this.$store.dispatch('retrieveEngagements')
     this.$store.dispatch('retrieveUsers')
-    this.engagement.status = this.option
-    this.engagement.assigned_to = this.option
+    this.checkedEngagements.status = this.option
+    this.checkedEngagements.assigned_to = this.option
       var self = this;
         setTimeout(() => {
           self.listLoaded = false;

@@ -37,17 +37,42 @@ export default new Router({
       component: () => import(/* webpackChunkName: "logout" */ './views/Logout.vue'),
     },
     {
-      // this is the route to logout of the app
-      path: '/admin',
-      name: 'admin',
-      component: () => import(/* webpackChunkName: "logout" */ './views/Admin.vue'),
+      path: '/administrator',
+      name: 'administrator',
+      component: () => import(/* webpackChunkName: "logout" */ './views/Administrator.vue'),
       meta: {
         requiresAuth: true,
         layout: "admin",
-        breadCrumb: [
-          { name: 'Admin' }
-        ]
-      }
+      },
+      children: [
+          {
+          path: 'account',
+          name: 'app-account',
+          component: () => import('@/children/Account.vue'),
+            meta: {
+              requiresAuth: true,
+              layout: "admin",
+            },
+          },
+          {
+          path: 'workflows',
+          name: 'workflows',
+          component: () => import('@/children/Workflows.vue'),
+            meta: {
+              requiresAuth: true,
+              layout: "admin",
+            },
+          },
+          {
+            path: 'users',
+            name: 'users',
+            component: () => import('@/children/Users.vue'),
+              meta: {
+                requiresAuth: true,
+                layout: "admin",
+              },
+          },
+      ] 
     },
     {
       // this is the dashboard view
@@ -72,9 +97,6 @@ export default new Router({
           { name: 'Firm' }
         ]
       },
-      children: [
-        
-      ]
     },
     {
       // this is the list of all clients view

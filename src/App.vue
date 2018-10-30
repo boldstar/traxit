@@ -51,6 +51,14 @@ export default {
         padding-top: 120px; /* Space for fixed navbar and toolbar / adds space below navbar */
     }
 
+    #administrator ul.admin-nav {
+    
+
+        a {
+            text-decoration: none;
+        }
+    }
+
 
     //this is the transition between router views
     .page-wrapper {

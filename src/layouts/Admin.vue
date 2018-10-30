@@ -3,12 +3,14 @@
 
     <Navbar />
 
-    <div class="admin">
-
+    <div class="admin d-flex justify-content-center">
+      <main role="main" class="col-lg-10">
         <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
-          <slot />
+          
+            <slot />
+         
         </transition>
-
+      </main>
     </div>
 
           
@@ -22,20 +24,17 @@ export default {
   components: {
     Navbar,
   },
+  computed: {
+    loggedIn() {
+      return this.$store.getters.loggedIn
+    },
+  },
 }
 </script>
 
 
 
-<style lang="scss" scoped>
-
-.landing {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+<style lang="scss">
 
 .page-wrapper {
   animation-duration: .5s;

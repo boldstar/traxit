@@ -14,10 +14,12 @@ let Bootstrap = require('bootstrap');
 
 import Default from './layouts/Default.vue';
 import Landing from "./layouts/Landing.vue";
+import Admin from "./layouts/Admin.vue";
 import Breadcrumb from "./components/Breadcrumb.vue";
 
 Vue.component('default-layout', Default);
 Vue.component('landing-layout', Landing);
+Vue.component('admin-layout', Admin);
 Vue.component('breadcrumb', Breadcrumb);
 
 Vue.config.productionTip = false;

@@ -23,6 +23,7 @@ export default new Vuex.Store({
     users: [],
     tasks: [],
     task: [],
+    workflows: [],
     token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
     activeTitle: true,
@@ -82,6 +83,9 @@ export default new Vuex.Store({
     },
     notes(state) {
       return state.notes
+    },
+    allWorkflows(state) {
+      return state.workflows
     }
   },
   mutations: {
@@ -268,6 +272,9 @@ export default new Vuex.Store({
     destroyToken(state) {
       state.token = null
     },
+    retrieveWorkflows(state, workflows) {
+      state.workflows = workflows
+    }
   },
   actions: {
     toggleSidebar({commit}) {
@@ -729,6 +736,16 @@ export default new Vuex.Store({
       .catch(error => {
           console.log(error)
       })           
+    },
+    retrieveWorkflows(context) {
+      axios.get('/workflowstatuses')
+      .then(response => {
+        console.log(response.data)
+        context.commit('retrieveWorkflows', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
     },
   }
 })

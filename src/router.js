@@ -37,6 +37,19 @@ export default new Router({
       component: () => import(/* webpackChunkName: "logout" */ './views/Logout.vue'),
     },
     {
+      // this is the route to logout of the app
+      path: '/admin',
+      name: 'admin',
+      component: () => import(/* webpackChunkName: "logout" */ './views/Admin.vue'),
+      meta: {
+        requiresAuth: true,
+        layout: "admin",
+        breadCrumb: [
+          { name: 'Admin' }
+        ]
+      }
+    },
+    {
       // this is the dashboard view
       path: '/',
       name: 'dashboard',

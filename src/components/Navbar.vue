@@ -15,7 +15,7 @@
             <i class="user fas fa-user-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dLabel"></i>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel">
             <router-link class="dropdown-item" to="#">Profile</router-link>
-            <router-link class="dropdown-item" to="/administrator">Admin</router-link>
+            <router-link class="dropdown-item" to="/administrator/account">Admin</router-link>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item logout" @click="logout">Logout<i class="ml-5 fas fa-sign-out-alt"></i></a>
             </div>

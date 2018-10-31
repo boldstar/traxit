@@ -4,7 +4,7 @@
     <Navbar />
 
     <div class="admin d-flex justify-content-center">
-      <main role="main" class="col-lg-10">
+      <main class="col-lg-10">
         <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
           
             <slot />
@@ -35,6 +35,10 @@ export default {
 
 
 <style lang="scss">
+
+main {
+  padding-top: 100px;
+}
 
 .page-wrapper {
   animation-duration: .5s;

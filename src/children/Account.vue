@@ -1,6 +1,10 @@
 <template>
-  <div>
-    Account
+  <div class="mt-3">
+    <div class="d-flex justify-content-between">
+        <span class="h3 m-0">Account</span>
+        <button class="btn btn-sm btn-primary">Dont know</button>
+      </div>
+      <hr>
   </div>
 </template>
 

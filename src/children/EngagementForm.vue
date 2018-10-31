@@ -27,7 +27,17 @@
           </select>
         </div>
 
-        
+        <div class="input-group my-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text text-primary" for="option">Workflow Type</label>
+          </div>
+          <select class="form-control" id="client_id" v-model.number="engagement.workflow_id">
+            <option disabled>{{ option }}</option>
+            <option v-for="workflow in allWorkflows" :key="workflow.id" :value="workflow.id">
+              {{ workflow.workflow }}
+            </option>
+          </select>
+        </div>
 
         <div class="input-group my-3">
           <div class="input-group-prepend">
@@ -51,17 +61,31 @@
         </select>
       </div>
 
+     
+
+      <div v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id === engagement.workflow_id">
       <div class="input-group my-3">
         <div class="input-group-prepend">
           <label class="input-group-text text-primary" for="option">Status</label>
         </div>
-        <select class="form-control" id="status" v-model="engagement.status">
+          <select class="form-control" id="status" v-model="engagement.status">
           <option  selected disabled>{{ option }}</option>
-          <option v-for="status in statuses" :key="status.id" :value="status">
-            {{ status }}
+          <option v-for="status in workflow.statuses" :key="status.id" :value="status">
+            {{ status.status }}
           </option>
         </select>
+        </div>
       </div>
+
+        <div class="input-group my-3" v-if="engagement.workflow_id === option">
+        <div class="input-group-prepend">
+          <label class="input-group-text text-primary" for="option">Status</label>
+        </div>
+          <select class="form-control" id="status">
+          <option  selected disabled>{{ empty }}</option>
+        </select>
+        </div> 
+      
 
       <button type="submit" class="btn btn-lg btn-primary d-flex justify-content-start">Create</button>
       </div>
@@ -78,6 +102,7 @@ export default {
     return {
       engagement: {
         client_id: null,
+        workflow_id: null,
         return_type: null,
         year: '',
         assigned_to: null,
@@ -88,6 +113,7 @@ export default {
         '1120',
       ],
       option: 'Choose...',
+      empty: 'Please select workflow first...',
       statuses: [
         'Recieved',
         'Scanned',
@@ -102,6 +128,7 @@ export default {
     ...mapGetters(
         [
           'allClients',
+          'allWorkflows',
           'users'
         ]
       ),
@@ -114,6 +141,7 @@ export default {
       this.addEngagement({
         id: this.idForEngagement,
         client_id: this.engagement.client_id,
+        workflow_id: this.engagement.workflow_id,
         return_type: this.engagement.return_type,
         year: this.engagement.year,
         assigned_to: this.engagement.assigned_to,
@@ -128,9 +156,11 @@ export default {
   },
   created: function() {
     this.$store.dispatch('retrieveClients');
+    this.$store.dispatch('retrieveWorkflows');
     this.$store.dispatch('retrieveUsers');
     this.engagement.return_type = this.option
     this.engagement.client_id = this.option
+    this.engagement.workflow_id = this.option
     this.engagement.assigned_to = this.option
     this.engagement.status = this.option
   },

@@ -6,12 +6,64 @@
       </div>
         <form @submit.prevent="addNewEngagement" class="d-flex-column justify-content-center">
           <div class="form-group">
-            <select class="form-control mb-3" id="type" v-model="engagement.return_type">
-              <option v-for="type in types" :key="type.id" :value="type">{{ type }}</option>
-            </select>
             <input type="text" class="form-control mb-3" placeholder="Year" v-model="engagement.year">
-            <input type="text" class="form-control mb-3" placeholder="Assign To" v-model="engagement.assigned_to">
-            <input type="text" class="form-control mb-3" placeholder="Status" v-model="engagement.status">
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text text-primary" for="option">Workflow Type</label>
+              </div>
+              <select class="form-control" id="client_id" v-model.number="engagement.workflow_id">
+                <option disabled>{{ option }}</option>
+                <option v-for="workflow in allWorkflows" :key="workflow.id" :value="workflow.id">
+                  {{ workflow.workflow }}
+                </option>
+              </select>
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text text-primary" for="option">Return Type</label>
+              </div>
+              <select class="form-control" id="type" v-model="engagement.return_type">
+              <option disabled>{{ option }}</option>
+              <option v-for="type in types" :key="type.id" :value="type">{{ type }}</option>
+              </select>
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text text-primary" for="option">Assign To</label>
+              </div>
+              <select class="form-control" id="user_id" v-model="engagement.assigned_to">
+                <option  selected disabled>{{ option }}</option>
+                <option v-for="user in users" :key="user.id" :value="user.id">
+                  {{ user.name }}
+                </option>
+              </select>
+            </div>
+
+              <div v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id === engagement.workflow_id">
+                <div class="input-group my-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text text-primary" for="option">Status</label>
+                  </div>
+                    <select class="form-control" id="status" v-model="engagement.status">
+                    <option  selected disabled>{{ option }}</option>
+                    <option v-for="status in workflow.statuses" :key="status.id" :value="status">
+                      {{ status.status }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="input-group my-3" v-if="engagement.workflow_id === option">
+                <div class="input-group-prepend">
+                  <label class="input-group-text text-primary" for="option">Status</label>
+                </div>
+                  <select class="form-control" id="status">
+                  <option  selected disabled>{{ empty }}</option>
+                </select>
+              </div> 
 
             <div class="d-flex justify-content-between">
               <button type="submit" class="btn btn-primary d-flex justify-content-start">Create</button>
@@ -31,22 +83,34 @@ export default {
   data() {
     return {
       engagement: {
+        workflow_id: null,
         return_type: null,
         year: '',
-        assigned_to: '',
-        status: '',
+        assigned_to: null,
+        status: null,
       },
       types: [ 
-        'Choose Return Type...', 
         '1040', 
         '1120',
       ],
+      option: 'Choose..',
+      empty: 'Please select workflow first...',
+      statuses: [
+        'Recieved',
+        'Scanned',
+        'Preparation',
+        'Review',
+        '2nd Review',
+        'Complete'
+      ]
     }
   },
   computed: {
     ...mapGetters(
         [
           'client',
+          'allWorkflows',
+          'users'
         ]
       ),
   },
@@ -59,6 +123,7 @@ export default {
       this.addEngagement({
         id: this.idForEngagement,
         client_id: this.client.id,
+        workflow_id: this.engagement.workflow_id,
         return_type: this.engagement.return_type,
         year: this.engagement.year,
         assigned_to: this.engagement.assigned_to,
@@ -72,8 +137,21 @@ export default {
     },
   },
   created: function() {
-    this.engagement.return_type = this.types[0]
+    this.engagement.return_type = this.option
+    this.engagement.workflow_id = this.option
+    this.engagement.assigned_to = this.option
+    this.engagement.status = this.option
   },
 }
 </script>
+
+<style lang="scss" scoped>
+
+
+ .add-engagement label .input-group-text {
+    width: 8em;
+  }
+
+
+</style>
 

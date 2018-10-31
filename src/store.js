@@ -530,6 +530,7 @@ export default new Vuex.Store({
     addEngagement(context, engagement) {
       axios.post(('/engagements'), {
         client_id: engagement.client_id,
+        workflow_id: engagement.workflow_id,
         return_type: engagement.return_type,
         year: engagement.year,
         assigned_to: engagement.assigned_to,

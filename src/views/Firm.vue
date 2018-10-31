@@ -18,7 +18,7 @@
 
         <div class="col-2 col-sm-3">
           <div class="card shadow-sm">
-            <span class="h5 mt-3 font-weight-bold">Event Center</span>
+            <span class="h5 mt-3 font-weight-bold">Workflow Status</span>
             <hr class="mt-2 mb-0">
             <div class="card-body p-0 d-flex flex-column">
               <ul class="p-0 m-0 h6">

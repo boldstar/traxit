@@ -43,16 +43,13 @@
 
         <div class="col-9 col-sm-8">
           <div class="card p-0 shadow-sm mb-3">
-            <div class="row justify-content-between my-3">
-              <div class="col-lg-3 col-sm-5 d-flex">
-                <!-- <span class="mx-3 align-self-center h4 mb-0 table-badge px-3">{{ filteredEngagements.length }}</span> -->
+            <div class="d-flex my-3">
                 <span class="text-capitalize align-self-center h5 mb-0 font-weight-bold mx-3">
                   {{ engagementFilterKey }}:
                 </span>
-              </div>
-              <div class="col-lg-8 col-sm-6 mx-3">
-                <input class="form-control" placeholder="Filter By Last Name..." v-model="searchEngagement">
-              </div>             
+                <div class="flex-fill mx-3">
+                  <input class="form-control" placeholder="Filter By Last Name..." v-model="searchEngagement">
+                </div>             
             </div>
             </div>
 

@@ -17,17 +17,26 @@
       <div class="row d-flex justify-content-around mt-5" v-if="!listLoaded">
 
         <div class="col-2 col-sm-3">
-          <div class="card shadow-sm">
-            <span class="h5 mt-3 font-weight-bold">Workflow Status</span>
+          <div class="card shadow-sm p-2">
+            <div class="input-group my-2">
+              <div class="input-group-prepend">
+                <label class="input-group-text text-primary" for="option">Workflow</label>
+              </div>
+              <select class="form-control" id="client_id" v-model="selectedWorkflowID">
+                <option v-for="workflow in allWorkflows" :key="workflow.id" :value="workflow.id">
+                  {{ workflow.workflow }}
+                </option>
+              </select>
+            </div>
             <hr class="mt-2 mb-0">
             <div class="card-body p-0 d-flex flex-column">
-              <ul class="p-0 m-0 h6">
-                <li class="d-flex justify-content-start" v-for="status in engagementStatuses" :key="status" @click="changeEngagementKey(status)" :class="{ active: engagementFilterKey === status }">
-                  <div class="ml-3">
-                    <span class="text-muted">{{ capitalize(status) }}</span>
-                  </div>
-                </li>
-              </ul>
+          
+                <ul class="p-0 text-left" v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id === selectedWorkflowID">
+                  <li class="m-0 pl-3" v-for="status in workflow.statuses" :key="status.id" :value="status.status"  @click="changeEngagementKey(status.status)" :class="{ active: engagementFilterKey === status.status }">
+                    <span class="text-muted">{{ capitalize(status.status) }}</span>
+                  </li>
+                </ul>
+    
             </div>
           </div>
         </div>
@@ -36,7 +45,7 @@
           <div class="card p-0 shadow-sm mb-3">
             <div class="row justify-content-between my-3">
               <div class="col-lg-3 col-sm-5 d-flex">
-                <span class="mx-3 align-self-center h4 mb-0 table-badge px-3">{{ filteredEngagements.length }}</span>
+                <!-- <span class="mx-3 align-self-center h4 mb-0 table-badge px-3">{{ filteredEngagements.length }}</span> -->
                 <span class="text-capitalize align-self-center h5 mb-0 font-weight-bold mx-3">
                   {{ engagementFilterKey }}:
                 </span>
@@ -60,7 +69,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="engagement in filteredEngagements" :key="engagement.id">
+              <tr v-for="engagement in filteredEngagements" :key="engagement.id" v-if="engagement.workflow_id === selectedWorkflowID">
                 <th scope="row"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements.engagements"></th>
                 <th>{{ engagement.client.last_name}}, {{ engagement.client.first_name}} & {{ engagement.client.spouse_first_name}}</th>
                 <td>{{ engagement.status }}</td>
@@ -114,12 +123,12 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { mapOrder } from '@/Utils/index.js'
 
 export default {
   name: 'FirmView',
   data() {
     return {
+      selectedWorkflowID: 1,
       searchEngagement: '',
       checkedEngagements: {
         engagements: [],
@@ -128,43 +137,25 @@ export default {
       },
       noEngagements: false,
       listLoaded: false,
-      engagementFilterKey: 'Recieved',
+      engagementFilterKey: 'Received',
       option: 'Choose...',
       statuses: [
-        'Recieved',
+        'Received',
         'Scanned',
         'Preparation',
         'Review',
         '2nd Review',
         'Complete'
       ],
-      statusesOrder: [
-        'Recieved',
-        'Scanned',
-        'Preparation',
-        'Review',
-        '2nd Review',
-        'Complete'
-      ]
     }
   },
   computed: {
-    ...mapGetters(['allEngagements', 'users']),
+    ...mapGetters(['allEngagements', 'users', 'allWorkflows']),
     filteredEngagements () {
       return this.allEngagements.filter((engagement) => engagement.status === this.engagementFilterKey)
       .filter( engagement => {
       return !this.searchEngagement || engagement.client.last_name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 });
     },
-    engagementStatuses () {
-      const statuses = this.allEngagements.reduce((acc, engagement) => {
-        if (acc.indexOf(engagement.status) === -1) {
-          acc.push(engagement.status)
-        }
-        return acc
-      }, [])
-      const ordered = mapOrder(statuses, this.statusesOrder)
-      return ordered
-    },  
   },
   methods: {
     ...mapActions(['updateCheckedEngagements']),
@@ -203,6 +194,7 @@ export default {
     this.listLoaded = true;
     this.$store.dispatch('retrieveEngagements')
     this.$store.dispatch('retrieveUsers')
+    this.$store.dispatch('retrieveWorkflows')
     this.checkedEngagements.status = this.option
     this.checkedEngagements.assigned_to = this.option
       var self = this;

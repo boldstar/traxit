@@ -71,7 +71,7 @@ export default {
     data () {
         return {
             scanned: null,
-            recieved: null,
+            received: null,
             preparation: null,
             review: null,
             secondreview: null,
@@ -81,7 +81,7 @@ export default {
     computed: {
         datasetsfull() {
             return {
-                labels: ['Scanned', 'Recieved', 'Preparation', 'Review', '2nd Review', 'Complete'],
+                labels: ['Scanned', 'Received', 'Preparation', 'Review', '2nd Review', 'Complete'],
                 datasets: [
                 {
                     label: 'Data One',
@@ -100,7 +100,7 @@ export default {
                         ],
                     data: [
                             this.scanned,
-                            this.recieved,
+                            this.received,
                             this.preparation,
                             this.review,
                             this.secondreview,
@@ -117,7 +117,7 @@ export default {
         .then(response => {
             this.scanned = response.data.Scanned.length
             this.complete = response.data.Complete.length
-            this.recieved = response.data.Recieved.length
+            this.received = response.data.Received.length
             this.review = response.data.Review.length
             this.preparation = response.data.Preparation.length
             this.secondreview = response.data['2nd Review'].length

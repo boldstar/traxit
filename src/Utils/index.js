@@ -9,3 +9,15 @@
     });     
     return newArray;
   }
+
+  // example
+  // engagementStatuses () {
+  //   const statuses = this.allEngagements.reduce((acc, engagement) => {
+  //     if (acc.indexOf(engagement.status) === -1) {
+  //       acc.push(engagement.status)
+  //     }
+  //     return acc
+  //   }, [])
+  //   const ordered = mapOrder(statuses, this.statusesOrder)
+  //   return ordered
+  // }, 

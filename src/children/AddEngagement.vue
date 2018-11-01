@@ -95,14 +95,6 @@ export default {
       ],
       option: 'Choose..',
       empty: 'Please select workflow first...',
-      statuses: [
-        'Recieved',
-        'Scanned',
-        'Preparation',
-        'Review',
-        '2nd Review',
-        'Complete'
-      ]
     }
   },
   computed: {

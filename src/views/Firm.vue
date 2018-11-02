@@ -14,7 +14,7 @@
       </div>
 
 
-      <div class="row d-flex justify-content-around mt-5" v-if="!listLoaded">
+      <div class="row d-flex justify-content-around mt-5" v-if="!listLoaded && Object.keys(allEngagements).length">
 
         <div class="col-2 col-sm-3">
           <div class="card shadow-sm p-2">
@@ -66,7 +66,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="engagement in filteredEngagements" :key="engagement.id" v-if="engagement.workflow_id === selectedWorkflowID">
+              <tr v-for="(engagement, index) in filteredEngagements" :key="index" v-if="engagement.workflow_id === selectedWorkflowID">
                 <th scope="row"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements.engagements"></th>
                 <th>{{ engagement.client.last_name}}, {{ engagement.client.first_name}} & {{ engagement.client.spouse_first_name}}</th>
                 <td>{{ engagement.status }}</td>

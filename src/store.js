@@ -24,6 +24,7 @@ export default new Vuex.Store({
     tasks: [],
     task: [],
     workflows: [],
+    workflow: [],
     token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
     activeTitle: true,
@@ -86,7 +87,10 @@ export default new Vuex.Store({
     },
     allWorkflows(state) {
       return state.workflows
-    }
+    },
+    workflow(state) {
+      return state.workflow
+    },
   },
   mutations: {
     toggleSidebar(state) {
@@ -274,7 +278,13 @@ export default new Vuex.Store({
     },
     retrieveWorkflows(state, workflows) {
       state.workflows = workflows
-    }
+    },
+    getWorkflow(state, workflow) {
+      state.workflow = workflow
+    },
+    addWorkflow(state, workflow) {
+      state.workflows.push(workflow);
+    },
   },
   actions: {
     toggleSidebar({commit}) {
@@ -748,6 +758,37 @@ export default new Vuex.Store({
         console.log(error.response.data)
       })
     },
-  }
+    getWorkflow({commit}, id) {
+      axios.get('/workflowstatuses/'+ id)
+      .then(response => {
+        commit('getWorkflow', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    addWorkflow(context, workflow) {
+      axios.post(('/workflowstatuses'), {
+        name: workflow.name
+      })
+      .then(response => {
+        context.commit('addWorkflow', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    editWorkflow(context, workflowForm) {
+      axios.patch('/workflowstatuses/' + workflow.id, {
+        statuses: workflowForm.statuses,
+      })
+      .then(response => {
+          context.commit('editWorkflow', response.data)
+      })
+      .catch(error => {
+          console.log(error)
+      })           
+    },
+  }, 
 })
 

@@ -5,6 +5,20 @@
         <button class="btn btn-sm btn-primary">Dont know</button>
       </div>
       <hr>
+      <ul class="h4 text-left">
+        <li>
+          <span>Business Name:</span>
+        </li>
+        <li>
+          <span>Account Email:</span>
+        </li>
+        <li>
+          <span>Logo:</span>
+        </li>
+        <li>
+          <span>Subscription:</span>
+        </li>
+      </ul>
   </div>
 </template>
 
@@ -39,6 +53,9 @@ export default {
 
 <style lang="scss" scoped>
 
-
+  li {
+    list-style: none;
+    padding: 30px 0;
+  }
 
 </style>

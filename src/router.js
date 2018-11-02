@@ -62,6 +62,17 @@ export default new Router({
               requiresAuth: true,
               layout: "admin",
             },
+            children: [
+              {
+                path: 'edit-workflow/:workflow',
+                name: 'edit-workflow',
+                component: () => import('@/children/EditWorkflow.vue'),
+                meta: {
+                  requiresAuth: true,
+                  layout: "admin",
+                },
+              }
+            ]
           },
           {
             path: 'users',

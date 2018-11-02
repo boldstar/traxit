@@ -47,7 +47,7 @@ export default {
         padding: 40px 0;
     }
 
-    
+
 
 </style>
 

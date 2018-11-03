@@ -78,17 +78,19 @@
           </table>
 
             <form @submit.prevent="updateChecked" class="d-flex mb-5">
-              <div class="input-group mr-3">
+              
+              <div class="input-group mr-3" v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id === selectedWorkflowID">
                 <div class="input-group-prepend">
-                  <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Status</label>
+                  <label class="input-group-text text-primary" for="option">Status</label>
                 </div>
-                <select class="custom-select" id="status" v-model="checkedEngagements.status">
+                  <select class="form-control" id="status" v-model="checkedEngagements.status">
                   <option  selected disabled>{{ option }}</option>
-                  <option v-for="status in statuses" :key="status.id" :value="status">
-                    {{ status }}
+                  <option v-for="status in workflow.statuses" :key="status.id" :value="status">
+                    {{ status.status }}
                   </option>
                 </select>
-              </div>
+                </div>
+              
 
               <div class="input-group mr-3">
                 <div class="input-group-prepend">
@@ -136,14 +138,6 @@ export default {
       listLoaded: false,
       engagementFilterKey: 'Received',
       option: 'Choose...',
-      statuses: [
-        'Received',
-        'Scanned',
-        'Preparation',
-        'Review',
-        '2nd Review',
-        'Complete'
-      ],
     }
   },
   computed: {

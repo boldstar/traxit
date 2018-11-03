@@ -178,6 +178,7 @@ export default new Vuex.Store({
       state.engagements.splice(index, 1, {
         'id': engagement.id,
         'client_id': engagement.client_id,
+        'workflow_id': engagement.workflow_id,
         'return_type': engagement.return_type,
         'year': engagement.year,
         'assigned_to': engagement.assigned_to,
@@ -185,16 +186,10 @@ export default new Vuex.Store({
         'done': false           
       })
     },
-    updateCheckedEngagements(state, updatedEngagements = []) {
-      const ids = updatedEngagements.map(engagement => engagement.id)
-      state.engagements = state.engagements.map(engagement => {
-        const matchedIndex = ids.indexOf(engagement.id)
-        if(matchedIndex !== -1) {
-         return{
-          ...updatedEngagements[matchedIndex] 
-         } 
-        }
-        return engagement
+    updateCheckedEngagements(state, checkedEngagements) {
+      checkedEngagements.forEach((engagement) => {
+        const o = state.engagements.find((e) => e.id === engagement.id);
+        Object.assign(o, engagement, {done:false}) 
       })
     },
     deleteEngagement(state, id) {
@@ -570,11 +565,11 @@ export default new Vuex.Store({
           console.log(error)
       })           
     },
-    updateCheckedEngagements(context, checkedEnagements) {  
+    updateCheckedEngagements(context, checkedEngagements) {  
       axios.patch('/engagementsarray', {
-        engagements: checkedEnagements.engagements,
-        assigned_to: checkedEnagements.assigned_to,
-        status: checkedEnagements.status
+        engagements: checkedEngagements.engagements,
+        assigned_to: checkedEngagements.assigned_to,
+        status: checkedEngagements.status
       })
       .then(response => {
           console.log(response.data)

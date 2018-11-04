@@ -13,6 +13,7 @@
         </div>
       </div>
 
+      <Alert v-if="alert" v-bind:message="alert" />
 
       <div class="row d-flex justify-content-around mt-5" v-if="!listLoaded && Object.keys(allEngagements).length">
 
@@ -45,7 +46,7 @@
           <div class="card p-0 shadow-sm mb-3">
             <div class="d-flex my-3">
                 <span class="text-capitalize align-self-center h5 mb-0 font-weight-bold mx-3">
-                  {{ engagementFilterKey }}:
+                  {{ engagementFilterKey }}
                 </span>
                 <div class="flex-fill mx-3">
                   <input class="form-control" placeholder="Filter By Last Name..." v-model="searchEngagement">
@@ -81,11 +82,11 @@
               
               <div class="input-group mr-3" v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id === selectedWorkflowID">
                 <div class="input-group-prepend">
-                  <label class="input-group-text text-primary" for="option">Status</label>
+                  <label class="input-group-text bg-light font-weight-bold text-primary" for="option">Status</label>
                 </div>
-                  <select class="form-control" id="status" v-model="checkedEngagements.status">
+                  <select class="custom-select" id="status" v-model="checkedEngagements.status">
                   <option  selected disabled>{{ option }}</option>
-                  <option v-for="status in workflow.statuses" :key="status.id" :value="status">
+                  <option v-for="status in workflow.statuses" :key="status.id" :value="status.status">
                     {{ status.status }}
                   </option>
                 </select>
@@ -122,12 +123,17 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import Alert from '@/components/Alert.vue'
 
 export default {
   name: 'FirmView',
+  components: {
+    Alert
+  },
   data() {
     return {
       selectedWorkflowID: 1,
+      alert: '',
       searchEngagement: '',
       checkedEngagements: {
         engagements: [],
@@ -156,6 +162,7 @@ export default {
         assigned_to: this.checkedEngagements.assigned_to,
         status: this.checkedEngagements.status
       }).then(() => {
+        this.alert = 'Engagements Updated'
         this.checkedEngagements.engagements = '';
         this.checkedEngagements.assigned_to = this.option;
         this.checkedEngagements.status = this.option;

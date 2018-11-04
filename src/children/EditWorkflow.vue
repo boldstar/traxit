@@ -1,22 +1,26 @@
 <template>
-    <div class="container card-body bg-light">
+    <div class="container card p-0 col-6 mb-5">
         <form @submit.prevent="editThisWorkflow" class="d-flex-column justify-content-center">
 
-            <div class="form-group">
+            <div class="form-group card-body bg-light">
                 <input class="form-control" type="text" v-model="workflow.workflow">
             </div>
-            <div v-for="object in workflow.statuses" :key="object.id">
-                <input class="form-control mt-3" type="text" v-model="object.status">
+            <div class="mx-2 mb-3">
+                <div v-for="object in workflow.statuses" :key="object.id">
+                    <input class="form-control mt-3" type="text" v-model="object.status">
+                </div>
+                <div v-for="(status, index) in statusFields" :key="index">
+                    <input class="form-control mt-3" type="text" placeholder="Add Status" v-model="workflowForm.newStatuses">
+                </div>
+                <button type="button" class="btn btn-sm btn-primary mt-3" @click="addField">
+                    New Status Field
+                </button>
             </div>
-            <div v-for="(status, index) in statusFields" :key="index">
-                <input class="form-control mt-3" type="text" placeholder="Add Status" v-model="workflowForm.statuses">
-            </div>
-            <button class="btn btn-sm btn-primary mt-3" @click="addField">
-                New Status Field
-            </button>
-            <div class="d-flex justify-content-between">
-              <button type="submit" class="btn btn-primary d-flex justify-content-start">Create</button>
-              <router-link  :to="{ path: '/administrator/workflows'}" class="btn btn-secondary float-right">Cancel</router-link>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary d-flex justify-content-start">Create</button>
+                <router-link  :to="{ path: '/administrator/workflows'}" class="btn btn-secondary float-right">Cancel</router-link>
+                </div>
             </div>
       
         </form>
@@ -33,7 +37,7 @@ export default {
         return {
             statusFields: [],
             workflowForm: {
-                statuses: []
+                newStatuses: []
             }
         }
     },
@@ -49,7 +53,9 @@ export default {
     editThisWorkflow() {
         this.editWorkflow({
             workflowId: this.workflow.id,
-            statuses: this.workflowForm.statuses
+            workflow: this.workflow.workflow,
+            statuses: this.workflow.statuses,
+            newStatuses: this.workflowForm.newStatuses
         })
     },
     addField() {

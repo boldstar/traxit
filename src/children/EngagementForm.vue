@@ -70,7 +70,7 @@
         </div>
           <select class="form-control" id="status" v-model="engagement.status">
           <option  selected disabled>{{ option }}</option>
-          <option v-for="status in workflow.statuses" :key="status.id" :value="status">
+          <option v-for="status in workflow.statuses" :key="status.id" :value="status.status">
             {{ status.status }}
           </option>
         </select>

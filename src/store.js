@@ -774,8 +774,11 @@ export default new Vuex.Store({
       })
     },
     editWorkflow(context, workflowForm) {
-      axios.patch('/workflowstatuses/' + workflow.id, {
+      axios.patch('/workflowstatuses/', {
+        id: workflowForm.id,
+        workflow: workflowForm.workflow,
         statuses: workflowForm.statuses,
+        newStatuses: workflowForm.newStatuses,
       })
       .then(response => {
           context.commit('editWorkflow', response.data)

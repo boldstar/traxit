@@ -280,6 +280,15 @@ export default new Vuex.Store({
     addWorkflow(state, workflow) {
       state.workflows.push(workflow);
     },
+    editWorkflow(state, workflow) {
+      state.workflows.push(workflow)
+    },
+    removeDataFromWorkflow(state) {
+      state.workflow = []
+    },
+    updateWorkflowName(state, value) {
+      state.workflow.workflow = value
+    }
   },
   actions: {
     toggleSidebar({commit}) {
@@ -572,7 +581,6 @@ export default new Vuex.Store({
         status: checkedEngagements.status
       })
       .then(response => {
-          console.log(response.data)
           context.commit('updateCheckedEngagements', response.data)
       })
       .catch(error => {
@@ -746,7 +754,6 @@ export default new Vuex.Store({
     retrieveWorkflows(context) {
       axios.get('/workflowstatuses')
       .then(response => {
-        console.log(response.data)
         context.commit('retrieveWorkflows', response.data)
       })
       .catch(error => {
@@ -773,18 +780,18 @@ export default new Vuex.Store({
         console.log(error.response.data)
       })
     },
-    editWorkflow(context, workflowForm) {
-      axios.patch('/workflowstatuses/', {
-        id: workflowForm.id,
-        workflow: workflowForm.workflow,
-        statuses: workflowForm.statuses,
-        newStatuses: workflowForm.newStatuses,
+    editWorkflow(context, payload) {
+      axios.patch('/workflowstatuses/' + payload.id, {
+        workflow: payload.workflow,
+        statuses: payload.statuses,
+        newStatuses: payload.newStatuses
       })
       .then(response => {
+          console.log(response.data)
           context.commit('editWorkflow', response.data)
       })
       .catch(error => {
-          console.log(error)
+          console.log(error.response.data)
       })           
     },
   }, 

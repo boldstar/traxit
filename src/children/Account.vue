@@ -7,16 +7,16 @@
       <hr>
       <ul class="h4 text-left">
         <li>
-          <span>Business Name:</span>
+          <span>Business Name</span>
         </li>
         <li>
-          <span>Account Email:</span>
+          <span>Account Email</span>
         </li>
         <li>
-          <span>Logo:</span>
+          <span>Logo</span>
         </li>
         <li>
-          <span>Subscription:</span>
+          <span>Subscription</span>
         </li>
       </ul>
   </div>

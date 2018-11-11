@@ -1,9 +1,6 @@
 <template>
     <div id="administrator">
-        <div class="text-left">
-            <span class="h2 ml-4">Administrator</span>
-            <hr class="mb-0">
-        </div>
+        <hr class="mb-0">
         <div class="row">
             <div class="col-2 pr-0">
                 <ul class="admin-nav text-right h5 d-flex flex-column pr-0">

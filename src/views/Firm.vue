@@ -32,9 +32,10 @@
             <hr class="mt-2 mb-0">
             <div class="card-body p-0 d-flex flex-column">
           
-                <ul class="p-0 text-left" v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id === selectedWorkflowID">
-                  <li class="m-0 pl-3" v-for="status in workflow.statuses" :key="status.id" :value="status.status"  @click="changeEngagementKey(status.status)" :class="{ active: engagementFilterKey === status.status }">
+                <ul class="p-0 text-left" v-for="workflows in countEngagementsByStatus" :key="workflows.workflow_id" v-if="workflows.workflow_id === selectedWorkflowID">
+                  <li class="m-0 px-3 d-flex justify-content-between" v-for="(status, index) in workflows.statuses" :key="index" :value="status.status"  @click="changeEngagementKey(status.status)" :class="{ active: engagementFilterKey === status.status }">
                     <span class="text-muted">{{ capitalize(status.status) }}</span>
+                    <span class="badge badge-primary align-self-center">{{ status.count }}</span>
                   </li>
                 </ul>
     
@@ -56,7 +57,7 @@
 
 
           <table class="table border">
-            <thead class="text-primary">
+            <thead class="text-primary text-left">
               <tr>
                 <th scope="col">Batch</th>
                 <th scope="col">Client</th>
@@ -66,7 +67,7 @@
                 <th scope="col">Year</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="text-left">
               <tr v-for="(engagement, index) in filteredEngagements" :key="index" v-if="engagement.workflow_id === selectedWorkflowID">
                 <th scope="row"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements.engagements"></th>
                 <th>{{ engagement.client.last_name}}, {{ engagement.client.first_name}} & {{ engagement.client.spouse_first_name}}</th>
@@ -153,6 +154,21 @@ export default {
       .filter( engagement => {
       return !this.searchEngagement || engagement.client.last_name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 });
     },
+    countEngagementsByStatus () {
+       const res = this.allWorkflows.map(({statuses, id}) => ({
+        workflow_id: id,
+        statuses: statuses.reduce((acc, cur) => {
+
+        const count = this.allEngagements.filter(({workflow_id, status}) => workflow_id === id && status === cur.status).length;
+
+        acc.push({status: cur.status, count});
+
+        return acc;
+    
+        }, [])
+      }))
+      return res
+    }
   },
   methods: {
     ...mapActions(['updateCheckedEngagements']),

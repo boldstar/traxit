@@ -286,8 +286,8 @@ export default new Vuex.Store({
     removeDataFromWorkflow(state) {
       state.workflow = []
     },
-    updateWorkflowName(state, value) {
-      state.workflow.workflow = value
+    statusOrder(state, statuses) {
+      state.workflow.statuses = statuses
     }
   },
   actions: {
@@ -484,7 +484,7 @@ export default new Vuex.Store({
     },
     deleteClient(context, id) {
       axios.delete('/clients/' + id)
-      .then(response => {
+      .then(() => {
           context.commit('deleteClient', id)
       })
       .catch(error => {
@@ -589,7 +589,7 @@ export default new Vuex.Store({
     },
     deleteEngagement(context, id) {
       axios.delete('/engagements/' + id)
-      .then(response => {
+      .then(() => {
           context.commit('deleteEngagement', id)
       })
       .catch(error => {
@@ -622,7 +622,7 @@ export default new Vuex.Store({
     },
     deleteDependent(context, id) {
       axios.delete('/dependents/' + id)
-      .then(response => {
+      .then(() => {
           context.commit('deleteDependent', id)
       })
       .catch(error => {
@@ -668,7 +668,7 @@ export default new Vuex.Store({
     },
     deleteQuestion(context, id) {
       axios.delete('/questions/' + id)
-      .then(response => {
+      .then(() => {
           context.commit('deleteQuestion', id)
       })
       .catch(error => {
@@ -732,7 +732,7 @@ export default new Vuex.Store({
     },
     deleteNote(context, id) {
       axios.delete('/notes/' + id)
-      .then(response => {
+      .then(() => {
           context.commit('deleteNote', id)
       })
       .catch(error => {
@@ -789,6 +789,19 @@ export default new Vuex.Store({
       .then(response => {
           console.log(response.data)
           context.commit('editWorkflow', response.data)
+      })
+      .catch(error => {
+          console.log(error.response.data)
+      })           
+    },
+    workflowStatusOrder(context, payload) {
+      axios.put('/workflowstatuses', {
+        id: payload.id,
+        statuses: payload.statuses,
+      })
+      .then(response => {
+        console.log(response.data)
+          context.commit('statusOrder', response.data)
       })
       .catch(error => {
           console.log(error.response.data)

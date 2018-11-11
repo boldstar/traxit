@@ -16,7 +16,7 @@
                         <input class="form-control" type="text" placeholder="Add Status" v-model="status.value">
                         <button type="button" class="btn btn-outline-danger btn-sm ml-3 font-weight-bold" @click="deleteField(index)">X</button>
                     </div>
-                    <button type="button" class="btn btn-sm btn-primary mt-3" @click="addField">
+                    <button type="button" class="btn btn-sm btn-primary mt-3" @click="addField()">
                         New Status Field
                     </button>
                 </div>
@@ -66,7 +66,7 @@ export default {
         })
     },
     addField() {
-        this.workflowData.newStatuses.push({ value: '' });
+        this.workflowData.newStatuses.push({ value: '', order: this.workflowData.newStatuses.length });
     },
     deleteField(index) {
         this.workflowData.newStatuses.splice(index, 1);

@@ -8,9 +8,22 @@
                     <input class="form-control" type="text" v-model="workflow.workflow">
                 </div>
                 <div class="mx-2 mb-3">
-                    <div v-for="object in workflow.statuses" :key="object.id" class="d-flex mt-3">
+                    <div v-for="(object, index) in workflow.statuses" :key="index" class="d-flex mt-3">
                         <input class="form-control" type="text" v-model="object.status">
-                        <button type="button" class="btn btn-outline-danger btn-sm ml-3 font-weight-bold" @click="deleteField(index)">X</button>
+                        <button type="button" class="btn btn-outline-danger btn-sm ml-3 font-weight-bold" @click="modalShow = !modalShow">X</button>
+
+                         <!-- this is the modal for deleting a status -->
+                        <b-modal v-model="modalShow" id="myModal" ref="myModal" hide-footer title="Delete Status From Workflow">
+                        <div class="d-block text-left">
+                            <h5>Are you sure you want to delete status</h5>
+                            <br>
+                            <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
+                        </div>
+                        <div class="d-flex">
+                            <b-btn class="mt-3" variant="danger" @click="modalShow = false">Cancel</b-btn>
+                            <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteStatus(object.id)">Confirm</b-btn>
+                        </div>
+                        </b-modal>
                     </div>
                     <div v-for="(status, index) in workflowData.newStatuses" :key="index" class="d-flex mt-3">
                         <input class="form-control" type="text" placeholder="Add Status" v-model="status.value">
@@ -28,6 +41,8 @@
                 </div>
         
             </form>
+
+           
         </div>
 
     </div>
@@ -37,53 +52,67 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import bModal from 'bootstrap-vue/es/components/modal/modal'
+import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 
 
 export default {
     name: 'EditWorkflow',
     data() {
         return {
+            modalShow: false,
             workflowData: {
                 newStatuses: []
             },
             workflowLoaded: false
         }
     },
+    components:{
+        'b-modal': bModal,
+    },
+    directives: {
+        'b-modal': bModalDirective
+    },
     computed: {
-    ...mapGetters(['workflow']),
-  },
-  methods: {
-    ...mapActions(['editWorkflow']),
-    editThisWorkflow() {
-        this.editWorkflow({
-           id: this.workflow.id,
-           workflow: this.workflow.workflow,
-           statuses: this.workflow.statuses,
-           newStatuses: this.workflowData.newStatuses
-        }).then(() => {
-            this.$router.push({ path: '/administrator/workflows' })
+        ...mapGetters(['workflow']),
+    },
+    methods: {
+        ...mapActions(['editWorkflow']),
+        editThisWorkflow() {
+            this.editWorkflow({
+            id: this.workflow.id,
+            workflow: this.workflow.workflow,
+            statuses: this.workflow.statuses,
+            newStatuses: this.workflowData.newStatuses
+            }).then(() => {
+                this.$router.push({ path: '/administrator/workflows' })
+                this.$store.commit('removeDataFromWorkflow')
+            })
+        },
+        deleteStatus(id) { 
+            this.$store.dispatch('deleteStatus', id)
+            .then(() => {
+                this.modalShow = false
+            })
+        },
+        addField() {
+            this.workflowData.newStatuses.push({ value: '', order: this.workflowData.newStatuses.length });
+        },
+        deleteField(index) {
+            this.workflowData.newStatuses.splice(index, 1);
+        },
+        removeData() {
             this.$store.commit('removeDataFromWorkflow')
-        })
+        }
     },
-    addField() {
-        this.workflowData.newStatuses.push({ value: '', order: this.workflowData.newStatuses.length });
-    },
-    deleteField(index) {
-        this.workflowData.newStatuses.splice(index, 1);
-    },
-    removeData() {
-        this.$store.commit('removeDataFromWorkflow')
+    created: function(){
+        this.workflowLoaded  = true
+        this.$store.dispatch('getWorkflow', this.$route.params.workflow);
+        var self = this;
+            setTimeout(() => {
+            self.workflowLoaded = false;
+        }, 3000);
     }
-  },
-  created: function(){
-    this.workflowLoaded  = true
-    this.$store.dispatch('getWorkflow', this.$route.params.workflow);
-    var self = this;
-        setTimeout(() => {
-          self.workflowLoaded = false;
-      }, 3000);
-  }
-
 }
 </script>
 

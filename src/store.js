@@ -21,6 +21,7 @@ export default new Vuex.Store({
     notes: [],
     clientnotes: [],
     users: [],
+    user: [],
     tasks: [],
     task: [],
     workflows: [],
@@ -105,6 +106,9 @@ export default new Vuex.Store({
     updateTask(state, id) {
       const index = state.tasks.findIndex(task => task.id == id);
       state.tasks.splice(index, 1);
+    },
+    addUser(state, user) {
+      state.users.push(user)
     },
     retrieveUsers(state, users) {
       state.users = users
@@ -281,14 +285,19 @@ export default new Vuex.Store({
       state.workflows.push(workflow);
     },
     editWorkflow(state, workflow) {
-      state.workflows.push(workflow)
+      const index = state.workflows.findIndex(item => item.id == workflow.id);
+      state.workflows.splice(index, 1, workflow)
     },
     removeDataFromWorkflow(state) {
       state.workflow = []
     },
     statusOrder(state, statuses) {
       state.workflow.statuses = statuses
-    }
+    },
+    deleteStatus(state, id) {
+      const index = state.workflow.statuses.findIndex(status => status.id == id);
+      state.workflow.statuses.splice(index, 1);
+    },
   },
   actions: {
     toggleSidebar({commit}) {
@@ -319,12 +328,27 @@ export default new Vuex.Store({
           password: data.password,
         })
         .then(response => {
+          console.log(response)
           resolve(response)
         })
         .catch(error => {
-          reject(error)
+          reject(error.response.data)
         })
       })
+    },
+    addUser(context, data) {
+        axios.post('/register', {
+          name: data.name,
+          email: data.email,
+          password: data.password,
+        })
+        .then(response => {
+          console.log(response.data)
+          context.commit('addUser', response.data)
+        })
+        .catch(error => {
+          console.log(error.response.data)
+        })
     },
     destroyToken(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
@@ -568,10 +592,11 @@ export default new Vuex.Store({
         done: false
       })
       .then(response => {
+          console.log(response.data)
           context.commit('updateEngagement', response.data)
       })
       .catch(error => {
-          console.log(error)
+          console.log(error.response.data)
       })           
     },
     updateCheckedEngagements(context, checkedEngagements) {  
@@ -787,7 +812,6 @@ export default new Vuex.Store({
         newStatuses: payload.newStatuses
       })
       .then(response => {
-          console.log(response.data)
           context.commit('editWorkflow', response.data)
       })
       .catch(error => {
@@ -800,12 +824,20 @@ export default new Vuex.Store({
         statuses: payload.statuses,
       })
       .then(response => {
-        console.log(response.data)
           context.commit('statusOrder', response.data)
       })
       .catch(error => {
           console.log(error.response.data)
       })           
+    },
+    deleteStatus(context, id) {
+      axios.delete('/workflowstatuses/' + id)
+      .then(() => {
+          context.commit('deleteStatus', id)
+      })
+      .catch(error => {
+          console.log(error)
+      })                
     },
   }, 
 })

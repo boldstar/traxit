@@ -21,19 +21,53 @@
 
   <form @submit.prevent="editThisEngagement" class="d-flex-column justify-content-center">
       <div class="form-group">
-        <label class="justify-content-start d-flex">Year:</label>
+
         <input type="text" class="form-control mb-3" placeholder="Year" v-model="engagement.year">
+        
 
-        <label class="justify-content-start d-flex">Return Type:</label>
-        <select class="form-control mb-3" id="type" v-model="engagement.return_type">
-            <option v-for="type in types" :key="type.id" :value="type">{{ type }}</option>
+        <div class="input-group my-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text text-primary" for="option">Workflow Type</label>
+          </div>
+          <select class="form-control" id="client_id" v-model.number="engagement.workflow_id">
+            <option v-for="workflow in allWorkflows" :key="workflow.id" :value="workflow.id">
+              {{ workflow.workflow }}
+            </option>
+          </select>
+        </div>
+
+       <div class="input-group my-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text text-primary" for="option">Return Type</label>
+          </div>
+          <select class="form-control" id="type" v-model="engagement.return_type">
+              <option v-for="type in types" :key="type.id" :value="type">{{ type }}</option>
+          </select>
+        </div>
+
+        <div class="input-group my-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text text-primary" for="option">Assign To</label>
+        </div>
+        <select class="form-control" id="user_id" v-model="engagement.assigned_to">
+          <option v-for="user in users" :key="user.id" :value="user.name">
+            {{ user.name }}
+          </option>
         </select>
+      </div>
 
-        <label class="justify-content-start d-flex">Assign To:</label>
-        <input type="text" class="form-control mb-3" placeholder="Assign To" v-model="engagement.assigned_to">
-
-        <label class="justify-content-start d-flex">Status:</label>
-        <input type="text" class="form-control mb-3" placeholder="Status" v-model="engagement.status">
+         <div v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id === engagement.workflow_id">
+      <div class="input-group my-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text text-primary" for="option">Status</label>
+        </div>
+          <select class="form-control" id="status" v-model="engagement.status">
+          <option v-for="status in workflow.statuses" :key="status.id" :value="status.status">
+            {{ status.status }}
+          </option>
+        </select>
+        </div>
+      </div>
 
       <button type="submit" class="btn btn-lg btn-primary d-flex justify-content-start">Save Changes</button>
       </div>
@@ -66,11 +100,10 @@ export default {
   name: 'EditEngagement',
   data() {
     return {
-      types: [ 
-        'Choose Return Type...', 
-        '1040', 
+      types: [
+        '1040',
         '1120',
-      ],
+      ]
     }
   },
   components:{
@@ -82,7 +115,9 @@ export default {
   computed: {
     ...mapGetters(
         [
-          'engagement'
+          'engagement',
+          'users',
+          'allWorkflows'
         ]
       )
   },
@@ -122,7 +157,8 @@ export default {
   },
   created: function(){
     this.$store.dispatch('getEngagement', this.$route.params.id);
-    this.engagement.return_type = this.types[0];
+    this.$store.dispatch('retrieveUsers')
+    this.$store.dispatch('retrieveWorkflows')
   }
   
 }
@@ -130,5 +166,7 @@ export default {
 
 
 <style scoped lang="scss">
-
+ label {
+    width: 8em;
+  }
 </style>

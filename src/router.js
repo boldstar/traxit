@@ -83,6 +83,15 @@ export default new Router({
                 layout: "admin",
               },
           },
+          {
+            path: 'add-user',
+            name: 'add-user',
+            component: () => import('@/children/AddUser.vue'),
+              meta: {
+                requiresAuth: true,
+                layout: "admin",
+              },
+          },
       ] 
     },
     {

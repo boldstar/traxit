@@ -26,6 +26,7 @@ export default new Vuex.Store({
     task: [],
     workflows: [],
     workflow: [],
+    result: '',
     token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
     activeTitle: true,
@@ -92,6 +93,9 @@ export default new Vuex.Store({
     workflow(state) {
       return state.workflow
     },
+    searchResults(state) {
+      return state.result
+    }
   },
   mutations: {
     toggleSidebar(state) {
@@ -298,6 +302,9 @@ export default new Vuex.Store({
       const index = state.workflow.statuses.findIndex(status => status.id == id);
       state.workflow.statuses.splice(index, 1);
     },
+    searchDatabase(state, keyword) {
+      state.result = keyword;
+    }
   },
   actions: {
     toggleSidebar({commit}) {
@@ -839,6 +846,15 @@ export default new Vuex.Store({
           console.log(error)
       })                
     },
+    searchDatabase(context, data) {
+      axios.post('/search', {
+        keyword: data.keyword
+      }).then(response => {
+        context.commit('searchDatabase', response.data)
+      }).catch(error => {
+        console.log(error.response.data)
+      })
+    }
   }, 
 })
 

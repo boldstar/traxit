@@ -385,7 +385,18 @@ export default new Router({
         },
       }
     ]
-    },
+  },
+  {
+  path: '/search',
+  name: 'search',
+  component: () => import(/* webpackChunkName: "accounts" */ './views/Search.vue'),
+  meta: {
+      requiresAuth: true,
+      breadCrumb: [
+        { name: 'Search' }
+      ]
+    }
+  },
   ],
   mode: 'history',
 })

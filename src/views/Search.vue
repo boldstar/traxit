@@ -30,12 +30,14 @@
                             <p>{{ result.cell_phone}}</p>
                             <p>{{ result.work_phone}}</p>
                         </div>
-                        <div class="flex-column text-left">
-                            <h4>Spouse</h4>
-                            <p>{{ result.spouse_first_name}} {{ result.last_name}}</p>
-                            <p>{{ result.spouse_email}}</p>
-                            <p>{{ result.spouse_cell_phone}}</p>
-                            <p>{{ result.spouse_work_phone}}</p>
+                        <div  v-if="result.has_spouse === true">
+                            <div class="flex-column text-left">
+                                <h4>Spouse</h4>
+                                <p>{{ result.spouse_first_name}} {{ result.last_name}}</p>
+                                <p>{{ result.spouse_email}}</p>
+                                <p>{{ result.spouse_cell_phone}}</p>
+                                <p>{{ result.spouse_work_phone}}</p>
+                            </div>
                         </div>
                         <div class="align-self-center">
                             <router-link :to="{ path: '/contact/' + result.id + '/account'}" class="btn btn-primary">View</router-link>
@@ -57,7 +59,7 @@
                                     <th scope="col">Year</th>
                                     <th scope="col">Assigned To</th>
                                     <th scope="col">Status</th>
-                                    <th>View</th>
+                                    <th>Engagement</th>
                                 </tr>
                             </thead>
                             <tbody class="table-bordered">

@@ -12,6 +12,10 @@
           <option v-for="category in categories" :key="category.id" :value="category">{{ category }}</option>
         </select>
         <input type="text" class="form-control mb-3" placeholder="Referral Type" v-model="client.referral_type">
+        <div class="d-flex mb-3 bg-light p-2">
+          <div class="h6 mb-0 mr-2">Does Contact Have Spouse?</div>
+          <input type="checkbox" v-model="client.has_spouse" class="align-self-center mt-1">
+        </div>
 
         <h5 class="text-left mb-3">Taxpayer:</h5>
         <div class="d-flex mb-3">
@@ -31,19 +35,19 @@
           <input type="text" class="form-control" placeholder="Work Phone #" v-model="client.work_phone">
         </div>
 
-        <h5 class="text-left mb-3">Spouse:</h5>
-        <div class="d-flex mb-3">
+        <h5 class="text-left mb-3" v-if="client.has_spouse == true">Spouse:</h5>
+        <div class="d-flex mb-3" v-if="client.has_spouse == true">
           <input type="text" class="form-control col-5" placeholder="First Name" v-model="client.spouse_first_name">
           <input type="text" class="form-control mx-2" placeholder="Middle Initial" v-model="client.spouse_middle_initial">
           <input type="text" class="form-control col-5" placeholder="Last Name" v-model="client.spouse_last_name">
         </div>
 
-        <div class="d-flex mb-3">
+        <div class="d-flex mb-3" v-if="client.has_spouse == true">
           <input type="text" class="form-control mr-2" placeholder="Occupation" v-model="client.spouse_occupation">
           <input type="text" class="form-control" placeholder="Date Of Birth" v-model="client.spouse_dob">
         </div>
 
-        <div class="d-flex mb-3">
+        <div class="d-flex mb-3" v-if="client.has_spouse == true">
           <input type="text" class="form-control" placeholder="email@example.com" v-model="client.spouse_email">
           <input type="text" class="form-control mx-2" placeholder="Cell Phone #" v-model="client.spouse_cell_phone">
           <input type="text" class="form-control" placeholder="Work Phone #" v-model="client.spouse_work_phone">
@@ -82,6 +86,7 @@ export default {
         email: '',
         cell_phone: '',
         work_phone: '',
+        has_spouse: 1,
         spouse_first_name: '',
         spouse_middle_initial: '',
         spouse_last_name: '',
@@ -141,7 +146,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

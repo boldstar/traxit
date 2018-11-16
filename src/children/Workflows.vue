@@ -8,12 +8,20 @@
         <b-btn variant="primary" size="sm" @click="modalShow = !modalShow">Create New Workflow</b-btn>
     </div>
     <hr>
+
+    <!-- this is the alert options -->
     <Alert v-if="alert" v-bind:message="alert" />
+    <Alert v-if="errorAlert && $route.name === 'workflows'" v-bind:message="errorAlert" />
+    <Alert v-if="successAlert && $route.name === 'workflows'" v-bind:message="successAlert" />
+
     <div class="d-flex flex-wrap justify-content-around" v-if="$route.name == 'workflows'">
       <div class="workflow-card border p-0 mb-3" v-for="workflow in allWorkflows" :key="workflow.id">
          <div class="card-header d-flex justify-content-between">
            <span class="align-self-center">{{ workflow.workflow }}</span>
-          <router-link class="btn btn-sm btn-outline-primary" :to="{ path: '/administrator/workflows/edit-workflow/' + workflow.id }">Edit</router-link>
+           <div>
+             <button type="button" class="btn btn-secondary btn-sm mr-3" @click="requestDelete(workflow.id)">Delete</button>
+            <router-link class="btn btn-sm btn-outline-primary" :to="{ path: '/administrator/workflows/edit-workflow/' + workflow.id }">Edit</router-link>
+           </div>
           </div>
         <ul class="status-body">
         <draggable v-model="workflow.statuses" @start="drag=true" @end="drag=false" @change="updateStatusOrder(workflow.id, workflow.statuses)">
@@ -31,7 +39,7 @@
       </div>
     </div>
 
-    <b-modal v-model="modalShow" id="myQuestion" ref="myQuestion" hide-footer title="New Workflow Form">
+    <b-modal v-model="modalShow" id="myWorkflow" ref="myWorkflow" hide-footer title="New Workflow Form">
       <form>
         <div class="d-block text-left">
           <br>
@@ -43,7 +51,19 @@
           <b-btn class="mt-3 ml-auto" variant="outline-primary" @click="addThisWorkflow">Create</b-btn>
         </div>
       </form>
-    </b-modal> 
+    </b-modal>
+
+    <b-modal v-model="modalDelete" id="deleteWorkflow" ref="deleteWorkflow" hide-footer title="Delete Workflow">
+      <form>
+        <div class="d-block text-left">
+          Are you sure you want to delete, workflow?
+        </div>
+        <div class="d-flex">
+          <b-btn class="mt-3" variant="secondary" @click="modalDelete = false">Cancel</b-btn>
+          <b-btn class="mt-3 ml-auto" variant="outline-primary" @click="deleteThisWorkflow">Confirm</b-btn>
+        </div>
+      </form>
+    </b-modal>  
 
       <router-view></router-view>
   </div>
@@ -61,6 +81,8 @@ export default {
   data() {
     return {
       modalShow: false,
+      modalDelete: false,
+      workflowToDelete: null,
       alert: '',
       newWorkflow: {
         name: '',
@@ -76,10 +98,10 @@ export default {
     'b-modal': bModalDirective
   },
   computed: {
-    ...mapGetters(['allWorkflows']),
+    ...mapGetters(['allWorkflows', 'errorAlert', 'successAlert']),
   },
   methods: {
-    ...mapActions(['addWorkflow', 'workflowStatusOrder']),
+    ...mapActions(['addWorkflow', 'workflowStatusOrder', 'deleteWorkflow']),
     addThisWorkflow() {
       if(!this.newWorkflow.name) return;
       this.addWorkflow({
@@ -103,6 +125,17 @@ export default {
         this.alert = 'Update Succesful'
       })
     },
+    deleteThisWorkflow() {
+      this.deleteWorkflow({
+        id: this.workflowToDelete
+      }).then(() => {
+        this.modalDelete = false;
+      })
+    },
+    requestDelete(id) {
+      this.workflowToDelete = id
+      this.modalDelete = true
+    }
   },
   created: function() {
     this.$store.dispatch('retrieveWorkflows');

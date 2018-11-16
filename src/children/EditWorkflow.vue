@@ -1,5 +1,7 @@
 <template>
     <div id="edit-workflow">
+     <Alert v-if="errorAlert" v-bind:message="errorAlert" />
+     <Alert v-if="successAlert" v-bind:message="successAlert" />
     <div class="container card p-0 col-6 mb-5"  v-if="!workflowLoaded">
         <div>
             <form @submit.prevent="editThisWorkflow" class="d-flex-column justify-content-center">
@@ -8,22 +10,10 @@
                     <input class="form-control" type="text" v-model="workflow.workflow">
                 </div>
                 <div class="mx-2 mb-3">
-                    <div v-for="(object, index) in workflow.statuses" :key="index" class="d-flex mt-3">
-                        <input class="form-control" type="text" v-model="object.status">
-                        <button type="button" class="btn btn-outline-danger btn-sm ml-3 font-weight-bold" @click="modalShow = !modalShow">X</button>
+                    <div v-for="oldStatus in workflow.statuses" :key="oldStatus.id" class="d-flex mt-3">
+                        <input class="form-control" type="text" v-model="oldStatus.status">
+                        <button type="button" class="btn btn-outline-danger btn-sm ml-3 font-weight-bold" @click="requestDelete(oldStatus.id)">X</button>
 
-                         <!-- this is the modal for deleting a status -->
-                        <b-modal v-model="modalShow" id="myModal" ref="myModal" hide-footer title="Delete Status From Workflow">
-                        <div class="d-block text-left">
-                            <h5>Are you sure you want to delete status</h5>
-                            <br>
-                            <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
-                        </div>
-                        <div class="d-flex">
-                            <b-btn class="mt-3" variant="danger" @click="modalShow = false">Cancel</b-btn>
-                            <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteStatus(object.id)">Confirm</b-btn>
-                        </div>
-                        </b-modal>
                     </div>
                     <div v-for="(status, index) in workflowData.newStatuses" :key="index" class="d-flex mt-3">
                         <input class="form-control" type="text" placeholder="Add Status" v-model="status.value">
@@ -45,6 +35,19 @@
            
         </div>
 
+        <!-- this is the modal for deleting a status -->
+        <b-modal v-model="modalShow" id="myModal" ref="myModal" hide-footer title="Delete Status From Workflow">
+        <div class="d-block text-left">
+            <h5>Are you sure you want to delete status</h5>
+            <br>
+            <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
+        </div>
+        <div class="d-flex">
+            <b-btn class="mt-3" variant="danger" @click="modalShow = false">Cancel</b-btn>
+            <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteStatus">Confirm</b-btn>
+        </div>
+        </b-modal>
+
     </div>
          <div v-if="workflowLoaded" class="lds-dual-ring justify-content-center"></div>
     </div>
@@ -52,6 +55,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import Alert from '@/components/Alert.vue'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 
@@ -61,6 +65,7 @@ export default {
     data() {
         return {
             modalShow: false,
+            statusToDelete: null,
             workflowData: {
                 newStatuses: []
             },
@@ -69,12 +74,13 @@ export default {
     },
     components:{
         'b-modal': bModal,
+        Alert
     },
     directives: {
         'b-modal': bModalDirective
     },
     computed: {
-        ...mapGetters(['workflow']),
+        ...mapGetters(['workflow', 'errorAlert', 'successAlert']),
     },
     methods: {
         ...mapActions(['editWorkflow']),
@@ -90,10 +96,14 @@ export default {
             })
         },
         deleteStatus(id) { 
-            this.$store.dispatch('deleteStatus', id)
+            this.$store.dispatch('deleteStatus', {id: this.statusToDelete})
             .then(() => {
                 this.modalShow = false
             })
+        },
+         requestDelete(id) {
+            this.statusToDelete = id
+            this.modalShow = true
         },
         addField() {
             this.workflowData.newStatuses.push({ value: '', order: this.workflowData.newStatuses.length });

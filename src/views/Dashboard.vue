@@ -19,7 +19,12 @@
         <!-- this is the doughnut chart for the overview of the firm -->
         <div class="row justify-content-around mt-3">
             <div class="col-4 col-md-5">
-                <span class="h3 mb-4"><i class=" far fa-folder-open mr-3 text-primary"></i><router-link to="/firm" class="text-muted">Firm Overview</router-link></span>
+                <div class="d-flex">
+                    <span class="h3 mb-4 mr-3"><i class=" far fa-folder-open mr-3 text-primary"></i><router-link to="/firm" class="text-muted">Firm Overview</router-link></span>
+                    <select class="custom-select flex-fill" v-model="workflowKey" style="width: 100px">
+                        <option :value="workflow.id" v-for="workflow in allWorkflows" :key="workflow.id" @click="changeKey(workflow.id)">{{ workflow.workflow }}</option>
+                    </select>
+                </div>
                 <br><br>
                 <doughnut-chart :chart-data="datasetsfull"></doughnut-chart>
             </div>
@@ -70,18 +75,43 @@ export default {
     },
     data () {
         return {
-            scanned: null,
-            received: null,
-            preparation: null,
-            review: null,
-            secondreview: null,
-            complete: null,
+            workflowKey: 1,
         }
     },
     computed: {
+        ...mapGetters(['allWorkflows', 'tasks', 'allEngagements']),
+        mapStatuses() {
+        const selectedWorkflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
+
+        const result = selectedWorkflow.map(({statuses}) => ({
+            statuses: statuses.reduce((acc, cur) => {
+                acc.push(cur.status)
+
+                return acc;
+            }, []) 
+        }))
+        return result
+        },
+        countEngagementsByStatus () {
+        const selectedWorkflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
+
+        const res = selectedWorkflow.map(({statuses, id}) => ({
+            workflow_id: id,
+            statuses: statuses.reduce((acc, cur) => {
+
+            const count = this.allEngagements.filter(({workflow_id, status}) => workflow_id === id && status === cur.status).length;
+
+            acc.push(count);
+
+            return acc;
+        
+            }, [])
+        }))
+        return res
+        },
         datasetsfull() {
             return {
-                labels: ['Scanned', 'Received', 'Preparation', 'Review', '2nd Review', 'Complete'],
+                labels: this.mapStatuses[0].statuses,
                 datasets: [
                 {
                     label: 'Data One',
@@ -97,31 +127,28 @@ export default {
                             '#11ffdd',
                             '#aabbcc',
                             '#22aabb',
+                            '#22aaaa',
+                            '#22aa11',
+                            '#0077bb',
+                            '#007711',
+                            '#007788',
+                            '#0077aa',
+                            '#0077cc',
                         ],
-                    data: [
-                            this.scanned,
-                            this.received,
-                            this.preparation,
-                            this.review,
-                            this.secondreview,
-                            this.complete,
-                        ]
+                    data: this.countEngagementsByStatus[0].statuses
                     }
                 ]
             }
         },
-        ...mapGetters(['tasks'])
+    },
+    methods: {
+        changeKey(id) {
+            this.workflowKey = id
+        }
     },
     created() {
-        this.$store.dispatch('retrieveEngagementsChartData')
-        .then(response => {
-            this.scanned = response.data.Scanned.length
-            this.complete = response.data.Complete.length
-            this.received = response.data.Received.length
-            this.review = response.data.Review.length
-            this.preparation = response.data.Preparation.length
-            this.secondreview = response.data['2nd Review'].length
-        });
+        this.$store.dispatch('retrieveWorkflows')
+        this.$store.dispatch('retrieveEngagements')
         this.$store.dispatch('retrieveTasks')
     },
 }

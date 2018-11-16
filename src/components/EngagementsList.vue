@@ -37,7 +37,7 @@
             </thead> 
             <tbody class="client-info table-bordered" v-if="!tableLoaded">
                 <tr v-for="(engagement, index) in sortedEngagements"  :key="index">
-                    <td>{{ engagement.client.last_name }}, {{ engagement.client.first_name }} & {{ engagement.client.spouse_first_name }}</td>
+                    <td>{{ engagement.client.last_name }}, {{ engagement.client.first_name }} <span v-if="engagement.client.has_spouse == 1">&</span> {{ engagement.client.spouse_first_name }}</td>
                     <td>{{ engagement.return_type }}</td>
                     <td>{{ engagement.year }}</td>
                     <td>{{ engagement.assigned_to }}</td>

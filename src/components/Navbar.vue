@@ -12,7 +12,14 @@
             </li>
         </ul>
         <li v-if="loggedIn" class="mr-3">
-            <div class="input-group">
+            <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+                <select v-model="category" class="btn btn-light text-primary">
+                    <option disabled>{{option}}</option>
+                    <option value="name">Name</option>
+                    <option value="number">Phone #</option>
+                </select>
+            </div>
             <input type="text" placeholder="Type Here.." class="form-control" v-model="search">
             <div class="input-group-append">
                 <router-link class="btn btn-secondary" to="/search" @click.native="searchDatabase">Search</router-link>
@@ -39,6 +46,8 @@ export default {
         return {
         isActive: false,
         search: '',
+        category: '',
+        option: 'Choose..'
         }
     },
     computed: {
@@ -60,6 +69,9 @@ export default {
                 this.search = ''
             })
         }
+    },
+    created() {
+        this.category = this.option
     }
 }
 </script>

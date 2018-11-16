@@ -31,7 +31,7 @@
                 </ul>
             </div>
         </div>
-        <div class="mb-3">
+        <div class="mb-3" v-if="client.has_spouse == 1">
             <div class="card">
                 <div class="card-header text-left d-flex justify-content-between py-0">
                     <div class="d-flex h4 mt-2 align-items-center">

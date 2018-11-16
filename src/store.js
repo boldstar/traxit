@@ -27,17 +27,14 @@ export default new Vuex.Store({
     workflows: [],
     workflow: [],
     result: '',
+    alert: '',
     token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
-    activeTitle: true,
     loading: false,
   },
   getters: {
     sidebarOpen(state) {
       return state.sidebarOpen;
-    },
-    eventTitleClicked(state) {
-      return state.activeTitle;
     },
     loggedIn(state) {
       return state.token != null;
@@ -95,14 +92,17 @@ export default new Vuex.Store({
     },
     searchResults(state) {
       return state.result
+    },
+    errorAlert(state) {
+      return state.alert
+    },
+    successAlert(state) {
+      return state.alert
     }
   },
   mutations: {
     toggleSidebar(state) {
       state.sidebarOpen = !state.sidebarOpen
-    },
-    eventTitleClicked(state) {
-      state.activeTitle = !state.activeTitle
     },
     retrieveTasks(state, tasks) {
       state.tasks = tasks
@@ -292,6 +292,10 @@ export default new Vuex.Store({
       const index = state.workflows.findIndex(item => item.id == workflow.id);
       state.workflows.splice(index, 1, workflow)
     },
+    deleteWorkflow(state, id) {
+      const index = state.workflows.findIndex(workflow => workflow.id == id);
+      state.workflows.splice(index, 1);
+    },
     removeDataFromWorkflow(state) {
       state.workflow = []
     },
@@ -304,14 +308,20 @@ export default new Vuex.Store({
     },
     searchDatabase(state, keyword) {
       state.result = keyword;
+    },
+    errorAlert(state, alert) {
+      state.alert = alert
+    },
+    successAlert(state, alert) {
+      state.alert = alert
+    },
+    clearAlert(state) {
+      state.alert = ''
     }
   },
   actions: {
     toggleSidebar({commit}) {
       commit('toggleSidebar')
-    },
-    titleClicked({commit}) {
-      commit('eventTitleClicked')
     },
     retrieveName(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
@@ -477,7 +487,7 @@ export default new Vuex.Store({
         context.commit('getDetails', response.data)
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.response.data)
       })
     },
     updateClient(context, client) {
@@ -825,6 +835,16 @@ export default new Vuex.Store({
           console.log(error.response.data)
       })           
     },
+    deleteWorkflow(context, id) {
+      axios.delete('/workflow/' + id.id)
+      .then(response => {
+        context.commit('deleteWorkflow', id.id)
+        context.commit('successAlert', response.data)
+      }).catch(error => {
+          console.log(error.response.data)
+          context.commit('errorAlert', error.response.data)
+      })
+    },
     workflowStatusOrder(context, payload) {
       axios.put('/workflowstatuses', {
         id: payload.id,
@@ -838,12 +858,14 @@ export default new Vuex.Store({
       })           
     },
     deleteStatus(context, id) {
-      axios.delete('/workflowstatuses/' + id)
-      .then(() => {
-          context.commit('deleteStatus', id)
+      axios.delete('/workflowstatuses/' + id.id )
+      .then(response => {
+          context.commit('deleteStatus', id.id)
+          context.commit('successAlert', response.data)
       })
-      .catch(error => {
-          console.log(error)
+      .catch(error => {       
+          context.commit('errorAlert', error.response.data)
+          console.log(error.response.data)
       })                
     },
     searchDatabase(context, data) {

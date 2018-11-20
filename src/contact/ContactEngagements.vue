@@ -23,38 +23,30 @@
         <div v-else>
 
             <div v-if="!engagementLoaded">
-                <div class="card mb-3 shadow-sm p-0" v-for="(engagement, index) in clientEngagements" :key="index">
-                    <div class="d-flex justify-content-between card-header">
-                        <h3 class="m-0 text-muted">{{ index + 1 }}</h3>
-                        <h5 class="align-self-center m-0"><span class="font-weight-bold">Created: </span> {{ engagement.created_at | formatDate }} </h5>
-                    </div>
-                    <div class="card-body px-4"> 
-                        <table class="table h3 my-5">
+                
+                        <table class="table">
                             <thead class="text-primary border">
                                 <tr>
-                                <th class="py-3" scope="col">Return Type</th>
-                                <th class="py-3" scope="col">Year</th>
-                                <th class="py-3" scope="col">Assigned To</th>
-                                <th class="py-3" scope="col">Status</th>
+                                <th  scope="col">Return Type</th>
+                                <th  scope="col">Year</th>
+                                <th scope="col">Assigned To</th>
+                                <th  scope="col">Status</th>
+                                <th  scope="col">Created Date</th>
+                                <th  scope="col">Details</th>
                                 </tr>
                             </thead>
                             <tbody class="table-bordered">
-                                <tr>
-                                <th class="py-4">{{ engagement.return_type}}</th>
-                                <th class="py-4">{{ engagement.year }}</th>
-                                <th class="py-4">{{ engagement.assigned_to}}</th>
-                                <th class="py-4">{{ engagement.status }}</th>
+                                <tr v-for="(engagement, index) in clientEngagements" :key="index">
+                                <th>{{ engagement.return_type}}</th>
+                                <th>{{ engagement.year }}</th>
+                                <th>{{ engagement.assigned_to}}</th>
+                                <th>{{ engagement.status }}</th>
+                                <th>{{ engagement.created_at | formatDate }}</th>
+                                <th><router-link v-bind:to="'/engagement/' + engagement.id " class="btn btn-primary btn-sm ml-auto"><i class="far fa-eye mr-2"></i>View</router-link></th>
                                 </tr>
                             </tbody>
                         </table> 
                     </div>
-                    <div class="card-footer d-flex justify-content-between">
-                        <router-link v-bind:to="'/engagement/' + engagement.id " class="btn btn-primary btn-sm ml-auto"><i class="far fa-eye mr-2"></i>View</router-link>
-                    </div>
-                </div>
-            </div>
-
-            
 
         </div>
 

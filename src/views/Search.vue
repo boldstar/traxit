@@ -30,7 +30,7 @@
                             <p>{{ result.cell_phone}}</p>
                             <p>{{ result.work_phone}}</p>
                         </div>
-                        <div  v-if="result.has_spouse === true">
+                        <div  v-if="result.has_spouse == true">
                             <div class="flex-column text-left">
                                 <h4>Spouse</h4>
                                 <p>{{ result.spouse_first_name}} {{ result.last_name}}</p>

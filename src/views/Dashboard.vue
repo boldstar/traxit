@@ -2,31 +2,39 @@
 
     <div class="dashboard flex-column justify-content-center">
 
-        <!-- this is the header for the dashboard -->
-        <div class="card mb-5 shadow-sm">
-        <div class="d-flex justify-content-between card-body">
-          <div class="h2 align-self-center m-0">
-            <i class="fas fa-tachometer-alt text-primary"></i> 
-          </div>
-          <p class="h2 align-self-center">Dashboard
-          </p>
-          <div class="align-self-center">
-            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
-          </div>
-        </div>
-      </div>
-
-        <!-- this is the doughnut chart for the overview of the firm -->
-        <div class="row justify-content-around mt-3">
-            <div class="col-4 col-md-5">
-                <div class="d-flex">
-                    <span class="h3 mb-4 mr-3"><i class=" far fa-folder-open mr-3 text-primary"></i><router-link to="/firm" class="text-muted">Firm Overview</router-link></span>
-                    <select class="custom-select flex-fill" v-model="workflowKey" style="width: 100px">
-                        <option :value="workflow.id" v-for="workflow in allWorkflows" :key="workflow.id" @click="changeKey(workflow.id)">{{ workflow.workflow }}</option>
-                    </select>
+            <!-- this is the header for the dashboard -->
+            <div class="card mb-5 shadow-sm">
+                <div class="d-flex justify-content-between card-body">
+                    <div class="h2 align-self-center m-0">
+                        <i class="fas fa-tachometer-alt text-primary"></i> 
+                    </div>
+                    <p class="h2 align-self-center">Dashboard</p>
+                    <div class="align-self-center">
+                        <button class="btn btn-sm btn-outline-primary"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
+                    </div>
                 </div>
-                <br><br>
-                <doughnut-chart :chart-data="datasetsfull"></doughnut-chart>
+            </div>
+
+            <!-- this is the doughnut chart for the overview of the firm -->
+            <div class="row justify-content-around mt-3">
+                <div class="col-4 col-md-5">
+                    <div class="d-flex flex-sm-column">
+                        <div class="col-6 col-sm-12 mb-sm-2">
+                            <span class="h3 mr-3"><i class=" far fa-folder-open mr-3 text-primary"></i><router-link to="/firm" class="text-muted">Firm Overview</router-link></span>        
+                        </div>
+                        <div class="col-6 col-sm-12">     
+                            <div class="input-group" >
+                            <div class="input-group-prepend">
+                                <label class="input-group-text bg-light text-primary" for="option">Workflow</label>
+                            </div>
+                            <select class="form-control" v-model="workflowKey">
+                                <option :value="workflow.id" v-for="workflow in allWorkflows" :key="workflow.id" @click="changeKey(workflow.id)">{{ workflow.workflow }}</option>
+                            </select>
+                            </div>
+                        </div> 
+                    </div>
+                    <br><br>
+                <doughnut-chart v-if="chartData" :chart-data="datasetsfull"></doughnut-chart>
             </div>
 
 
@@ -34,7 +42,7 @@
             <div class="col-6">
                 <span class="h3 mb-4"><i class="fas fa-tasks text-primary mr-3"></i><router-link to="/tasks" class="text-muted">Your Tasks</router-link></span>
                 <br><br>
-                 <table class="table table-hover">
+                    <table class="table table-hover">
                     <thead class="bg-primary text-light">
                     <tr>
                         <th scope="col">#</th>
@@ -53,12 +61,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-lg-4">
-
-            </div>
         </div>
-
-
     </div>  
 
 
@@ -76,6 +79,7 @@ export default {
     data () {
         return {
             workflowKey: 1,
+            chartData: false
         }
     },
     computed: {
@@ -83,14 +87,14 @@ export default {
         mapStatuses() {
         const selectedWorkflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
 
-        const result = selectedWorkflow.map(({statuses}) => ({
+        const res = selectedWorkflow.map(({statuses}) => ({
             statuses: statuses.reduce((acc, cur) => {
                 acc.push(cur.status)
 
                 return acc;
             }, []) 
         }))
-        return result
+        return res
         },
         countEngagementsByStatus () {
         const selectedWorkflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
@@ -150,6 +154,10 @@ export default {
         this.$store.dispatch('retrieveWorkflows')
         this.$store.dispatch('retrieveEngagements')
         this.$store.dispatch('retrieveTasks')
+        var self = this
+        if(this.allWorkflows.length > 0) {
+            self.chartData = true
+        }
     },
 }
 </script>

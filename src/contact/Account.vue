@@ -4,8 +4,8 @@
 
         <!-- this is the details of the account -->
     <div class="col-8 col-md-7 d-inline-flex flex-column pl-0 ml-2" v-if="$route.name == 'account'">
-        <div class="">
-            <div class="card mb-3">
+        <div>
+            <div class="card shadow-sm">
                 <div class="card-header text-left d-flex justify-content-between py-0">
                     <div class="d-flex h4 mt-2 align-items-center">
                         <i class="fas fa-user-circle mr-2 fa-2x"></i>
@@ -13,21 +13,21 @@
                     </div>
                         <span class="card-title text-capitalize h4 mt-2 align-self-center">{{ client.first_name }} {{client.middle_initial}} {{client.last_name}}</span>
                 </div>
-                <ul class="list-group list-group-flush h6 text-left">
-                    <li class="list-group-item justify-content-between d-flex">
+                <ul class="card-body px-5 h6 text-left">
+                    <li class=" justify-content-between d-flex mb-2">
                         <span class="font-weight-bold">Date Of Birth: </span>
                         {{client.dob}}
                     </li>
-                    <li class="list-group-item text-capitalize justify-content-between d-flex">
+                    <li class=" text-capitalize justify-content-between d-flex mb-2">
                         <span class="font-weight-bold">Occupation: </span>
                         {{client.occupation}}
                     </li>
-                    <li class="list-group-item justify-content-between d-flex">
+                    <li class=" justify-content-between d-flex mb-2">
                         <span class="font-weight-bold">Email: </span>
                         {{client.email}}
                     </li>
-                    <li class="list-group-item justify-content-between d-flex"><span class="font-weight-bold">Cell Phone: </span>{{client.cell_phone}}</li>
-                    <li class="list-group-item justify-content-between d-flex"><span class="font-weight-bold">Work Phone: </span>{{client.work_phone}}</li>
+                    <li class=" justify-content-between d-flex mb-2"><span class="font-weight-bold">Cell Phone: </span>{{client.cell_phone}}</li>
+                    <li class=" justify-content-between d-flex mb-2"><span class="font-weight-bold">Work Phone: </span>{{client.work_phone}}</li>
                 </ul>
             </div>
         </div>
@@ -40,12 +40,12 @@
                     </div>
                         <span class="card-title text-capitalize h4 mt-2 align-self-center">{{ client.spouse_first_name }} {{client.spouse_middle_initial}} {{client.spouse_last_name}}</span>
                 </div>
-                <ul class="list-group list-group-flush h6 text-left">
-                    <li class="list-group-item justify-content-between d-flex"><span class="font-weight-bold">Date Of Birth: </span> {{client.spouse_dob}}</li>
-                    <li class="list-group-item text-capitalize justify-content-between d-flex"><span class="font-weight-bold">Occupation: </span> {{client.spouse_occupation}}</li>
-                    <li class="list-group-item justify-content-between d-flex"><span class="font-weight-bold">Email: </span> {{client.spouse_email}}</li>
-                    <li class="list-group-item justify-content-between d-flex"><span class="font-weight-bold">Cell Phone: </span> {{client.spouse_cell_phone}}</li>
-                    <li class="list-group-item justify-content-between d-flex"><span class="font-weight-bold">Work Phone: </span> {{client.spouse_work_phone}}</li>
+                <ul class="card-body px-5 h6 text-left">
+                    <li class="justify-content-between d-flex mb-2"><span class="font-weight-bold">Date Of Birth: </span> {{client.spouse_dob}}</li>
+                    <li class="text-capitalize justify-content-between d-flex mb-2"><span class="font-weight-bold">Occupation: </span> {{client.spouse_occupation}}</li>
+                    <li class="justify-content-between d-flex mb-2"><span class="font-weight-bold">Email: </span> {{client.spouse_email}}</li>
+                    <li class="justify-content-between d-flex mb-2"><span class="font-weight-bold">Cell Phone: </span> {{client.spouse_cell_phone}}</li>
+                    <li class="justify-content-between d-flex mb-2"><span class="font-weight-bold">Work Phone: </span> {{client.spouse_work_phone}}</li>
                 </ul>
             </div>
         </div>

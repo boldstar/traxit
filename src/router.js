@@ -31,12 +31,6 @@ export default new Router({
       }
     },
     {
-      // this is the route to logout of the app
-      path: '/logout',
-      name: 'logout',
-      component: () => import(/* webpackChunkName: "logout" */ './views/Logout.vue'),
-    },
-    {
       path: '/administrator',
       name: 'administrator',
       component: () => import(/* webpackChunkName: "logout" */ './views/Administrator.vue'),

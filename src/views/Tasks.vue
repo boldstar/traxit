@@ -56,7 +56,7 @@
             <td>{{ task.engagements[0].return_type }}</td>
             <td>{{ task.engagements[0].year }}</td>
             <td class="px-0">
-                <b-btn variant="primary" class="mr-2" size="sm" @click="requestUpdate(task.id)"><i class="fas fa-pen-square mr-2"></i>Update</b-btn>
+                <b-btn variant="primary" class="mr-2" size="sm" @click="requestUpdate(task.id, task.engagements[0].workflow_id)"><i class="fas fa-pen-square mr-2"></i>Update</b-btn>
             </td>
             <td class="px-0">
                 <router-link class="btn btn-sm btn-secondary" :to="'/engagement/' +task.engagements[0].id "><i class="far fa-eye mr-2"></i>View</router-link>
@@ -84,12 +84,14 @@
                   <div class="input-group-prepend">
                     <label class="input-group-text font-weight-bold bg-primary text-light" for="option">Status</label>
                   </div>
+                  <div v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id == selectedWorkflow" class="flex-fill d-flex">
                   <select class="custom-select" id="status" v-model="task.status">
                     <option  selected disabled>{{ option }}</option>
-                    <option v-for="status in statuses" :key="status.id" :value="status">
-                      {{ status }}
+                    <option v-for="status in workflow.statuses" :key="status.id" :value="status.status">
+                      {{ status.status }}
                     </option>
                   </select>
+                  </div>               
                 </div>
                 </div>
                 <div class="d-flex">
@@ -116,6 +118,7 @@ export default {
       noTasks: false,
       tasksLoaded: false,
       taskToUpdate: null,
+      selectedWorkflow: null,
       task: {
         user_id: 0,
         status: null
@@ -140,8 +143,12 @@ export default {
   computed: {
     ...mapGetters([
       'tasks',
-      'users'
-    ])
+      'users',
+      'allWorkflows'
+    ]),
+    mapStatuses() {
+
+    }
   },
   methods: {
     showModal() {
@@ -149,6 +156,7 @@ export default {
         },
     hideModal() {
         this.$refs.modal.hide()
+        this.selectedWorkflow = null
     },
     ...mapActions(['updateTask']),
 
@@ -164,7 +172,8 @@ export default {
         }) 
         }
       },
-    requestUpdate(id) {
+    requestUpdate(id, workflow) {
+      this.selectedWorkflow = workflow
         this.taskToUpdate = id
         this.$store.dispatch('retrieveUsers');
         this.task.user_id = this.option
@@ -203,6 +212,11 @@ export default {
 
 
 <style scoped lang="scss">
+
+  label {
+    width: 6em;
+  }
+
   //this is the css for the loading spinner
     .lds-dual-ring {
         display: inline-block;

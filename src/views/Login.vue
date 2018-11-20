@@ -16,7 +16,7 @@
                 <form @submit.prevent="validateBeforeSubmit" class="text-left">
                     <div class="form-group mt-3">
                         <label >Email address</label>
-                        <input type="text" name="email" class="form-control" placeholder="Enter email" :class="{ 'input-error': errors.has('email') }" v-model="username" v-validate="'required|email'">
+                        <input type="text" name="email" class="form-control" placeholder="Enter email" v-model="username" v-validate="'required|email'">
                         <span class="form-error">{{ errors.first('email') }}</span>
                     </div>
                     <div class="form-group mb-5">

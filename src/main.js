@@ -6,9 +6,11 @@ import VeeValidate from 'vee-validate';
 import moment from 'moment';
 import VueCharts from 'vue-chartjs';
 import jQuery from 'jquery';
+import Popper from 'popper.js'
 import 'bootstrap/dist/css/bootstrap.css';
 import { Button } from 'bootstrap-vue/es/components';
 global.jQuery = jQuery;
+global.Popper = Popper;
 let Bootstrap = require('bootstrap');
 
 

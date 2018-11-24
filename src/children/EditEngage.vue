@@ -3,7 +3,7 @@
 
   <div class="flex-row justify-content-between d-flex my-3">
     <router-link v-bind:to="'/engagement/' +this.engagement.id" class="btn btn-outline-secondary"><i class="fas fa-arrow-circle-left mr-2"></i>Cancel</router-link>
-    <div>
+    <div v-if="$can('delete', engagement)">
       <b-btn class="outline-secondary" v-b-modal.myModal><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn> 
     </div>
   </div>  

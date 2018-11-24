@@ -29,7 +29,6 @@
 
 export default {
   name: 'add',
-  
 }
 </script>
 

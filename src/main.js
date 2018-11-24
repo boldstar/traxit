@@ -9,6 +9,8 @@ import jQuery from 'jquery';
 import Popper from 'popper.js'
 import 'bootstrap/dist/css/bootstrap.css';
 import { Button } from 'bootstrap-vue/es/components';
+import { abilitiesPlugin } from '@casl/vue';
+import { ability } from './utils/ability';
 global.jQuery = jQuery;
 global.Popper = Popper;
 let Bootstrap = require('bootstrap');
@@ -28,6 +30,7 @@ Vue.config.productionTip = false;
 Vue.use(Button);
 Vue.use(VeeValidate);
 Vue.use(VueCharts);
+Vue.use(abilitiesPlugin, ability);
 
 Vue.filter('formatDate', function(created_at) {
   if(created_at) {
@@ -64,5 +67,5 @@ router.beforeEach((to, from, next) => {
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
 }).$mount('#app')

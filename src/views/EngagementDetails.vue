@@ -11,7 +11,7 @@
         <div>
         <router-link to="/engagements" class="btn btn-outline-secondary mr-4"><i class="fas fa-arrow-circle-left mr-2"></i>All Engagements</router-link>
         <router-link class="btn btn-primary mr-3" :to="'/engagement/' +this.engagement.id+ '/edit'"><i class="far fa-edit mr-2"></i>Edit</router-link> 
-        <b-btn class="outline-secondary" v-b-modal.myEngage><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
+        <b-btn class="outline-secondary" v-b-modal.myEngage v-if="$can('delete', engagement)"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
         </div>
       </div>  
 
@@ -74,8 +74,8 @@
     <div class="card mb-3"  v-for="(question, index) in engagement.questions" :key="index" v-if="$route.name == 'engagement-details'">
         <div class="card-header">
           <div class="h6 m-0 justify-content-between d-flex">
-            <router-link v-if="question.answered == 0" class="btn btn-sm btn-primary mr-3" :to="'/engagement/' +engagement.id+ '/edit-question/' + question.id" ><i class="far fa-edit mr-2" ></i>Edit</router-link> 
-            <b-btn class="outline-secondary" size="sm" @click="modalShow = !modalShow"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
+            <router-link v-if="question.answered == 0 && $can('update', engagement)" class="btn btn-sm btn-primary mr-3" :to="'/engagement/' +engagement.id+ '/edit-question/' + question.id" ><i class="far fa-edit mr-2" ></i>Edit</router-link> 
+            <b-btn v-if="$can('delete', engagement)" class="outline-secondary" size="sm" @click="modalShow = !modalShow"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
           </div>
         </div>
         <div class="card-body bg-light d-flex justify-content-between">
@@ -84,7 +84,7 @@
             <span class="align-self-center h6" v-html="question.question"></span>
           </div>
           <div class="ml-5 d-flex align-self-center">
-            <button class="btn btn-sm btn-primary" v-if="question.answered == 0">Answer</button>
+            <router-link class="btn btn-sm btn-primary" v-if="question.answered == 0" :to="{ path: '/engagement/' +engagement.id+ '/answer-question/' +question.id }">Answer</router-link>
             <div v-else>
               <span class="font-weight-bold mr-2">Answered: </span>
               <input class="mt-2" type="checkbox" v-model="question.answered">
@@ -146,12 +146,7 @@ export default {
     'b-modal': bModalDirective
   },
   computed: {
-    ...mapGetters(
-        [
-          'engagement',
-          'question'
-        ]
-      ),
+    ...mapGetters(['engagement','question']),
   },
   methods: {
     deleteEngagement(id) {

@@ -377,6 +377,16 @@ export default new Router({
               { name: 'Edit Question' }
           ]
         },
+      },
+      {
+        path: 'answer-question/:question',
+        component: () => import('@/children/AnswerQuest.vue'),
+          meta: {
+            requiresAuth: true,
+            breadCrumb: [
+              { name: 'Answer Question' }
+          ]
+        },
       }
     ]
   },

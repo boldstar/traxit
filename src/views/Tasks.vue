@@ -36,7 +36,7 @@
       </div>
 <!-- this is the list of the assigned user tasks -->
     <div v-else>
-      <table class="table table-hover" v-if="!tasksLoaded">
+      <table class="table table-hover" v-if="!tasksLoaded && taskData">
         <thead class="bg-primary text-light">
           <tr>
             <th scope="col">Task</th>
@@ -119,6 +119,7 @@ export default {
       tasksLoaded: false,
       taskToUpdate: null,
       selectedWorkflow: null,
+      taskData: false,
       task: {
         user_id: 0,
         status: null
@@ -200,10 +201,11 @@ export default {
   var self = this;
     setTimeout(() => {
         self.tasksLoaded = false;
-        if(self.tasks == 0){
+        if(self.tasks.length == 0){
               self.noTasks = true
         } else {
-            self.noTasks = false
+          self.taskData = true
+          self.noTasks = false
         }
     }, 3000);
   }

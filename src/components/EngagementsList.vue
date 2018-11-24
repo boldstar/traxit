@@ -5,20 +5,20 @@
 
             <input class="form-control w-25" placeholder="Filter By Last Name" v-model="searchEngagement" type="search">
             <div class="mr-auto ml-2">
-                <button class="btn btn-outline-primary dropdown-toggle dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span>Type:</span>
-                All
-                </button>
-                <div class="dropdown-menu dropdown-menu-left">
-                <a class="dropdown-item" href="#">Client</a>
-                <a class="dropdown-item" href="#">Prospect</a>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                  <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Type</label>
+                </div>
+                <select class="custom-select" id="client_id" v-model="filterType">
+                  <option v-for="(type, index) in types" :key="index">
+                    {{ type }}
+                  </option>
+                </select>
                 </div>
             </div>         
 
             <div class="btn-group ml-auto">
-                <button class="btn btn-outline-secondary"><i class="fas fa-print"></i></button>
-                <button class="btn btn-outline-success">Import <span><i class="fas fa-download"></i></span></button>
-                <button class="btn btn-outline-danger">Export <span><i class="fas fa-upload"></i></span></button>
+                <button class="btn btn-outline-secondary" @click="downloadEngagements">Download<span><i class="fas fa-download ml-2"></i></span></button>
                 <router-link to="/add" class="btn btn-primary pt-2">Engagement<i class="ml-2 fas fa-plus"></i></router-link>
             </div>
 
@@ -95,22 +95,15 @@ export default {
     data() {
         return {
             tableLoaded: false,
+            filterType: '',
             searchEngagement: '',
             currentSort: 'last_name',
             currentSortDir: 'asc',
             currentPage: 1,
             pageSize: null,
-            options: ['10', '25', '50', '100']
+            options: ['10', '25', '50', '100'],
+            types: ['All', '1040', '1120', '941']
         }
-    },
-    created() {
-        this.$store.dispatch('retrieveEngagements')
-        this.tableLoaded = true;
-        this.pageSize = this.options[1]
-        var self = this;
-        setTimeout(() => {
-            self.tableLoaded = false;
-        }, 3000)
     },
     computed: {
         sortedEngagements:function() {
@@ -141,7 +134,20 @@ export default {
         },
         prevPage:function() {
             if(this.currentPage > 1) this.currentPage--;
+        },
+        downloadEngagements() {
+            this.$store.dispatch('downloadEngagements')
         }
+    },
+    created() {
+        this.$store.dispatch('retrieveEngagements')
+        this.tableLoaded = true;
+        this.filterType = this.types[0]
+        this.pageSize = this.options[1]
+        var self = this;
+        setTimeout(() => {
+            self.tableLoaded = false;
+        }, 3000)
     },
 }
 </script>

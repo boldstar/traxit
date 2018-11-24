@@ -16,9 +16,8 @@
       </div>         
 
       <div class="btn-group ml-auto">
-        <button class="btn btn-outline-secondary"><i class="fas fa-print"></i></button>
-        <button class="btn btn-outline-success">Import <span><i class="fas fa-download"></i></span></button>
-        <button class="btn btn-outline-danger">Export <span><i class="fas fa-upload"></i></span></button>
+        <button class="btn btn-outline-success">Import<span><i class="fas fa-upload ml-2"></i></span></button>
+        <button class="btn btn-outline-secondary" @click="downloadContacts">Download <span><i class="fas fa-download ml-2"></i></span></button>
         <router-link to="/add" class="btn btn-primary pt-2">Contact<i class="ml-2 fas fa-plus"></i></router-link>
       </div>
 
@@ -144,6 +143,9 @@ export default {
         },
             prevPage:function() {
             if(this.currentPage > 1) this.currentPage--;
+        },
+        downloadContacts() {
+            this.$store.dispatch('downloadContacts')
         }
     }
 }

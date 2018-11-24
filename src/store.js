@@ -1,14 +1,25 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import { abilityPlugin, ability as appAbility } from './utils/ability'
+import storage from './utils/storage'
 
+export const ability = appAbility
 Vue.use(Vuex)
 axios.defaults.baseURL = 'http://traxit.test/api'
 
 
 
 export default new Vuex.Store({
+  plugins: [
+    storage({
+      storedKeys: ['rules', 'token'],
+      destroyOn: ['destroySession']
+    }),
+    abilityPlugin
+  ],
   state: {
+    rules: '',
     clients: [],
     client:[],
     engagements: [],
@@ -102,6 +113,13 @@ export default new Vuex.Store({
   mutations: {
     toggleSidebar(state) {
       state.sidebarOpen = !state.sidebarOpen
+    },
+    createSession(state, session) {
+      state.rules = session[0]
+      state.token = session.access_token
+    },
+    destroySession(state) {
+      state.rules = ''
     },
     retrieveTasks(state, tasks) {
       state.tasks = tasks
@@ -240,12 +258,8 @@ export default new Vuex.Store({
       })
     },
     updateAnswer(state, question) {
-      const index = state.questions.findIndex(item => item.id == question.id);
-      state.questions.splice(index, 1, {
-        'id': question.id,
-        'answer': question.answer,
-        'answered': question.answered          
-      })
+      const index = state.engagement.questions.findIndex(item => item.id == question.id);
+      state.engagement.questions.splice(index, 1, question)
     },
     getClientNotes(state, clientnotes) {
       state.clientnotes = clientnotes
@@ -267,9 +281,6 @@ export default new Vuex.Store({
         'client_id': note.client_id,
         'note': note.note,           
       })
-    },
-    retrieveToken(state, token) {
-      state.token = token
     },
     destroyToken(state) {
       state.token = null
@@ -371,6 +382,7 @@ export default new Vuex.Store({
             
             localStorage.removeItem('access_token')
             context.commit('destroyToken')
+            context.commit('destroySession')
             resolve(response)
           })
           .catch(error => {
@@ -392,7 +404,7 @@ export default new Vuex.Store({
               const token = response.data.access_token
 
               localStorage.setItem('access_token', token)
-              commit('retrieveToken', token,)
+              commit('createSession', response.data)
               resolve(response)
           })
           .catch(error => {
@@ -856,7 +868,35 @@ export default new Vuex.Store({
       }).catch(error => {
         console.log(error.response.data)
       })
-    }
+    },
+    downloadEngagements(context) {
+      axios.get('http://traxit.test/api/downloadengagements', {responseType: 'blob'})
+      .then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'engagements.xlsx');
+        document.body.appendChild(link);
+        link.click();
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    downloadContacts(context) {
+      axios.get('http://traxit.test/api/downloadclients', {responseType: 'blob'})
+      .then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'contacts.xlsx');
+        document.body.appendChild(link);
+        link.click();
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
   }, 
 })
 

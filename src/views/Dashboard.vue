@@ -15,53 +15,65 @@
                 </div>
             </div>
 
-            <!-- this is the doughnut chart for the overview of the firm -->
-            <div class="row justify-content-around mt-3">
-                <div class="col-4 col-md-5">
-                    <div class="d-flex flex-sm-column">
-                        <div class="col-6 col-sm-12 mb-sm-2">
-                            <span class="h3 mr-3"><i class=" far fa-folder-open mr-3 text-primary"></i><router-link to="/firm" class="text-muted">Firm Overview</router-link></span>        
+            <div v-if="!loading">
+
+                <!-- this is the doughnut chart for the overview of the firm -->
+                <div class="row justify-content-around mt-3">
+                    <div class="col-4 col-md-5">
+                        <div class="d-flex flex-sm-column">
+                            <div class="col-6 col-sm-12 mb-sm-2">
+                                <span class="h3 mr-3"><i class=" far fa-folder-open mr-3 text-primary"></i><router-link to="/firm" class="text-muted">Firm Overview</router-link></span>        
+                            </div>
+                            <div class="col-6 col-sm-12">     
+                                <div class="input-group" >
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text bg-light text-primary" for="option">Workflow</label>
+                                </div>
+                                <select class="form-control" v-model="workflowKey">
+                                    <option :value="workflow.id" v-for="workflow in allWorkflows" :key="workflow.id" @click="changeKey(workflow.id)">{{ workflow.workflow }}</option>
+                                </select>
+                                </div>
+                            </div> 
                         </div>
-                        <div class="col-6 col-sm-12">     
-                            <div class="input-group" >
-                            <div class="input-group-prepend">
-                                <label class="input-group-text bg-light text-primary" for="option">Workflow</label>
-                            </div>
-                            <select class="form-control" v-model="workflowKey">
-                                <option :value="workflow.id" v-for="workflow in allWorkflows" :key="workflow.id" @click="changeKey(workflow.id)">{{ workflow.workflow }}</option>
-                            </select>
-                            </div>
-                        </div> 
-                    </div>
+                        <br><br>
+                    <doughnut-chart v-if="chartData" :chart-data="datasetsfull"></doughnut-chart>
+                </div>
+
+
+                <!-- this is the simple list of current tasks -->
+                <div class="col-6" v-if="taskData">
+                    <span class="h3 mb-4"><i class="fas fa-tasks text-primary mr-3"></i><router-link to="/tasks" class="text-muted">Your Tasks</router-link></span>
                     <br><br>
-                <doughnut-chart v-if="chartData" :chart-data="datasetsfull"></doughnut-chart>
+                        <table class="table table-hover">
+                        <thead class="bg-primary text-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Client</th>
+                            <th scope="col">Created On</th>
+                            <th scope="col">Return Type</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-bordered">
+                        <tr v-for="(task, index) in tasks"  :key="index">
+                            <th>{{ index + 1 }}</th>
+                            <td>{{ task.engagements[0].client.last_name }}, {{ task.engagements[0].client.first_name }} & {{ task.engagements[0].client.spouse_first_name }}</td>
+                            <td>{{ task.created_at | formatDate }}</td>
+                            <td>{{ task.engagements[0].return_type }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-
-            <!-- this is the simple list of current tasks -->
-            <div class="col-6">
-                <span class="h3 mb-4"><i class="fas fa-tasks text-primary mr-3"></i><router-link to="/tasks" class="text-muted">Your Tasks</router-link></span>
-                <br><br>
-                    <table class="table table-hover">
-                    <thead class="bg-primary text-light">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Client</th>
-                        <th scope="col">Created On</th>
-                        <th scope="col">Return Type</th>
-                    </tr>
-                    </thead>
-                    <tbody class="table-bordered">
-                    <tr v-for="(task, index) in tasks"  :key="index">
-                        <th>{{ index + 1 }}</th>
-                        <td>{{ task.engagements[0].client.last_name }}, {{ task.engagements[0].client.first_name }} & {{ task.engagements[0].client.spouse_first_name }}</td>
-                        <td>{{ task.created_at | formatDate }}</td>
-                        <td>{{ task.engagements[0].return_type }}</td>
-                    </tr>
-                    </tbody>
-                </table>
             </div>
-        </div>
+
+    <div v-else>
+        <not-found v-if="noData"></not-found>   
+    </div>
+
+    <div v-if="loading" class="lds-dual-ring justify-content-center"></div>
+
+
     </div>  
 
 
@@ -69,17 +81,22 @@
 
 <script>
 import DoughnutChart from '@/components/DoughnutChart.vue'
+import NotFound from '@/components/404.vue'
 import { mapGetters } from 'vuex'
 
 export default {
     name: 'dashboard',
     components: {
         DoughnutChart,
+        NotFound
     },
     data () {
         return {
             workflowKey: 1,
-            chartData: false
+            chartData: false,
+            taskData: false,
+            loading: false,
+            noData: false
         }
     },
     computed: {
@@ -154,10 +171,23 @@ export default {
         this.$store.dispatch('retrieveWorkflows')
         this.$store.dispatch('retrieveEngagements')
         this.$store.dispatch('retrieveTasks')
+        this.loading = true
         var self = this
-        if(this.allWorkflows.length > 0) {
+        setTimeout(() => {
+            if(this.allWorkflows.length > 0 && this.allEngagements.length > 0) {
             self.chartData = true
-        }
+            }
+            if(this.tasks.length > 0) {
+                self.taskData = true
+            } 
+            if(this.tasks.length > 0 && this.allWorkflows.length > 0 && this.allEngagements.length > 0) {
+                self.loading = false
+            } 
+            else {
+                self.noData = true
+                self.loading = false
+            }
+        }, 3000) 
     },
 }
 </script>

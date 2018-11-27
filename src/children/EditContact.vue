@@ -108,6 +108,7 @@ export default {
           email: this.client.email,
           cell_phone: this.client.cell_phone,
           work_phone: this.client.work_phone,
+          has_spouse: this.client.has_spouse,
           spouse_first_name: this.client.spouse_first_name,
           spouse_middle_initial: this.client.spouse_middle_initial,
           spouse_last_name: this.client.spouse_last_name,

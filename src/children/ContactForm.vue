@@ -1,64 +1,81 @@
 <template>
   <div class="page-wrapper">
+
+    <div class="server-error" v-if="serverError">{{ serverError }}</div>
+
     <div class="justify-content-start d-flex mb-3">
       <router-link to="/add" class="btn btn-sm btn-outline-secondary"><i class="fas fa-arrow-circle-left mr-2"></i>Back</router-link>
     </div>
     <div class="card-body bg-light border-primary mb-2">
       <h4 class="text-left text-primary m-0"><i class="far fa-address-book mr-2"></i>New Contact</h4>
     </div>
-    <form @submit.prevent="addNewClient" class="d-flex-column justify-content-center">
+    <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center">
       <div class="form-group">
-        <select class="form-control mb-3" id="category" v-model="client.category">
-          <option v-for="category in categories" :key="category.id" :value="category">{{ category }}</option>
+        <select :class="{ 'input-error': errors.has('Category Type') }"  class="form-control mb-3" id="type" v-model="client.category" name="Category Type" v-validate="{ is_not: option }">
+          <option disabled>{{option}}</option>
+          <option v-for="(category, index) in categories" :key="index" :value="category">{{ category }}</option>
         </select>
-        <input type="text" class="form-control mb-3" placeholder="Referral Type" v-model="client.referral_type">
-        <div class="d-flex mb-3 bg-light p-2">
-          <div class="h6 mb-0 mr-2">Does Contact Have Spouse?</div>
-          <input type="checkbox" v-model="client.has_spouse" class="align-self-center mt-1">
-        </div>
+        <span class="form-error" v-show="errors.has('Category Type')">{{ errors.first('Category Type') }}</span>
+
+        <input type="text" :class="{ 'input-error': errors.has('Referral Type') }"  class="form-control mb-3" placeholder="Referral Type" v-model="client.referral_type" v-validate="'required'" name="Referral Type">
+        <span class="form-error" v-show="errors.has('Referral Type')">{{ errors.first('Referral Type') }}</span>
+        
 
         <h5 class="text-left mb-3">Taxpayer:</h5>
-        <div class="d-flex mb-3">
-          <input type="text" class="form-control col-5" placeholder="First Name" v-model="client.first_name">
-          <input type="text" class="form-control mx-2" placeholder="Middle Initial" v-model="client.middle_initial">
-          <input type="text" class="form-control col-5" placeholder="Last Name" v-model="client.last_name">
+        <div class="d-flex mb-3 ">
+          <div class="col-5 px-0">
+            <input type="text" :class="{ 'input-error': errors.has('First Name') }" class="form-control" placeholder="First Name" v-model="client.first_name" v-validate="'required'" name="First Name">
+            <span class="form-error" v-show="errors.has('First Name')">{{ errors.first('First Name') }}</span>
+          </div>
+          <div class="mx-2">
+            <input type="text" class="form-control" placeholder="Middle Initial" v-model="client.middle_initial" name="Middle Initial">
+          </div>
+          <div class="col-5 px-0">
+            <input type="text" :class="{ 'input-error': errors.has('Last Name') }" class="form-control" placeholder="Last Name" v-model="client.last_name" v-validate="'required'" name="Last Name">
+            <span class="form-error" v-show="errors.has('Last Name')">{{ errors.first('Last Name') }}</span>
+          </div>
         </div>      
  
         <div class="d-flex mb-3">
-          <input type="text" class="form-control mr-2" placeholder="Occupation" v-model="client.occupation">
-          <input type="text" class="form-control" placeholder="Date Of Birth" v-model="client.dob">
+          <input type="text" class="form-control mr-2" placeholder="Occupation" v-model="client.occupation" name="Occupation">
+          <input type="text" class="form-control" placeholder="Date Of Birth" v-model="client.dob" name="Date Of Birth">
         </div>
 
         <div class="d-flex mb-3">
-          <input type="text" class="form-control" placeholder="email@example.com" v-model="client.email">
-          <input type="text" class="form-control mx-2" placeholder="Cell Phone #" v-model="client.cell_phone">
-          <input type="text" class="form-control" placeholder="Work Phone #" v-model="client.work_phone">
+          <input type="text" class="form-control" placeholder="email@example.com" v-model="client.email" name="Email">
+          <input type="text" class="form-control mx-2" placeholder="Cell Phone #" v-model="client.cell_phone" name="Cell Phone">
+          <input type="text" class="form-control" placeholder="Work Phone #" v-model="client.work_phone" name="Work Phone">
+        </div>
+
+        <div class="d-flex mb-3 bg-light p-2">
+          <div class="h6 mb-0 mr-2">Does Contact Have Spouse?</div>
+          <input type="checkbox" v-model="client.has_spouse" class="align-self-center mt-1" name="Has Spouse">
         </div>
 
         <h5 class="text-left mb-3" v-if="client.has_spouse == true">Spouse:</h5>
         <div class="d-flex mb-3" v-if="client.has_spouse == true">
-          <input type="text" class="form-control col-5" placeholder="First Name" v-model="client.spouse_first_name">
-          <input type="text" class="form-control mx-2" placeholder="Middle Initial" v-model="client.spouse_middle_initial">
-          <input type="text" class="form-control col-5" placeholder="Last Name" v-model="client.spouse_last_name">
+          <input type="text" class="form-control col-5" placeholder="First Name" v-model="client.spouse_first_name" name="Spouse First Name">
+          <input type="text" class="form-control mx-2" placeholder="Middle Initial" v-model="client.spouse_middle_initial" name="Spouse Middle Inital">
+          <input type="text" class="form-control col-5" placeholder="Last Name" v-model="client.spouse_last_name" name="Spouse Last Name">
         </div>
 
         <div class="d-flex mb-3" v-if="client.has_spouse == true">
-          <input type="text" class="form-control mr-2" placeholder="Occupation" v-model="client.spouse_occupation">
-          <input type="text" class="form-control" placeholder="Date Of Birth" v-model="client.spouse_dob">
+          <input type="text" class="form-control mr-2" placeholder="Occupation" v-model="client.spouse_occupation" name="Spouse Occupation">
+          <input type="text" class="form-control" placeholder="Date Of Birth" v-model="client.spouse_dob" name="Spouse Date Of Birth">
         </div>
 
         <div class="d-flex mb-3" v-if="client.has_spouse == true">
-          <input type="text" class="form-control" placeholder="email@example.com" v-model="client.spouse_email">
-          <input type="text" class="form-control mx-2" placeholder="Cell Phone #" v-model="client.spouse_cell_phone">
-          <input type="text" class="form-control" placeholder="Work Phone #" v-model="client.spouse_work_phone">
+          <input type="text" class="form-control" placeholder="email@example.com" v-model="client.spouse_email" name="Spouse Email">
+          <input type="text" class="form-control mx-2" placeholder="Cell Phone #" v-model="client.spouse_cell_phone" name="Spouse Cell Phone">
+          <input type="text" class="form-control" placeholder="Work Phone #" v-model="client.spouse_work_phone" name="Spouse Work Phone">
         </div>
 
         <h5 class="text-left mb-3">Address:</h5>
         <div class="d-flex mb-4">
-          <input type="text" class="form-control" placeholder="Street Address" v-model="client.street_address">
-          <input type="text" class="form-control ml-2 mr-1" placeholder="City" v-model="client.city">
-          <input type="text" class="form-control ml-1 mr-2" placeholder="State" v-model="client.state">
-          <input type="text" class="form-control" placeholder="Postal Code" v-model="client.postal_code">
+          <input type="text" class="form-control" placeholder="Street Address" v-model="client.street_address" name="Street Address">
+          <input type="text" class="form-control ml-2 mr-1" placeholder="City" v-model="client.city" name="City">
+          <input type="text" class="form-control ml-1 mr-2" placeholder="State" v-model="client.state" name="State">
+          <input type="text" class="form-control" placeholder="Postal Code" v-model="client.postal_code" name="Postal Code">
         </div>
 
       <button type="submit" class="btn btn-lg btn-primary d-flex justify-content-start">Create</button>
@@ -86,7 +103,7 @@ export default {
         email: '',
         cell_phone: '',
         work_phone: '',
-        has_spouse: 1,
+        has_spouse: true,
         spouse_first_name: '',
         spouse_middle_initial: '',
         spouse_last_name: '',
@@ -100,16 +117,27 @@ export default {
         state: '',
         postal_code: '',
       },
-        categories: [ 'Choose Category...', 'Client', 'Prospect'],
+        categories: ['Client', 'Prospect'],
+        option: 'Choose..',
+        serverError: '',
     }
   },
   methods: {
     ...mapActions(['addClient']),
 
+    validateBeforeSubmit() {
+            this.$validator.validateAll().then((result) => {
+                if(this.client.has_spouse == true && this.client.spouse_first_name === '') {
+                  return;
+                }
+                else if (result) {
+                    this.addNewClient();
+                }
+            });
+        },
+
     addNewClient() {
-      if(!this.client.first_name || !this.client.email || !this.client.cell_phone ) return;
-      
-        this.addClient( {
+        this.addClient({
           id: this.idForClient,
           category: this.client.category,
           referral_type: this.client.referral_type,
@@ -121,6 +149,7 @@ export default {
           email: this.client.email,
           cell_phone: this.client.cell_phone,
           work_phone: this.client.work_phone,
+          has_spouse: this.client.has_spouse,
           spouse_first_name: this.client.spouse_first_name,
           spouse_middle_initial: this.client.spouse_middle_initial,
           spouse_last_name: this.client.spouse_last_name,
@@ -139,10 +168,19 @@ export default {
           this.idForClient++
           this.$router.push({path: '/contacts', query: {alert: 'The Contact Has Been Added Succesfully!'}})
         })
+        .catch(error => {
+            this.serverError = error.response.data
+        })
     },
   },
   created: function() {
-    this.client.category = this.categories[0]
+    this.client.category = this.option
   }
 }
 </script>
+
+<style>
+ .input-error {
+        border: 1px solid red;
+    }
+</style>

@@ -95,7 +95,7 @@ export default {
     data() {
         return {
             tableLoaded: false,
-            filterType: '',
+            filterType: 'All',
             searchEngagement: '',
             currentSort: 'last_name',
             currentSortDir: 'asc',
@@ -113,6 +113,8 @@ export default {
             if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
             if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
             return 0;
+            }).filter(engagement => {
+              if(this.filterType === 'All'){ return engagement } else{ return engagement.return_type === this.filterType} 
             }).filter((row, index) => {
             let start = (this.currentPage-1)*this.pageSize;
             let end = this.currentPage*this.pageSize;
@@ -161,12 +163,5 @@ export default {
     }
 }
 
-    .input-group {
-        font-size: 14px;
-        height: 35px;
 
-        select {
-            height: 35px;
-        }
-    }
 </style>

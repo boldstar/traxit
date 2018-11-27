@@ -41,9 +41,9 @@ export default new Vuex.Store({
     workflow: [],
     result: '',
     alert: '',
+    processing: false,
     token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
-    loading: false,
   },
   getters: {
     sidebarOpen(state) {
@@ -51,6 +51,9 @@ export default new Vuex.Store({
     },
     loggedIn(state) {
       return state.token != null;
+    },
+    processing(state) {
+      return state.processing
     },
     users(state) {
       return state.users;
@@ -114,6 +117,12 @@ export default new Vuex.Store({
     toggleSidebar(state) {
       state.sidebarOpen = !state.sidebarOpen
     },
+    startProcessing(state) {
+      state.processing = !state.processing
+    },
+    stopProcessing(state) {
+      state.processing = false
+    },
     createSession(state, session) {
       state.rules = session[0]
       state.token = session.access_token
@@ -176,6 +185,7 @@ export default new Vuex.Store({
         'email': client.email,
         'cell_phone': client.cell_phone,
         'work_phone': client.work_phone,
+        'has_spouse': client.has_spouse,
         'spouse_first_name': client.spouse_first_name,
         'spouse_middle_initial': client.spouse_middle_initial,
         'spouse_last_name': client.spouse_last_name,
@@ -476,6 +486,7 @@ export default new Vuex.Store({
         email: client.email,
         cell_phone: client.cell_phone,
         work_phone: client.work_phone,
+        has_spouse: client.has_spouse,
         spouse_first_name: client.spouse_first_name,
         spouse_middle_initial: client.spouse_middle_initial,
         spouse_last_name: client.spouse_last_name,
@@ -509,6 +520,7 @@ export default new Vuex.Store({
         email: client.email,
         cell_phone: client.cell_phone,
         work_phone: client.work_phone,
+        has_spouse: client.has_spouse,
         spouse_first_name: client.spouse_first_name,
         spouse_middle_initial: client.spouse_middle_initial,
         spouse_last_name: client.spouse_last_name,
@@ -870,7 +882,7 @@ export default new Vuex.Store({
       })
     },
     downloadEngagements(context) {
-      axios.get('http://traxit.test/api/downloadengagements', {responseType: 'blob'})
+      axios.get('/downloadengagements', {responseType: 'blob'})
       .then(response => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
@@ -884,7 +896,7 @@ export default new Vuex.Store({
       })
     },
     downloadContacts(context) {
-      axios.get('http://traxit.test/api/downloadclients', {responseType: 'blob'})
+      axios.get('/downloadclients', {responseType: 'blob'})
       .then(response => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
@@ -897,6 +909,22 @@ export default new Vuex.Store({
         console.log(error.response.data)
       })
     },
+    uploadContacts(context, file) {
+      context.commit('startProcessing')
+      let formData = new FormData();
+      formData.append('file', file)
+      axios.post('/importclients', formData, { headers: {
+        'Content-Type': 'multipart/form-data'
+      }})
+      .then(response => {
+        context.commit('successAlert', response.data )
+        context.commit('stopProcessing')
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        context.commit('stopProcessing')
+      })
+    }
   }, 
 })
 

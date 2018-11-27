@@ -3,23 +3,43 @@
 
     <!-- this is the row of buttons above the clients list -->
     <div class="d-flex mb-3">.
-      <input class="form-control w-25" placeholder="Filter By Last Name" v-model="searchClient" type="search">
-      <div class="mr-auto ml-2">
-        <button class="btn btn-outline-primary dropdown-toggle dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span>Category:</span>
-          All
-        </button>
-        <div class="dropdown-menu dropdown-menu-left">
-          <a class="dropdown-item" href="#">Client</a>
-          <a class="dropdown-item" href="#">Prospect</a>
+        <div class="w-25">
+            <input class="form-control" placeholder="Filter By Last Name" v-model="searchClient" type="search">
         </div>
-      </div>         
+        <div class="mr-auto ml-2">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Type</label>
+            </div>
+            <select class="custom-select" id="client_id" v-model="filterType">
+                <option v-for="(type, index) in types" :key="index">
+                {{ type }}
+                </option>
+            </select>
+        </div> 
+    </div>  
 
-      <div class="btn-group ml-auto">
-        <button class="btn btn-outline-success">Import<span><i class="fas fa-upload ml-2"></i></span></button>
-        <button class="btn btn-outline-secondary" @click="downloadContacts">Download <span><i class="fas fa-download ml-2"></i></span></button>
-        <router-link to="/add" class="btn btn-primary pt-2">Contact<i class="ml-2 fas fa-plus"></i></router-link>
-      </div>
+    <div class="d-flex">
+        <div class="input-group d-flex" v-if="uploadInput">
+            <div class="mr-2">
+                <button class="btn btn-outline-secondary" @click="uploadInput = false">Cancel</button>
+            </div>
+            <div class="custom-file">
+                <label class="custom-file-label" for="inputGroupFile04" v-if="!hasFile">Choose file</label>
+                <label class="custom-file-label" for="inputGroupFile04" v-if="hasFile">{{ fileLabel }}</label>
+                <input type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" v-on:change="selectedFile($event)">
+            </div>
+            <div class="input-group-append">
+                <button class="btn btn-primary" id="inputGroupFileAddon04" @click="uploadContacts">Submit</button>
+            </div>
+        </div>      
+
+        <div class="btn-group ml-auto" v-if="!uploadInput">
+            <button class="btn btn-outline-success font-weight-bold" @click="uploadInput = true">Import<span><i class="far fa-file-excel ml-2"></i></span></button>
+            <button class="btn btn-outline-secondary font-weight-bold" @click="downloadContacts">Download <span><i class="far fa-file-excel ml-2"></i></span></button>
+            <router-link to="/add" class="btn btn-primary pt-2">Contact<i class="ml-2 fas fa-plus"></i></router-link>
+        </div>
+    </div>
 
     </div>
 
@@ -39,7 +59,7 @@
         </thead> 
         <tbody class="client-info table-bordered"  v-if="!tableLoaded">
             <tr v-for="(client, index) in sortedClients"  :key="index">
-                <td class="text-capitalize">{{ client.last_name }}, {{client.first_name}} <span v-if="client.has_spouse == 1">&</span> {{ client.spouse_first_name }}</td>
+                <td class="text-capitalize">{{ client.last_name }}, {{client.first_name}} <span v-if="client.has_spouse == true">&</span> {{ client.spouse_first_name }}</td>
                 <td class="text-capitalize">{{ client.category }}</td>
                 <td>{{ client.email }}</td>
                 <td>{{ client.cell_phone }}</td>
@@ -97,22 +117,19 @@ export default {
     data() {
         return {
             tableLoaded: false,
+            uploadInput: false,
+            file: '',
+            fileLabel: null,
+            hasFile: false,
+            filterType: 'All',
             searchClient: '',
             currentSort: 'name',
             currentSortDir: 'asc',
             currentPage: 1,
             pageSize: null,
-            options: ['10', '25', '50', '100']
+            options: ['10', '25', '50', '100'],
+            types: ['All', 'Client', 'Prospect']
         }
-    },
-    created() {
-        this.$store.dispatch('retrieveClients');
-        this.tableLoaded = true;
-        this.pageSize = this.options[1]
-        var self = this;
-        setTimeout(() => {
-            self.tableLoaded = false;
-        }, 3000)
     },
     computed: {
         sortedClients:function() {
@@ -122,6 +139,8 @@ export default {
             if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
             if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
             return 0;
+            }).filter(client => {
+              if(this.filterType === 'All'){ return client } else{ return client.category === this.filterType} 
             }).filter((row, index) => {
             let start = (this.currentPage-1)*this.pageSize;
             let end = this.currentPage*this.pageSize;
@@ -146,8 +165,26 @@ export default {
         },
         downloadContacts() {
             this.$store.dispatch('downloadContacts')
+        },
+        selectedFile(event) {
+            this.file = event.target.files[0]
+            this.fileLabel = event.target.files[0].name
+            this.hasFile = true
+        },
+        uploadContacts() {
+            this.$store.dispatch('uploadContacts', this.file)
         }
-    }
+    },
+    created() {
+        this.$store.dispatch('retrieveClients');
+        this.tableLoaded = true;
+        this.filterType = this.types[0]
+        this.pageSize = this.options[1]
+        var self = this;
+        setTimeout(() => {
+            self.tableLoaded = false;
+        }, 3000)
+    },
 }
 </script>
 
@@ -159,14 +196,6 @@ export default {
     }
 }
 
-.input-group {
-        font-size: 14px;
-        height: 35px;
-
-        select {
-            height: 35px;
-        }
-    }
 
 </style>
 

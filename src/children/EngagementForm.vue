@@ -10,56 +10,61 @@
     <div class="card-body bg-light border-primary mb-2">
       <h4 class="text-left text-primary m-0"><i class="far fa-address-book mr-2"></i>New Engagement</h4>
     </div>
-    <form @submit.prevent="addNewEngagement" class="d-flex-column justify-content-center">
+    <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center">
       <div class="form-group">
 
-        <input type="text" class="form-control mb-3" placeholder="Year" v-model="engagement.year">
+        <input :class="{ 'input-error': errors.has('Year') }" type="text" class="form-control mb-3" placeholder="Year" v-model="engagement.year" v-validate="'required'" name="Year">
+        <span class="form-error" v-show="errors.has('Year')">{{ errors.first('Year')}}</span>
 
         <div class="input-group my-3">
           <div class="input-group-prepend">
             <label class="input-group-text text-primary" for="option">Find Contact</label>
           </div>
-          <select class="form-control" id="client_id" v-model.number="engagement.client_id">
+          <select :class="{ 'input-error': errors.has('Contact') }" class="form-control" id="client_id" v-model.number="engagement.client_id" v-validate="{ is_not: option }" name="Contact">
             <option disabled>{{ option }}</option>
             <option v-for="client in allClients" :key="client.id" :value="client.id">
               {{ client.last_name }}, {{client.first_name}} & {{client.spouse_first_name }}
             </option>
           </select>
         </div>
+        <span class="form-error" v-show="errors.has('Contact')">{{ errors.first('Contact') }}</span>
 
         <div class="input-group my-3">
           <div class="input-group-prepend">
             <label class="input-group-text text-primary" for="option">Workflow Type</label>
           </div>
-          <select class="form-control" id="client_id" v-model.number="engagement.workflow_id">
+          <select :class="{ 'input-error': errors.has('Workflow') }" class="form-control" id="client_id" v-model.number="engagement.workflow_id" v-validate="{ is_not: option }" name="Workflow">
             <option disabled>{{ option }}</option>
             <option v-for="workflow in allWorkflows" :key="workflow.id" :value="workflow.id">
               {{ workflow.workflow }}
             </option>
           </select>
         </div>
+          <span class="form-error" v-show="errors.has('Workflow')">{{ errors.first('Workflow') }}</span>
 
         <div class="input-group my-3">
           <div class="input-group-prepend">
             <label class="input-group-text text-primary" for="option">Return Type</label>
           </div>
-          <select class="form-control" id="type" v-model="engagement.return_type">
+          <select :class="{ 'input-error': errors.has('Return Type') }" class="form-control" id="type" v-model="engagement.return_type" v-validate="{ is_not: option }" name="Return Type">
               <option  selected disabled>{{ option }}</option>
               <option v-for="type in types" :key="type.id" :value="type">{{ type }}</option>
           </select>
         </div>
+          <span class="form-error" v-show="errors.has('Return Type')">{{ errors.first('Return Type') }}</span>
 
         <div class="input-group my-3">
         <div class="input-group-prepend">
           <label class="input-group-text text-primary" for="option">Assign To</label>
         </div>
-        <select class="form-control" id="user_id" v-model="engagement.assigned_to">
+        <select :class="{ 'input-error': errors.has('Assigned User') }" class="form-control" id="user_id" v-model="engagement.assigned_to" v-validate="{ is_not: option }" name="Assigned User">
           <option  selected disabled>{{ option }}</option>
           <option v-for="user in users" :key="user.id" :value="user.id">
             {{ user.name }}
           </option>
         </select>
       </div>
+        <span class="form-error" v-show="errors.has('Assigned User')">{{ errors.first('Assigned User') }}</span>
 
      
 
@@ -68,7 +73,7 @@
         <div class="input-group-prepend">
           <label class="input-group-text text-primary" for="option">Status</label>
         </div>
-          <select class="form-control" id="status" v-model="engagement.status">
+          <select :class="{ 'input-error': errors.has('Status') }" class="form-control" id="status" v-model="engagement.status" v-validate="{ is_not: option }" name="Status">
           <option  selected disabled>{{ option }}</option>
           <option v-for="status in workflow.statuses" :key="status.id" :value="status.status">
             {{ status.status }}
@@ -76,6 +81,7 @@
         </select>
         </div>
       </div>
+        <span class="form-error" v-show="errors.has('Status')">{{ errors.first('Status') }}</span>
 
         <div class="input-group my-3" v-if="engagement.workflow_id === option">
         <div class="input-group-prepend">
@@ -101,12 +107,12 @@ export default {
   data() {
     return {
       engagement: {
+        year: '',
         client_id: null,
         workflow_id: null,
         return_type: null,
-        year: '',
         assigned_to: null,
-        status: '',
+        status: null,
       },
       types: [ 
         '1040', 
@@ -127,7 +133,13 @@ export default {
   },
   methods: {
     ...mapActions(['addEngagement']),
-    
+    validateBeforeSubmit() {
+          this.$validator.validateAll().then((result) => {
+              if (result) {
+                  this.addNewEngagement();
+              }
+          });
+      },
     addNewEngagement() {
       if(!this.engagement.return_type || !this.engagement.year ) return;
       this.addEngagement({
@@ -163,6 +175,10 @@ export default {
 
   label {
     width: 8em;
+  }
+
+  .input-error {
+      border: 1px solid red;
   }
 
 </style>

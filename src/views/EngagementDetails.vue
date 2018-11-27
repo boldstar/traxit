@@ -3,12 +3,15 @@
     <!-- this is to view the details of the engagement and will be hidden if the following route does not match -->
     <div v-if="!detailsLoaded">
     <div v-if="$route.name == 'engagement-details'">
+
+      <Alert v-if="alert" v-bind:message="alert" />
+
       <div class="flex-row justify-content-between d-flex my-3">
         <span class="h4 align-self-end m-0 text-left">Details | <strong class="text-primary"><router-link :to="'/contact/' +engagement.client.id + '/account'">{{ engagement.client.last_name}}, {{ engagement.client.first_name}} & {{ engagement.client.spouse_first_name}}</router-link></strong></span>
         <div>
         <router-link to="/engagements" class="btn btn-outline-secondary mr-4"><i class="fas fa-arrow-circle-left mr-2"></i>All Engagements</router-link>
         <router-link class="btn btn-primary mr-3" :to="'/engagement/' +this.engagement.id+ '/edit'"><i class="far fa-edit mr-2"></i>Edit</router-link> 
-        <b-btn class="outline-secondary" v-b-modal.myModal><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
+        <b-btn class="outline-secondary" v-b-modal.myEngage v-if="$can('delete', engagement)"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
         </div>
       </div>  
 
@@ -40,41 +43,89 @@
       <!-- this is the section where the qustions will go -->
       <hr>
 
-      <div class="d-flex justify-content-between h3">
-          <span><i class="far fa-question-circle text-primary"></i></span>
-          <div>    
-              Questions
+      <div class="d-flex justify-content-between h4">
+          <div>
+            <span>
+              Questions |
+            </span>
+            <span class="text-primary font-weight-bold">{{ engagement.questions.length }}</span>    
           </div>
-          <span><router-link :to="'/contact/' +engagement.client.id + '/account'"><i class="far fa-plus-square"></i></router-link></span>
+          <span><router-link :to="'/engagement/' + engagement.id + '/add-question'" class="btn btn-sm btn-primary"><i class="far fa-plus-square mr-2"></i>Question</router-link></span>
       </div>
 
-      <hr>
-    </div>
+      <hr class="mb-4">
 
-
-<!-- this is the modal to confirm or cancel the delete -->
-      <b-modal id="myModal" ref="myModalRef" hide-footer title="Delete Client">
+      <!-- this is the modal to confirm or cancel the delete for the engagement -->
+      <b-modal id="myEngage" ref="myEngage" hide-footer title="Delete Engagement">
         <div class="d-block text-left">
           <h5>Are you sure you want to delete engagement?</h5>
           <br>
           <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
         </div>
         <div class="d-flex">
-          <b-btn class="mt-3" variant="danger" @click="hideModal">Cancel</b-btn>
+          <b-btn class="mt-3" variant="danger" @click="hideEngageModal">Cancel</b-btn>
           <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteEngagement(engagement.id)">Confirm</b-btn>
         </div>
       </b-modal>
+
+  </div>
+
+    <!-- using v-modal for showing modal for question because there seems to be a bug with deep nested modals   -->
+    <div class="card mb-3"  v-for="(question, index) in engagement.questions" :key="index" v-if="$route.name == 'engagement-details'">
+        <div class="card-header">
+          <div class="h6 m-0 justify-content-between d-flex">
+            <router-link v-if="question.answered == 0 && $can('update', engagement)" class="btn btn-sm btn-primary mr-3" :to="'/engagement/' +engagement.id+ '/edit-question/' + question.id" ><i class="far fa-edit mr-2" ></i>Edit</router-link> 
+            <b-btn v-if="$can('delete', engagement)" class="outline-secondary" size="sm" @click="modalShow = !modalShow"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
+          </div>
+        </div>
+        <div class="card-body bg-light d-flex justify-content-between">
+          <div class="h5 mr-5 d-flex flex-column text-left">
+            <span class="mb-3">Question</span>
+            <span class="align-self-center h6" v-html="question.question"></span>
+          </div>
+          <div class="ml-5 d-flex align-self-center">
+            <router-link class="btn btn-sm btn-primary" v-if="question.answered == 0" :to="{ path: '/engagement/' +engagement.id+ '/answer-question/' +question.id }">Answer</router-link>
+            <div v-else>
+              <span class="font-weight-bold mr-2">Answered: </span>
+              <input class="mt-2" type="checkbox" v-model="question.answered">
+            </div>
+          </div>
+        </div>
+        <div v-if="question.answered == 1">
+          <div class="card-footer d-flex flex-column text-left h5 mb-0">
+            <span class="mb-3">Answer</span>
+            <span class="h6" v-html="question.answer"></span>
+          </div>
+        </div>
+
+          <!-- this is the modal for deleting a question -->
+        <b-modal v-model="modalShow" id="myQuestion" ref="myQuestion" hide-footer title="Delete Question">
+          <div class="d-block text-left">
+            <h5>Are you sure you want to delete question?</h5>
+            <br>
+            <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
+          </div>
+          <div class="d-flex">
+            <b-btn class="mt-3" variant="danger" @click="modalShow = false">Cancel</b-btn>
+            <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteQuestion(engagement, question.id)">Confirm</b-btn>
+          </div>
+        </b-modal>
+      
+      </div>
+
     </div>
+
 
     <div v-if="detailsLoaded" class="lds-dual-ring justify-content-center"></div>
 
-<!-- this will show the edit view if the route matches the v-if below -->
-  <router-view v-if="$route.path == '/engagement/' +this.engagement.id+ '/edit'"></router-view>
+<!-- this will show the child view if the route matches-->
+  <router-view ></router-view>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import Alert from '@/components/Alert.vue'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 
@@ -83,20 +134,19 @@ export default {
   data() {
     return {
       detailsLoaded: false,
+      alert: '',
+      modalShow: false,
     }
   },
   components:{
-    'b-modal': bModal
+    'b-modal': bModal,
+    Alert
   },
   directives: {
     'b-modal': bModalDirective
   },
   computed: {
-    ...mapGetters(
-        [
-          'engagement'
-        ]
-      )
+    ...mapGetters(['engagement','question']),
   },
   methods: {
     deleteEngagement(id) {
@@ -105,15 +155,33 @@ export default {
         this.$router.push({path: '/engagements', query: {alert: 'Engagement Was Succesfully Deleted'}});
       })
     },
-    showModal () {
-      this.$refs.myModalRef.show()
+    deleteQuestion(engagement, id) {
+      this.$store.dispatch('deleteQuestion', id)
+      .then(() => {
+        this.modalShow = false
+        this.$router.push({path: '/engagement/' +this.engagement.id , query: {alert: 'The Question Was Succesfully Deleted'}});
+      })
     },
-    hideModal () {
-      this.$refs.myModalRef.hide()
+    showEngageModal () {
+      this.$refs.myEngage.show()
+    },
+    hideEngageModal () {
+      this.$refs.myEngage.hide()
     },
     isActive: function (menuItem) {
       return this.activeItem === menuItem
     },
+  },
+  watch: {
+      $route (to, from) {
+        if(this.$route.query.alert) {
+          this.alert  = this.$route.query.alert;
+          setTimeout(() => {
+            this.alert = '';
+            this.$router.replace({path: '/engagment/' +this.engagement.id});
+          }, 10000)
+        }    
+    }
   },
   created: function(){
     this.$store.dispatch('getEngagement', this.$route.params.id);

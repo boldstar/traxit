@@ -20,7 +20,7 @@ export default {
         layout() {
             return (this.$route.meta.layout || default_layout) + '-layout';
         }
-    }
+    },
 }
 </script>
 
@@ -49,6 +49,14 @@ export default {
 
     [role="main"] {
         padding-top: 120px; /* Space for fixed navbar and toolbar / adds space below navbar */
+    }
+
+    #administrator ul.admin-nav {
+    
+
+        a {
+            text-decoration: none;
+        }
     }
 
 

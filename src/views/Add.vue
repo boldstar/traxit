@@ -1,6 +1,6 @@
 <template>
-  <div class="page-wrapper d-flex justify-content-center mt-5">
-    <div class="d-flex flex-row" v-if="$route.name == 'add'">
+  <div class="page-wrapper d-flex justify-content-center">
+    <div class="d-flex flex-row mt-5" v-if="$route.name == 'add'">
       <div class="card-style card-body bg-light border shadow-sm mx-5 py-5 px-5">
         <div class="h3 mb-4 font-weight-bold">
           Contact
@@ -29,7 +29,6 @@
 
 export default {
   name: 'add',
-  
 }
 </script>
 

@@ -8,10 +8,10 @@
                       <router-link class="nav-link border-right text-left pl-4" to="/"><span><i class="fas fa-tachometer-alt"></i></span>Dashboard</router-link>    
                   </li>
                   <li class="nav-item w-100"  v-bind:class="{ 'is-active': isActive }">                                        
-                      <router-link class="nav-link border-right text-left pl-4" to="/tasks"><span><i class="fas fa-list-ul"></i></span>Tasks</router-link>  
+                      <router-link class="nav-link border-right text-left pl-4" to="/firm"><span><i class="fas fa-home"></i></span>Firm</router-link>    
                   </li>
                   <li class="nav-item w-100"  v-bind:class="{ 'is-active': isActive }">                                        
-                      <router-link class="nav-link border-right text-left pl-4" to="/firm"><span><i class="fas fa-home"></i></span>Firm</router-link>    
+                      <router-link class="nav-link border-right text-left pl-4" to="/tasks"><span><i class="fas fa-list-ul"></i></span>Tasks</router-link>  
                   </li>
                   <li class="nav-item w-100"  v-bind:class="{ 'is-active': isActive }">                                  
                       <router-link class="nav-link border-right text-left pl-4" to="/engagements"><span><i class="far fa-folder-open"></i></span>Engagements</router-link>  
@@ -102,6 +102,7 @@ export default {
 
     .is-active {
         background:rgb(223, 231, 253);
+        border-left: 5px solid #0077ff;
 
         i {
             color: #0077ff;

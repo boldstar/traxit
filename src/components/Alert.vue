@@ -11,6 +11,16 @@
 export default {
     name: 'Alert',
     props: ['message'],
+    mounted() {
+        this.clearAlert()
+    },
+    methods: {
+        clearAlert() {
+            setTimeout(() => {
+                this.$store.commit('clearAlert')
+            }, 5000)
+        }
+    }
 }
 </script>
 

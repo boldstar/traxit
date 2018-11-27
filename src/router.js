@@ -31,10 +31,62 @@ export default new Router({
       }
     },
     {
-      // this is the route to logout of the app
-      path: '/logout',
-      name: 'logout',
-      component: () => import(/* webpackChunkName: "logout" */ './views/Logout.vue'),
+      path: '/administrator',
+      name: 'administrator',
+      component: () => import(/* webpackChunkName: "logout" */ './views/Administrator.vue'),
+      meta: {
+        requiresAuth: true,
+        layout: "admin",
+      },
+      children: [
+          {
+          path: 'account',
+          name: 'app-account',
+          component: () => import('@/children/Account.vue'),
+            meta: {
+              requiresAuth: true,
+              layout: "admin",
+            },
+          },
+          {
+          path: 'workflows',
+          name: 'workflows',
+          component: () => import('@/children/Workflows.vue'),
+            meta: {
+              requiresAuth: true,
+              layout: "admin",
+            },
+            children: [
+              {
+                path: 'edit-workflow/:workflow',
+                name: 'edit-workflow',
+                component: () => import('@/children/EditWorkflow.vue'),
+                meta: {
+                  requiresAuth: true,
+                  layout: "admin",
+                },
+              }
+            ]
+          },
+          {
+            path: 'users',
+            name: 'users',
+            component: () => import('@/children/Users.vue'),
+              meta: {
+                requiresAuth: true,
+                layout: "admin",
+              },
+          },
+          {
+            path: 'add-user',
+            name: 'add-user',
+            component: () => import('@/children/AddUser.vue'),
+              meta: {
+                requiresAuth: true,
+                layout: "admin",
+              },
+          },
+      ] 
     },
     {
       // this is the dashboard view
@@ -58,7 +110,7 @@ export default new Router({
         breadCrumb: [
           { name: 'Firm' }
         ]
-      }
+      },
     },
     {
       // this is the list of all clients view
@@ -88,7 +140,7 @@ export default new Router({
           // this is the path to view the account of the client
           path: 'account',
           name: 'account',
-          component: () => import('@/components/client_detail_tabs/Account.vue'),
+          component: () => import('@/contact/Account.vue'),
             meta: {
               requiresAuth: true,
               breadCrumb: [
@@ -97,22 +149,44 @@ export default new Router({
             },
             children: [
               {
-                 // this is the path to edit contact
-                 path: 'edit',
-                 component: () => import('@/components/EditContact.vue'),
-                   meta: {
-                     requiresAuth: true,
-                     breadCrumb: [
-                       { name: 'Edit Contact' }
-                     ]
-                   },
+              // this is the path to edit contact
+              path: 'edit',
+              component: () => import('@/children/EditContact.vue'),
+                meta: {
+                  requiresAuth: true,
+                  breadCrumb: [
+                    { name: 'Edit Contact' }
+                  ]
+                },
+              },
+              {
+              // this is the path to add dependent
+              path: 'add-dependent',
+              component: () => import('@/children/AddDependent.vue'),
+                meta: {
+                  requiresAuth: true,
+                  breadCrumb: [
+                    { name: 'Add Dependent' }
+                  ]
+                },
+              },
+              {
+              // this is the path to edit dependent
+              path: 'edit-dependent/:dependent',
+              component: () => import('@/children/EditDepend.vue'),
+                meta: {
+                  requiresAuth: true,
+                  breadCrumb: [
+                    { name: 'Edit Dependent' }
+                  ]
+                },
               }
             ]
           },
           {
           // this is the path to view the engagements that belong to the client
           path: 'engagements',
-          component: () => import('@/components/client_detail_tabs/ContactEngagements.vue'),
+          component: () => import('@/contact/ContactEngagements.vue'),
             meta: {
               requiresAuth: true,
               breadCrumb: [
@@ -123,7 +197,7 @@ export default new Router({
               {
                 // this is the path to add an engagement to singel client
                 path: 'add-engagement',
-                component: () => import('@/components/client_detail_tabs/AddEngagement.vue'),
+                component: () => import('@/children/AddEngagement.vue'),
                   meta: {
                     requiresAuth: true,
                     breadCrumb: [
@@ -136,7 +210,7 @@ export default new Router({
           {
           // this is the path to view the files belonging to client
           path: 'files',
-          component: () => import('@/components/client_detail_tabs/Files.vue'),
+          component: () => import('@/contact/Files.vue'),
             meta: {
               requiresAuth: true,
               breadCrumb: [
@@ -147,18 +221,41 @@ export default new Router({
           {
           // this is the path to view the notes belonging to client
             path: 'notes',
-            component: () => import('@/components/client_detail_tabs/Notes.vue'),
+            name: 'notes',
+            component: () => import('@/contact/Notes.vue'),
             meta: {
               requiresAuth: true,
               breadCrumb: [
                 { name: 'Notes' }
-              ]
-            },
+                ],
+              },
+              children: [
+                {
+                  path: 'add-note',
+                  component: () => import('@/children/AddNote.vue'),
+                    meta: {
+                      requiresAuth: true,
+                      breadCrumb: [
+                        { name: 'Add Note' }
+                      ]
+                  },
+                },
+                {
+                  path: 'edit-note/:note',
+                  component: () => import('@/children/EditNote.vue'),
+                    meta: {
+                      requiresAuth: true,
+                      breadCrumb: [
+                        { name: 'Edit Note' }
+                      ]
+                  },
+                },
+              ],
           },
           {
           // this is the path to view the pending belonging to the client
           path: 'pending',
-          component: () => import('@/components/client_detail_tabs/Pending.vue'),
+          component: () => import('@/contact/Pending.vue'),
             meta: {
               requiresAuth: true,
               breadCrumb: [
@@ -169,7 +266,7 @@ export default new Router({
           {
             // this is the path to view the portal belonging to the client
             path: 'portal',
-            component: () => import('@/components/client_detail_tabs/Portal.vue'),
+            component: () => import('@/contact/Portal.vue'),
             meta: {
               requiresAuth: true,
               breadCrumb: [
@@ -194,7 +291,7 @@ export default new Router({
         {
           // this is the children route for adding a new contact
           path: 'contact',
-          component: () => import('@/components/ContactForm.vue'),
+          component: () => import('@/children/ContactForm.vue'),
             meta: {
               requiresAuth: true,
               breadCrumb: [
@@ -205,7 +302,7 @@ export default new Router({
         {
           // this is the children route for adding a new engagement
           path: 'engagement',
-          component: () => import('@/components/EngagementForm.vue'),
+          component: () => import('@/children/EngagementForm.vue'),
             meta: {
               requiresAuth: true,
               breadCrumb: [
@@ -253,16 +350,57 @@ export default new Router({
     children: [
       {
         path: 'edit',
-        component: () => import('@/components/EditEngage.vue'),
+        component: () => import('@/children/EditEngage.vue'),
           meta: {
             requiresAuth: true,
             breadCrumb: [
               { name: 'Edit Engagement' }
           ]
         },
+      },
+      {
+        path: 'add-question',
+        component: () => import('@/children/AddQuestion.vue'),
+          meta: {
+            requiresAuth: true,
+            breadCrumb: [
+              { name: 'Add Question' }
+          ]
+        },
+      },
+      {
+        path: 'edit-question/:question',
+        component: () => import('@/children/EditQuest.vue'),
+          meta: {
+            requiresAuth: true,
+            breadCrumb: [
+              { name: 'Edit Question' }
+          ]
+        },
+      },
+      {
+        path: 'answer-question/:question',
+        component: () => import('@/children/AnswerQuest.vue'),
+          meta: {
+            requiresAuth: true,
+            breadCrumb: [
+              { name: 'Answer Question' }
+          ]
+        },
       }
     ]
-    },
+  },
+  {
+  path: '/search',
+  name: 'search',
+  component: () => import(/* webpackChunkName: "accounts" */ './views/Search.vue'),
+  meta: {
+      requiresAuth: true,
+      breadCrumb: [
+        { name: 'Search' }
+      ]
+    }
+  },
   ],
   mode: 'history',
 })

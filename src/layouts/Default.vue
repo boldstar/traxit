@@ -36,7 +36,6 @@ export default {
   },
   data () {
     return {
-      sidebarToggle: false,
       closedSidebar: 'col-lg-12',
       openSidebar: 'col-lg-10'
     }
@@ -62,6 +61,7 @@ export default {
 .page-wrapper {
   animation-duration: .5s;
 }
+
 
 
 </style>

@@ -21,16 +21,6 @@ export default new Router({
       },
     },
     {
-      // this is the route to the register form
-      path: '/register',
-      name: 'register',
-      component: () => import(/* webpackChunkName: "login" */ './views/Register.vue'),
-      meta: {
-        requiresVisitor: true,
-        layout: "landing",
-      }
-    },
-    {
       path: '/administrator',
       name: 'administrator',
       component: () => import(/* webpackChunkName: "logout" */ './views/Administrator.vue'),
@@ -95,6 +85,7 @@ export default new Router({
       component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue'),
       meta: {
         requiresAuth: true,
+        layout: "default",
         breadCrumb: [
           { name: 'Dashboard' }
         ]
@@ -107,6 +98,7 @@ export default new Router({
       component: () => import(/* webpackChunkName: "firm" */ './views/Firm.vue'),
       meta: {
         requiresAuth: true,
+        layout: "default",
         breadCrumb: [
           { name: 'Firm' }
         ]
@@ -119,6 +111,7 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/Contacts.vue'),
       meta: {
         requiresAuth: true,
+        layout: "default",
         breadCrumb: [
           { name: 'Contacts' }
         ]
@@ -131,6 +124,7 @@ export default new Router({
       component: () => import('./views/ContactDetails.vue'),
       meta: {
         requiresAuth: true,
+        layout: "default",
         breadCrumb: [
           { name: 'Contact Details' }
         ]
@@ -283,6 +277,7 @@ export default new Router({
       component: () => import(/* webpackChunkName: "add" */ './views/Add.vue'),
       meta: {
         requiresAuth: true,
+        layout: "default",
         breadCrumb: [
           { name: 'Add New' }
         ]
@@ -319,6 +314,7 @@ export default new Router({
       component: () => import(/* webpackChunkName: "tasks" */ './views/Tasks.vue'),
       meta: {
         requiresAuth: true,
+        layout: "default",
         breadCrumb: [
           { name: 'Tasks' }
         ]
@@ -331,6 +327,7 @@ export default new Router({
     component: () => import(/* webpackChunkName: "accounts" */ './views/Engagements.vue'),
     meta: {
         requiresAuth: true,
+        layout: "default",
         breadCrumb: [
           { name: 'Engagements' }
         ]
@@ -343,6 +340,7 @@ export default new Router({
     component: () => import(/* webpackChunkName: "accounts" */ './views/EngagementDetails.vue'),
     meta: {
         requiresAuth: true,
+        layout: "default",
         breadCrumb: [
           { name: 'Engagement Details' }
         ]
@@ -396,6 +394,7 @@ export default new Router({
   component: () => import(/* webpackChunkName: "accounts" */ './views/Search.vue'),
   meta: {
       requiresAuth: true,
+      layout: "default",
       breadCrumb: [
         { name: 'Search' }
       ]

@@ -8,9 +8,6 @@
         <div class="card shadow">
             <div class="card-header bg-light text-primary border-primary d-flex justify-content-between">
                 <h6 class="mt-2">Login</h6>
-                <h6 class="mt-2 text-black-50">Not yet registered?
-                    <router-link class="btn-link ml-1" to="/register"> Click Here</router-link>
-                </h6>
             </div>
             <div class="card-body">
                 <form @submit.prevent="validateBeforeSubmit" class="text-left">
@@ -32,7 +29,6 @@
                     </button>
                     <div class="forgot d-flex justify-content-between">
                         <span>Forgot password? <a href="#">Click Here</a> </span>
-                        <span>Forgot email? <a href="#">Click Here</a> </span>
                     </div>
                 </form>
             </div>

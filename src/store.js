@@ -353,26 +353,12 @@ export default new Vuex.Store({
           })
         })
     },
-    register(context, data) {
-      return new Promise((resolve, reject) => {
-        axios.post('/register', {
-          name: data.name,
-          email: data.email,
-          password: data.password,
-        })
-        .then(response => {
-          resolve(response)
-        })
-        .catch(error => {
-          reject(error.response.data)
-        })
-      })
-    },
     addUser(context, data) {
         axios.post('/register', {
           name: data.name,
           email: data.email,
           password: data.password,
+          role: data.role
         })
         .then(response => {
           console.log(response.data)

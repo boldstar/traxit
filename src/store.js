@@ -34,11 +34,11 @@ export default new Vuex.Store({
     notes: [],
     clientnotes: [],
     users: [],
-    user: [],
     tasks: [],
     task: [],
     workflows: [],
     workflow: [],
+    user: '',
     result: '',
     alert: '',
     processing: false,
@@ -48,6 +48,9 @@ export default new Vuex.Store({
   getters: {
     sidebarOpen(state) {
       return state.sidebarOpen;
+    },
+    user(state) {
+      return state.user
     },
     loggedIn(state) {
       return state.token != null;
@@ -139,6 +142,10 @@ export default new Vuex.Store({
     },
     addUser(state, user) {
       state.users.push(user)
+    },
+    updateUser(state, user) {
+      const index = state.users.findIndex(item => item.id == user.id);
+      state.users.splice(index, 1, user);
     },
     retrieveUsers(state, users) {
       state.users = users
@@ -333,25 +340,36 @@ export default new Vuex.Store({
     },
     clearAlert(state) {
       state.alert = ''
+    },
+    userDetails(state, user) {
+      state.user = user
     }
   },
   actions: {
     toggleSidebar({commit}) {
       commit('toggleSidebar')
     },
-    retrieveName(context) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-
-
-        return new Promise((resolve, reject) => {
-          axios.get('/user')
-          .then(response => {
-            resolve(response)
-          })
-          .catch(error => {
-            reject(error)
-          })
-        })
+    retrieveUser(context, id) {
+      axios.get('/users/' + id)
+      .then(response => {
+        context.commit('userDetails', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    updateUser(context, data) {
+      axios.patch('/users/' +data.id, {
+        name: data.name,
+        email: data.email,
+        role: data.role
+      })
+      .then(response => {
+        context.commit('updateUser', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
     },
     addUser(context, data) {
         axios.post('/register', {
@@ -361,7 +379,6 @@ export default new Vuex.Store({
           role: data.role
         })
         .then(response => {
-          console.log(response.data)
           context.commit('addUser', response.data)
         })
         .catch(error => {

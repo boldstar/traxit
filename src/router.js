@@ -62,10 +62,21 @@ export default new Router({
             path: 'users',
             name: 'users',
             component: () => import('@/children/Users.vue'),
-              meta: {
-                requiresAuth: true,
-                layout: "admin",
-              },
+            meta: {
+              requiresAuth: true,
+              layout: "admin",
+            },
+            children: [
+              {
+                path: 'edit-user/:id',
+                name: 'edit-user',
+                component: () => import('@/children/EditUser.vue'),
+                meta: {
+                  requiresAuth: true,
+                  layout: "admin"
+                }
+              }
+            ]
           },
           {
             path: 'add-user',

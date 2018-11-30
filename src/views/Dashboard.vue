@@ -185,7 +185,7 @@ export default {
             } 
             else {
                 self.noData = true
-                self.loading = false
+                self.loading = true
             }
         }, 3000) 
     },

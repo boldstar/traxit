@@ -7,29 +7,27 @@
         <hr>
         <div class="container card-body bg-light col-6">
             <div class="text-left">
-                <h3>User Form</h3>
+                <h3>Edit Team Member</h3>
             </div>
-            <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center">
+            <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center" v-if="user">
                 <div class="d-block text-left">
                     <br>
-                    <input :class="{ 'input-error': errors.has('Name') }" class="form-control" type="text" placeholder="Name" v-model="name" v-validate="'required'" name="Name">.
+                    <input :class="{ 'input-error': errors.has('Name') }" class="form-control" type="text" placeholder="Name" v-model="user.name" v-validate="'required'" name="Name">.
                     <span class="form-error" v-show="errors.has('Name')">{{ errors.first('Name') }}</span>
                     <br>
-                    <input :class="{ 'input-error': errors.has('Email') }" class="form-control" type="text" placeholder="Email" v-model="email" v-validate="'required'" name="Email">
+                    <input :class="{ 'input-error': errors.has('Email') }" class="form-control" type="text" placeholder="Email" v-model="user.email" v-validate="'required'" name="Email">
                     <span class="form-error"  v-show="errors.has('Email')">{{ errors.first('Email') }}</span>
                     <br>
-                    <input :class="{ 'input-error': errors.has('Password') }" class="form-control" type="text" placeholder="Password" v-model="password" v-validate="'required|min:6'" name="Password">
-                    <span class="form-error"  v-show="errors.has('Password')">{{ errors.first('Password') }}</span>
-                    <br>
-                    <select :class="{ 'input-error': errors.has('Role') }" name="Role" id="user" v-model="role" class="form-control" v-validate="{ is_not: option }"> 
-                        <option disabled>{{ option }}</option>
+                    <select :class="{ 'input-error': errors.has('Role') }" name="Role" id="user" v-model="user.roles[0].name" class="form-control" v-validate="{ is_not: option }">
+                        <option disabled>{{ option }}</option> 
                         <option v-for="(role, index) in roles" :key="index" :value="role">{{ role }}</option>
                     </select>
                     <span class="form-error"  v-show="errors.has('Role')">{{ errors.first('Role') }}</span>
                     <br>
                 </div>
-                <div class="d-flex">
+                <div class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-primary">Create</button>
+                    <router-link class="btn btn-secondary" :to="{ path: '/administrator/users' }">Cancel</router-link>
                 </div>   
             </form>
         </div>      
@@ -37,42 +35,41 @@
 </template>
 
 <script>
-import {  mapActions } from 'vuex'
+import {  mapActions, mapGetters } from 'vuex'
 
 export default {
-    name: 'AddUser',
+    name: 'EditUser',
     data() {
         return {
-            name: '',
-            email: '',
-            password: '',
-            role: null,
             roles: ['Admin', 'Manager', 'User'],
             option: 'Choose Role...'
         }
     },
+    computed: {
+        ...mapGetters(['user'])
+    },
   methods: {
-    ...mapActions(['addUser']),
+    ...mapActions(['updateUser']),
     validateBeforeSubmit() {
             this.$validator.validateAll().then((result) => {
                 if (result) {
-                    this.addNewUser();
+                    this.updateThisUser();
                 }
             });
         },
-    addNewUser() {
-      this.addUser({
-        name: this.name,
-        email: this.email,
-        password: this.password,
-        role: this.role
+    updateThisUser() {
+      this.updateUser({
+        id: this.user.id,
+        name: this.user.name,
+        email: this.user.email,
+        role: this.user.roles[0].name
       }).then(() => {
           this.$router.push({path: '/administrator/users'});
       })
     }
   },
   created() {
-      this.role = this.option
+      this.$store.dispatch('retrieveUser', this.$route.params.id)
   }
 }
 </script>

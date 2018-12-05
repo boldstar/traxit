@@ -12,8 +12,9 @@
                 <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Type</label>
             </div>
             <select class="custom-select" id="client_id" v-model="filterType">
-                <option v-for="(type, index) in types" :key="index">
-                {{ type }}
+                <option>{{ type }}</option>
+                <option v-for="(category, index) in filterCategories" :key="index">
+                {{ category }}
                 </option>
             </select>
         </div> 
@@ -76,7 +77,7 @@
     <nav aria-label="pagination" class="d-flex" v-if="!tableLoaded">
         <ul class="pagination">
             <li class="page-item">
-            <button class="page-link" @click="prevPage">Previous</button>            
+                <button class="page-link" @click="prevPage">Previous</button>            
             </li>
             <li class="page-item">
                 <a class="page-link">
@@ -84,7 +85,7 @@
                 </a>            
             </li>
             <li class="page-item">
-            <button class="page-link" @click="nextPage">Next</button>           
+                <button class="page-link" @click="nextPage">Next</button>           
             </li>
         </ul>
         <div class="pl-3">
@@ -97,7 +98,12 @@
                 </select>
             </div>
         </div>
-        
+        <div class="ml-auto align-self-center">
+            <label for="count" class="font-weight-bold">Viewing: </label>
+            <span id="count">
+                {{ sortedClients.length }} of {{ clients.length }}
+            </span>
+        </div>  
     </nav>
 
     </div>
@@ -121,14 +127,14 @@ export default {
             file: '',
             fileLabel: null,
             hasFile: false,
-            filterType: 'All',
+            filterType: '',
             searchClient: '',
             currentSort: 'name',
             currentSortDir: 'asc',
             currentPage: 1,
             pageSize: null,
             options: ['10', '25', '50', '100'],
-            types: ['All', 'Client', 'Prospect']
+            type: 'All'
         }
     },
     computed: {
@@ -148,6 +154,14 @@ export default {
             let end = this.currentPage*this.pageSize;
             if(index >= start && index < end) return true;
             }); 
+        },
+        filterCategories() {
+            //map categories
+            const categories = this.clients.map(client => client.category)
+            //filter duplicates
+            const result = categories.filter((v, i) => categories.indexOf(v) === i)
+            //return result
+            return result
         }
     },
     methods:{
@@ -179,8 +193,8 @@ export default {
     created() {
         this.$store.dispatch('retrieveClients');
         this.tableLoaded = true;
-        this.filterType = this.types[0]
         this.pageSize = this.options[1]
+        this.filterType = this.type
         var self = this;
         setTimeout(() => {
             self.tableLoaded = false;
@@ -190,13 +204,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .hover {
 
     &:hover {
         cursor: pointer;
     }
 }
-
 
 </style>
 

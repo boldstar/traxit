@@ -21,7 +21,7 @@
                         <input type="password" name="password" class="form-control" placeholder="Password" :class="{ 'input-error': errors.has('password') }"  v-model="password" v-validate="'required|min:6'">
                         <span class="form-error">{{ errors.first('password') }}</span>
                     </div>
-                    <button type="submit" class="btn btn-block btn-primary py-2 mb-3 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-block btn-primary py-2 mb-3 d-flex justify-content-center" :disabled="trying">
                         <div v-if="loading">
                         <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                         </div>
@@ -52,6 +52,7 @@ export default {
             serverError: '',
             successMessage: this.dataSuccessMessage,
             loading: false,
+            trying: false,
         }
     },
     methods: {
@@ -64,15 +65,18 @@ export default {
         },
         login() {
             this.loading = true
+            this.trying = true
             this.$store.dispatch('retrieveToken', {
                 username: this.username,
                 password: this.password,
             })
             .then(response => {
+                this.trying =false
                 this.loading = false
                 this.$router.push('/')
             })
             .catch(error => {
+                this.trying = false
                 this.loading = false
                 this.serverError = error.response.data
                 this.password = ''

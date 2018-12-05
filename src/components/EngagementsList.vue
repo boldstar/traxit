@@ -10,8 +10,9 @@
                   <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Type</label>
                 </div>
                 <select class="custom-select" id="client_id" v-model="filterType">
-                  <option v-for="(type, index) in types" :key="index">
-                    {{ type }}
+                    <option> {{ type }}</option>
+                  <option v-for="(returntype, index) in filterReturnTypes" :key="index">
+                    {{ returntype }}
                   </option>
                 </select>
                 </div>
@@ -72,10 +73,14 @@
                 </select>
             </div>
         </div>
-
-        
+        <div class="ml-auto align-self-center">
+            <label for="count" class="font-weight-bold">Viewing: </label>
+            <span id="count">
+                {{ sortedEngagements.length }} of {{ engagements.length }}
+            </span>
+        </div>   
     </nav>
-        
+  
         <div v-if="tableLoaded" class="lds-dual-ring justify-content-center"></div>
 
     </div>
@@ -95,14 +100,14 @@ export default {
     data() {
         return {
             tableLoaded: false,
-            filterType: 'All',
+            filterType: '',
             searchEngagement: '',
             currentSort: 'last_name',
             currentSortDir: 'asc',
             currentPage: 1,
             pageSize: null,
             options: ['10', '25', '50', '100'],
-            types: ['All', '1040', '1120', '941'],
+            type: 'All'
         }
     },
     computed: {
@@ -122,7 +127,15 @@ export default {
             let end = this.currentPage*this.pageSize;
             if(index >= start && index < end) return true;
             }); 
-        }
+        },
+        filterReturnTypes() {
+            //map categories
+            const returns = this.engagements.map(engagement => engagement.return_type)
+            //filter duplicates
+            const result = returns.filter((v, i) => returns.indexOf(v) === i)
+            //return result
+            return result
+        },
     },
     methods:{
         sort:function(s) {
@@ -136,7 +149,7 @@ export default {
             if((this.currentPage*this.pageSize) < this.engagements.length) this.currentPage++;
         },
         prevPage:function() {
-            if(this.currentPage > 1) this.currentPage--;
+            if(this.currentPage > 1) this.currentPage--; 
         },
         downloadEngagements() {
             this.$store.dispatch('downloadEngagements')
@@ -145,7 +158,7 @@ export default {
     created() {
         this.$store.dispatch('retrieveEngagements')
         this.tableLoaded = true;
-        this.filterType = this.types[0]
+        this.filterType = this.type
         this.pageSize = this.options[1]
         var self = this;
         setTimeout(() => {

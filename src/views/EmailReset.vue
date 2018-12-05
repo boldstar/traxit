@@ -6,7 +6,7 @@
         <div class="card shadow">
             <div class="card-header bg-light text-primary border-primary d-flex justify-content-between">
                 <h6 class="mt-2">Request Reset</h6>
-                <router-link class="btn btn-sm btn-secondary" to="/login">Back To Login</router-link>
+                <router-link class="btn btn-sm btn-outline-primary" to="/login">Login <i class="fas fa-sign-in-alt ml-2"></i></router-link>
             </div>
             <div class="card-body">
                 <div class="text-left">
@@ -18,7 +18,7 @@
                         <input :class="{ 'input-error': errors.has('email') }" type="text" name="email" class="form-control" placeholder="Enter email" v-model="email" v-validate="'required|email'">
                         <span class="form-error">{{ errors.first('email') }}</span>
                     </div>
-                    <button type="submit" class="btn btn-block btn-primary py-2 mb-3 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-block btn-primary py-2 mb-3 d-flex justify-content-center" :disabled="loading">
                         <div v-if="loading">
                         <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                         </div>
@@ -43,11 +43,10 @@ export default {
         return {
             email: '',
             serverError: '',
-            loading: false,
         }
     },
     computed: {
-        ...mapGetters(['passwordAlert'])
+        ...mapGetters(['passwordAlert', 'loading'])
     },
     methods: {
         validateBeforeSubmit() {

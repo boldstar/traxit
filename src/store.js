@@ -45,6 +45,7 @@ export default new Vuex.Store({
     resetError:'',
     passwordAlert: '',
     processing: false,
+    loading: false,
     token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
   },
@@ -129,6 +130,9 @@ export default new Vuex.Store({
     },
     passwordAlert(state) {
       return state.passwordAlert
+    },
+    loading(state) {
+      return state.loading
     }
   },
   mutations: {
@@ -373,6 +377,10 @@ export default new Vuex.Store({
     },
     passwordAlert(state, alert) {
       state.passwordAlert = alert
+      state.loading = false
+    },
+    loading(state) {
+      state.loading = !state.loading
     }
   },
   actions: {
@@ -427,6 +435,7 @@ export default new Vuex.Store({
       })
     },
     forgotReset(context, email) {
+      context.commit('loading')
       axios.post('/password/create', {
         email: email.email
       })
@@ -455,11 +464,9 @@ export default new Vuex.Store({
         token: data.token
       })
       .then(response => {
-        context.commit('updatePassword', response.data)
         context.commit('resetSuccess', response.data)
       })
       .catch(error => {
-        console.log(error.response.data)
         context.commit('resetError', error.response.data)
       })
     },

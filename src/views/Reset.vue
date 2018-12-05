@@ -1,11 +1,12 @@
 <template>
-  <div class="reset d-flex justify-content-center">
+  <div>
+  <div class="reset d-flex justify-content-center" v-if="resetToken">
 
-      <div class="bg-light" v-if="resetSuccess">
+      <div class="bg-light p-3 font-weight-bold" v-if="resetSuccess">
           <span>Please Proceed To Login, Password Reset Was Succesful</span>
       </div>
 
-      <div class="bg-light" v-if="resetError">
+      <div class="bg-light p-3" v-if="resetError">
           <span>{{ resetError }}</span>
       </div>
     
@@ -31,6 +32,9 @@
         </form>
       </div>
     </div>
+
+    <span class="h3" else>Im sorry, the reset token is invalid!</span>
+  </div>
 </template>
 
 <script>

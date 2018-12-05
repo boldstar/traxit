@@ -43,6 +43,7 @@ export default new Vuex.Store({
     alert: '',
     resetToken: '',
     resetError:'',
+    passwordAlert: '',
     processing: false,
     token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
@@ -125,6 +126,9 @@ export default new Vuex.Store({
     },
     resetError(state) {
       return state.alert
+    },
+    passwordAlert(state) {
+      return state.passwordAlert
     }
   },
   mutations: {
@@ -366,6 +370,9 @@ export default new Vuex.Store({
     },
     resetError(state, error) {
       state.resetError = error
+    },
+    passwordAlert(state, alert) {
+      state.passwordAlert = alert
     }
   },
   actions: {
@@ -948,7 +955,8 @@ export default new Vuex.Store({
     },
     searchDatabase(context, data) {
       axios.post('/search', {
-        keyword: data.keyword
+        keyword: data.keyword,
+        category: data.category
       }).then(response => {
         context.commit('searchDatabase', response.data)
       }).catch(error => {

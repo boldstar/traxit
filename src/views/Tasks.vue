@@ -125,14 +125,6 @@ export default {
         status: null
       },
       option: 'Choose...',
-      statuses: [
-        'Recieved',
-        'Scanned',
-        'Preparation',
-        'Review',
-        '2nd Review',
-        'Complete'
-      ]
     }
   },
    components:{

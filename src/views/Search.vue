@@ -82,7 +82,7 @@
 
 
         <div v-else>
-            Sorry, there is nothing that matches the given search! Please try again =)
+            <img class="search-engine" src="@/assets/search-engine.png" alt="">
         </div>
     </div>
 </template>
@@ -107,7 +107,10 @@ export default {
 </script>
 
 <style lang="scss">
-
+.search-engine {
+    background-size: cover;
+    height: 80vh;
+}
 
 </style>
 

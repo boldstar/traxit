@@ -15,19 +15,19 @@
                 </div>
                 <input type="text" placeholder="Type Here.." class="form-control" v-model="search">
                 <div class="input-group-append">
-                    <router-link class="btn btn-secondary" to="/search" @click.native="searchDatabase">Search</router-link>
+                    <router-link class="btn btn-secondary" to="/search" @click.native="searchDatabase" @keyup.enter.native="searchDatabase">Search</router-link>
                 </div>
                 </div>
             </li>
             <li v-if="loggedIn" class="dropdown align-self-center"> 
                 <i class="user fas fa-user-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dLabel"></i>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel">
-                <router-link class="dropdown-item" to="#">Profile</router-link>
-                <div v-if="$can('read', admin)">
-                    <router-link class="dropdown-item" to="/administrator/account">Admin</router-link>
-                </div>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item logout" @click="logout">Logout<i class="ml-5 fas fa-sign-out-alt"></i></a>
+                    <router-link class="dropdown-item" to="#">Profile</router-link>
+                    <div v-if="$can('read', admin)">
+                        <router-link class="dropdown-item" to="/administrator/account">Admin</router-link>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item logout" @click="logout">Logout<i class="ml-5 fas fa-sign-out-alt"></i></a>
                 </div>
             </li>
         </ul>
@@ -60,10 +60,11 @@ export default {
             })
         },
         searchDatabase() {
-            this.$store.dispatch('searchDatabase', { keyword: this.search})
+            this.$store.dispatch('searchDatabase', { keyword: this.search, category: this.category})
             .then(() => {
                 this.$router.push({path: '/search', query: {keyword: this.search }})
                 this.search = ''
+                this.category = this.option
             })
         }
     },

@@ -27,7 +27,7 @@
             <div class="custom-file">
                 <label class="custom-file-label" for="inputGroupFile04" v-if="!hasFile">Choose file</label>
                 <label class="custom-file-label" for="inputGroupFile04" v-if="hasFile">{{ fileLabel }}</label>
-                <input type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" v-on:change="selectedFile($event)">
+                <input type="file" class="custom-file-input px-2" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" v-on:change="selectedFile($event)">
             </div>
             <div class="input-group-append">
                 <button class="btn btn-primary" id="inputGroupFileAddon04" @click="uploadContacts">Submit</button>

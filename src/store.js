@@ -41,6 +41,8 @@ export default new Vuex.Store({
     user: '',
     result: '',
     alert: '',
+    resetToken: '',
+    resetError:'',
     processing: false,
     token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
@@ -54,6 +56,9 @@ export default new Vuex.Store({
     },
     loggedIn(state) {
       return state.token != null;
+    },
+    resetToken(state) {
+      return state.resetToken
     },
     processing(state) {
       return state.processing
@@ -110,9 +115,15 @@ export default new Vuex.Store({
       return state.result
     },
     errorAlert(state) {
-      return state.alert
+      return state.resetError
     },
     successAlert(state) {
+      return state.alert
+    },
+    resetSuccess(state) {
+      return state.alert
+    },
+    resetError(state) {
       return state.alert
     }
   },
@@ -122,6 +133,9 @@ export default new Vuex.Store({
     },
     startProcessing(state) {
       state.processing = !state.processing
+    },
+    resetToken(state, token) {
+      state.resetToken = token
     },
     stopProcessing(state) {
       state.processing = false
@@ -343,6 +357,15 @@ export default new Vuex.Store({
     },
     userDetails(state, user) {
       state.user = user
+    },
+    notifyEmailSent(state, alert) {
+      state.alert = alert
+    },
+    resetSuccess(state, alert) {
+      state.alert = alert
+    },
+    resetError(state, error) {
+      state.resetError = error
     }
   },
   actions: {
@@ -384,6 +407,54 @@ export default new Vuex.Store({
         .catch(error => {
           console.log(error.response.data)
         })
+    },
+    requestReset(context, email) {
+      axios.post('/password/create', {
+        email: email
+      })
+      .then(response => {
+        context.commit('passwordAlert', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    forgotReset(context, email) {
+      axios.post('/password/create', {
+        email: email.email
+      })
+      .then(response => {
+        context.commit('passwordAlert', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        context.commit('passwordAlert', error.response.data)
+      })
+    },
+    retrieveResetToken(context, token) {
+      axios.get('/password/find/' + token)
+      .then(response => {
+        context.commit('resetToken', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    updatePassword(context, data) {
+      axios.post('/password/reset', {
+        email: data.email,
+        password: data.password,
+        password_confirmation: data.password_confirmation,
+        token: data.token
+      })
+      .then(response => {
+        context.commit('updatePassword', response.data)
+        context.commit('resetSuccess', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        context.commit('resetError', error.response.data)
+      })
     },
     destroyToken(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token

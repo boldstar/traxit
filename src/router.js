@@ -21,6 +21,28 @@ export default new Router({
       },
     },
     {
+      // this is the route for logging in to the app
+      path: '/get-reset-link',
+      name: 'get-reset-link',
+      component: () => import(/* webpackChunkName: "login" */ './views/EmailReset.vue'),
+      props: true,
+      meta: {
+        requiresVisitor: true,
+        layout: "landing",
+      },
+    },
+    {
+      // this is the route for logging in to the app
+      path: '/reset-password/:token',
+      name: 'reset-password',
+      component: () => import(/* webpackChunkName: "login" */ './views/Reset.vue'),
+      props: true,
+      meta: {
+        passwordReset: true,
+        layout: "reset",
+      },
+    },
+    {
       path: '/administrator',
       name: 'administrator',
       component: () => import(/* webpackChunkName: "logout" */ './views/Administrator.vue'),

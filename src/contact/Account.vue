@@ -4,7 +4,7 @@
 
         <!-- this is the details of the account -->
     <div class="col-8 col-md-7 d-inline-flex flex-column pl-0 ml-2" v-if="$route.name == 'account'">
-        <div>
+        <div class="mb-3">
             <div class="card shadow-sm">
                 <div class="card-header text-left d-flex justify-content-between py-0">
                     <div class="d-flex h4 mt-2 align-items-center">
@@ -16,7 +16,7 @@
                 <ul class="card-body px-5 h6 text-left">
                     <li class=" justify-content-between d-flex mb-2">
                         <span class="font-weight-bold">Date Of Birth: </span>
-                        {{client.dob}}
+                        {{client.dob | formatDate}}
                     </li>
                     <li class=" text-capitalize justify-content-between d-flex mb-2">
                         <span class="font-weight-bold">Occupation: </span>
@@ -41,7 +41,7 @@
                         <span class="card-title text-capitalize h4 mt-2 align-self-center">{{ client.spouse_first_name }} {{client.spouse_middle_initial}} {{client.spouse_last_name}}</span>
                 </div>
                 <ul class="card-body px-5 h6 text-left">
-                    <li class="justify-content-between d-flex mb-2"><span class="font-weight-bold">Date Of Birth: </span> {{client.spouse_dob}}</li>
+                    <li class="justify-content-between d-flex mb-2"><span class="font-weight-bold">Date Of Birth: </span> {{client.spouse_dob | formatDate}}</li>
                     <li class="text-capitalize justify-content-between d-flex mb-2"><span class="font-weight-bold">Occupation: </span> {{client.spouse_occupation}}</li>
                     <li class="justify-content-between d-flex mb-2"><span class="font-weight-bold">Email: </span> {{client.spouse_email}}</li>
                     <li class="justify-content-between d-flex mb-2"><span class="font-weight-bold">Cell Phone: </span> {{client.spouse_cell_phone}}</li>
@@ -99,7 +99,7 @@
                             Date Of Birth:
                         </span>
                         <div>
-                            {{ dependent.dob }}
+                            {{ dependent.dob | formatDate }}
                         </div>
                     </div>
                 </div>

@@ -102,7 +102,7 @@ export default {
             currentPage: 1,
             pageSize: null,
             options: ['10', '25', '50', '100'],
-            types: ['All', '1040', '1120', '941']
+            types: ['All', '1040', '1120', '941'],
         }
     },
     computed: {
@@ -115,12 +115,13 @@ export default {
             return 0;
             }).filter(engagement => {
               if(this.filterType === 'All'){ return engagement } else{ return engagement.return_type === this.filterType} 
-            }).filter((row, index) => {
+            }).filter( engagement => {
+            return !this.searchEngagement || engagement.client.last_name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 })
+            .filter((row, index) => {
             let start = (this.currentPage-1)*this.pageSize;
             let end = this.currentPage*this.pageSize;
             if(index >= start && index < end) return true;
-            }).filter( engagement => {
-            return !this.searchEngagement || engagement.client.last_name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 }); 
+            }); 
         }
     },
     methods:{

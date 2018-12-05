@@ -19,11 +19,13 @@ let Bootstrap = require('bootstrap');
 import Default from './layouts/Default.vue';
 import Landing from "./layouts/Landing.vue";
 import Admin from "./layouts/Admin.vue";
+import ResetPassword from "./layouts/ResetPassword.vue";
 import Breadcrumb from "./components/Breadcrumb.vue";
 
 Vue.component('default-layout', Default);
 Vue.component('landing-layout', Landing);
 Vue.component('admin-layout', Admin);
+Vue.component('reset-layout', ResetPassword);
 Vue.component('breadcrumb', Breadcrumb);
 
 Vue.config.productionTip = false;
@@ -59,6 +61,10 @@ router.beforeEach((to, from, next) => {
         path: '/',
       })
     } else {
+      next()
+    }
+  } else if(to.matched.some(record => record.meta.passwordReset)) {
+    if(store.getters.loggedIn || !store.getters.loggedIn) {
       next()
     }
   }

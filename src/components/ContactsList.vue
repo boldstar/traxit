@@ -141,12 +141,13 @@ export default {
             return 0;
             }).filter(client => {
               if(this.filterType === 'All'){ return client } else{ return client.category === this.filterType} 
-            }).filter((row, index) => {
+            }).filter( client => {
+            return !this.searchClient || client.last_name.toLowerCase().indexOf(this.searchClient.toLowerCase()) >= 0 })
+            .filter((row, index) => {
             let start = (this.currentPage-1)*this.pageSize;
             let end = this.currentPage*this.pageSize;
             if(index >= start && index < end) return true;
-            }).filter( client => {
-            return !this.searchClient || client.last_name.toLowerCase().indexOf(this.searchClient.toLowerCase()) >= 0 }); 
+            }); 
         }
     },
     methods:{

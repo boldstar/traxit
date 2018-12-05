@@ -23,7 +23,7 @@
           <select :class="{ 'input-error': errors.has('Contact') }" class="form-control" id="client_id" v-model.number="engagement.client_id" v-validate="{ is_not: option }" name="Contact">
             <option disabled>{{ option }}</option>
             <option v-for="client in allClients" :key="client.id" :value="client.id">
-              {{ client.last_name }}, {{client.first_name}} & {{client.spouse_first_name }}
+              {{ client.last_name }}, {{client.first_name}} <span v-if="client.has_spouse == 1"> & </span>{{client.spouse_first_name }}
             </option>
           </select>
         </div>

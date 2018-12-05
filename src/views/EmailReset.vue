@@ -1,5 +1,5 @@
 <template>
-    <div class="login-form page-wrapper w-25">
+    <div class="reset page-wrapper w-25">
 
         <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
 
@@ -7,29 +7,25 @@
 
         <div class="card shadow">
             <div class="card-header bg-light text-primary border-primary d-flex justify-content-between">
-                <h6 class="mt-2">Login</h6>
+                <h6 class="mt-2">Request Reset</h6>
+                <router-link class="btn btn-sm btn-secondary" to="/login">Back To Login</router-link>
             </div>
             <div class="card-body">
+                <div class="text-left">
+                    <span class="font-weight-bold">For your safety we will email a reset link!</span>
+                </div>
                 <form @submit.prevent="validateBeforeSubmit" class="text-left">
                     <div class="form-group mt-3">
                         <label >Email address</label>
-                        <input type="text" name="email" class="form-control" placeholder="Enter email" v-model="username" v-validate="'required|email'">
+                        <input type="text" name="email" class="form-control" placeholder="Enter email" v-model="email" v-validate="'required|email'">
                         <span class="form-error">{{ errors.first('email') }}</span>
-                    </div>
-                    <div class="form-group mb-5">
-                        <label >Password</label>
-                        <input type="password" name="password" class="form-control" placeholder="Password" :class="{ 'input-error': errors.has('password') }"  v-model="password" v-validate="'required|min:6'">
-                        <span class="form-error">{{ errors.first('password') }}</span>
                     </div>
                     <button type="submit" class="btn btn-block btn-primary py-2 mb-3 d-flex justify-content-center">
                         <div v-if="loading">
                         <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                         </div>
-                        <span v-show="!loading">Login</span>
+                        <span v-show="!loading">Submit Request</span>
                     </button>
-                    <div class="forgot d-flex justify-content-between">
-                        <span>Forgot password?  </span> <router-link to="/get-reset-link">Click Here</router-link>
-                    </div>
                 </form>
             </div>
         </div>
@@ -39,7 +35,7 @@
 <script>
 
 export default {
-    name: 'login-form',
+    name: 'email-reset',
     props: {
         dataSuccessMessage: {
             type: String,
@@ -47,8 +43,7 @@ export default {
     },
     data () {
         return {
-            username: '',
-            password: '',
+            email: '',
             serverError: '',
             successMessage: this.dataSuccessMessage,
             loading: false,
@@ -58,11 +53,11 @@ export default {
         validateBeforeSubmit() {
             this.$validator.validateAll().then((result) => {
                 if (result) {
-                    this.login();
+                    this.requestReset();
                 }
             });
         },
-        login() {
+        requestReset() {
             this.loading = true
             this.$store.dispatch('retrieveToken', {
                 username: this.username,

@@ -26,7 +26,7 @@
               </div>
               <select class="form-control" id="type" v-model="engagement.return_type">
               <option disabled>{{ option }}</option>
-              <option v-for="type in types" :key="type.id" :value="type">{{ type }}</option>
+              <option v-for="type in returnTypes" :key="type.id" :value="type.return_type">{{ type.return_type }}</option>
               </select>
             </div>
 
@@ -89,10 +89,6 @@ export default {
         assigned_to: null,
         status: null,
       },
-      types: [ 
-        '1040', 
-        '1120',
-      ],
       option: 'Choose..',
       empty: 'Please select workflow first...',
     }
@@ -102,7 +98,8 @@ export default {
         [
           'client',
           'allWorkflows',
-          'users'
+          'users',
+          'returnTypes'
         ]
       ),
   },
@@ -129,6 +126,7 @@ export default {
     },
   },
   created: function() {
+    this.$store.dispatch('getReturnTypes')
     this.engagement.return_type = this.option
     this.engagement.workflow_id = this.option
     this.engagement.assigned_to = this.option

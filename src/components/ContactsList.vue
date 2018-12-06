@@ -9,7 +9,7 @@
         <div class="mr-auto ml-2">
             <div class="input-group">
                 <div class="input-group-prepend">
-                <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Type</label>
+                <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Category</label>
             </div>
             <select class="custom-select" id="client_id" v-model="filterType">
                 <option>{{ type }}</option>

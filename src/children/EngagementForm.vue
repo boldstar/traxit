@@ -48,7 +48,7 @@
           </div>
           <select :class="{ 'input-error': errors.has('Return Type') }" class="form-control" id="type" v-model="engagement.return_type" v-validate="{ is_not: option }" name="Return Type">
               <option  selected disabled>{{ option }}</option>
-              <option v-for="type in types" :key="type.id" :value="type">{{ type }}</option>
+              <option v-for="type in returnTypes" :key="type.id" :value="type.return_type">{{ type.return_type }}</option>
           </select>
         </div>
           <span class="form-error" v-show="errors.has('Return Type')">{{ errors.first('Return Type') }}</span>
@@ -114,10 +114,6 @@ export default {
         assigned_to: null,
         status: null,
       },
-      types: [ 
-        '1040', 
-        '1120',
-      ],
       option: 'Choose...',
       empty: 'Please select workflow first...',
     }
@@ -127,7 +123,8 @@ export default {
         [
           'allClients',
           'allWorkflows',
-          'users'
+          'users',
+          'returnTypes'
         ]
       ),
   },
@@ -162,6 +159,7 @@ export default {
     this.$store.dispatch('retrieveClients');
     this.$store.dispatch('retrieveWorkflows');
     this.$store.dispatch('retrieveUsers');
+    this.$store.dispatch('getReturnTypes')
     this.engagement.return_type = this.option
     this.engagement.client_id = this.option
     this.engagement.workflow_id = this.option

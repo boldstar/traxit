@@ -10,12 +10,12 @@
                     </div>
                     <p class="h2 align-self-center">Dashboard</p>
                     <div class="align-self-center">
-                        <button class="btn btn-sm btn-outline-primary"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
+                        <button class="btn btn-sm btn-outline-primary" @click="refresh"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
                     </div>
                 </div>
             </div>
 
-            <div v-if="!loading">
+            <div v-if="!loading && !noData">
 
                 <!-- this is the doughnut chart for the overview of the firm -->
                 <div class="row justify-content-around mt-3">
@@ -41,10 +41,10 @@
 
 
                 <!-- this is the simple list of current tasks -->
-                <div class="col-6" v-if="taskData">
+                <div class="col-6">
                     <span class="h3 mb-4"><i class="fas fa-tasks text-primary mr-3"></i><router-link to="/tasks" class="text-muted">Your Tasks</router-link></span>
                     <br><br>
-                        <table class="table table-hover">
+                    <table class="table table-hover">
                         <thead class="bg-primary text-light">
                         <tr>
                             <th scope="col">#</th>
@@ -53,7 +53,7 @@
                             <th scope="col">Return Type</th>
                         </tr>
                         </thead>
-                        <tbody class="table-bordered">
+                        <tbody class="table-bordered" v-if="taskData">
                         <tr v-for="(task, index) in tasks"  :key="index">
                             <th>{{ index + 1 }}</th>
                             <td>{{ task.engagements[0].client.last_name }}, {{ task.engagements[0].client.first_name }} & {{ task.engagements[0].client.spouse_first_name }}</td>
@@ -62,16 +62,19 @@
                         </tr>
                         </tbody>
                     </table>
+                    <div v-if="!taskData" class="mt-5">
+                        <span class="h3">You Currently Have No Tasks</span>
+                    </div>
                 </div>
             </div>
 
             </div>
 
-    <div v-else>
-        <not-found v-if="noData"></not-found>   
+    <div v-if="noData && !loading">
+        <not-found ></not-found>   
     </div>
 
-    <div v-if="loading" class="lds-dual-ring justify-content-center"></div>
+    <div v-if="loading && !noData" class="lds-dual-ring justify-content-center"></div>
 
 
     </div>  
@@ -165,6 +168,21 @@ export default {
     methods: {
         changeKey(id) {
             this.workflowKey = id
+        },
+        refresh() {
+            this.loading = true
+            this.$store.dispatch('retrieveWorkflows')
+            this.$store.dispatch('retrieveEngagements')
+            this.$store.dispatch('retrieveTasks')
+            var self = this;
+            setTimeout(() => {
+                self.loading = false;
+                if(self.allEngagements == 0){
+                    self.noData = true
+                } else {
+                    self.noData = false
+                }
+            }, 3000);
         }
     },
     created() {
@@ -179,13 +197,23 @@ export default {
             }
             if(this.tasks.length > 0) {
                 self.taskData = true
+                self.noData = false
             } 
             if(this.tasks.length > 0 && this.allWorkflows.length > 0 && this.allEngagements.length > 0) {
                 self.loading = false
+                self.noData = false
             } 
-            else {
+            if(this.allWorkflows.length > 0 && this.allEngagements.length > 0) {
+                self.loading = false
+                self.noData = false
+            } 
+            else if(this.allEngagements.length < 1 && this.tasks.length < 1) {
                 self.noData = true
-                self.loading = true
+                self.loading = false
+            }
+            else if(this.allEngagements.length < 1 && this.allWorkflows.length < 1 && this.tasks.length < 1) {
+                self.noData = true
+                self.loading = false
             }
         }, 3000) 
     },

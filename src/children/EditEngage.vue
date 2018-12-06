@@ -41,7 +41,7 @@
             <label class="input-group-text text-primary" for="option">Return Type</label>
           </div>
           <select class="form-control" id="type" v-model="engagement.return_type">
-              <option v-for="type in types" :key="type.id" :value="type">{{ type }}</option>
+              <option v-for="type in returnTypes" :key="type.id" :value="type.return_type">{{ type.return_type }}</option>
           </select>
         </div>
 
@@ -100,10 +100,7 @@ export default {
   name: 'EditEngagement',
   data() {
     return {
-      types: [
-        '1040',
-        '1120',
-      ]
+      
     }
   },
   components:{
@@ -117,7 +114,8 @@ export default {
         [
           'engagement',
           'users',
-          'allWorkflows'
+          'allWorkflows',
+          'returnTypes'
         ]
       )
   },
@@ -159,6 +157,7 @@ export default {
     this.$store.dispatch('getEngagement', this.$route.params.id);
     this.$store.dispatch('retrieveUsers')
     this.$store.dispatch('retrieveWorkflows')
+    this.$store.dispatch('getReturnTypes')
   }
   
 }

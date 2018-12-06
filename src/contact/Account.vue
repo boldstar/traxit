@@ -3,7 +3,7 @@
         
 
         <!-- this is the details of the account -->
-    <div class="col-8 col-md-7 d-inline-flex flex-column pl-0 ml-2" v-if="$route.name == 'account'">
+    <div class="col-6 d-inline-flex flex-column pl-0 ml-2" v-if="$route.name == 'account'">
         <div class="mb-3">
             <div class="card shadow-sm">
                 <div class="card-header text-left d-flex justify-content-between py-0">

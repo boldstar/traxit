@@ -44,6 +44,8 @@ export default new Vuex.Store({
     resetToken: '',
     resetError:'',
     passwordAlert: '',
+    returntypes: '',
+    account: '',
     processing: false,
     loading: false,
     token: localStorage.getItem('access_token') || null,
@@ -70,6 +72,9 @@ export default new Vuex.Store({
     },
     tasks(state) {
       return state.tasks;
+    },
+    returnTypes(state) {
+      return state.returntypes
     },
     allClients(state) {
       return state.clients;
@@ -133,11 +138,20 @@ export default new Vuex.Store({
     },
     loading(state) {
       return state.loading
+    },
+    accountDetails(state) {
+      return state.account
     }
   },
   mutations: {
     toggleSidebar(state) {
       state.sidebarOpen = !state.sidebarOpen
+    },
+    accountDetails(state, account) {
+      state.account = account[0]
+    },
+    returnTypes(state, returns) {
+      state.returntypes = returns
     },
     startProcessing(state) {
       state.processing = !state.processing
@@ -924,7 +938,8 @@ export default new Vuex.Store({
           context.commit('editWorkflow', response.data)
       })
       .catch(error => {
-          console.log(error.response.data)
+          context.commit('editWorkflow', error.response.data.workflow)
+          context.commit('errorAlert', error.response.data.message)
       })           
     },
     deleteWorkflow(context, id) {
@@ -1013,7 +1028,25 @@ export default new Vuex.Store({
         console.log(error.response.data)
         context.commit('stopProcessing')
       })
-    }
+    },
+    getReturnTypes(context) {
+      axios.get('/engagementReturnTypes')
+      .then(response => {
+        context.commit('returnTypes', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    getAccountDetails(context) {
+      axios.get('/account')
+      .then(response => {
+        context.commit('accountDetails', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
   }, 
 })
 

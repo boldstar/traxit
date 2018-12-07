@@ -6,7 +6,7 @@ import storage from './utils/storage'
 
 export const ability = appAbility
 Vue.use(Vuex)
-axios.defaults.baseURL = 'http://traxit.test/api'
+axios.defaults.baseURL = 'https://traxit.pro/api'
 
 
 

@@ -27,6 +27,7 @@
                         <table class="table">
                             <thead class="text-primary border">
                                 <tr>
+                                <th  scope="col">Category</th>
                                 <th  scope="col">Return Type</th>
                                 <th  scope="col">Year</th>
                                 <th scope="col">Assigned To</th>
@@ -37,6 +38,7 @@
                             </thead>
                             <tbody class="table-bordered">
                                 <tr v-for="(engagement, index) in clientEngagements" :key="index">
+                                <th class="text-capitalize">{{ engagement.category}}</th>
                                 <th>{{ engagement.return_type}}</th>
                                 <th>{{ engagement.year }}</th>
                                 <th>{{ engagement.assigned_to}}</th>

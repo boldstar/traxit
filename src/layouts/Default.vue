@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-
+    
     <Navbar />
 
     <Toolbar class="ml-auto" v-bind:class="[!toggleSidebar ? closedSidebar : '', openSidebar]" />

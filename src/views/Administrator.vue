@@ -2,8 +2,8 @@
     <div id="administrator">
         <hr class="mb-0">
         <div class="row">
-            <div class="col-2 pr-0">
-                <ul class="admin-nav text-right h5 d-flex flex-column pr-0">
+            <div class="col-2 p-0">
+                <ul class="admin-nav text-right h5 d-flex flex-column p-0 m-0">
                     <router-link class="py-3 text-muted pr-4" to="/administrator/account" :class="{ 'is-selected': $route.name === 'app-account' }">Account</router-link>
                     <router-link class="py-3 text-muted pr-4" to="/administrator/workflows" :class="{ 'is-selected': $route.name === 'workflows' }">Workflows</router-link>
                     <router-link class="py-3 text-muted pr-4" to="/administrator/users" :class="{ 'is-selected': $route.name === 'users' }">Team Members</router-link>
@@ -43,7 +43,6 @@ export default {
         border-right: 5px solid #0077ff;
         padding: 40px 0;
     }
-
 
 
 </style>

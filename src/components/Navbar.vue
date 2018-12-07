@@ -2,42 +2,36 @@
     <nav class="navbar navbar-dark fixed-top bg-primary flex-md-nowrap p-0 shadow-sm">
         <a class="navbar-brand col-sm-3 col-md-2 ml-3 text-left" href="/"><i class="far fa-compass mr-1"></i>TRAXIT</a>
         <!-- bread crumbs to go here -->
+        
         <ul class="navbar-nav mr-3 d-flex flex-row">
-        <ul class="navbar-nav d-flex flex-row">
-            <li v-if="!loggedIn" class="pr-4" v-bind:class="{ 'is-active': isActive }">
-                <router-link class="h6 link" to="/register">Sign Up</router-link>
+            <li v-if="loggedIn" class="mr-3">
+                <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                    <select v-model="category" class="btn btn-light text-primary">
+                        <option disabled>{{option}}</option>
+                        <option value="name">Name</option>
+                        <option value="number">Phone #</option>
+                    </select>
+                </div>
+                <input type="text" placeholder="Type Here.." class="form-control" v-model="search">
+                <div class="input-group-append">
+                    <router-link class="btn btn-secondary" to="/search" @click.native="searchDatabase" @keyup.enter.native="searchDatabase">Search</router-link>
+                </div>
+                </div>
             </li>
-            <li v-if="!loggedIn" v-bind:class="{ 'is-active': isActive }">
-                <router-link class="h6 link"  to="/login">Login</router-link>
+            <li v-if="loggedIn" class="dropdown align-self-center"> 
+                <i class="user fas fa-user-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dLabel"></i>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel">
+                    <router-link class="dropdown-item" to="/profile">Profile</router-link>
+                    <div v-if="$can('read', admin)">
+                        <router-link class="dropdown-item" to="/administrator/account">Admin</router-link>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item logout" @click="logout">Logout<i class="ml-5 fas fa-sign-out-alt"></i></a>
+                </div>
             </li>
         </ul>
-        <li v-if="loggedIn" class="mr-3">
-            <div class="input-group input-group-sm">
-            <div class="input-group-prepend">
-                <select v-model="category" class="btn btn-light text-primary">
-                    <option disabled>{{option}}</option>
-                    <option value="name">Name</option>
-                    <option value="number">Phone #</option>
-                </select>
-            </div>
-            <input type="text" placeholder="Type Here.." class="form-control" v-model="search">
-            <div class="input-group-append">
-                <router-link class="btn btn-secondary" to="/search" @click.native="searchDatabase">Search</router-link>
-            </div>
-            </div>
-        </li>
-        <li v-if="loggedIn" class="dropdown align-self-center"> 
-            <i class="user fas fa-user-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dLabel"></i>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel">
-            <router-link class="dropdown-item" to="#">Profile</router-link>
-            <div v-if="$can('read', admin)">
-                <router-link class="dropdown-item" to="/administrator/account">Admin</router-link>
-            </div>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item logout" @click="logout">Logout<i class="ml-5 fas fa-sign-out-alt"></i></a>
-            </div>
-        </li>
-        </ul>
+        
     </nav>
 </template>
 
@@ -56,7 +50,7 @@ export default {
     computed: {
         loggedIn() {
         return this.$store.getters.loggedIn
-        }
+        },
     },
      methods: {
         logout() {
@@ -66,10 +60,11 @@ export default {
             })
         },
         searchDatabase() {
-            this.$store.dispatch('searchDatabase', { keyword: this.search})
+            this.$store.dispatch('searchDatabase', { keyword: this.search, category: this.category})
             .then(() => {
                 this.$router.push({path: '/search', query: {keyword: this.search }})
                 this.search = ''
+                this.category = this.option
             })
         }
     },
@@ -123,7 +118,8 @@ export default {
     }
 
     .is-active {
-        color: white;
+        color: #0077ff;
+        background-color: rgba(187, 187, 187, 0.486);
     }
 
     input .search{

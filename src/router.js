@@ -21,14 +21,26 @@ export default new Router({
       },
     },
     {
-      // this is the route to the register form
-      path: '/register',
-      name: 'register',
-      component: () => import(/* webpackChunkName: "login" */ './views/Register.vue'),
+      // this is the route for logging in to the app
+      path: '/get-reset-link',
+      name: 'get-reset-link',
+      component: () => import(/* webpackChunkName: "login" */ './views/EmailReset.vue'),
+      props: true,
       meta: {
         requiresVisitor: true,
         layout: "landing",
-      }
+      },
+    },
+    {
+      // this is the route for logging in to the app
+      path: '/reset-password/:token',
+      name: 'reset-password',
+      component: () => import(/* webpackChunkName: "login" */ './views/Reset.vue'),
+      props: true,
+      meta: {
+        passwordReset: true,
+        layout: "reset",
+      },
     },
     {
       path: '/administrator',
@@ -72,10 +84,21 @@ export default new Router({
             path: 'users',
             name: 'users',
             component: () => import('@/children/Users.vue'),
-              meta: {
-                requiresAuth: true,
-                layout: "admin",
-              },
+            meta: {
+              requiresAuth: true,
+              layout: "admin",
+            },
+            children: [
+              {
+                path: 'edit-user/:id',
+                name: 'edit-user',
+                component: () => import('@/children/EditUser.vue'),
+                meta: {
+                  requiresAuth: true,
+                  layout: "admin"
+                }
+              }
+            ]
           },
           {
             path: 'add-user',
@@ -95,6 +118,7 @@ export default new Router({
       component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue'),
       meta: {
         requiresAuth: true,
+        layout: "default",
         breadCrumb: [
           { name: 'Dashboard' }
         ]
@@ -107,6 +131,7 @@ export default new Router({
       component: () => import(/* webpackChunkName: "firm" */ './views/Firm.vue'),
       meta: {
         requiresAuth: true,
+        layout: "default",
         breadCrumb: [
           { name: 'Firm' }
         ]
@@ -119,6 +144,7 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/Contacts.vue'),
       meta: {
         requiresAuth: true,
+        layout: "default",
         breadCrumb: [
           { name: 'Contacts' }
         ]
@@ -131,6 +157,7 @@ export default new Router({
       component: () => import('./views/ContactDetails.vue'),
       meta: {
         requiresAuth: true,
+        layout: "default",
         breadCrumb: [
           { name: 'Contact Details' }
         ]
@@ -180,7 +207,29 @@ export default new Router({
                     { name: 'Edit Dependent' }
                   ]
                 },
-              }
+              },
+              {
+              // this is the path to add dependent
+              path: 'add-business',
+              component: () => import('@/children/AddBusiness.vue'),
+                meta: {
+                  requiresAuth: true,
+                  breadCrumb: [
+                    { name: 'Add Business' }
+                  ]
+                },
+              },
+              {
+              // this is the path to add dependent
+              path: 'edit-business/:business',
+              component: () => import('@/children/EditBusiness.vue'),
+                meta: {
+                  requiresAuth: true,
+                  breadCrumb: [
+                    { name: 'Edit Business' }
+                  ]
+                },
+              },
             ]
           },
           {
@@ -283,6 +332,7 @@ export default new Router({
       component: () => import(/* webpackChunkName: "add" */ './views/Add.vue'),
       meta: {
         requiresAuth: true,
+        layout: "default",
         breadCrumb: [
           { name: 'Add New' }
         ]
@@ -296,6 +346,17 @@ export default new Router({
               requiresAuth: true,
               breadCrumb: [
                 { name: 'New Contact' }
+            ]
+          },
+        },
+        {
+          // this is the children route for adding a new contact
+          path: 'business',
+          component: () => import('@/children/BusinessForm.vue'),
+            meta: {
+              requiresAuth: true,
+              breadCrumb: [
+                { name: 'New Business' }
             ]
           },
         },
@@ -319,8 +380,21 @@ export default new Router({
       component: () => import(/* webpackChunkName: "tasks" */ './views/Tasks.vue'),
       meta: {
         requiresAuth: true,
+        layout: "default",
         breadCrumb: [
           { name: 'Tasks' }
+        ]
+      }
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: () => import(/* webpackChunkName: "tasks" */ './views/Profile.vue'),
+      meta: {
+        requiresAuth: true,
+        layout: "default",
+        breadCrumb: [
+          { name: 'Profile' }
         ]
       }
     },
@@ -331,6 +405,7 @@ export default new Router({
     component: () => import(/* webpackChunkName: "accounts" */ './views/Engagements.vue'),
     meta: {
         requiresAuth: true,
+        layout: "default",
         breadCrumb: [
           { name: 'Engagements' }
         ]
@@ -343,6 +418,7 @@ export default new Router({
     component: () => import(/* webpackChunkName: "accounts" */ './views/EngagementDetails.vue'),
     meta: {
         requiresAuth: true,
+        layout: "default",
         breadCrumb: [
           { name: 'Engagement Details' }
         ]
@@ -396,6 +472,7 @@ export default new Router({
   component: () => import(/* webpackChunkName: "accounts" */ './views/Search.vue'),
   meta: {
       requiresAuth: true,
+      layout: "default",
       breadCrumb: [
         { name: 'Search' }
       ]

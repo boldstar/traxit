@@ -23,14 +23,18 @@
         <table class="table table-bordered h3 mt-3">
           <thead class="text-primary">
             <tr>
+              <th class="py-4" scope="col">Category</th>
+              <th class="py-4" scope="col">Name</th>
               <th class="py-4" scope="col">Return Type</th>
               <th class="py-4" scope="col">Year</th>
-              <th class="py-4" scope="col">Assigned To</th>
+              <th class="py-4" scope="col">Currently Assigned</th>
               <th class="py-4" scope="col">Status</th>
             </tr>
           </thead>
           <tbody>
             <tr>
+              <th class="py-5 text-capitalize">{{ engagement.category}}</th>
+              <th class="py-5">{{ engagement.name}}</th>
               <th class="py-5">{{ engagement.return_type}}</th>
               <th class="py-5">{{ engagement.year }}</th>
               <th class="py-5">{{ engagement.assigned_to}}</th>

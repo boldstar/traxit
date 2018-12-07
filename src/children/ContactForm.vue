@@ -3,21 +3,28 @@
 
     <div class="server-error" v-if="serverError">{{ serverError }}</div>
 
-    <div class="justify-content-start d-flex mb-3">
+    <div class="justify-content-start d-flex mb-1 p-3 shadow">
       <router-link to="/add" class="btn btn-sm btn-outline-secondary"><i class="fas fa-arrow-circle-left mr-2"></i>Back</router-link>
     </div>
-    <div class="card-body bg-light border-primary mb-2">
+    <div class="card-body bg-light border mb-2">
       <h4 class="text-left text-primary m-0"><i class="far fa-address-book mr-2"></i>New Contact</h4>
     </div>
-    <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center">
+    <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center bg-light border p-3 mb-3">
       <div class="form-group">
-        <select :class="{ 'input-error': errors.has('Category Type') }"  class="form-control mb-3" id="type" v-model="client.category" name="Category Type" v-validate="{ is_not: option }">
-          <option disabled>{{option}}</option>
-          <option v-for="(category, index) in categories" :key="index" :value="category">{{ category }}</option>
-        </select>
+
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+              <label class="input-group-text text-primary" for="option">Category</label>
+          </div>
+          <select :class="{ 'input-error': errors.has('Category Type') }"  class="form-control" id="type" v-model="client.category" name="Category Type" v-validate="{ is_not: option }">
+            <option disabled>{{option}}</option>
+            <option v-for="(category, index) in categories" :key="index" :value="category">{{ category }}</option>
+          </select>
+        </div>
         <span class="form-error" v-show="errors.has('Category Type')">{{ errors.first('Category Type') }}</span>
 
-        <input type="text" :class="{ 'input-error': errors.has('Referral Type') }"  class="form-control mb-3" placeholder="Referral Type" v-model="client.referral_type" v-validate="'required'" name="Referral Type">
+
+          <input type="text" :class="{ 'input-error': errors.has('Referral Type') }"  class="form-control mb-3" placeholder="Referral Type" v-model="client.referral_type" v-validate="'required'" name="Referral Type">
         <span class="form-error" v-show="errors.has('Referral Type')">{{ errors.first('Referral Type') }}</span>
         
 

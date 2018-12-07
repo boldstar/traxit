@@ -34,14 +34,22 @@ export default new Vuex.Store({
     notes: [],
     clientnotes: [],
     users: [],
-    user: [],
     tasks: [],
     task: [],
     workflows: [],
     workflow: [],
+    businesses: [],
+    business: '',
+    user: '',
     result: '',
     alert: '',
+    resetToken: '',
+    resetError:'',
+    passwordAlert: '',
+    returntypes: '',
+    account: '',
     processing: false,
+    loading: false,
     token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
   },
@@ -49,8 +57,14 @@ export default new Vuex.Store({
     sidebarOpen(state) {
       return state.sidebarOpen;
     },
+    user(state) {
+      return state.user
+    },
     loggedIn(state) {
       return state.token != null;
+    },
+    resetToken(state) {
+      return state.resetToken
     },
     processing(state) {
       return state.processing
@@ -60,6 +74,9 @@ export default new Vuex.Store({
     },
     tasks(state) {
       return state.tasks;
+    },
+    returnTypes(state) {
+      return state.returntypes
     },
     allClients(state) {
       return state.clients;
@@ -88,6 +105,9 @@ export default new Vuex.Store({
     engagementQuestions(state) {
       return state.engagementquestions
     },
+    business(state) {
+      return state.business
+    },
     clientNotes(state) {
       return state.clientnotes
     },
@@ -107,18 +127,42 @@ export default new Vuex.Store({
       return state.result
     },
     errorAlert(state) {
-      return state.alert
+      return state.resetError
     },
     successAlert(state) {
       return state.alert
+    },
+    resetSuccess(state) {
+      return state.alert
+    },
+    resetError(state) {
+      return state.resetError
+    },
+    passwordAlert(state) {
+      return state.passwordAlert
+    },
+    loading(state) {
+      return state.loading
+    },
+    accountDetails(state) {
+      return state.account
     }
   },
   mutations: {
     toggleSidebar(state) {
       state.sidebarOpen = !state.sidebarOpen
     },
+    accountDetails(state, account) {
+      state.account = account[0]
+    },
+    returnTypes(state, returns) {
+      state.returntypes = returns
+    },
     startProcessing(state) {
       state.processing = !state.processing
+    },
+    resetToken(state, token) {
+      state.resetToken = token
     },
     stopProcessing(state) {
       state.processing = false
@@ -139,6 +183,10 @@ export default new Vuex.Store({
     },
     addUser(state, user) {
       state.users.push(user)
+    },
+    updateUser(state, user) {
+      const index = state.users.findIndex(item => item.id == user.id);
+      state.users.splice(index, 1, user);
     },
     retrieveUsers(state, users) {
       state.users = users
@@ -226,6 +274,20 @@ export default new Vuex.Store({
     deleteEngagement(state, id) {
       const index = state.engagements.findIndex(engagement => engagement.id == id);
       state.engagements.splice(index, 1);
+    },
+    getBusiness(state, business) {
+      state.business = business
+    },
+    addBusiness(state, business) {
+      state.client.businesses.push(business);
+    },
+    deleteBusiness(state, id) {
+      const index = state.client.businesses.findIndex(business => business.id == id)
+      state.client.businesses.splice(index, 1)
+    },
+    updateBusiness(state, business) {
+      const index = state.client.businesses.findIndex(item => item.id == business.id)
+      state.client.businesses.splice(index, 1, business)
     },
     getDependent(state, dependent){
       state.dependent = dependent
@@ -333,39 +395,58 @@ export default new Vuex.Store({
     },
     clearAlert(state) {
       state.alert = ''
+      state.resetError = '',
+      state.resetSuccess = ''
+    },
+    userDetails(state, user) {
+      state.user = user[0]
+    },
+    notifyEmailSent(state, alert) {
+      state.alert = alert
+    },
+    resetSuccess(state, alert) {
+      state.alert = alert
+    },
+    resetError(state, error) {
+      state.resetError = error
+    },
+    passwordAlert(state, alert) {
+      state.passwordAlert = alert
+      state.loading = false
+    },
+    loading(state) {
+      state.loading = !state.loading
+    },
+    clearResetToken(state) {
+      state.resetToken = ''
     }
   },
   actions: {
     toggleSidebar({commit}) {
       commit('toggleSidebar')
     },
-    retrieveName(context) {
+    retrieveUser(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
-
-        return new Promise((resolve, reject) => {
-          axios.get('/user')
-          .then(response => {
-            resolve(response)
-          })
-          .catch(error => {
-            reject(error)
-          })
-        })
+      axios.get('/userProfile')
+      .then(response => {
+        context.commit('userDetails', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
     },
-    register(context, data) {
-      return new Promise((resolve, reject) => {
-        axios.post('/register', {
-          name: data.name,
-          email: data.email,
-          password: data.password,
-        })
-        .then(response => {
-          resolve(response)
-        })
-        .catch(error => {
-          reject(error.response.data)
-        })
+    updateUser(context, data) {
+      axios.patch('/users/' +data.id, {
+        name: data.name,
+        email: data.email,
+        role: data.role
+      })
+      .then(response => {
+        context.commit('updateUser', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
       })
     },
     addUser(context, data) {
@@ -373,14 +454,66 @@ export default new Vuex.Store({
           name: data.name,
           email: data.email,
           password: data.password,
+          role: data.role
         })
         .then(response => {
-          console.log(response.data)
           context.commit('addUser', response.data)
         })
         .catch(error => {
           console.log(error.response.data)
         })
+    },
+    requestReset(context, email) {
+      axios.post('/password/create', {
+        email: email
+      })
+      .then(response => {
+        context.commit('passwordAlert', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    forgotReset(context, email) {
+      context.commit('loading')
+      axios.post('/password/create', {
+        email: email.email
+      })
+      .then(response => {
+        context.commit('passwordAlert', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        context.commit('passwordAlert', error.response.data)
+      })
+    },
+    retrieveResetToken(context, token) {
+      axios.get('/password/find/' + token)
+      .then(response => {
+        context.commit('resetToken', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    updatePassword(context, data) {
+      context.commit('clearAlert')
+      context.commit('loading')
+      axios.post('/password/reset', {
+        email: data.email,
+        password: data.password,
+        password_confirmation: data.password_confirmation,
+        token: data.token
+      })
+      .then(response => {
+        context.commit('resetSuccess', response.data)
+        context.commit('loading')
+        context.commit('clearResetToken')
+      })
+      .catch(error => {
+        context.commit('loading')
+        context.commit('resetError', error.response.data)
+      })
     },
     destroyToken(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
@@ -462,6 +595,15 @@ export default new Vuex.Store({
       })
       .catch(error => {
         console.log(error)
+      })
+    },
+    retrieveClientsWithBusinesses(context) {
+      axios.get('/clientsWithBusinesses')
+      .then(response => {
+        context.commit('retrieveClients', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
       })
     },
     getDetails({commit}, id) {
@@ -588,7 +730,9 @@ export default new Vuex.Store({
     },
     addEngagement(context, engagement) {
       axios.post(('/engagements'), {
+        category: engagement.category,
         client_id: engagement.client_id,
+        name: engagement.name,
         workflow_id: engagement.workflow_id,
         return_type: engagement.return_type,
         year: engagement.year,
@@ -613,7 +757,6 @@ export default new Vuex.Store({
         done: false
       })
       .then(response => {
-          console.log(response.data)
           context.commit('updateEngagement', response.data)
       })
       .catch(error => {
@@ -641,6 +784,65 @@ export default new Vuex.Store({
       .catch(error => {
           console.log(error)
       })                
+    },
+    getBusiness({commit}, id) {
+      axios.get('/businesses/'+ id)
+      .then(response => {
+        commit('getBusiness', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    addBusiness(context, business) {
+      axios.post(('/businesses'), {
+        client_id: business.client_id,
+        business_name: business.business_name,
+        business_type: business.business_type,
+        address: business.address,
+        city: business.city,
+        state: business.state,
+        postal_code: business.postal_code,
+        email: business.email,
+        phone_number: business.phone_number,
+        fax_number: business.fax_number
+      })
+      .then(response => {
+        context.commit('addBusiness', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    updateBusiness(context, business) {
+      axios.patch(('/businesses/' + business.id ), {
+        client_id: business.client_id,
+        business_name: business.business_name,
+        business_type: business.business_type,
+        address: business.address,
+        city: business.city,
+        state: business.state,
+        postal_code: business.postal_code,
+        email: business.email,
+        phone_number: business.phone_number,
+        fax_number: business.fax_number
+      })
+      .then(response => {
+        console.log(response.data)
+        context.commit('updateBusiness', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    deleteBusiness(context, id) {
+      axios.delete('/businesses/' + id)
+      .then(() => {
+        context.commit('deleteBusiness', id)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
     },
     getDependent({commit}, id) {
       axios.get('/dependents/'+ id)
@@ -836,7 +1038,8 @@ export default new Vuex.Store({
           context.commit('editWorkflow', response.data)
       })
       .catch(error => {
-          console.log(error.response.data)
+          context.commit('editWorkflow', error.response.data.workflow)
+          context.commit('errorAlert', error.response.data.message)
       })           
     },
     deleteWorkflow(context, id) {
@@ -874,7 +1077,8 @@ export default new Vuex.Store({
     },
     searchDatabase(context, data) {
       axios.post('/search', {
-        keyword: data.keyword
+        keyword: data.keyword,
+        category: data.category
       }).then(response => {
         context.commit('searchDatabase', response.data)
       }).catch(error => {
@@ -924,7 +1128,25 @@ export default new Vuex.Store({
         console.log(error.response.data)
         context.commit('stopProcessing')
       })
-    }
+    },
+    getReturnTypes(context) {
+      axios.get('/engagementReturnTypes')
+      .then(response => {
+        context.commit('returnTypes', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    getAccountDetails(context) {
+      axios.get('/account')
+      .then(response => {
+        context.commit('accountDetails', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
   }, 
 })
 

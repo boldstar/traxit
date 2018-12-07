@@ -41,7 +41,7 @@
           <tr>
             <th scope="col">Task</th>
             <th scope="col">Client</th>
-            <th scope="col">Created On</th>
+            <th scope="col">Assigned On</th>
             <th scope="col">Return Type</th>
             <th scope="col">Year</th>
             <th scope="col">Action</th>
@@ -51,7 +51,7 @@
         <tbody class="table-bordered">
           <tr v-for="(task, index) in tasks"  :key="index">
             <th>{{ task.engagements[0].status }}</th>
-            <td>{{ task.engagements[0].client.last_name }}, {{ task.engagements[0].client.first_name }} <span v-if="task.engagements[0].client.has_spouse == 1">&</span> {{ task.engagements[0].client.spouse_first_name }}</td>
+            <td>{{ task.engagements[0].name }}</td>
             <td>{{ task.created_at | formatDate }}</td>
             <td>{{ task.engagements[0].return_type }}</td>
             <td>{{ task.engagements[0].year }}</td>
@@ -125,14 +125,6 @@ export default {
         status: null
       },
       option: 'Choose...',
-      statuses: [
-        'Recieved',
-        'Scanned',
-        'Preparation',
-        'Review',
-        '2nd Review',
-        'Complete'
-      ]
     }
   },
    components:{

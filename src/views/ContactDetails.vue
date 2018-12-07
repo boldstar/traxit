@@ -15,7 +15,8 @@
       </button>
       <div class="dropdown-menu dropdown-menu-right mr-0" aria-labelledby="dropdownMenu2">
         <router-link :to="'/contact/' + client.id + '/account/' + 'edit'" class="dropdown-item"><i class="fas fa-pencil-alt"></i><span class="ml-2 pl-4">Edit Contact</span></router-link>
-        <router-link :to="'/contact/' + client.id + '/account/' + 'add-dependent'" class="dropdown-item"><i class="fas fa-plus-square"></i><span class="ml-2 pl-4">Add Dependent</span></router-link>
+        <router-link :to="'/contact/' + client.id + '/account/' + 'add-business'" class="dropdown-item"><i class="far fa-building"></i><span class="ml-2 pl-4">Add Business</span></router-link>
+        <router-link :to="'/contact/' + client.id + '/account/' + 'add-dependent'" class="dropdown-item"><i class="far fa-plus-square"></i><span class="ml-2 pl-4">Add Dependent</span></router-link>
         <div class="dropdown-divider"></div>
         <b-btn v-if="$can('delete', client)" class="dropdown-item text-danger" @click="showModal = !showModal"><i class="fas fa-trash"></i><span class="ml-2">Delete Account</span></b-btn>
       </div>
@@ -24,7 +25,7 @@
       <!-- this is the modal popup for confirming the delete action -->
     <b-modal v-model="showModal" id="myModal" ref="myModalRef" hide-footer title="Delete Client">
       <div class="d-block text-left">
-        <h5>Are you sure you want to delete, {{client.last_name}}?</h5>
+        <h5>Are you sure you want to delete the {{client.last_name}} account?</h5>
         <br>
         <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
       </div>

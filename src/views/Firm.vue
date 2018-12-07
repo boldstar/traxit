@@ -70,7 +70,7 @@
             <tbody class="text-left">
               <tr v-for="(engagement, index) in filteredEngagements" :key="index" v-if="engagement.workflow_id === selectedWorkflowID">
                 <th scope="row"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements.engagements"></th>
-                <th>{{ engagement.client.last_name}}, {{ engagement.client.first_name}} <span v-if="engagement.client.has_spouse == 1">&</span> {{ engagement.client.spouse_first_name}}</th>
+                <th>{{ engagement.name}}</th>
                 <td>{{ engagement.status }}</td>
                 <td>{{ engagement.assigned_to }}</td>
                 <td>{{ engagement.return_type }}</td>
@@ -152,7 +152,7 @@ export default {
     filteredEngagements () {
       return this.allEngagements.filter((engagement) => engagement.status === this.engagementFilterKey)
       .filter( engagement => {
-      return !this.searchEngagement || engagement.client.last_name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 });
+      return !this.searchEngagement || engagement.name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 });
     },
     countEngagementsByStatus () {
        const res = this.allWorkflows.map(({statuses, id}) => ({

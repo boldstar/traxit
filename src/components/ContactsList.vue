@@ -49,7 +49,7 @@
     <table class="table border table-light table-hover text-left">
         <thead class="text-primary hover">
             <tr>
-                <th scope="col">Name</th>
+                <th scope="col">Client</th>
                 <th scope="col" @click="sort('category')">Category</th>
                 <th scope="col">Taxpayer Email</th>
                 <th scope="col">Taxpayer Phone</th>

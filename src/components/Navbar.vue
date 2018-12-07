@@ -22,7 +22,7 @@
             <li v-if="loggedIn" class="dropdown align-self-center"> 
                 <i class="user fas fa-user-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dLabel"></i>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel">
-                    <router-link class="dropdown-item" to="#">Profile</router-link>
+                    <router-link class="dropdown-item" to="/profile">Profile</router-link>
                     <div v-if="$can('read', admin)">
                         <router-link class="dropdown-item" to="/administrator/account">Admin</router-link>
                     </div>
@@ -118,7 +118,8 @@ export default {
     }
 
     .is-active {
-        color: white;
+        color: #0077ff;
+        background-color: rgba(187, 187, 187, 0.486);
     }
 
     input .search{

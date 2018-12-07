@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-3">
+  <div class="mt-3" v-if="accountDetails">
       <ul class="h4 text-left">
         <li class="border">
           <div class="d-flex">

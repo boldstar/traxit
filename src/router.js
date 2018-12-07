@@ -387,6 +387,18 @@ export default new Router({
       }
     },
     {
+      path: '/profile',
+      name: 'profile',
+      component: () => import(/* webpackChunkName: "tasks" */ './views/Profile.vue'),
+      meta: {
+        requiresAuth: true,
+        layout: "default",
+        breadCrumb: [
+          { name: 'Profile' }
+        ]
+      }
+    },
+    {
       // this is the path to view the list of all engagements
     path: '/engagements',
     name: 'engagements',

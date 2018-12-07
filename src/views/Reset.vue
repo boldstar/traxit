@@ -1,13 +1,15 @@
 <template>
-  <div>
-  <div class="reset d-flex justify-content-center" v-if="resetToken">
-
-      <div class="bg-light p-3 font-weight-bold" v-if="resetSuccess">
+  <div class="d-flex justify-content-center col-4">
+  <div class="reset" v-if="resetToken">
+    
+      <div class="bg-light text-primary p-3 font-weight-bold" v-if="resetSuccess">
           <span>Please Proceed To Login, Password Reset Was Succesful</span>
       </div>
 
-      <div class="bg-light p-3" v-if="resetError">
-          <span>{{ resetError }}</span>
+      <div class="bg-light p-3 text-danger font-weight-bold" v-if="resetError">
+          <span v-for="(error, index) in resetError" :key="index">
+            <span v-for="(password, index) in error.password" :key="index">{{password}}</span>
+          </span>
       </div>
     
       <div class="shadow card border">
@@ -26,14 +28,17 @@
           <div class="form-group mb-3 text-left">
               <input type="password" name="confirmpassword" class="form-control" placeholder="Confirm Password" v-model="confirmpassword">
           </div>
-          <button type="submit" class="btn btn-block btn-primary my-4 d-flex justify-content-center">
-              <span>Submit</span>
+          <button type="submit" class="btn btn-block btn-primary my-4 d-flex justify-content-center" :disabled="loading">
+              <div v-if="loading">
+                <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+              </div>
+              <span v-show="!loading">Submit</span>
           </button>
         </form>
       </div>
     </div>
 
-    <span class="h3" else>Im sorry, the reset token is invalid!</span>
+    <span class="h3" v-else>Im sorry, the reset token is invalid!</span>
   </div>
 </template>
 
@@ -46,11 +51,10 @@ export default {
     return {
       password: '',
       confirmpassword: '',
-      alert: ''
     }
   },
   computed: {
-    ...mapGetters(['resetToken', 'resetSuccess', 'resetError'])
+    ...mapGetters(['resetToken', 'resetSuccess', 'resetError', 'loading'])
   },
   methods: {
     ...mapActions(['updatePassword']),
@@ -60,6 +64,10 @@ export default {
         password: this.password,
         password_confirmation: this.confirmpassword,
         token: this.$route.params.token
+      })
+      .then(() => {
+        this.password = ''
+        this.password_confirmation = ''
       })
     }
   },

@@ -136,7 +136,7 @@ export default new Vuex.Store({
       return state.alert
     },
     resetError(state) {
-      return state.alert
+      return state.resetError
     },
     passwordAlert(state) {
       return state.passwordAlert
@@ -395,9 +395,11 @@ export default new Vuex.Store({
     },
     clearAlert(state) {
       state.alert = ''
+      state.resetError = '',
+      state.resetSuccess = ''
     },
     userDetails(state, user) {
-      state.user = user
+      state.user = user[0]
     },
     notifyEmailSent(state, alert) {
       state.alert = alert
@@ -414,19 +416,24 @@ export default new Vuex.Store({
     },
     loading(state) {
       state.loading = !state.loading
+    },
+    clearResetToken(state) {
+      state.resetToken = ''
     }
   },
   actions: {
     toggleSidebar({commit}) {
       commit('toggleSidebar')
     },
-    retrieveUser(context, id) {
-      axios.get('/users/' + id)
+    retrieveUser(context) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
+      axios.get('/userProfile')
       .then(response => {
         context.commit('userDetails', response.data)
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.response.data)
       })
     },
     updateUser(context, data) {
@@ -490,6 +497,8 @@ export default new Vuex.Store({
       })
     },
     updatePassword(context, data) {
+      context.commit('clearAlert')
+      context.commit('loading')
       axios.post('/password/reset', {
         email: data.email,
         password: data.password,
@@ -498,8 +507,11 @@ export default new Vuex.Store({
       })
       .then(response => {
         context.commit('resetSuccess', response.data)
+        context.commit('loading')
+        context.commit('clearResetToken')
       })
       .catch(error => {
+        context.commit('loading')
         context.commit('resetError', error.response.data)
       })
     },

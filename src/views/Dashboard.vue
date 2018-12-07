@@ -42,7 +42,7 @@
 
                 <!-- this is the simple list of current tasks -->
                 <div class="col-6">
-                    <span class="h3 mb-4"><i class="fas fa-tasks text-primary mr-3"></i><router-link to="/tasks" class="text-muted">Your Tasks</router-link></span>
+                    <span class="h3"><i class="fas fa-tasks text-primary mr-3"></i><router-link to="/tasks" class="text-muted">Your Tasks</router-link></span>
                     <br><br>
                     <table class="table table-hover">
                         <thead class="bg-primary text-light">
@@ -53,10 +53,10 @@
                             <th scope="col">Return Type</th>
                         </tr>
                         </thead>
-                        <tbody class="table-bordered" v-if="taskData">
-                        <tr v-for="(task, index) in tasks"  :key="index">
+                        <tbody v-if="taskData">
+                        <tr class="border" v-for="(task, index) in tasks"  :key="index">
                             <th>{{ index + 1 }}</th>
-                            <td>{{ task.engagements[0].client.last_name }}, {{ task.engagements[0].client.first_name }} & {{ task.engagements[0].client.spouse_first_name }}</td>
+                            <td>{{ task.engagements[0].name }}</td>
                             <td>{{ task.created_at | formatDate }}</td>
                             <td>{{ task.engagements[0].return_type }}</td>
                         </tr>

@@ -207,7 +207,29 @@ export default new Router({
                     { name: 'Edit Dependent' }
                   ]
                 },
-              }
+              },
+              {
+              // this is the path to add dependent
+              path: 'add-business',
+              component: () => import('@/children/AddBusiness.vue'),
+                meta: {
+                  requiresAuth: true,
+                  breadCrumb: [
+                    { name: 'Add Business' }
+                  ]
+                },
+              },
+              {
+              // this is the path to add dependent
+              path: 'edit-business/:business',
+              component: () => import('@/children/EditBusiness.vue'),
+                meta: {
+                  requiresAuth: true,
+                  breadCrumb: [
+                    { name: 'Edit Business' }
+                  ]
+                },
+              },
             ]
           },
           {
@@ -324,6 +346,17 @@ export default new Router({
               requiresAuth: true,
               breadCrumb: [
                 { name: 'New Contact' }
+            ]
+          },
+        },
+        {
+          // this is the children route for adding a new contact
+          path: 'business',
+          component: () => import('@/children/BusinessForm.vue'),
+            meta: {
+              requiresAuth: true,
+              breadCrumb: [
+                { name: 'New Business' }
             ]
           },
         },

@@ -10,6 +10,31 @@
 
             <div class="input-group mb-3">
               <div class="input-group-prepend">
+                <label class="input-group-text text-primary" for="option">Category</label>
+              </div>
+              <select class="form-control" id="client_id" v-model.number="engagement.category">
+                <option disabled>{{ option }}</option>
+                <option v-for="(category, index) in categories" :key="index" :value="category">
+                  {{ category }}
+                </option>
+              </select>
+            </div>
+
+            <div class="input-group my-3" v-if="engagement.category == 'business'">
+              <div class="input-group-prepend">
+                <label class="input-group-text text-primary" for="option">Find Business</label>
+              </div>
+              <select :class="{ 'input-error': errors.has('Business') }" class="form-control" id="client_id" v-model="engagement.name" v-validate="{ is_not: option }" name="Business">
+                <option disabled>{{ option }}</option>
+                <option v-for="(business, index) in clientBusinesses" :key="index">
+                  {{business.business_name}} {{business.business_type}}
+                </option>
+              </select>
+            </div>
+            <span class="form-error" v-show="errors.has('Business')">{{ errors.first('Business') }}</span>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
                 <label class="input-group-text text-primary" for="option">Workflow Type</label>
               </div>
               <select class="form-control" id="client_id" v-model.number="engagement.workflow_id">
@@ -84,6 +109,8 @@ export default {
     return {
       engagement: {
         workflow_id: null,
+        category: null,
+        name: null,
         return_type: null,
         year: '',
         assigned_to: null,
@@ -91,6 +118,7 @@ export default {
       },
       option: 'Choose..',
       empty: 'Please select workflow first...',
+      categories: ['personal', 'business']
     }
   },
   computed: {
@@ -102,6 +130,9 @@ export default {
           'returnTypes'
         ]
       ),
+      clientBusinesses() {
+      return this.client.businesses
+    }
   },
   methods: {
     ...mapActions(['addEngagement']),
@@ -111,7 +142,9 @@ export default {
       
       this.addEngagement({
         id: this.idForEngagement,
+        category: this.engagement.category,
         client_id: this.client.id,
+        name: this.engagement.name,
         workflow_id: this.engagement.workflow_id,
         return_type: this.engagement.return_type,
         year: this.engagement.year,
@@ -131,17 +164,17 @@ export default {
     this.engagement.workflow_id = this.option
     this.engagement.assigned_to = this.option
     this.engagement.status = this.option
+    this.engagement.category = this.option
+    this.engagement.name = this.option
   },
 }
 </script>
 
 <style lang="scss" scoped>
 
-
- .add-engagement label .input-group-text {
+ label {
     width: 8em;
   }
-
 
 </style>
 

@@ -13,7 +13,7 @@
   <div class="d-flex justify-content-start my-4 h4">
     <div>
       <span class="mr-3"><i class="fas fa-user-edit"></i> </span>
-      {{ engagement.client.last_name }}, {{ engagement.client.first_name }} & {{ engagement.client.spouse_first_name }}
+      {{ engagement.name }}
     </div>
   </div>
 

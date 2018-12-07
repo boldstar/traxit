@@ -38,6 +38,8 @@ export default new Vuex.Store({
     task: [],
     workflows: [],
     workflow: [],
+    businesses: [],
+    business: '',
     user: '',
     result: '',
     alert: '',
@@ -102,6 +104,9 @@ export default new Vuex.Store({
     },
     engagementQuestions(state) {
       return state.engagementquestions
+    },
+    business(state) {
+      return state.business
     },
     clientNotes(state) {
       return state.clientnotes
@@ -269,6 +274,20 @@ export default new Vuex.Store({
     deleteEngagement(state, id) {
       const index = state.engagements.findIndex(engagement => engagement.id == id);
       state.engagements.splice(index, 1);
+    },
+    getBusiness(state, business) {
+      state.business = business
+    },
+    addBusiness(state, business) {
+      state.client.businesses.push(business);
+    },
+    deleteBusiness(state, id) {
+      const index = state.client.businesses.findIndex(business => business.id == id)
+      state.client.businesses.splice(index, 1)
+    },
+    updateBusiness(state, business) {
+      const index = state.client.businesses.findIndex(item => item.id == business.id)
+      state.client.businesses.splice(index, 1, business)
     },
     getDependent(state, dependent){
       state.dependent = dependent
@@ -566,6 +585,15 @@ export default new Vuex.Store({
         console.log(error)
       })
     },
+    retrieveClientsWithBusinesses(context) {
+      axios.get('/clientsWithBusinesses')
+      .then(response => {
+        context.commit('retrieveClients', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
     getDetails({commit}, id) {
       axios.get('/clients/'+id)
       .then(response => {
@@ -690,7 +718,9 @@ export default new Vuex.Store({
     },
     addEngagement(context, engagement) {
       axios.post(('/engagements'), {
+        category: engagement.category,
         client_id: engagement.client_id,
+        name: engagement.name,
         workflow_id: engagement.workflow_id,
         return_type: engagement.return_type,
         year: engagement.year,
@@ -715,7 +745,6 @@ export default new Vuex.Store({
         done: false
       })
       .then(response => {
-          console.log(response.data)
           context.commit('updateEngagement', response.data)
       })
       .catch(error => {
@@ -743,6 +772,65 @@ export default new Vuex.Store({
       .catch(error => {
           console.log(error)
       })                
+    },
+    getBusiness({commit}, id) {
+      axios.get('/businesses/'+ id)
+      .then(response => {
+        commit('getBusiness', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    addBusiness(context, business) {
+      axios.post(('/businesses'), {
+        client_id: business.client_id,
+        business_name: business.business_name,
+        business_type: business.business_type,
+        address: business.address,
+        city: business.city,
+        state: business.state,
+        postal_code: business.postal_code,
+        email: business.email,
+        phone_number: business.phone_number,
+        fax_number: business.fax_number
+      })
+      .then(response => {
+        context.commit('addBusiness', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    updateBusiness(context, business) {
+      axios.patch(('/businesses/' + business.id ), {
+        client_id: business.client_id,
+        business_name: business.business_name,
+        business_type: business.business_type,
+        address: business.address,
+        city: business.city,
+        state: business.state,
+        postal_code: business.postal_code,
+        email: business.email,
+        phone_number: business.phone_number,
+        fax_number: business.fax_number
+      })
+      .then(response => {
+        console.log(response.data)
+        context.commit('updateBusiness', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    deleteBusiness(context, id) {
+      axios.delete('/businesses/' + id)
+      .then(() => {
+        context.commit('deleteBusiness', id)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
     },
     getDependent({commit}, id) {
       axios.get('/dependents/'+ id)

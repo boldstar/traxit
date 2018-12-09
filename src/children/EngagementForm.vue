@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="card-body bg-light border mb-2">
-      <h4 class="text-left text-primary m-0"><i class="far fa-address-book mr-2"></i>New Engagement</h4>
+      <h4 class="text-left text-primary m-0"><i class="far fa-folder-open mr-2"></i>New Engagement</h4>
     </div>
     <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center bg-light p-3 border">
       <div class="form-group">

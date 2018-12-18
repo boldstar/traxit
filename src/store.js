@@ -45,16 +45,18 @@ export default new Vuex.Store({
     business: '',
     user: '',
     result: '',
-    alert: '',
     resetToken: '',
-    resetError:'',
-    passwordAlert: '',
     returntypes: '',
     account: '',
     processing: false,
     loading: false,
     token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
+    alert: '',
+    successAlert: '',
+    resetError:'',
+    resetSuccess: '',
+    passwordAlert: '',
   },
   getters: {
     sidebarOpen(state) {
@@ -133,10 +135,10 @@ export default new Vuex.Store({
       return state.resetError
     },
     successAlert(state) {
-      return state.alert
+      return state.successAlert
     },
     resetSuccess(state) {
-      return state.alert
+      return state.resetSuccess
     },
     resetError(state) {
       return state.resetError
@@ -391,24 +393,26 @@ export default new Vuex.Store({
       state.result = keyword;
     },
     errorAlert(state, alert) {
-      state.alert = alert
+      state.errorAlert = alert
     },
     successAlert(state, alert) {
-      state.alert = alert
+      state.successAlert = alert
     },
     clearAlert(state) {
       state.alert = ''
-      state.resetError = '',
+      state.resetError = ''
       state.resetSuccess = ''
+      state.successAlert = ''
+      state.errorAlert = ''
     },
     userDetails(state, user) {
       state.user = user[0]
     },
     notifyEmailSent(state, alert) {
-      state.alert = alert
+      state.emailAlert = alert
     },
     resetSuccess(state, alert) {
-      state.alert = alert
+      state.resetSucess = alert
     },
     resetError(state, error) {
       state.resetError = error
@@ -743,7 +747,8 @@ export default new Vuex.Store({
         done: false
       })
       .then(response => {
-        context.commit('addClientEngagement', response.data)
+        context.commit('addClientEngagement', response.data.engagement)
+        context.commit('successAlert', response.data.message)
       })
       .catch(error => {
         console.log(error.response.data)
@@ -810,10 +815,11 @@ export default new Vuex.Store({
         fax_number: business.fax_number
       })
       .then(response => {
-        context.commit('addBusiness', response.data)
+        context.commit('addBusiness', response.data.business)
+        context.commit('successAlert', response.data.message)
       })
       .catch(error => {
-        console.log(error.response.data)
+        console.log(error)
       })
     },
     updateBusiness(context, business) {

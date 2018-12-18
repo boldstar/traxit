@@ -207,7 +207,7 @@ export default {
       .then(() => {
         this.engagement = "" 
         this.idForEngagement++
-        this.$router.push({path: '/add', query: {alert: 'A new engagement has been added'}});
+        this.$router.push({path: '/add'});
       })
     },
   },

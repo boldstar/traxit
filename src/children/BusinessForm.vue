@@ -104,7 +104,7 @@ export default {
       .then(() => {
         this.business = "" 
         this.idForBusiness++
-        this.$router.push({path: '/add', query: {alert: 'A new dependent has been added!'}});
+        this.$router.push({path: '/add'});
       })
     },
   },
@@ -115,9 +115,4 @@ export default {
 
 }
 </script>
-
-
-<style>
-
-</style>
 

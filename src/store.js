@@ -6,7 +6,10 @@ import storage from './utils/storage'
 
 export const ability = appAbility
 Vue.use(Vuex)
-axios.defaults.baseURL = 'http://traxit.test/api'
+axios.defaults.baseURL = 'http://lawnsnmore.traxit.test/api'
+axios.defaults.headers.common['header1'] = {
+  'X-Requested-With': 'XMLHttpRequest',
+}
 
 
 
@@ -159,7 +162,7 @@ export default new Vuex.Store({
       state.returntypes = returns
     },
     startProcessing(state) {
-      state.processing = !state.processing
+      state.processing = true
     },
     resetToken(state, token) {
       state.resetToken = token
@@ -508,7 +511,6 @@ export default new Vuex.Store({
       .then(response => {
         context.commit('resetSuccess', response.data)
         context.commit('loading')
-        context.commit('clearResetToken')
       })
       .catch(error => {
         context.commit('loading')
@@ -551,7 +553,7 @@ export default new Vuex.Store({
               resolve(response)
           })
           .catch(error => {
-              console.log(error)
+              console.log(error.response.data)
               reject(error)
           })
       })
@@ -782,7 +784,7 @@ export default new Vuex.Store({
           context.commit('deleteEngagement', id)
       })
       .catch(error => {
-          console.log(error)
+          console.log(error.response.data)
       })                
     },
     getBusiness({commit}, id) {
@@ -1076,12 +1078,15 @@ export default new Vuex.Store({
       })                
     },
     searchDatabase(context, data) {
+      context.commit('startProcessing')
       axios.post('/search', {
         keyword: data.keyword,
         category: data.category
       }).then(response => {
         context.commit('searchDatabase', response.data)
+        context.commit('stopProcessing')
       }).catch(error => {
+        context.commit('stopProcessing')
         console.log(error.response.data)
       })
     },

@@ -478,6 +478,19 @@ export default new Router({
       ]
     }
   },
+  {
+    path: '/404',
+    name: '404',
+    component: () => import(/* webpackChunkName: "404" */ './components/404.vue'),
+    meta: {
+      passwordReset: true,
+      layout: "reset",
+    },
+  },
+  {
+    path: '*',
+    redirect: '/404'
+  }
   ],
   mode: 'history',
 })

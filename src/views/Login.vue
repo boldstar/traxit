@@ -1,5 +1,5 @@
 <template>
-    <div class="login-form page-wrapper w-25">
+    <div class="login-form page-wrapper col-lg-4 col-sm-12">
 
         <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
 

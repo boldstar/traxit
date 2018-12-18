@@ -53,7 +53,7 @@
                             <th scope="col">Return Type</th>
                         </tr>
                         </thead>
-                        <tbody v-if="taskData">
+                        <tbody v-if="tasks">
                         <tr class="border" v-for="(task, index) in tasks"  :key="index">
                             <th>{{ index + 1 }}</th>
                             <td>{{ task.engagements[0].name }}</td>
@@ -71,7 +71,7 @@
             </div>
 
     <div v-if="noData && !loading">
-        <not-found ></not-found>   
+        <welcome></welcome> 
     </div>
 
     <div v-if="loading && !noData" class="lds-dual-ring justify-content-center"></div>
@@ -84,14 +84,14 @@
 
 <script>
 import DoughnutChart from '@/components/DoughnutChart.vue'
-import NotFound from '@/components/404.vue'
+import Welcome from '@/components/Welcome.vue'
 import { mapGetters } from 'vuex'
 
 export default {
     name: 'dashboard',
     components: {
         DoughnutChart,
-        NotFound
+        Welcome
     },
     data () {
         return {

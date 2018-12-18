@@ -115,6 +115,7 @@
       </div>
 
 
+  <div v-if="noEngagements &&!listLoaded" class="mt-5"><welcome></welcome></div>
 
   <div v-if="listLoaded" class="lds-dual-ring justify-content-center"></div>
     
@@ -125,11 +126,13 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Alert from '@/components/Alert.vue'
+import Welcome from '@/components/Welcome.vue'
 
 export default {
   name: 'FirmView',
   components: {
-    Alert
+    Alert,
+    Welcome
   },
   data() {
     return {

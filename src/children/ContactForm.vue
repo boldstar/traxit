@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrapper">
+  <div class="page-wrapper mb-3 col-8">
 
     <div class="server-error" v-if="serverError">{{ serverError }}</div>
 

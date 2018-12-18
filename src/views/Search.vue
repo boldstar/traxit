@@ -1,5 +1,5 @@
 <template>
-    <div id="search">
+    <div id="search" v-if="!processing">
         <div v-if="searchResults.length > 0">
             <div class="d-flex justify-content-between">
                 <div class="d-flex">
@@ -79,7 +79,7 @@
         
 
 
-
+        <div v-else-if="processing">Searching Records....</div>
 
         <div v-else>
             <img class="search-engine" src="@/assets/search-engine.png" alt="">
@@ -98,7 +98,7 @@ export default {
         }
     },
     computed: {
-       ...mapGetters(['searchResults']) 
+       ...mapGetters(['searchResults', 'processing']) 
     },
     created() {
        this.keyword = this.$route.query.keyword

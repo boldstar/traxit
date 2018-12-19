@@ -3,8 +3,8 @@
     <div class="col-7" v-if="$route.name == 'add'">
       <Alert class="mb-0" v-bind:message="successAlert" v-if="successAlert" />
     </div>
-    <div class="d-flex flex-row mt-5 col-7" v-if="$route.name == 'add'">
-      <div class="card-style card-body bg-light border shadow-sm mr-5 py-5 px-5">
+    <div class="d-flex flex-row justify-content-center mt-5 col-12" v-if="$route.name == 'add'">
+      <div class="card-style card-body bg-light border shadow-sm py-5 px-5 col-3">
         <div class="h3 mb-4 font-weight-bold">
           Contact
         </div>
@@ -13,7 +13,7 @@
           <router-link to="add/contact" class="btn btn-style">Create</router-link>
         </div>
       </div>
-      <div class="card-style card-body bg-light border shadow-sm py-5">
+      <div class="card-style card-body bg-light border shadow-sm py-5 mx-4 col-3">
         <div class="h3 mb-4 font-weight-bold">
           Business
         </div>
@@ -22,7 +22,7 @@
           <router-link to="add/business" class="btn btn-style">Create</router-link>
         </div>
       </div>
-      <div class="card-style card-body bg-light border shadow-sm ml-5 py-5">
+      <div class="card-style card-body bg-light border shadow-sm py-5 col-3">
         <div class="h3 mb-4 font-weight-bold">
           Engagement
         </div>

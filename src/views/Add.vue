@@ -1,14 +1,15 @@
 <template>
   <div class="page-wrapper">
     <div class="d-flex justify-content-center">
-      <Alert class="mb-0 col-sm-12 col-md-10 col-lg-10" v-bind:message="successAlert" v-if="successAlert && $route.name == 'add'" />
+      <Alert class="mb-0 col-sm-12 col-md-10" v-bind:message="successAlert" v-if="successAlert && $route.name == 'add'" />
     </div>
     <div class="d-flex justify-content-center">
       <div class="d-flex flex-row justify-content-around mt-5 col-sm-12 col-md-10 col-lg-10 flex-sm-wrap" v-if="$route.name == 'add'">
-        <div class="col-sm-6 col-md-4 col-lg-4">
+        <!-- contact card -->
+        <div class="col-sm-6 col-md-4">
           <div class="card-style card-body bg-light border shadow-sm p-5">
             <div class="h3 mb-4 font-weight-bold">
-              Contact
+              <span>Contact</span>
             </div>
             <i class="text-primary fas fa-user-circle fa-7x mb-4 mt-3"></i>
             <div class="mt-3">
@@ -16,10 +17,11 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-6 col-md-4 col-lg-4">
+        <!-- business card -->
+        <div class="col-sm-6 col-md-4">
           <div class="card-style card-body bg-light border shadow-sm p-5">
             <div class="h3 mb-4 font-weight-bold">
-              Business
+              <span>Business</span>
             </div>
             <i class="text-primary far fa-building fa-7x mb-4 mt-3"></i>
             <div class="mt-3">
@@ -27,10 +29,11 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-6 col-md-4 col-lg-4 mt-sm-3 mt-md-0">
+        <!-- engagement card -->
+        <div class="col-sm-6 col-md-4 mt-sm-3 mt-md-0">
           <div class="card-style card-body bg-light border shadow-sm p-5">
             <div class="h3 mb-4 font-weight-bold">
-              Engagement
+              <span>Engagement</span>
             </div>
             <i class="text-primary far fa-folder-open fa-7x mb-4 mt-3"></i>
             <div class="mt-3">

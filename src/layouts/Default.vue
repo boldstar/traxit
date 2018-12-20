@@ -36,8 +36,8 @@ export default {
   },
   data () {
     return {
-      closedSidebar: 'col-lg-12',
-      openSidebar: 'col-lg-10'
+      closedSidebar: ['col-lg-12', 'page-wrapper'],
+      openSidebar: ['col-lg-10', 'page-wrapper']
     }
   },
   computed: {
@@ -60,6 +60,7 @@ export default {
 //this is the transition between router views
 .page-wrapper {
   animation-duration: .5s;
+  transition: margin-left .5s;
 }
 
 

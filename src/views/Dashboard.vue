@@ -17,31 +17,31 @@
 
             <div v-if="!loading && !noData">
 
-                <!-- this is the doughnut chart for the overview of the firm -->
-                <div class="row justify-content-around mt-3">
-                    <div class="col-4 col-md-5">
-                        <div class="d-flex flex-sm-column">
-                            <div class="col-6 col-sm-12 mb-sm-2">
-                                <span class="h3 mr-3"><i class=" far fa-folder-open mr-3 text-primary"></i><router-link to="/firm" class="text-muted">Firm Overview</router-link></span>        
-                            </div>
-                            <div class="col-6 col-sm-12">     
-                                <div class="input-group" >
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text bg-light text-primary" for="option">Workflow</label>
-                                </div>
-                                <select class="form-control" v-model="workflowKey">
-                                    <option :value="workflow.id" v-for="workflow in allWorkflows" :key="workflow.id" @click="changeKey(workflow.id)">{{ workflow.workflow }}</option>
-                                </select>
-                                </div>
-                            </div> 
+            <!-- this is the doughnut chart for the overview of the firm -->
+            <div class="d-flex flex-lg-row flex-sm-column justify-content-around mt-3">
+                <div class="col-lg-5 col-md-5 col-sm-12">
+                    <div class="d-flex flex-lg-row flex-md-column">
+                        <div class="col-lg-6 col-md-12 mb-sm-2">
+                            <span class="h3 mr-3"><i class=" far fa-folder-open mr-3 text-primary"></i><router-link to="/firm" class="text-muted">Firm Overview</router-link></span>        
                         </div>
-                        <br><br>
-                    <doughnut-chart v-if="chartData" :chart-data="datasetsfull"></doughnut-chart>
+                        <div class="col-lg-6 col-md-12">     
+                            <div class="input-group" >
+                            <div class="input-group-prepend">
+                                <label class="input-group-text bg-light text-primary" for="option">Workflow</label>
+                            </div>
+                            <select class="form-control" v-model="workflowKey">
+                                <option :value="workflow.id" v-for="workflow in allWorkflows" :key="workflow.id" @click="changeKey(workflow.id)">{{ workflow.workflow }}</option>
+                            </select>
+                            </div>
+                        </div> 
+                    </div>
+                    <br><br>
+                <doughnut-chart v-if="chartData" :chart-data="datasetsfull"></doughnut-chart>
                 </div>
 
 
                 <!-- this is the simple list of current tasks -->
-                <div class="col-6">
+                <div class="col-lg-5 col-md-5 col-sm-12">
                     <span class="h3"><i class="fas fa-tasks text-primary mr-3"></i><router-link to="/tasks" class="text-muted">Your Tasks</router-link></span>
                     <br><br>
                     <table class="table table-hover">
@@ -67,19 +67,12 @@
                     </div>
                 </div>
             </div>
-
-            </div>
-
-    <div v-if="noData && !loading">
-        <welcome></welcome> 
-    </div>
-
-    <div v-if="loading && !noData" class="lds-dual-ring justify-content-center"></div>
-
-
-    </div>  
-
-
+        </div>
+        <div v-if="noData && !loading">
+            <welcome></welcome> 
+        </div>
+        <div v-if="loading && !noData" class="lds-dual-ring justify-content-center"></div>
+        </div>  
 </template>
 
 <script>

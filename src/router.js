@@ -59,6 +59,26 @@ export default new Router({
               requiresAuth: true,
               layout: "admin",
             },
+            children: [
+              {
+                path: 'edit-account',
+                name: 'edit-account',
+                component: () => import('@/children/EditAccount'),
+                meta: {
+                  requiresAuth: true,
+                  layout: "admin"
+                }
+              },
+              {
+                path: 'add-account',
+                name: 'add-account',
+                component: () => import('@/children/AddAccount'),
+                meta: {
+                  requiresAuth: true,
+                  layout: "admin"
+                }
+              },
+            ]
           },
           {
           path: 'workflows',
@@ -403,7 +423,7 @@ export default new Router({
       // this is the path to view the list of all engagements
     path: '/engagements',
     name: 'engagements',
-    component: () => import(/* webpackChunkName: "accounts" */ './views/Engagements.vue'),
+    component: () => import(/* webpackChunkName: "engagements" */ './views/Engagements.vue'),
     meta: {
         requiresAuth: true,
         layout: "default",
@@ -416,7 +436,7 @@ export default new Router({
     //this is the route to view single engagement
     path: '/engagement/:id',
     name: 'engagement-details',
-    component: () => import(/* webpackChunkName: "accounts" */ './views/EngagementDetails.vue'),
+    component: () => import(/* webpackChunkName: "engagement-details" */ './views/EngagementDetails.vue'),
     meta: {
         requiresAuth: true,
         layout: "default",
@@ -470,7 +490,7 @@ export default new Router({
   {
   path: '/search',
   name: 'search',
-  component: () => import(/* webpackChunkName: "accounts" */ './views/Search.vue'),
+  component: () => import(/* webpackChunkName: "search" */ './views/Search.vue'),
   meta: {
       requiresAuth: true,
       layout: "default",

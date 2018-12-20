@@ -160,6 +160,9 @@ export default new Vuex.Store({
     accountDetails(state, account) {
       state.account = account[0]
     },
+    updateAccountDetails(state, account) {
+      state.account = account
+    },
     returnTypes(state, returns) {
       state.returntypes = returns
     },
@@ -1170,6 +1173,46 @@ export default new Vuex.Store({
         console.log(error.response.data)
       })
     },
+    addAccountDetails(context, account) {
+      axios.post('/account', {
+        business_name: account.business_name,
+        email: account.email,
+        phone_number: account.phone_number,
+        fax_number: account.fax_number,
+        address: account.address,
+        city: account.city,
+        state: account.state,
+        postal_code: account.postal_code,
+        logo: account.logo,
+        subscription: account.subscription
+      })
+      .then(response => {
+        context.commit('addAccountDetails', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    updateAccountDetails(context, account) {
+      axios.patch('/account/' +account.id, {
+        business_name: account.business_name,
+        email: account.email,
+        phone_number: account.phone_number,
+        fax_number: account.fax_number,
+        address: account.address,
+        city: account.city,
+        state: account.state,
+        postal_code: account.postal_code,
+        logo: account.logo,
+        subscription: account.subscription
+      })
+      .then(response => {
+        context.commit('updateAccountDetails', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    }
   }, 
 })
 

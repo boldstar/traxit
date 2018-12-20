@@ -12,7 +12,8 @@
             <div class="card shadow p-0 col-lg-8">
                 <div class="card-header bg-light text-primary border-primary d-flex justify-content-between">
                     <span class="font-weight-bold align-self-center">Company</span>
-                    <h6 class="mt-2">{{ accountDetails.business_name || 'Login' }}</h6>
+                    <h6 class="mt-2" v-if="accountDetails">{{ accountDetails.business_name}}</h6>
+                    <h6 class="mt-2" v-else>Login</h6>
                 </div>
                 <div class="card-body">
                     <form @submit.prevent="validateBeforeSubmit" class="text-left">

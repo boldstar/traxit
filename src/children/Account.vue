@@ -1,6 +1,16 @@
 <template>
-  <div class="mt-3" v-if="accountDetails">
-      <ul class="h4 text-left">
+  <div class="mt-3">
+    <div class="d-flex justify-content-between">
+      <div class="h3">
+        <span class="m-0">Account Details</span>
+      </div>
+      <div class=" align-self-center">
+        <router-link :to="{path: '/administrator/account/edit-account'}" class="btn btn-primary" v-if="accountDetails">Edit Details</router-link>
+        <router-link :to="{path: '/administrator/account/add-account'}" class="btn btn-primary" v-else>Add Details</router-link>
+      </div>
+    </div>
+    <hr>
+      <ul class="h4 text-left" v-if="$route.name == 'app-account' && accountDetails">
         <li class="border">
           <div class="d-flex">
           <span class="border-right p-3 background width">Business Name</span>
@@ -44,6 +54,9 @@
           </div>
         </li>
       </ul>
+
+      <!-- this is for viewing the account form -->
+      <router-view></router-view>
   </div>
 </template>
 

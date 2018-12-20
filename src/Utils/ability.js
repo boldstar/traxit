@@ -1,6 +1,6 @@
-import { Ability } from '@casl/ability'
+import { Ability } from '@casl/ability';
 
-export const ability = new Ability()
+export const ability = new Ability();
 
 export const abilityPlugin = (store) => {
     ability.update(store.state.rules)
@@ -16,4 +16,4 @@ export const abilityPlugin = (store) => {
         }
       })
       return rules
-  }
+  };

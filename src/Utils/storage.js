@@ -16,4 +16,4 @@ export default (options) => (store) => {
   
       localStorage.state = JSON.stringify(newState)
     })
-  }
+  };

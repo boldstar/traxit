@@ -6,12 +6,12 @@ import VeeValidate from 'vee-validate';
 import moment from 'moment';
 import VueCharts from 'vue-chartjs';
 import jQuery from 'jquery';
-import Popper from 'popper.js'
+import Popper from 'popper.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import { Button } from 'bootstrap-vue/es/components';
 import { abilitiesPlugin } from '@casl/vue';
-import { ability } from '@/utils/ability.js';
+import { ability } from './ability.js';
 global.jQuery = jQuery;
 global.Popper = Popper;
 

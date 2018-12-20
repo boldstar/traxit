@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 // import { abilityPlugin, ability as appAbility } from './utils/ability.js'
-import storage from './utils/storage.js'
+// import storage from './utils/storage.js'
 
 export const ability = appAbility
 Vue.use(Vuex)

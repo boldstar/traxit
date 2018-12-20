@@ -1,9 +1,9 @@
 <template>
-  <div class="page-wrapper flex-column align-items-center">
+  <div class="page-wrapper">
     <div class="d-flex justify-content-center">
-      <div class="col-7" v-if="$route.name == 'add' && successAlert">
-        <Alert class="mb-0" v-bind:message="successAlert" v-if="successAlert" />
-      </div>
+      <Alert class="mb-0 col-sm-12 col-md-10 col-lg-10" v-bind:message="successAlert" v-if="successAlert && $route.name == 'add'" />
+    </div>
+    <div class="d-flex justify-content-center">
       <div class="d-flex flex-row justify-content-around mt-5 col-sm-12 col-md-10 col-lg-10 flex-sm-wrap" v-if="$route.name == 'add'">
         <div class="col-sm-6 col-md-4 col-lg-4">
           <div class="card-style card-body bg-light border shadow-sm p-5">

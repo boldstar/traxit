@@ -10,8 +10,8 @@ import Popper from 'popper.js'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import { Button } from 'bootstrap-vue/es/components';
-// import { abilitiesPlugin } from '@casl/vue';
-// import { ability } from './utils/ability.js';
+import { abilitiesPlugin } from '@casl/vue';
+import { ability } from './utils/ability.js';
 global.jQuery = jQuery;
 global.Popper = Popper;
 
@@ -34,7 +34,7 @@ Vue.config.productionTip = false;
 Vue.use(Button);
 Vue.use(VeeValidate);
 Vue.use(VueCharts);
-// Vue.use(abilitiesPlugin, ability);
+Vue.use(abilitiesPlugin, ability);
 
 //this is a filter for dates
 Vue.filter('formatDate', function(created_at) {

@@ -40,7 +40,9 @@
         </div>
       </div>
     </div>
-    <router-view v-if="$route.path == 'add/contact' || 'add/engagement' || 'add/business'"></router-view>
+    <div class="d-flex justify-content-center">
+      <router-view v-if="$route.path == 'add/contact' || 'add/engagement' || 'add/business'"></router-view>
+    </div>
   </div>
 </template>
 

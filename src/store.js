@@ -6,14 +6,10 @@ import storage from './utils/storage'
 
 export const ability = appAbility
 Vue.use(Vuex)
-<<<<<<< HEAD
-axios.defaults.baseURL = 'https://traxit.pro/api'
-=======
 axios.defaults.baseURL = 'https://aewcpa.traxit.pro/api'
 axios.defaults.headers.common['header1'] = {
   'X-Requested-With': 'XMLHttpRequest',
 }
->>>>>>> developer
 
 
 

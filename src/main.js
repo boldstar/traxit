@@ -11,7 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import { Button } from 'bootstrap-vue/es/components';
 import { abilitiesPlugin } from '@casl/vue';
-import { ability } from './utils/ability.js';
+import { ability } from '@/utils/ability.js';
 global.jQuery = jQuery;
 global.Popper = Popper;
 

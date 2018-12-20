@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import { abilityPlugin, ability as appAbility } from './utils/ability.js'
-import storage from './utils/storage.js'
+import { abilityPlugin, ability as appAbility } from '@/utils/ability.js'
+import storage from '@/utils/storage.js'
 
 export const ability = appAbility
 Vue.use(Vuex)
@@ -11,10 +11,8 @@ axios.defaults.headers.common['header1'] = {
   'X-Requested-With': 'XMLHttpRequest',
 }
 
-
-
 export default new Vuex.Store({
-  plugins: [
+  plugins: [  
     storage({
       storedKeys: ['rules', 'token'],
       destroyOn: ['destroySession']

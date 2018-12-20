@@ -6,7 +6,7 @@ import storage from './utils/storage'
 
 export const ability = appAbility
 Vue.use(Vuex)
-axios.defaults.baseURL = 'http://lawnsnmore.traxit.test/api'
+axios.defaults.baseURL = 'http://harrisandco.traxit.test/api'
 axios.defaults.headers.common['header1'] = {
   'X-Requested-With': 'XMLHttpRequest',
 }
@@ -443,6 +443,17 @@ export default new Vuex.Store({
         console.log(error.response.data)
       })
     },
+    retrieveUserToUpdate(context, id) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
+      axios.get('/userToUpdate/' + id)
+      .then(response => {
+        context.commit('userDetails', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
     updateUser(context, data) {
       axios.patch('/users/' +data.id, {
         name: data.name,
@@ -693,6 +704,7 @@ export default new Vuex.Store({
       axios.delete('/clients/' + id)
       .then(() => {
           context.commit('deleteClient', id)
+          context.commit('successAlert', 'Client Deleted Succesfully')
       })
       .catch(error => {
           console.log(error)

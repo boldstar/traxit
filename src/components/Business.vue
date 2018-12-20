@@ -46,7 +46,7 @@
            </div>
            <div class="card-footer d-flex justify-content-between">
                <router-link :to="'/contact/' + client.id + '/account/edit-business/' + business.id " class="btn btn-sm btn-primary">Edit</router-link>
-               <button type="button" class="btn btn-sm btn-secondary" @click="deleteBusiness(business.id)">Delete</button>
+               <button type="button" class="btn btn-sm btn-secondary" @click="deleteBusiness(business.id)" v-if="$can('delete', business)">Delete</button>
            </div>
        </div>
     </div>

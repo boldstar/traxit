@@ -26,7 +26,7 @@
                     <br>
                 </div>
                 <div class="d-flex justify-content-between">
-                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
                     <router-link class="btn btn-secondary" :to="{ path: '/administrator/users' }">Cancel</router-link>
                 </div>   
             </form>
@@ -69,7 +69,7 @@ export default {
     }
   },
   created() {
-      this.$store.dispatch('retrieveUser', this.$route.params.id)
+      this.$store.dispatch('retrieveUserToUpdate', this.$route.params.id)
   }
 }
 </script>

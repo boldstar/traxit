@@ -1,5 +1,5 @@
 <template>
-    <div class="reset page-wrapper w-25">
+    <div class="reset page-wrapper col-lg-4 col-md-8 col-sm-12">
 
         <Alert v-if="passwordAlert" v-bind:message="passwordAlert.message" />
 

@@ -235,6 +235,7 @@ export default new Router({
           {
           // this is the path to view the engagements that belong to the client
           path: 'engagements',
+          name: 'contact-engagements',
           component: () => import('@/contact/ContactEngagements.vue'),
             meta: {
               requiresAuth: true,

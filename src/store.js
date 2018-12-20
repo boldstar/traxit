@@ -6,7 +6,14 @@ import storage from './utils/storage'
 
 export const ability = appAbility
 Vue.use(Vuex)
+<<<<<<< HEAD
 axios.defaults.baseURL = 'https://traxit.pro/api'
+=======
+axios.defaults.baseURL = 'https://aewcpa.traxit.pro/api'
+axios.defaults.headers.common['header1'] = {
+  'X-Requested-With': 'XMLHttpRequest',
+}
+>>>>>>> developer
 
 
 
@@ -42,16 +49,18 @@ export default new Vuex.Store({
     business: '',
     user: '',
     result: '',
-    alert: '',
     resetToken: '',
-    resetError:'',
-    passwordAlert: '',
     returntypes: '',
     account: '',
     processing: false,
     loading: false,
     token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
+    alert: '',
+    successAlert: '',
+    resetError:'',
+    resetSuccess: '',
+    passwordAlert: '',
   },
   getters: {
     sidebarOpen(state) {
@@ -130,10 +139,10 @@ export default new Vuex.Store({
       return state.resetError
     },
     successAlert(state) {
-      return state.alert
+      return state.successAlert
     },
     resetSuccess(state) {
-      return state.alert
+      return state.resetSuccess
     },
     resetError(state) {
       return state.resetError
@@ -155,11 +164,14 @@ export default new Vuex.Store({
     accountDetails(state, account) {
       state.account = account[0]
     },
+    updateAccountDetails(state, account) {
+      state.account = account
+    },
     returnTypes(state, returns) {
       state.returntypes = returns
     },
     startProcessing(state) {
-      state.processing = !state.processing
+      state.processing = true
     },
     resetToken(state, token) {
       state.resetToken = token
@@ -388,24 +400,26 @@ export default new Vuex.Store({
       state.result = keyword;
     },
     errorAlert(state, alert) {
-      state.alert = alert
+      state.errorAlert = alert
     },
     successAlert(state, alert) {
-      state.alert = alert
+      state.successAlert = alert
     },
     clearAlert(state) {
       state.alert = ''
-      state.resetError = '',
+      state.resetError = ''
       state.resetSuccess = ''
+      state.successAlert = ''
+      state.errorAlert = ''
     },
     userDetails(state, user) {
       state.user = user[0]
     },
     notifyEmailSent(state, alert) {
-      state.alert = alert
+      state.emailAlert = alert
     },
     resetSuccess(state, alert) {
-      state.alert = alert
+      state.resetSucess = alert
     },
     resetError(state, error) {
       state.resetError = error
@@ -429,6 +443,17 @@ export default new Vuex.Store({
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
       axios.get('/userProfile')
+      .then(response => {
+        context.commit('userDetails', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    retrieveUserToUpdate(context, id) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
+      axios.get('/userToUpdate/' + id)
       .then(response => {
         context.commit('userDetails', response.data)
       })
@@ -508,7 +533,6 @@ export default new Vuex.Store({
       .then(response => {
         context.commit('resetSuccess', response.data)
         context.commit('loading')
-        context.commit('clearResetToken')
       })
       .catch(error => {
         context.commit('loading')
@@ -551,7 +575,7 @@ export default new Vuex.Store({
               resolve(response)
           })
           .catch(error => {
-              console.log(error)
+              console.log(error.response.data)
               reject(error)
           })
       })
@@ -687,6 +711,7 @@ export default new Vuex.Store({
       axios.delete('/clients/' + id)
       .then(() => {
           context.commit('deleteClient', id)
+          context.commit('successAlert', 'Client Deleted Succesfully')
       })
       .catch(error => {
           console.log(error)
@@ -741,7 +766,8 @@ export default new Vuex.Store({
         done: false
       })
       .then(response => {
-        context.commit('addClientEngagement', response.data)
+        context.commit('addClientEngagement', response.data.engagement)
+        context.commit('successAlert', response.data.message)
       })
       .catch(error => {
         console.log(error.response.data)
@@ -782,7 +808,7 @@ export default new Vuex.Store({
           context.commit('deleteEngagement', id)
       })
       .catch(error => {
-          console.log(error)
+          console.log(error.response.data)
       })                
     },
     getBusiness({commit}, id) {
@@ -808,10 +834,11 @@ export default new Vuex.Store({
         fax_number: business.fax_number
       })
       .then(response => {
-        context.commit('addBusiness', response.data)
+        context.commit('addBusiness', response.data.business)
+        context.commit('successAlert', response.data.message)
       })
       .catch(error => {
-        console.log(error.response.data)
+        console.log(error)
       })
     },
     updateBusiness(context, business) {
@@ -1076,12 +1103,15 @@ export default new Vuex.Store({
       })                
     },
     searchDatabase(context, data) {
+      context.commit('startProcessing')
       axios.post('/search', {
         keyword: data.keyword,
         category: data.category
       }).then(response => {
         context.commit('searchDatabase', response.data)
+        context.commit('stopProcessing')
       }).catch(error => {
+        context.commit('stopProcessing')
         console.log(error.response.data)
       })
     },
@@ -1147,6 +1177,46 @@ export default new Vuex.Store({
         console.log(error.response.data)
       })
     },
+    addAccountDetails(context, account) {
+      axios.post('/account', {
+        business_name: account.business_name,
+        email: account.email,
+        phone_number: account.phone_number,
+        fax_number: account.fax_number,
+        address: account.address,
+        city: account.city,
+        state: account.state,
+        postal_code: account.postal_code,
+        logo: account.logo,
+        subscription: account.subscription
+      })
+      .then(response => {
+        context.commit('addAccountDetails', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    updateAccountDetails(context, account) {
+      axios.patch('/account/' +account.id, {
+        business_name: account.business_name,
+        email: account.email,
+        phone_number: account.phone_number,
+        fax_number: account.fax_number,
+        address: account.address,
+        city: account.city,
+        state: account.state,
+        postal_code: account.postal_code,
+        logo: account.logo,
+        subscription: account.subscription
+      })
+      .then(response => {
+        context.commit('updateAccountDetails', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    }
   }, 
 })
 

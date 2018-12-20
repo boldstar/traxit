@@ -1,50 +1,76 @@
 <template>
-  <div class="page-wrapper d-flex justify-content-center">
-    <div class="d-flex flex-row mt-5" v-if="$route.name == 'add'">
-      <div class="card-style card-body bg-light border shadow-sm mr-5 py-5 px-5">
-        <div class="h3 mb-4 font-weight-bold">
-          Contact
+  <div class="page-wrapper">
+    <div class="d-flex justify-content-center">
+      <Alert class="mb-0 col-sm-12 col-md-10" v-bind:message="successAlert" v-if="successAlert && $route.name == 'add'" />
+    </div>
+    <div class="d-flex justify-content-center">
+      <div class="d-flex flex-row justify-content-around mt-5 col-sm-12 col-md-10 col-lg-10 flex-sm-wrap" v-if="$route.name == 'add'">
+        <!-- contact card -->
+        <div class="col-sm-6 col-md-4">
+          <div class="card-style card-body bg-light border shadow-sm p-5">
+            <div class="h3 mb-4 font-weight-bold">
+              <span>Contact</span>
+            </div>
+            <i class="text-primary fas fa-user-circle fa-7x mb-4 mt-3"></i>
+            <div class="mt-3">
+              <router-link to="add/contact" class="btn btn-style">Create</router-link>
+            </div>
+          </div>
         </div>
-        <i class="text-primary fas fa-user-circle fa-7x mb-4 mt-3"></i>
-        <div class="mt-3">
-          <router-link to="add/contact" class="btn btn-style">Create</router-link>
+        <!-- business card -->
+        <div class="col-sm-6 col-md-4">
+          <div class="card-style card-body bg-light border shadow-sm p-5">
+            <div class="h3 mb-4 font-weight-bold">
+              <span>Business</span>
+            </div>
+            <i class="text-primary far fa-building fa-7x mb-4 mt-3"></i>
+            <div class="mt-3">
+              <router-link to="add/business" class="btn btn-style">Create</router-link>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="card-style card-body bg-light border shadow-sm py-5">
-        <div class="h3 mb-4 font-weight-bold">
-          Business
-        </div>
-        <i class="text-primary far fa-building fa-7x mb-4 mt-3"></i>
-        <div class="mt-3">
-          <router-link to="add/business" class="btn btn-style">Create</router-link>
-        </div>
-      </div>
-      <div class="card-style card-body bg-light border shadow-sm ml-5 py-5">
-        <div class="h3 mb-4 font-weight-bold">
-          Engagement
-        </div>
-        <i class="text-primary far fa-folder-open fa-7x mb-4 mt-3"></i>
-        <div class="mt-3">
-          <router-link to="add/engagement" class="btn btn-style">Create</router-link>
+        <!-- engagement card -->
+        <div class="col-sm-6 col-md-4 mt-sm-3 mt-md-0">
+          <div class="card-style card-body bg-light border shadow-sm p-5">
+            <div class="h3 mb-4 font-weight-bold">
+              <span>Engagement</span>
+            </div>
+            <i class="text-primary far fa-folder-open fa-7x mb-4 mt-3"></i>
+            <div class="mt-3">
+              <router-link to="add/engagement" class="btn btn-style">Create</router-link>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <router-view v-if="$route.path == 'add/contact' || 'add/engagement'"></router-view>
+    <div class="d-flex justify-content-center">
+      <router-view v-if="$route.path == 'add/contact' || 'add/engagement' || 'add/business'"></router-view>
+    </div>
   </div>
 </template>
 
 <script>
-
-
+import Alert from '@/components/Alert.vue'
+import {mapGetters} from 'vuex'
 export default {
   name: 'add',
+  data() {
+    return {
+      alert: ''
+    }
+  },
+  components: {
+    Alert
+  },
+  computed: {
+    ...mapGetters(['successAlert'])
+  },
 }
 </script>
 
 <style lang="scss" scoped>
 
 .card-style {
-  width: 250px;
   border-radius: 10px;
 }
  

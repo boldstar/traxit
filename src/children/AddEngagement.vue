@@ -74,7 +74,7 @@
                   </div>
                     <select class="form-control" id="status" v-model="engagement.status">
                     <option  selected disabled>{{ option }}</option>
-                    <option v-for="status in workflow.statuses" :key="status.id" :value="status">
+                    <option v-for="status in workflow.statuses" :key="status.id" :value="status.status">
                       {{ status.status }}
                     </option>
                   </select>
@@ -160,6 +160,8 @@ export default {
   },
   created: function() {
     this.$store.dispatch('getReturnTypes')
+    this.$store.dispatch('retrieveWorkflows');
+    this.$store.dispatch('retrieveUsers');
     this.engagement.return_type = this.option
     this.engagement.workflow_id = this.option
     this.engagement.assigned_to = this.option

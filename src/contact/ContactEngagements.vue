@@ -14,43 +14,43 @@
             <router-view></router-view>
         </transition>
 
-        <!-- this will show if there is no engagements only -->
-        <div v-if="noEngagements & !engagementLoaded" class="mt-5">
-            This Contact Has No Engagements...
-        </div>
-
         <!-- this shows if there is engagements -->
-        <div v-else>
 
-            <div v-if="!engagementLoaded">
-                
-                        <table class="table">
-                            <thead class="text-primary border">
-                                <tr>
-                                <th  scope="col">Category</th>
-                                <th  scope="col">Return Type</th>
-                                <th  scope="col">Year</th>
-                                <th scope="col">Assigned To</th>
-                                <th  scope="col">Status</th>
-                                <th  scope="col">Created Date</th>
-                                <th  scope="col">Details</th>
-                                </tr>
-                            </thead>
-                            <tbody class="table-bordered">
-                                <tr v-for="(engagement, index) in clientEngagements" :key="index">
-                                <th class="text-capitalize">{{ engagement.category}}</th>
-                                <th>{{ engagement.return_type}}</th>
-                                <th>{{ engagement.year }}</th>
-                                <th>{{ engagement.assigned_to}}</th>
-                                <th>{{ engagement.status }}</th>
-                                <th>{{ engagement.created_at | formatDate }}</th>
-                                <th><router-link v-bind:to="'/engagement/' + engagement.id " class="btn btn-primary btn-sm ml-auto"><i class="far fa-eye mr-2"></i>View</router-link></th>
-                                </tr>
-                            </tbody>
-                        </table> 
-                    </div>
-
+    <div v-if="!engagementLoaded && $route.name == 'contact-engagements'">
+    
+            <table class="table">
+                <thead class="text-primary border">
+                    <tr>
+                    <th  scope="col">Category</th>
+                    <th  scope="col">Return Type</th>
+                    <th  scope="col">Year</th>
+                    <th scope="col">Assigned To</th>
+                    <th  scope="col">Status</th>
+                    <th  scope="col">Created Date</th>
+                    <th  scope="col">Details</th>
+                    </tr>
+                </thead>
+                <tbody class="table-bordered">
+                    <tr v-for="(engagement, index) in clientEngagements" :key="index">
+                    <th class="text-capitalize">{{ engagement.category}}</th>
+                    <th>{{ engagement.return_type}}</th>
+                    <th>{{ engagement.year }}</th>
+                    <th>{{ engagement.assigned_to}}</th>
+                    <th>{{ engagement.status }}</th>
+                    <th>{{ engagement.created_at | formatDate }}</th>
+                    <th><router-link v-bind:to="'/engagement/' + engagement.id " class="btn btn-primary btn-sm ml-auto"><i class="far fa-eye mr-2"></i>View</router-link></th>
+                    </tr>
+                </tbody>
+            </table> 
         </div>
+
+                    <!-- this will show if there is no engagements only -->
+        <div v-else>
+            <div v-if="noEngagements & !engagementLoaded" class="mt-5">
+                This Contact Has No Engagements...
+            </div>
+        </div>
+
 
         
     <!-- this is the loading ring for the engagements -->

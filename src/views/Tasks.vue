@@ -139,9 +139,6 @@ export default {
       'users',
       'allWorkflows'
     ]),
-    mapStatuses() {
-
-    }
   },
   methods: {
     showModal() {
@@ -169,6 +166,7 @@ export default {
       this.selectedWorkflow = workflow
         this.taskToUpdate = id
         this.$store.dispatch('retrieveUsers');
+        this.$store.dispatch('retrieveWorkflows');
         this.task.user_id = this.option
         this.task.status = this.option
         this.$refs.modal.show()

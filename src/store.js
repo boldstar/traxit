@@ -1170,7 +1170,7 @@ export default new Vuex.Store({
         context.commit('accountDetails', response.data)
       })
       .catch(error => {
-        console.log(error.response.data)
+        console.log(error)
       })
     },
     addAccountDetails(context, account) {

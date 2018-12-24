@@ -7,11 +7,6 @@ import storage from './storage.js'
 export const ability = appAbility
 Vue.use(Vuex)
 axios.defaults.baseURL = 'https://aewcpa.traxit.pro/api'
-const csrftoken = document.head.querySelector('meta[name="csrf-token"]');
-axios.defaults.headers.common['header1'] = {
-  'X-Requested-With': 'XMLHttpRequest',
-  'X-CSRF-TOKEN': csrftoken.content
-}
 
 export default new Vuex.Store({
   plugins: [  

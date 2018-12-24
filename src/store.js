@@ -559,6 +559,7 @@ export default new Vuex.Store({
               password: credentials.password,
           })
           .then(response => {
+            console.log(response.data)
               const token = response.data.access_token
 
               localStorage.setItem('access_token', token)

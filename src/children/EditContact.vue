@@ -93,9 +93,7 @@ export default {
   methods: {
     ...mapActions(['updateClient']),
 
-    updateThisClient(id) {
-      if(!this.client.first_name || !this.client.email || !this.client.cell_phone ) return;
-      
+    updateThisClient() {
         this.updateClient( {
           id: this.client.id,
           category: this.client.category,
@@ -134,8 +132,3 @@ export default {
   
 }
 </script>
-
-
-<style scoped lang="scss">
-
-</style>

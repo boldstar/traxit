@@ -1,17 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import { abilityPlugin, ability as appAbility } from './utils/ability'
-import storage from './utils/storage'
+import { abilityPlugin, ability as appAbility } from './ability'
+import storage from './storage'
 
 export const ability = appAbility
 Vue.use(Vuex)
-axios.defaults.baseURL = 'https://aewcpa.traxit.pro/api'
-axios.defaults.headers.common['header1'] = {
-  'X-Requested-With': 'XMLHttpRequest',
-}
-
-
+axios.defaults.baseURL = 'http://staging.traxit.test/api'
 
 export default new Vuex.Store({
   plugins: [

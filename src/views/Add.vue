@@ -25,7 +25,11 @@
             </div>
             <i class="text-primary far fa-building fa-7x mb-4 mt-3"></i>
             <div class="mt-3">
+<<<<<<< HEAD
               <router-link to="add/business" class="btn btn-style">Add</router-link>
+=======
+              <router-link to="add/business" class="btn btn-style">Create</router-link>
+>>>>>>> developer
             </div>
           </div>
         </div>
@@ -37,7 +41,11 @@
             </div>
             <i class="text-primary far fa-folder-open fa-7x mb-4 mt-3"></i>
             <div class="mt-3">
+<<<<<<< HEAD
               <router-link to="add/engagement" class="btn btn-style">Start</router-link>
+=======
+              <router-link to="add/engagement" class="btn btn-style">Create</router-link>
+>>>>>>> developer
             </div>
           </div>
         </div>

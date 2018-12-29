@@ -5,7 +5,7 @@
         
         <ul class="navbar-nav mr-3 d-flex flex-row">
             <li v-if="loggedIn" class="mr-3">
-                <div class="input-group input-group-sm">
+                <div class="input-group input-group-sm" @keyup.enter="searchDatabase">
                 <div class="input-group-prepend">
                     <select v-model="category" class="btn btn-light text-primary">
                         <option disabled>{{option}}</option>
@@ -15,7 +15,7 @@
                 </div>
                 <input type="text" placeholder="Type Here.." class="form-control" v-model="search">
                 <div class="input-group-append">
-                    <router-link class="btn btn-secondary" to="/search" @click.native="searchDatabase" @keyup.enter.native="searchDatabase">Search</router-link>
+                    <button class="btn btn-secondary" @click="searchDatabase">Search</button>
                 </div>
                 </div>
             </li>

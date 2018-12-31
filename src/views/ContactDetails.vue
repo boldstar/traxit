@@ -2,6 +2,7 @@
 <div class="page-wrapper mt-1">
 <!-- this is the go back button -->
 <Alert v-if="alert" v-bind:message="alert" />
+<Alert v-if="successAlert" v-bind:message="successAlert" />
   <div>
     <router-link class="float-left btn btn-secondary btn-sm mt-3" to="/contacts"><i class="far fa-arrow-alt-circle-left mr-2"></i>Contacts</router-link>  
   </div>
@@ -102,7 +103,8 @@ export default {
     ...mapGetters(
         [
           'client',
-          'engagement'
+          'engagement',
+          'successAlert'
         ]
       )
   },

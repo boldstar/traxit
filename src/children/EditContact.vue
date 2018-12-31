@@ -9,6 +9,10 @@
         </select>
         <input type="text" class="form-control mb-3" placeholder="Referral Type" v-model="client.referral_type">
         <div class="d-flex mb-3 bg-light p-2">
+          <div class="h6 mb-0 mr-2">Is Client Active?</div>
+          <input type="checkbox" v-model="client.active" class="align-self-center mt-1">
+        </div>
+        <div class="d-flex mb-3 bg-light p-2">
           <div class="h6 mb-0 mr-2">Does Contact Have Spouse?</div>
           <input type="checkbox" v-model="client.has_spouse" class="align-self-center mt-1">
         </div>
@@ -96,6 +100,7 @@ export default {
     updateThisClient() {
         this.updateClient( {
           id: this.client.id,
+          active: this.client.active,
           category: this.client.category,
           referral_type: this.client.referral_type,
           first_name: this.client.first_name,

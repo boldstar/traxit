@@ -15,6 +15,12 @@ export default {
         removeAlert() {
             this.$store.commit('clearAlert')
         }
+    },
+    mounted() {
+        var self = this
+        setTimeout(() => {
+            self.removeAlert()
+        }, 10000)
     }
 }
 </script>

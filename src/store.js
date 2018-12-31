@@ -413,7 +413,7 @@ export default new Vuex.Store({
       state.emailAlert = alert
     },
     resetSuccess(state, alert) {
-      state.resetSucess = alert
+      state.resetSuccess = alert
     },
     resetError(state, error) {
       state.resetError = error
@@ -525,6 +525,7 @@ export default new Vuex.Store({
         token: data.token
       })
       .then(response => {
+        console.log(response.data)
         context.commit('resetSuccess', response.data)
         context.commit('loading')
       })
@@ -636,6 +637,7 @@ export default new Vuex.Store({
     addClient(context, client) {
       axios.post('/clients', {
         id: client.id,
+        active: true,
         category: client.category,
         referral_type: client.referral_type,
         first_name: client.first_name,
@@ -670,6 +672,7 @@ export default new Vuex.Store({
     updateClient(context, client) {
       axios.patch('/clients/' + client.id, {
         id: client.id,
+        active: client.active,
         category: client.category,
         referral_type: client.referral_type,
         first_name: client.first_name,
@@ -849,7 +852,6 @@ export default new Vuex.Store({
         fax_number: business.fax_number
       })
       .then(response => {
-        console.log(response.data)
         context.commit('updateBusiness', response.data)
       })
       .catch(error => {
@@ -858,8 +860,9 @@ export default new Vuex.Store({
     },
     deleteBusiness(context, id) {
       axios.delete('/businesses/' + id)
-      .then(() => {
+      .then(response => {
         context.commit('deleteBusiness', id)
+        context.commit('successAlert', response.data)
       })
       .catch(error => {
         console.log(error.response.data)

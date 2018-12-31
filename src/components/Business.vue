@@ -46,19 +46,51 @@
            </div>
            <div class="card-footer d-flex justify-content-between">
                <router-link :to="'/contact/' + client.id + '/account/edit-business/' + business.id " class="btn btn-sm btn-primary">Edit</router-link>
-               <button type="button" class="btn btn-sm btn-secondary" @click="deleteBusiness(business.id)" v-if="$can('delete', business)">Delete</button>
+               <button type="button" class="btn btn-sm btn-secondary" @click="requestDelete(business.id)" v-if="$can('delete', business)">Delete</button>
            </div>
        </div>
+
+       <b-modal v-model="modalShow" id="myModal" ref="myModal" hide-footer title="Delete Dependent">
+            <div class="d-block text-left">
+                <h5>Are you sure you want to delete?</h5>
+                <br>
+                <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
+            </div>
+            <div class="d-flex">
+                <b-btn class="mt-3" variant="danger" @click="modalShow = false">Cancel</b-btn>
+                <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteBusiness">Confirm</b-btn>
+            </div>
+        </b-modal>
     </div>
 </template>
 
 <script>
+import bModal from 'bootstrap-vue/es/components/modal/modal'
+import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
+
 export default {
     name: 'Business',
     props: ['businesses', 'client'],
+    components: {
+        'b-modal': bModal
+    },
+    directives: {
+        'b-modal': bModalDirective
+    },
+    data() {
+        return {
+            modalShow: false,
+            businessToDelete: null
+        }
+    },
     methods: {
+        requestDelete(id) {
+            this.businessToDelete = id
+            this.modalShow = true
+        },
         deleteBusiness(id) {
-            this.$store.dispatch('deleteBusiness', id)
+            this.$store.dispatch('deleteBusiness', this.businessToDelete)
+            this.modalShow = false
         }
     },
 }

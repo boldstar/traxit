@@ -6,7 +6,9 @@
         <div class="card shadow">
             <div class="card-header bg-light text-primary border-primary d-flex justify-content-between">
                 <h6 class="mt-2">Request Reset</h6>
-                <router-link class="btn btn-sm btn-outline-primary" to="/login">Login <i class="fas fa-sign-in-alt ml-2"></i></router-link>
+                <div>
+                    <router-link class="btn btn-sm btn-outline-primary" to="/login">Login <i class="fas fa-sign-in-alt ml-2"></i></router-link>
+                </div>
             </div>
             <div class="card-body">
                 <div class="text-left">

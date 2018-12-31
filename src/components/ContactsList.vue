@@ -2,23 +2,37 @@
 <div>
 
     <!-- this is the row of buttons above the clients list -->
-    <div class="d-flex mb-3">.
+    <div class="d-flex mb-3">
         <div class="w-25">
             <input class="form-control" placeholder="Filter By Last Name" v-model="searchClient" type="search">
         </div>
-        <div class="mr-auto ml-2">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Category</label>
+        <div class="mr-auto d-flex">
+            <div class="mx-2">      
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Category</label>
+                    </div>
+                    <select class="form-control" id="client_id" v-model="filterType">
+                        <option>{{ type }}</option>
+                        <option v-for="(category, index) in filterCategories" :key="index">
+                        {{ category }}
+                        </option>
+                    </select>
+                </div> 
             </div>
-            <select class="custom-select" id="client_id" v-model="filterType">
-                <option>{{ type }}</option>
-                <option v-for="(category, index) in filterCategories" :key="index">
-                {{ category }}
-                </option>
-            </select>
-        </div> 
-    </div>  
+            <div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Activity</label>
+                    </div>
+                    <select class="form-control" id="client_id" v-model.number="filterActive">
+                        <option>{{ type }}</option>
+                        <option value=1>Active</option>
+                        <option value=0>Inactive</option>
+                    </select>
+                </div> 
+            </div>
+        </div>  
 
     <div class="d-flex">
         <div class="input-group d-flex" v-if="uploadInput">
@@ -60,7 +74,7 @@
         </thead> 
         <tbody class="client-info table-bordered"  v-if="!tableLoaded">
             <tr v-for="(client, index) in sortedClients"  :key="index">
-                <td class="text-capitalize">{{ client.last_name }}, {{client.first_name}} <span v-if="client.has_spouse == true">&</span> {{ client.spouse_first_name }}</td>
+                <td class="text-capitalize">{{ client.last_name }}, {{client.first_name}} <span v-if="client.has_spouse == true">&</span> <span v-if="client.last_name != client.spouse_last_name && client.has_spouse == true"> {{client.spouse_last_name}},</span> {{ client.spouse_first_name }}</td>
                 <td class="text-capitalize">{{ client.category }}</td>
                 <td>{{ client.email }}</td>
                 <td>{{ client.cell_phone }}</td>
@@ -100,7 +114,10 @@
         </div>
         <div class="ml-auto align-self-center">
             <label for="count" class="font-weight-bold">Viewing: </label>
-            <span id="count">
+            <span id="count" v-if="sortedClients.length >= 10">
+                {{ (sortedClients.length * pageSize) * currentPage }} of {{ clients.length }}
+            </span>
+            <span id="count" v-else>
                 {{ sortedClients.length }} of {{ clients.length }}
             </span>
         </div>  
@@ -128,6 +145,7 @@ export default {
             fileLabel: null,
             hasFile: false,
             filterType: '',
+            filterActive: null,
             searchClient: '',
             currentSort: 'name',
             currentSortDir: 'asc',
@@ -147,6 +165,8 @@ export default {
             return 0;
             }).filter(client => {
               if(this.filterType === 'All'){ return client } else{ return client.category === this.filterType} 
+            }).filter(client => {
+              if(this.filterActive === 'All'){ return client } else{ return client.active === this.filterActive} 
             }).filter( client => {
             return !this.searchClient || client.last_name.toLowerCase().indexOf(this.searchClient.toLowerCase()) >= 0 })
             .filter((row, index) => {
@@ -195,6 +215,7 @@ export default {
         this.tableLoaded = true;
         this.pageSize = this.options[1]
         this.filterType = this.type
+        this.filterActive = this.type
         var self = this;
         setTimeout(() => {
             self.tableLoaded = false;

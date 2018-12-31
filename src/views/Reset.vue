@@ -1,6 +1,6 @@
 <template>
-  <div class="d-flex justify-content-center col-4">
-  <div class="reset" v-if="resetToken">
+  <div class="d-flex justify-content-center col-md-8 col-sm-12">
+  <div class="reset col-lg-4 col-md-6 col-sm-12" v-if="resetToken" >
     
       <div class="bg-light text-primary p-3 font-weight-bold" v-if="resetSuccess">
           <span>Please Proceed To Login, Password Reset Was Succesful</span>
@@ -67,7 +67,7 @@ export default {
       })
       .then(() => {
         this.password = ''
-        this.password_confirmation = ''
+        this.confirmpassword = ''
       })
     }
   },

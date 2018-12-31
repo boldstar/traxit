@@ -6,7 +6,7 @@ import storage from './storage.js'
 
 export const ability = appAbility
 Vue.use(Vuex)
-axios.defaults.baseURL = 'https://aewcpa.traxit.pro/api'
+axios.defaults.baseURL = 'https://staging.traxit.pro/api'
 axios.defaults.headers.common['header1'] = {
   'X-Requested-With': 'XMLHttpRequest',
 }

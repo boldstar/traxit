@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import { abilityPlugin, ability as appAbility } from './ability.js'
+import moment from 'moment';
+import { abilityPlugin, ability as appAbility } from './ability'
 import storage from './storage.js'
 
 export const ability = appAbility
@@ -362,6 +363,7 @@ export default new Vuex.Store({
     },
     destroyToken(state) {
       state.token = null
+      state.expiresIn = null
     },
     retrieveWorkflows(state, workflows) {
       state.workflows = workflows
@@ -543,12 +545,14 @@ export default new Vuex.Store({
           .then(response => {
             
             localStorage.removeItem('access_token')
+            localStorage.removeItem('expires_on')
             context.commit('destroyToken')
             context.commit('destroySession')
             resolve(response)
           })
           .catch(error => {
             localStorage.removeItem('access_token')
+            localStorage.removeItem('expires_on')
             context.commit('destroyToken')
             reject(error)
           })
@@ -564,7 +568,8 @@ export default new Vuex.Store({
           })
           .then(response => {
               const token = response.data.access_token
-
+              const date = new Date(moment().add(1, 'day').toDate());
+              localStorage.setItem('expires_on', date)
               localStorage.setItem('access_token', token)
               commit('createSession', response.data)
               resolve(response)

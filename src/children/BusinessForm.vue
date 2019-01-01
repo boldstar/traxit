@@ -33,8 +33,8 @@
                     <input type="text" class="form-control mb-3" v-model="business.state" placeholder="State">
                     <input type="text" class="form-control mb-3" v-model="business.postal_code" placeholder="Postal Code">
                     <input type="email" class="form-control mb-3" v-model="business.email" placeholder="Email">
-                    <input type="text" class="form-control mb-3" v-model="business.phone_number" placeholder="Phone Number">
-                    <input type="text" class="form-control mb-3" v-model="business.fax_number" placeholder="Fax Number">
+                    <number-input class="mb-3" v-model="business.phone_number" :placeholder="'Phone Number'" mask-type="number"></number-input>
+                    <number-input class="mb-3" v-model="business.fax_number" :placeholder="'Fax Number'" mask-type="number"></number-input>
                 </div>
 
 
@@ -49,9 +49,13 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import NumberInput from '@/components/NumberInput.vue'
 
 export default {
     name: 'BusinessForm',
+    components: {
+        NumberInput
+    },
     data() {
         return {
             business: {

@@ -1,22 +1,44 @@
 <template>
     <div id="app">
-     
-            <component :is="layout"> 
-                    <router-view/>
-            </component>
-         
+        <component :is="layout"> 
+                <router-view/>
+        </component> 
     </div>
 </template>
 
 <script>
 const default_layout = "default";
+import {mapActions} from 'vuex'
+import moment from 'moment'
 
 export default {
     computed: {
         layout() {
             return (this.$route.meta.layout || default_layout) + '-layout';
+        },
+    },
+    methods: {
+        ...mapActions(['destroyToken']),
+        destroySessionIfTokenIsExpired() {
+            const expiresOn = localStorage.getItem('expires_on')
+            const expiresDate = moment(expiresOn).format('YYYYMMDDHHMMSS')
+            if(expiresOn == null) return;
+            const current = new Date(moment())
+            const currentDate = moment(current).format('YYYYMMDDHHMMSS')
+            if(currentDate >= expiresDate) {
+                this.$store.dispatch('destroyToken')
+                this.$router.push('/login')
+            } else return;
         }
     },
+    watch: {
+        '$route': function(to, from) {
+            this.destroySessionIfTokenIsExpired()
+        }
+    },
+    mounted() {
+        this.destroySessionIfTokenIsExpired()
+    }
 }
 </script>
 

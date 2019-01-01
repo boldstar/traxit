@@ -9,6 +9,7 @@
     <div class="card-body bg-light border mb-2">
       <h4 class="text-left text-primary m-0"><i class="far fa-address-book mr-2"></i>New Contact</h4>
     </div>
+
     <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center bg-light border p-3 mb-3">
       <div class="form-group">
 
@@ -50,8 +51,8 @@
 
         <div class="d-flex mb-3">
           <input type="text" class="form-control" placeholder="email@example.com" v-model="client.email" name="Email">
-          <input type="text" class="form-control mx-2" placeholder="Cell Phone #" v-model="client.cell_phone" name="Cell Phone">
-          <input type="text" class="form-control" placeholder="Work Phone #" v-model="client.work_phone" name="Work Phone">
+          <number-input :placeholder="'Cell Phone'" v-model="client.cell_phone" mask-type="number" class="mx-2"></number-input>
+          <number-input :placeholder="'Work Phone'" v-model="client.work_phone" mask-type="number"></number-input>
         </div>
 
         <div class="d-flex mb-3 bg-light p-2">
@@ -73,8 +74,8 @@
 
         <div class="d-flex mb-3" v-if="client.has_spouse == true">
           <input type="text" class="form-control" placeholder="email@example.com" v-model="client.spouse_email" name="Spouse Email">
-          <input type="text" class="form-control mx-2" placeholder="Cell Phone #" v-model="client.spouse_cell_phone" name="Spouse Cell Phone">
-          <input type="text" class="form-control" placeholder="Work Phone #" v-model="client.spouse_work_phone" name="Spouse Work Phone">
+          <number-input :placeholder="'Cell Phone'"  v-model="client.spouse_cell_phone" mask-type="number" class="mx-2"></number-input>
+          <number-input :placeholder="'Work Phone'"  v-model="client.spouse_work_phone" mask-type="number"></number-input>
         </div>
 
         <h5 class="text-left mb-3">Address:</h5>
@@ -93,9 +94,13 @@
 
 <script>
 import { mapActions } from 'vuex'
+import NumberInput from '@/components/NumberInput.vue'
 
 export default {
   name: 'contact',
+  components: {
+    NumberInput
+  },
   data () {
     return {
       client: {

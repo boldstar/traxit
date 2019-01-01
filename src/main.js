@@ -51,7 +51,9 @@ Vue.filter('formatNumber', function (number) {
 
 //this is route protection
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
+
+
+  if (to.matched.some(record => record.meta.requiresAuth)) {     
     // this route requires auth, check if logged in
     // if not, redirect to login page.
     if (!store.getters.loggedIn) {
@@ -61,7 +63,7 @@ router.beforeEach((to, from, next) => {
     } else {
       next()
     }
-  } else if (to.matched.some(record => record.meta.requiresVisitor)) {
+  }else if (to.matched.some(record => record.meta.requiresVisitor)) {
     // this route requires auth, check if logged in
     // if yes, redirect to home page.
     if (store.getters.loggedIn) {

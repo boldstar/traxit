@@ -10,7 +10,7 @@
                     <select v-model="category" class="btn btn-light text-primary">
                         <option disabled>{{option}}</option>
                         <option value="name">Name</option>
-                        <option value="taxpayer">Tax Payer</option>
+                        <option value="taxpayer">Taxpayer</option>
                         <option value="spouse">Spouse</option>
                         <option value="number">Phone #</option>
                     </select>

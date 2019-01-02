@@ -55,10 +55,13 @@
           <number-input :placeholder="'Work Phone'" v-model="client.work_phone" mask-type="number"></number-input>
         </div>
 
-        <div class="d-flex mb-3 bg-light p-2">
-          <div class="h6 mb-0 mr-2">Does Contact Have Spouse?</div>
-          <input type="checkbox" v-model="client.has_spouse" class="align-self-center mt-1" name="Has Spouse">
+        <div class="d-flex mb-3 bg-light p-2 custom-control custom-checkbox bg-white form-control" v-bind:class="{'input-error' : has_spouse_alert}">
+          <span class="mr-3 font-weight-bold mb-1 h6">Does Contact Have Spouse?</span>
+          <input type="checkbox" v-model="client.has_spouse" class="custom-control-input" id="customCheck1" @change="has_spouse_alert = false">
+          <label class="custom-control-label ml-3 align-self-start" for="customCheck1"></label>
+          <small v-if="has_spouse_alert" class="text-danger">If contact does not have spouse, please uncheck the has spouse checkbox</small>
         </div>
+        
 
         <h5 class="text-left mb-3" v-if="client.has_spouse == true">Spouse:</h5>
         <div class="d-flex mb-3" v-if="client.has_spouse == true">
@@ -103,6 +106,7 @@ export default {
   },
   data () {
     return {
+      has_spouse_alert: false,
       client: {
         id: '',
         category: null,
@@ -140,6 +144,7 @@ export default {
     validateBeforeSubmit() {
             this.$validator.validateAll().then((result) => {
                 if(this.client.has_spouse == true && this.client.spouse_first_name === '') {
+                  this.has_spouse_alert = true
                   return;
                 }
                 else if (result) {

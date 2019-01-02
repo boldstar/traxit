@@ -35,8 +35,8 @@
             </div>
 
             <div class="btn-group ml-auto">
-                <button class="btn btn-outline-secondary" @click="downloadEngagements">Download<span><i class="fas fa-download ml-2"></i></span></button>
-                <router-link to="/add" class="btn btn-primary pt-2">Engagement<i class="ml-2 fas fa-plus"></i></router-link>
+                <button class="btn btn-outline-secondary" @click="downloadEngagements" data-toggle="tooltip" data-placement="top" title="Download Engagements"><i class="far fa-file-excel"></i></button>
+                <router-link to="/add" class="btn btn-primary pt-2" data-toggle="tooltip" data-placement="top" title="Add New Engagement"><i class="far fa-plus-square"></i></router-link>
             </div>
 
         </div>
@@ -54,7 +54,7 @@
                 </tr>
             </thead> 
             <tbody class="client-info table-bordered" v-if="!tableLoaded">
-                <tr v-for="(engagement, index) in sortedEngagements"  :key="index">
+                <tr v-for="(engagement, index) in sortedEngagements"  :key="index" @click="viewDetails(engagement.id)">
                     <td class="text-capitalize">{{ engagement.name }}</td>
                     <td class="text-capitalize">{{ engagement.category }}</td>
                     <td>{{ engagement.return_type }}</td>
@@ -185,6 +185,9 @@ export default {
         },
         downloadEngagements() {
             this.$store.dispatch('downloadEngagements')
+        },
+        viewDetails(id) {
+            this.$router.push({path: '/engagement/' + id})
         }
     },
     created() {
@@ -210,5 +213,8 @@ export default {
     }
 }
 
+tr {
+    cursor: pointer;
+}
 
 </style>

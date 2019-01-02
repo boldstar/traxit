@@ -8,13 +8,16 @@
           <option v-for="category in categories" :key="category.id" :value="category">{{ category }}</option>
         </select>
         <input type="text" class="form-control mb-3" placeholder="Referral Type" v-model="client.referral_type">
-        <div class="d-flex mb-3 bg-light p-2">
-          <div class="h6 mb-0 mr-2">Is Client Active?</div>
-          <input type="checkbox" v-model="client.active" class="align-self-center mt-1">
+        <div class="d-flex mb-3 p-2 custom-control custom-checkbox bg-white form-control">
+          <span class="mr-3 font-weight-bold mb-1 h6">Is Contact Active?</span>
+          <input type="checkbox" v-model="client.active" class="custom-control-input" id="customCheck2">
+          <label class="custom-control-label ml-3 align-self-start" for="customCheck2"></label>
         </div>
-        <div class="d-flex mb-3 bg-light p-2">
-          <div class="h6 mb-0 mr-2">Does Contact Have Spouse?</div>
-          <input type="checkbox" v-model="client.has_spouse" class="align-self-center mt-1">
+        <div class="d-flex mb-3 bg-light p-2 custom-control custom-checkbox bg-white form-control" v-bind:class="{'border-danger' : has_spouse_alert}">
+          <span class="mr-3 font-weight-bold mb-1 h6">Does Contact Have Spouse?</span>
+          <input type="checkbox" v-model="client.has_spouse" class="custom-control-input" id="customCheck1" @change="has_spouse_alert = false">
+          <label class="custom-control-label ml-3 align-self-start" for="customCheck1"></label>
+          <small v-if="has_spouse_alert" class="text-danger">If contact does not have spouse, please uncheck the has spouse checkbox</small>
         </div>
 
         <h5 class="text-left mb-3">Taxpayer:</h5>
@@ -84,6 +87,7 @@ export default {
   name: 'EditContact',
   data () {
     return {
+      has_spouse_alert: false,
         categories: [ 'Choose Category...', 'Client', 'Prospect'],
     }
   },
@@ -98,42 +102,59 @@ export default {
     ...mapActions(['updateClient']),
 
     updateThisClient() {
-        this.updateClient( {
-          id: this.client.id,
-          active: this.client.active,
-          category: this.client.category,
-          referral_type: this.client.referral_type,
-          first_name: this.client.first_name,
-          middle_initial: this.client.middle_initial,
-          last_name: this.client.last_name,
-          occupation: this.client.occupation,
-          dob: this.client.dob,
-          email: this.client.email,
-          cell_phone: this.client.cell_phone,
-          work_phone: this.client.work_phone,
-          has_spouse: this.client.has_spouse,
-          spouse_first_name: this.client.spouse_first_name,
-          spouse_middle_initial: this.client.spouse_middle_initial,
-          spouse_last_name: this.client.spouse_last_name,
-          spouse_occupation: this.client.spouse_occupation,
-          spouse_dob: this.client.spouse_dob,
-          spouse_email: this.client.spouse_email,
-          spouse_cell_phone: this.client.spouse_cell_phone,
-          spouse_work_phone: this.client.spouse_work_phone,
-          street_address: this.client.street_address,
-          city: this.client.city,
-          state: this.client.state,
-          postal_code: this.client.postal_code,
-        })
-        .then(() => {
-          this.$router.push({path: '/contact/' +this.client.id+ '/account', query: {alert: 'The Contact Has Been Updated'}})
-        })
+        if(this.client.has_spouse == false) {
+          this.client.spouse_first_name = null
+          this.client.spouse_middle_initial = null
+          this.client.spouse_last_name = null
+          this.client.spouse_dob = null
+          this.client.spouse_occupation = null
+          this.client.spouse_email = null
+          this.client.spouse_cell_phone = null
+          this.client.spouse_work_phone = null
+          this.proceedWithUpdate()
+        } else if(this.client.has_spouse == true && this.client.spouse_first_name == '' || this.client.spouse_first_name == null){
+          this.has_spouse_alert = true;
+          return;
+        } else {
+          this.proceedWithUpdate()
+        } 
     },
+    proceedWithUpdate() {
+      this.updateClient( {
+        id: this.client.id,
+        active: this.client.active,
+        category: this.client.category,
+        referral_type: this.client.referral_type,
+        first_name: this.client.first_name,
+        middle_initial: this.client.middle_initial,
+        last_name: this.client.last_name,
+        occupation: this.client.occupation,
+        dob: this.client.dob,
+        email: this.client.email,
+        cell_phone: this.client.cell_phone,
+        work_phone: this.client.work_phone,
+        has_spouse: this.client.has_spouse,
+        spouse_first_name: this.client.spouse_first_name,
+        spouse_middle_initial: this.client.spouse_middle_initial,
+        spouse_last_name: this.client.spouse_last_name,
+        spouse_occupation: this.client.spouse_occupation,
+        spouse_dob: this.client.spouse_dob,
+        spouse_email: this.client.spouse_email,
+        spouse_cell_phone: this.client.spouse_cell_phone,
+        spouse_work_phone: this.client.spouse_work_phone,
+        street_address: this.client.street_address,
+        city: this.client.city,
+        state: this.client.state,
+        postal_code: this.client.postal_code,
+      })
+      .then(() => {
+        this.$router.push({path: '/contact/' +this.client.id+ '/account', query: {alert: 'The Contact Has Been Updated'}})
+      })
+    }
     },
     created: function() {
       this.$store.dispatch('getDetails', this.$route.params.id);
       this.client.category = this.categories[0]
     }
-  
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
     <transition>
-        <h1>Portal</h1>
+        <img src="@/assets/underconstruction.png" alt="">
     </transition>
 </template>
 
@@ -14,5 +14,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+    img {
+        overflow: hidden;
+        height: 80vh;
+        width: 100%;
+    }
 </style>

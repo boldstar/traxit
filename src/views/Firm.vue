@@ -68,7 +68,7 @@
             </thead>
             <tbody class="text-left">
               <tr v-for="(engagement, index) in filteredEngagements" :key="index" v-if="engagement.workflow_id === selectedWorkflowID">
-                <th scope="row" class="custom-control custom-checkbox"><input type="checkbox" :indeterminate="engagement.id" v-model="checkedEngagements.engagements" class="custom-control-input" id="customCheck1"><label class="custom-control-label pb-3 ml-4" for="customCheck1"></label></th>
+                <th scope="row"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements.engagements"></th>
                 <th>{{ engagement.name}}</th>
                 <td>{{ engagement.status }}</td>
                 <td>{{ engagement.assigned_to }}</td>

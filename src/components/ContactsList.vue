@@ -50,9 +50,9 @@
         </div>      
 
         <div class="btn-group ml-auto" v-if="!uploadInput">
-            <button class="btn btn-outline-success font-weight-bold" @click="uploadInput = true">Import<span><i class="far fa-file-excel ml-2"></i></span></button>
-            <button class="btn btn-outline-secondary font-weight-bold" @click="downloadContacts">Download <span><i class="far fa-file-excel ml-2"></i></span></button>
-            <router-link to="/add" class="btn btn-primary pt-2">Contact<i class="ml-2 fas fa-plus"></i></router-link>
+            <button class="btn btn-outline-success font-weight-bold" @click="uploadInput = true" data-toggle="tooltip" data-placement="top" title="Upload Contacts"><i class="far fa-file-excel"></i></button>
+            <button class="btn btn-outline-secondary font-weight-bold" @click="downloadContacts" data-toggle="tooltip" data-placement="top" title="Download Contacts"><i class="far fa-file-excel"></i></button>
+            <router-link to="/add" class="btn btn-primary pt-2" data-toggle="tooltip" data-placement="top" title="Add New Contact"><i class="far fa-plus-square"></i></router-link>
         </div>
     </div>
 
@@ -73,8 +73,8 @@
             </tr>
         </thead> 
         <tbody class="client-info table-bordered"  v-if="!tableLoaded">
-            <tr v-for="(client, index) in sortedClients"  :key="index">
-                <td class="text-capitalize">{{ client.last_name }}, {{client.first_name}} <span v-if="client.has_spouse == true">&</span> <span v-if="client.last_name != client.spouse_last_name && client.has_spouse == true"> {{client.spouse_last_name}},</span> {{ client.spouse_first_name }}</td>
+            <tr v-for="(client, index) in sortedClients"  :key="index" @click="viewDetails(client.id)">
+                <td class="text-capitalize">{{ client.last_name }}, {{client.first_name}} <span v-if="client.has_spouse == true">&</span> <span v-if="client.last_name != client.spouse_last_name && client.has_spouse == true && client.spouse_last_name != null"> {{client.spouse_last_name}},</span> {{ client.spouse_first_name }}</td>
                 <td class="text-capitalize">{{ client.category }}</td>
                 <td>{{ client.email }}</td>
                 <td>{{ client.cell_phone }}</td>
@@ -208,6 +208,9 @@ export default {
         },
         uploadContacts() {
             this.$store.dispatch('uploadContacts', this.file)
+        },
+        viewDetails(id) {
+            this.$router.push({path: '/contact/'+ id + '/account'})
         }
     },
     created() {
@@ -231,6 +234,10 @@ export default {
     &:hover {
         cursor: pointer;
     }
+}
+
+tr {
+    cursor: pointer;
 }
 
 </style>

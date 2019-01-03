@@ -17,10 +17,10 @@
 
             <div v-if="!loading && !noData">
             <div class="d-flex flex-lg-row flex-sm-colum col-12 justify-content-around mt-5">
-                <div class="workflow-card col-lg-2 col-md-2 col-sm-12 p-0">
+                <div class="workflow-card col-lg-2 col-md-4 col-sm-12 p-0">
                     <div class="list-group p-0">
                         <div class="card-header border font-weight-bold text-primary py-2 bg-white">Workflows</div>
-                        <div class="d-flex justify-content-between list-group-item py-1 workflow-select font-weight-bold" :value="workflow.workflow_id" v-for="workflow in countEngagementsLengthByWorkflow" :key="workflow.workflow_id" @click="changeKey(workflow.workflow_id)" v-bind:class="{'selected': selected && workflow.workflow_id == workflowKey}">
+                        <div class="d-flex justify-content-between list-group-item py-1 workflow-select font-weight-bold m-0" :value="workflow.workflow_id" v-for="workflow in countEngagementsLengthByWorkflow" :key="workflow.workflow_id" @click="changeKey(workflow.workflow_id)" v-bind:class="{'selected': selected && workflow.workflow_id == workflowKey}">
                             <span>{{ workflow.workflow }}</span>
                             <span class="badge badge-primary align-self-center">{{ workflow.count }}</span>
                             </div>
@@ -29,7 +29,7 @@
                 <!-- this is the doughnut chart for the overview of the firm -->
                 <div class="col-lg-4 col-md-4 col-sm-12">
                     <div class="h4">
-                        <i class="far fa-building mr-2 text-primary "></i>
+                        <i class="fas fa-home mr-2 text-primary "></i>
                     <span class="font-weight-bold">Firm</span> 
                     </div>
                     <doughnut-chart v-if="chartData" :chart-data="datasetsfull"></doughnut-chart>
@@ -37,7 +37,7 @@
                 <!-- this is the dougnut chart for the tasks -->
                 <div class="col-lg-4 col-md-4 col-sm-12">
                     <div class="h4">
-                        <i class="far fa-folder-open mr-2 text-primary"></i>
+                        <i class="fas fa-list-ul mr-2 text-primary"></i>
                     <span class="font-weight-bold">Tasks</span>
                     </div>
                     <doughnut-chart v-if="chartData && tasks.length > 0" :chart-data="tasksetsfull"></doughnut-chart>
@@ -261,13 +261,14 @@ export default {
     cursor: pointer;
 
     &:hover {
-        background-color: beige;
+        background-color: #0044ff3d;
     }
 }
 
 .selected {
-    background-color: beige;
+    background-color: #0044ff3d;
     color: #0044ff;
+    border: 1px solid #0044ff;
 }
 </style>
 

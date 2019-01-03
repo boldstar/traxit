@@ -106,6 +106,13 @@ export default {
         }))
         return res
         },
+        countEngagementsBySelectedWorkflow() {
+            const workflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
+            const id = workflow.map(({id}) => id)
+            const res = this.allEngagements.filter(engagement => engagement.workflow_id === id[0]).length
+            
+            return res
+        },
         countEngagementsLengthByWorkflow () {
        
 
@@ -158,7 +165,8 @@ export default {
                         ],
                     data: this.countEngagementsByStatus[0].statuses
                     }
-                ]
+                ],
+                centerText: this.countEngagementsBySelectedWorkflow
             }
         },
         tasksetsfull() {
@@ -191,7 +199,8 @@ export default {
                         this.countTasks
                         ]  
                     }
-                ]
+                ],
+                centerText: this.tasks.length
             }
         },
     },

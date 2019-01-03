@@ -56,8 +56,12 @@ export default new Vuex.Store({
     resetError:'',
     resetSuccess: '',
     passwordAlert: '',
+    chartData: ''
   },
   getters: {
+    chartDataLength(state) {
+      return state.chartData
+    },
     sidebarOpen(state) {
       return state.sidebarOpen;
     },
@@ -153,6 +157,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    changeChartLength(state, length) {
+      state.chartData = length
+    },
     toggleSidebar(state) {
       state.sidebarOpen = !state.sidebarOpen
     },

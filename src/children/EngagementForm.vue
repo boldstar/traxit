@@ -10,7 +10,7 @@
     <div class="card-body bg-light border mb-2">
       <h4 class="text-left text-primary m-0"><i class="far fa-folder-open mr-2"></i>New Engagement</h4>
     </div>
-    <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center bg-light p-3 border">
+    <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center bg-light px-3 pt-3 border pb-0">
       <div class="form-group">
 
         <input :class="{ 'input-error': errors.has('Year') }" type="text" class="form-control mb-3" placeholder="Year" v-model="engagement.year" v-validate="'required'" name="Year">
@@ -133,7 +133,7 @@
         </div> 
       
 
-      <button type="submit" class="btn btn-lg btn-primary d-flex justify-content-start">Create</button>
+      <button type="submit" class="btn btn-primary d-flex justify-content-start">Create</button>
       </div>
     </form>
   </div>

@@ -50,16 +50,17 @@
         </thead>
         <tbody class="table-bordered">
           <tr v-for="(task, index) in tasks"  :key="index">
-            <th>{{ task.engagements[0].status }}</th>
-            <td>{{ task.engagements[0].name }}</td>
-            <td>{{ task.created_at | formatDate }}</td>
-            <td>{{ task.engagements[0].return_type }}</td>
-            <td>{{ task.engagements[0].year }}</td>
+            <th  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].status }}</th>
+            <td  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].name }}</td>
+            <td  @click="viewDetails(task.engagements[0].id)">{{ task.created_at | formatDate }}</td>
+            <td  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].return_type }}</td>
+            <td  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].year }}</td>
             <td class="px-0">
-                <b-btn variant="primary" class="mr-2" size="sm" @click="requestUpdate(task.id, task.engagements[0].workflow_id)"><i class="fas fa-pen-square mr-2"></i>Update</b-btn>
+                <b-btn variant="primary" class="mr-2" size="sm" @click="requestUpdate(task.id, task.engagements[0].workflow_id)" data-toggle="tooltip" data-placement="top" title="Update Engagement Task"><i class="fas fa-pen-square mr-2"></i>Update</b-btn>
             </td>
             <td class="px-0">
-                <router-link class="btn btn-sm btn-secondary" :to="'/engagement/' +task.engagements[0].id "><i class="far fa-eye mr-2"></i>View</router-link>
+                <router-link class="btn btn-sm btn-secondary mr-2" :to="'/engagement/' +task.engagements[0].id " data-toggle="tooltip" data-placement="top" title="View Engagement"><i class="far fa-eye"></i></router-link>
+                <router-link class="btn btn-sm btn-primary" :to="'/engagement/' +task.engagements[0].id + '/add-question' " data-toggle="tooltip" data-placement="top" title="Add Question"><i class="far fa-question-circle"></i></router-link>
             </td>
           </tr>
         </tbody>
@@ -183,6 +184,9 @@ export default {
             self.noTasks = false
         }
       }, 3000);
+    },
+    viewDetails(id) {
+      this.$router.push('/engagement/'+ id)
     }
   },
   created() {
@@ -204,6 +208,10 @@ export default {
 
 
 <style scoped lang="scss">
+
+  tr {
+    cursor: pointer;
+  }
 
   label {
     width: 6em;

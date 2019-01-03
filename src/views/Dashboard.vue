@@ -42,7 +42,7 @@
                     </div>
                     <doughnut-chart v-if="chartData && tasks.length > 0" :chart-data="tasksetsfull"></doughnut-chart>
                     <div class="mt-3" v-else>
-                        <span class="font-weight-bold">You Currently Have Zero Tasks</span>
+                        <img src="@/assets/taskillustration.png" alt="" class="no-tasks-img mt-3">
                     </div>
                 </div>
             </div>
@@ -146,12 +146,12 @@ export default {
                             '#1133bb',
                             '#0088aa',
                             '#11ffdd',
-                            '#aabbcc',
+                            '#1a75ff',
                             '#22aabb',
-                            '#22aaaa',
-                            '#22aa11',
+                            '#006699',
+                            '#66ccff',
                             '#0077bb',
-                            '#007711',
+                            '#0000cc',
                             '#007788',
                             '#0077aa',
                             '#0077cc',
@@ -177,12 +177,12 @@ export default {
                             '#1133bb',
                             '#0088aa',
                             '#11ffdd',
-                            '#aabbcc',
+                            '#1a75ff',
                             '#22aabb',
-                            '#22aaaa',
-                            '#22aa11',
+                            '#006699',
+                            '#66ccff',
                             '#0077bb',
-                            '#007711',
+                            '#0000cc',
                             '#007788',
                             '#0077aa',
                             '#0077cc',
@@ -253,6 +253,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.no-tasks-img {
+    height: 23em;
+    width: 31em;
+}
+
 .workflow-card{
     height: 100%;
 }

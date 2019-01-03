@@ -10,7 +10,7 @@
       <h4 class="text-left text-primary m-0"><i class="far fa-address-book mr-2"></i>New Contact</h4>
     </div>
 
-    <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center bg-light border p-3 mb-3">
+    <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center bg-light border px-3 pt-3 pb-0 mb-3">
       <div class="form-group">
 
         <div class="input-group mb-3">
@@ -89,7 +89,7 @@
           <input type="text" class="form-control" placeholder="Postal Code" v-model="client.postal_code" name="Postal Code">
         </div>
 
-      <button type="submit" class="btn btn-lg btn-primary d-flex justify-content-start">Create</button>
+      <button type="submit" class="btn btn-primary d-flex justify-content-start">Create</button>
       </div>
     </form>
   </div>

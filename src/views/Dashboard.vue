@@ -132,7 +132,7 @@ export default {
         },
         datasetsfull() {
             return {
-                // labels: this.mapStatuses[0].statuses,
+                labels: this.mapStatuses[0].statuses,
                 datasets: [
                 {
                     label: 'Data One',
@@ -163,7 +163,7 @@ export default {
         },
         tasksetsfull() {
             return {
-                // labels: this.tasksLabels,
+                labels: this.tasksLabels,
                 datasets: [
                 {
                     label: 'Data One',

@@ -20,6 +20,7 @@ export default {
                             labels: {
                                 padding: 10
                             },
+                            display: false
                         }
                     }
             );

@@ -3,7 +3,7 @@
     <div class="dashboard flex-column justify-content-center">
 
             <!-- this is the header for the dashboard -->
-            <div class="card mb-5 shadow-sm">
+            <div class="card mb-3 shadow-sm">
                 <div class="d-flex justify-content-between card-body">
                     <div class="h2 align-self-center m-0">
                         <i class="fas fa-tachometer-alt text-primary"></i> 
@@ -16,54 +16,33 @@
             </div>
 
             <div v-if="!loading && !noData">
-
-            <!-- this is the doughnut chart for the overview of the firm -->
-            <div class="d-flex flex-lg-row flex-sm-column justify-content-around mt-3">
-                <div class="col-lg-5 col-md-5 col-sm-12">
-                    <div class="d-flex flex-lg-row flex-md-column">
-                        <div class="col-lg-6 col-md-12 mb-sm-2">
-                            <span class="h3 mr-3"><i class=" far fa-folder-open mr-3 text-primary"></i><router-link to="/firm" class="text-muted">Firm Overview</router-link></span>        
-                        </div>
-                        <div class="col-lg-6 col-md-12">     
-                            <div class="input-group" >
-                            <div class="input-group-prepend">
-                                <label class="input-group-text bg-light text-primary" for="option">Workflow</label>
+            <div class="d-flex flex-lg-row flex-sm-colum col-12 justify-content-around mt-5">
+                <div class="workflow-card col-lg-2 col-md-2 col-sm-12 p-0">
+                    <div class="list-group p-0">
+                        <div class="card-header border font-weight-bold text-primary py-2 bg-white">Workflows</div>
+                        <div class="d-flex justify-content-between list-group-item py-1 workflow-select font-weight-bold" :value="workflow.workflow_id" v-for="workflow in countEngagementsLengthByWorkflow" :key="workflow.workflow_id" @click="changeKey(workflow.workflow_id)" v-bind:class="{'selected': selected && workflow.workflow_id == workflowKey}">
+                            <span>{{ workflow.workflow }}</span>
+                            <span class="badge badge-primary align-self-center">{{ workflow.count }}</span>
                             </div>
-                            <select class="form-control" v-model="workflowKey">
-                                <option :value="workflow.id" v-for="workflow in allWorkflows" :key="workflow.id" @click="changeKey(workflow.id)">{{ workflow.workflow }}</option>
-                            </select>
-                            </div>
-                        </div> 
                     </div>
-                    <br><br>
-                <doughnut-chart v-if="chartData" :chart-data="datasetsfull"></doughnut-chart>
                 </div>
-
-
-                <!-- this is the simple list of current tasks -->
-                <div class="col-lg-5 col-md-5 col-sm-12">
-                    <span class="h3"><i class="fas fa-tasks text-primary mr-3"></i><router-link to="/tasks" class="text-muted">Your Tasks</router-link></span>
-                    <br><br>
-                    <table class="table table-hover">
-                        <thead class="bg-primary text-light">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Client</th>
-                            <th scope="col">Created On</th>
-                            <th scope="col">Return Type</th>
-                        </tr>
-                        </thead>
-                        <tbody v-if="tasks">
-                        <tr class="border" v-for="(task, index) in tasks"  :key="index">
-                            <th>{{ index + 1 }}</th>
-                            <td>{{ task.engagements[0].name }}</td>
-                            <td>{{ task.created_at | formatDate }}</td>
-                            <td>{{ task.engagements[0].return_type }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <div v-if="!taskData" class="mt-5">
-                        <span class="h3">You Currently Have No Tasks</span>
+                <!-- this is the doughnut chart for the overview of the firm -->
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <div class="h4">
+                        <i class="far fa-building mr-2 text-primary "></i>
+                    <span class="font-weight-bold">Firm</span> 
+                    </div>
+                    <doughnut-chart v-if="chartData" :chart-data="datasetsfull"></doughnut-chart>
+                </div>
+                <!-- this is the dougnut chart for the tasks -->
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <div class="h4">
+                        <i class="far fa-folder-open mr-2 text-primary"></i>
+                    <span class="font-weight-bold">Tasks</span>
+                    </div>
+                    <doughnut-chart v-if="chartData && tasks.length > 0" :chart-data="tasksetsfull"></doughnut-chart>
+                    <div class="mt-3" v-else>
+                        <span class="font-weight-bold">You Currently Have Zero Tasks</span>
                     </div>
                 </div>
             </div>
@@ -92,7 +71,8 @@ export default {
             chartData: false,
             taskData: false,
             loading: false,
-            noData: false
+            noData: false,
+            selected: false,
         }
     },
     computed: {
@@ -126,9 +106,33 @@ export default {
         }))
         return res
         },
+        countEngagementsLengthByWorkflow () {
+       
+
+        const res = this.allWorkflows.map(({id, workflow}) => ({
+            workflow_id: id,
+            workflow: workflow,
+            count: this.allEngagements.filter(({workflow_id}) => workflow_id === id).length
+        }))
+        return res
+        },
+        countTasks() {
+            return this.tasks.length
+        },
+        tasksLabels() {
+            const engagements = this.tasks.map(task => task.engagements)
+
+            const statuses = engagements.reduce((acc, engagement) => {
+                acc.push(engagement[0].status)
+
+                return acc
+            }, [])
+
+            return statuses
+        },
         datasetsfull() {
             return {
-                labels: this.mapStatuses[0].statuses,
+                // labels: this.mapStatuses[0].statuses,
                 datasets: [
                 {
                     label: 'Data One',
@@ -157,10 +161,44 @@ export default {
                 ]
             }
         },
+        tasksetsfull() {
+            return {
+                // labels: this.tasksLabels,
+                datasets: [
+                {
+                    label: 'Data One',
+                    borderColor: 'black',
+                    pointBackgroundColor: 'white',
+                    borderWidth: 1,
+                    pointBorderColor: 'white',
+                    backgroundColor: [
+                            '#0077ff', 
+                            '#0022ff',
+                            '#1133bb',
+                            '#0088aa',
+                            '#11ffdd',
+                            '#aabbcc',
+                            '#22aabb',
+                            '#22aaaa',
+                            '#22aa11',
+                            '#0077bb',
+                            '#007711',
+                            '#007788',
+                            '#0077aa',
+                            '#0077cc',
+                        ],
+                    data: [
+                        this.countTasks
+                        ]  
+                    }
+                ]
+            }
+        },
     },
     methods: {
         changeKey(id) {
             this.workflowKey = id
+            this.selected = true
         },
         refresh() {
             this.loading = true
@@ -183,6 +221,7 @@ export default {
         this.$store.dispatch('retrieveEngagements')
         this.$store.dispatch('retrieveTasks')
         this.loading = true
+        this.selected = true
         var self = this
         setTimeout(() => {
             if(this.allWorkflows.length > 0 && this.allEngagements.length > 0) {
@@ -212,3 +251,23 @@ export default {
     },
 }
 </script>
+
+<style lang="scss" scoped>
+.workflow-card{
+    height: 100%;
+}
+
+.workflow-select {
+    cursor: pointer;
+
+    &:hover {
+        background-color: beige;
+    }
+}
+
+.selected {
+    background-color: beige;
+    color: #0044ff;
+}
+</style>
+

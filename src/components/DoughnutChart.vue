@@ -12,13 +12,14 @@ export default {
             this.chartData, 
             {
                 responsive: true, 
-                maintainAspectRatio: false,
+                maintainAspectRatio: true,
+                cutoutPercentage: 65,
                 legend: 
                         {
                             position: 'left',
                             labels: {
-                                padding: 20
-                            }
+                                padding: 10
+                            },
                         }
                     }
             );

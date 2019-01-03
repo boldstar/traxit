@@ -120,7 +120,7 @@
     </div>
 
 
-    <div v-if="detailsLoaded" class="lds-dual-ring justify-content-center"></div>
+    <div v-if="detailsLoaded && $route.name == 'engagement-details'" class="lds-dual-ring justify-content-center"></div>
 
 <!-- this will show the child view if the route matches-->
   <router-view ></router-view>

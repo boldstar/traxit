@@ -6,7 +6,8 @@ import VeeValidate from 'vee-validate';
 import moment from 'moment';
 import VueCharts from 'vue-chartjs';
 import jQuery from 'jquery';
-import Popper from 'popper.js'
+import Popper from 'popper.js';
+import VueCarousel from 'vue-carousel';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import { Button } from 'bootstrap-vue/es/components';
@@ -34,6 +35,7 @@ Vue.config.productionTip = false;
 Vue.use(Button);
 Vue.use(VeeValidate);
 Vue.use(VueCharts);
+Vue.use(VueCarousel);
 Vue.use(abilitiesPlugin, ability);
 
 //this is a filter for dates

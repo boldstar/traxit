@@ -1,6 +1,17 @@
 <template>
 
-    <div class="dashboard flex-column justify-content-center">
+    <div class="dashboard-layout flex-column justify-content-center">
+
+            <!-- workflow card for selecting workflows -->
+             <!-- <div class="workflow-card col-lg-6 col-md-6 col-sm-12 p-0">
+                    <div class="list-group p-0">
+                        <div class="d-flex justify-content-between list-group-item py-1 workflow-select font-weight-bold m-0" :value="workflow.workflow_id" v-for="workflow in mapWorkflowsWithIds" :key="workflow.workflow_id" @click="changeKey(workflow.workflow_id)" v-bind:class="{'selected': selected && workflow.workflow_id == workflowKey}" v-if="workflow.workflow_id == workflowKey">
+                            <span>{{ workflow.workflow }}</span>
+                            <span class="badge badge-primary align-self-center">{{ workflow.count }}</span>
+                        </div>
+                    </div>
+                </div> -->
+            
 
             <!-- this is the header for the dashboard -->
             <div class="card mb-3 shadow-sm">
@@ -16,29 +27,30 @@
             </div>
 
             <div v-if="!loading && !noData">
-            <div class="d-flex flex-lg-row flex-sm-colum col-12 justify-content-around mt-5">
-                <div class="workflow-card col-lg-2 col-md-4 col-sm-12 p-0">
-                    <div class="list-group p-0">
-                        <div class="card-header border font-weight-bold text-primary py-2 bg-white">Workflows</div>
-                        <div class="d-flex justify-content-between list-group-item py-1 workflow-select font-weight-bold m-0" :value="workflow.workflow_id" v-for="workflow in countEngagementsLengthByWorkflow" :key="workflow.workflow_id" @click="changeKey(workflow.workflow_id)" v-bind:class="{'selected': selected && workflow.workflow_id == workflowKey}">
-                            <span>{{ workflow.workflow }}</span>
-                            <span class="badge badge-primary align-self-center">{{ workflow.count }}</span>
-                            </div>
+            <div class="d-flex flex-lg-row flex-sm-colum col-12 justify-content-around dashboard">
+                <div class="col-lg-4 col-md-4 col-sm-12 card-body p-3">
+                    <div class="h4 py-3">
+                        <i class="fas fa-home mr-2 text-primary"></i>
+                        <span class="font-weight-bold">Firm</span>
                     </div>
+                     <doughnut-chart v-if="chartData" :chart-data="workflowsetsfull"></doughnut-chart>
                 </div>
                 <!-- this is the doughnut chart for the overview of the firm -->
-                <div class="col-lg-4 col-md-4 col-sm-12">
-                    <div class="h4">
-                        <i class="fas fa-home mr-2 text-primary "></i>
-                    <span class="font-weight-bold">Firm</span> 
+                <div class="col-lg-4 col-md-4 col-sm-12 card-body p-3 mx-3">
+                    <div class="col-lg-8 col-md-8 col-sm-12 carousel h4 py-2">
+                        <carousel ref="carousel" :per-page="1"  :mouse-drag="false" :loop="true" :navigationEnabled="true" :paginationEnabled="false" @pageChange="handleClick" :navigationNextLabel='`<i class="fas fa-arrow-alt-circle-right text-primary"></i>`' :navigationPrevLabel='`<i class="fas fa-arrow-alt-circle-left text-primary"></i>`'>
+                            <slide class="font-weight-bold p-2" ref="slide" v-for="workflow in mapWorkflowsWithIds" :key="workflow.workflow_id" :title="`${workflow.workflow_id}`">
+                                <i class="fas fa-project-diagram mr-2 text-primary"></i>{{workflow.workflow}}
+                            </slide>
+                        </carousel>
                     </div>
                     <doughnut-chart v-if="chartData" :chart-data="datasetsfull"></doughnut-chart>
                 </div>
                 <!-- this is the dougnut chart for the tasks -->
-                <div class="col-lg-4 col-md-4 col-sm-12">
-                    <div class="h4">
+                <div class="col-lg-4 col-md-4 col-sm-12 card-body p-3">
+                    <div class="h4 py-3">
                         <i class="fas fa-list-ul mr-2 text-primary"></i>
-                    <span class="font-weight-bold">Tasks</span>
+                        <span class="font-weight-bold">Tasks</span>
                     </div>
                     <doughnut-chart v-if="chartData && tasks.length > 0" :chart-data="tasksetsfull"></doughnut-chart>
                     <div class="mt-3" v-else>
@@ -47,6 +59,8 @@
                 </div>
             </div>
         </div>
+        
+
         <div v-if="noData && !loading">
             <welcome></welcome> 
         </div>
@@ -89,6 +103,9 @@ export default {
         }))
         return res
         },
+        mapWorkflows() {
+            return this.allWorkflows.map(workflow => workflow.workflow)
+        },
         countEngagementsByStatus () {
         const selectedWorkflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
 
@@ -113,14 +130,30 @@ export default {
             
             return res
         },
+        mapWorkflowsWithIds() {
+            const workflows = this.allWorkflows.map(({id, workflow}) => ({
+            workflow_id: id,
+            workflow: workflow,
+            count: this.allEngagements.filter(({workflow_id}) => workflow_id === id).length
+            }))
+
+            return workflows
+        },
         countEngagementsLengthByWorkflow () {
        
 
-        const res = this.allWorkflows.map(({id, workflow}) => ({
+        const workflows = this.allWorkflows.map(({id, workflow}) => ({
             workflow_id: id,
             workflow: workflow,
             count: this.allEngagements.filter(({workflow_id}) => workflow_id === id).length
         }))
+
+        const res = workflows.reduce((acc, workflow) => {
+            acc.push(workflow.count)
+
+            return acc
+        }, [])
+
         return res
         },
         countTasks() {
@@ -136,6 +169,38 @@ export default {
             }, [])
 
             return statuses
+        },
+        workflowsetsfull() {
+            return {
+                labels: this.mapWorkflows,
+                datasets: [
+                {
+                    label: 'Data One',
+                    borderColor: 'black',
+                    pointBackgroundColor: 'white',
+                    borderWidth: 1,
+                    pointBorderColor: 'white',
+                    backgroundColor: [
+                            '#0077ff', 
+                            '#0022ff',
+                            '#1133bb',
+                            '#0088aa',
+                            '#11ffdd',
+                            '#1a75ff',
+                            '#22aabb',
+                            '#006699',
+                            '#66ccff',
+                            '#0077bb',
+                            '#0000cc',
+                            '#007788',
+                            '#0077aa',
+                            '#0077cc',
+                        ],
+                    data: this.countEngagementsLengthByWorkflow
+                    }
+                ],
+                centerText: this.allEngagements.length
+            }
         },
         datasetsfull() {
             return {
@@ -223,6 +288,11 @@ export default {
                     self.noData = false
                 }
             }, 3000);
+        },
+        handleClick() {
+            const index = this.$refs.slide[0].$parent.currentPage
+            const id = this.$refs.slide[index].title
+            this.workflowKey = JSON.parse(id)
         }
     },
     created() {
@@ -262,13 +332,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.dashboard {
+    margin-top: 50px;
+}
+
+.carousel {
+    margin-left: 75px;
+}
 .no-tasks-img {
     height: 23em;
     width: 31em;
-}
-
-.workflow-card{
-    height: 100%;
 }
 
 .workflow-select {

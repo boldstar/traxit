@@ -8,42 +8,34 @@
       </div>
     </div>
     <div class="card-body bg-light border mb-2">
-      <h4 class="text-left text-primary m-0"><i class="far fa-folder-open mr-2"></i>New Engagement</h4>
+      <h4 class="text-left text-primary m-0"><i class="far fa-folder-open mr-2"></i>New Bookkeeping Engagement</h4>
     </div>
     <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center bg-light px-3 pt-3 border pb-0">
       <div class="form-group">
+
+        <div class="d-flex mb-3 bg-light p-2 custom-control custom-checkbox bg-white form-control" v-bind:class="{'input-error' : nothingChecked}">
+          <div class="d-flex">
+            <span class="mr-3 font-weight-bold h6">Monthly</span>
+            <input type="checkbox" v-model="monthChecked" class="custom-control-input ml-3" id="customCheck1" @change="selectedMonthRange">
+            <label class="custom-control-label ml-3" for="customCheck1"></label>
+          </div>
+          <div class="d-flex">
+            <span class="mr-3 font-weight-bold h6 mr-3">Quarterly</span>
+            <input type="checkbox" v-model="quarterChecked" class="custom-control-input ml-3" id="customCheck2" @change="selectedQuarterRange">
+            <label class="custom-control-label ml-3" for="customCheck2"></label>
+          </div>
+          <div class="d-flex">
+            <span class="mr-3 font-weight-bold h6 mr-3">Annual</span>
+            <input type="checkbox" v-model="annualChecked" class="custom-control-input ml-3" id="customCheck3" @change="selectedAnnualRange">
+            <label class="custom-control-label ml-3" for="customCheck3"></label>
+          </div>
+        </div>
+        <small v-if="nothingChecked" class="text-danger">Please select a date range before submitting</small>
 
         <input :class="{ 'input-error': errors.has('Year') }" type="text" class="form-control mb-3" placeholder="Year" v-model="engagement.year" v-validate="'required'" name="Year">
         <span class="form-error" v-show="errors.has('Year')">{{ errors.first('Year')}}</span>
 
         <div class="input-group my-3">
-          <div class="input-group-prepend">
-            <label class="input-group-text text-primary" for="option">Category</label>
-          </div>
-          <select :class="{ 'input-error': errors.has('Category') }" class="form-control" id="client_id" v-model="engagement.category" v-validate="{ is_not: option }" name="Category" v-on:change="removeSelected">
-            <option disabled>{{ option }}</option>
-            <option v-for="(category, index) in categories" :key="index" :value="category">
-              {{ category }}
-            </option>
-          </select>
-        </div>
-        <span class="form-error" v-show="errors.has('Category')">{{ errors.first('Category') }}</span>
-
-       
-        <div class="input-group my-3" v-if="engagement.category == 'personal'">
-          <div class="input-group-prepend">
-            <label class="input-group-text text-primary" for="option">Find Contact</label>
-          </div>
-          <select :class="{ 'input-error': errors.has('Contact') }" class="form-control" id="client_id" v-model.number="engagement.client_id" v-validate="{ is_not: option }" name="Contact">
-            <option disabled>{{ option }}</option>
-            <option v-for="client in allClients" :key="client.id" :value="client.id">
-              {{ client.last_name }}, {{client.first_name}} <span v-if="client.has_spouse == 1"> & </span>{{client.spouse_first_name }}
-            </option>
-          </select>
-        </div>
-        <span class="form-error" v-show="errors.has('Contact')">{{ errors.first('Contact') }}</span>
-
-        <div class="input-group my-3" v-if="engagement.category == 'business'">
           <div class="input-group-prepend">
             <label class="input-group-text text-primary" for="option">Find Contact</label>
           </div>
@@ -56,7 +48,7 @@
         </div>
         <span class="form-error" v-show="errors.has('Business Contact')">{{ errors.first('Business Contact') }}</span>
 
-        <div class="input-group my-3" v-if="engagement.category == 'business'">
+        <div class="input-group my-3">
           <div class="input-group-prepend">
             <label class="input-group-text text-primary" for="option">Find Business</label>
           </div>
@@ -82,16 +74,27 @@
         </div>
           <span class="form-error" v-show="errors.has('Workflow')">{{ errors.first('Workflow') }}</span>
 
-        <div class="input-group my-3">
+        <div class="input-group my-3" v-if="monthRange">
           <div class="input-group-prepend">
-            <label class="input-group-text text-primary" for="option">Return Type</label>
+            <label class="input-group-text text-primary" for="option">Monthly</label>
           </div>
-          <select :class="{ 'input-error': errors.has('Return Type') }" class="form-control" id="type" v-model="engagement.return_type" v-validate="{ is_not: option }" name="Return Type">
+          <select :class="{ 'input-error': errors.has('Title') }" class="form-control" id="type" v-model="engagement.title" v-validate="{ is_not: option }" name="Title">
               <option  selected disabled>{{ option }}</option>
-              <option v-for="type in returnTypes" :key="type.id" :value="type.return_type">{{ type.return_type }}</option>
+              <option v-for="(month, index) in monthly" :key="index" :value="month">{{ month }}</option>
           </select>
         </div>
-          <span class="form-error" v-show="errors.has('Return Type')">{{ errors.first('Return Type') }}</span>
+          <span class="form-error" v-show="errors.has('Title')">{{ errors.first('Title') }}</span>
+
+        <div class="input-group my-3" v-if="quarterRange">
+          <div class="input-group-prepend">
+            <label class="input-group-text text-primary" for="option">Quarterly</label>
+          </div>
+          <select :class="{ 'input-error': errors.has('Title') }" class="form-control" id="type" v-model="engagement.title" v-validate="{ is_not: option }" name="Title">
+              <option  selected disabled>{{ option }}</option>
+              <option v-for="(quarter, index) in quarterly" :key="index" :value="quarter">{{ quarter }}</option>
+          </select>
+        </div>
+          <span class="form-error" v-show="errors.has('Title')">{{ errors.first('Title') }}</span>
 
         <div class="input-group my-3">
         <div class="input-group-prepend">
@@ -146,10 +149,20 @@ export default {
   name: 'engagement',
   data() {
     return {
+      monthRange: false,
+      quarterRange: false,
+      annualRange: false,
+      monthChecked: false,
+      quarterChecked: false,
+      annualChecked: false,
+      nothingChecked: false,
       client: '',
       engagement: {
         year: '',
-        category: null,
+        category: 'Business',
+        type: 'bookkeeping',
+        title: '',
+        description: '',
         client_id: null,
         name: null,
         workflow_id: null,
@@ -159,7 +172,8 @@ export default {
       },
       option: 'Choose...',
       empty: 'Please select workflow first...',
-      categories:['Personal', 'Business']
+      monthly: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      quarterly: ['Jan-Mar', 'Apr-Jun', 'Jul-Sep', 'Oct-Dec'],
     }
   },
   computed: {
@@ -185,6 +199,10 @@ export default {
       this.engagement.name = this.option
     },
     validateBeforeSubmit() {
+          if(this.quarterChecked == false && this.monthChecked == false && this.annualChecked == false) {
+            this.nothingChecked = true
+            return;
+          }
           this.$validator.validateAll().then((result) => {
               if (result) {
                   this.addNewEngagement();
@@ -196,6 +214,9 @@ export default {
       this.addEngagement({
         id: this.idForEngagement,
         category: this.engagement.category,
+        type: this.engagement.type,
+        title: this.engagement.title,
+        description: this.engagement.description,
         client_id: this.engagement.client_id,
         name: this.engagement.name,
         workflow_id: this.engagement.workflow_id,
@@ -210,6 +231,30 @@ export default {
         this.$router.push({path: '/add'});
       })
     },
+    selectedMonthRange() {
+      this.monthRange = !this.monthRange
+      this.quarterRange = false
+      this.annualRange = false
+      this.quarterChecked = false
+      this.annualChecked = false
+      this.nothingChecked = false
+    },
+    selectedQuarterRange() {
+      this.quarterRange = !this.quarterRange
+      this.monthRange = false
+      this.annualRange = false
+      this.monthChecked = false
+      this.annualChecked = false
+      this.nothingChecked = false
+    },
+    selectedAnnualRange() {
+      this.annualRange = !this.annualRange
+      this.monthRange = false
+      this.quarterRange = false
+      this.monthChecked = false
+      this.quarterChecked = false
+      this.nothingChecked = false
+    }
   },
   created: function() {
     this.$store.dispatch('retrieveClientsWithBusinesses');
@@ -221,8 +266,8 @@ export default {
     this.engagement.workflow_id = this.option
     this.engagement.assigned_to = this.option
     this.engagement.status = this.option
-    this.engagement.category = this.option
     this.engagement.name = this.option
+    this.engagement.title = this.option
   },
 }
 </script>

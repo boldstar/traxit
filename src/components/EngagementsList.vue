@@ -17,7 +17,7 @@
                         </div>
                         <select class="custom-select" id="client_id" v-model="filterType">
                             <option> {{ type }}</option>
-                            <option v-for="(returntype, index) in filterReturnTypes" :key="index">
+                            <option v-for="(returntype, index) in filterReturnTypes" :key="index" v-if="returntype != null">
                             {{ returntype }}
                             </option>
                         </select>
@@ -90,6 +90,7 @@
                 <tr>
                     <th scope="col">Client</th>
                     <th scope="col" @click="sort('category')">Category</th>
+                    <th scope="col">Engagement Type</th>
                     <th scope="col" @click="sort('return_type')">Return Type</th>
                     <th scope="col" @click="sort('year')">Year</th>
                     <th scope="col" @click="sort('assigned_to')">Assigned To</th>
@@ -101,6 +102,7 @@
                 <tr v-for="(engagement, index) in sortedEngagements"  :key="index" @click="viewDetails(engagement.id)">
                     <td class="text-capitalize">{{ engagement.name }}</td>
                     <td class="text-capitalize">{{ engagement.category }}</td>
+                    <td class="text-capitalize">{{ engagement.type }}</td>
                     <td>{{ engagement.return_type }}</td>
                     <td>{{ engagement.year }}</td>
                     <td>{{ engagement.assigned_to }}</td>

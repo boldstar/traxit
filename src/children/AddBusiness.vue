@@ -81,7 +81,7 @@ export default {
       .then(() => {
         this.business = "" 
         this.idForBusiness++
-        this.$router.push({path: '/contact/' +this.client.id+ '/account', query: {alert: 'A new business has been added!'}});
+        this.$router.push({path: '/contact/' +this.client.id+ '/account'});
       })
     },
   },

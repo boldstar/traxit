@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="card-body bg-light border mb-2">
-      <h4 class="text-left text-primary m-0"><i class="far fa-folder-open mr-2"></i>New Engagement</h4>
+      <h4 class="text-left text-primary m-0"><i class="far fa-folder-open mr-2"></i>New Tax Engagement</h4>
     </div>
     <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center bg-light px-3 pt-3 border pb-0">
       <div class="form-group">
@@ -151,6 +151,7 @@ export default {
         year: '',
         category: null,
         client_id: null,
+        type: 'taxreturn',
         name: null,
         workflow_id: null,
         return_type: null,
@@ -197,6 +198,7 @@ export default {
         id: this.idForEngagement,
         category: this.engagement.category,
         client_id: this.engagement.client_id,
+        type: this.engagement.type,
         name: this.engagement.name,
         workflow_id: this.engagement.workflow_id,
         return_type: this.engagement.return_type,

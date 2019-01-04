@@ -6,20 +6,18 @@
 
       <Alert v-if="alert" v-bind:message="alert" />
 
-      <div class="flex-row justify-content-between d-flex my-3">
-        <span class="h4 align-self-end m-0 text-left">Details | <strong class="text-primary"><router-link :to="'/contact/' +engagement.client.id + '/account'">{{ engagement.client.last_name}}, {{ engagement.client.first_name}} <span v-if="engagement.client.has_spouse"> & {{ engagement.client.spouse_first_name}}</span></router-link></strong></span>
+      <div class="flex-row justify-content-between d-flex mt-3 card-body shadow-sm p-3">
+        <span class="h4 align-self-center m-0 text-left">Details | <strong class="text-primary"><router-link :to="'/contact/' +engagement.client.id + '/account'">{{ engagement.client.last_name}}, {{ engagement.client.first_name}} <span v-if="engagement.client.has_spouse"> & {{ engagement.client.spouse_first_name}}</span></router-link></strong></span>
         <div>
         <router-link to="/engagements" class="btn btn-outline-secondary mr-4"><i class="fas fa-arrow-circle-left mr-2"></i>All Engagements</router-link>
         <router-link class="btn btn-primary mr-3" :to="'/engagement/' +this.engagement.id+ '/edit'"><i class="far fa-edit mr-2"></i>Edit</router-link> 
         <b-btn class="outline-secondary" v-b-modal.myEngage v-if="$can('delete', engagement)"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
         </div>
-      </div>  
-
-      <hr>
+      </div> 
 
       
       <!-- this is the table for the details of the engagement -->
-      <div class="card-body bg-light my-4 py-2 px-3"> 
+      <div class="card-body bg-light mt-1 mb-2 py-2 px-3"> 
         <table class="table table-bordered h3 mt-3">
           <thead class="text-primary">
             <tr>
@@ -45,9 +43,8 @@
       </div>
 
       <!-- this is the section where the qustions will go -->
-      <hr>
 
-      <div class="d-flex justify-content-between h4">
+      <div class="d-flex justify-content-between h4 card-body p-3 shadow-sm mb-3">
           <div>
             <span>
               Questions |
@@ -56,8 +53,6 @@
           </div>
           <span><router-link :to="'/engagement/' + engagement.id + '/add-question'" class="btn btn-sm btn-primary"><i class="far fa-plus-square mr-2"></i>Question</router-link></span>
       </div>
-
-      <hr class="mb-4">
 
       <!-- this is the modal to confirm or cancel the delete for the engagement -->
       <b-modal id="myEngage" ref="myEngage" hide-footer title="Delete Engagement">

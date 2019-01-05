@@ -766,6 +766,9 @@ export default new Vuex.Store({
       axios.post(('/engagements'), {
         category: engagement.category,
         client_id: engagement.client_id,
+        type: engagement.type,
+        title: engagement.title,
+        description: engagement.description,
         name: engagement.name,
         workflow_id: engagement.workflow_id,
         return_type: engagement.return_type,
@@ -785,6 +788,10 @@ export default new Vuex.Store({
     updateEngagement(context, engagement) {
       axios.patch('/engagements/' + engagement.id, {
         client_id: engagement.client_id,
+        workflow_id: engagement.workflow_id,
+        type: engagement.type,
+        title: engagement.title,
+        description: engagement.description,
         return_type: engagement.return_type,
         year: engagement.year,
         assigned_to: engagement.assigned_to,

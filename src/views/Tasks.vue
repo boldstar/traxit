@@ -40,8 +40,10 @@
         <thead class="bg-primary text-light">
           <tr>
             <th scope="col">Task</th>
+            <th scope="col">Type</th>
             <th scope="col">Client</th>
             <th scope="col">Assigned On</th>
+            <th scope="col">Time Period</th>
             <th scope="col">Return Type</th>
             <th scope="col">Year</th>
             <th scope="col">Action</th>
@@ -51,9 +53,14 @@
         <tbody class="table-bordered">
           <tr v-for="(task, index) in tasks"  :key="index">
             <th  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].status }}</th>
+            <th  @click="viewDetails(task.engagements[0].id)" class="text-capitalize" v-if="task.engagements[0].type == 'taxreturn'">{{fixCasing(task.engagements[0].type)}}</th>
+            <th  @click="viewDetails(task.engagements[0].id)" class="text-capitalize" v-else>{{task.engagements[0].type}}</th>
             <td  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].name }}</td>
             <td  @click="viewDetails(task.engagements[0].id)">{{ task.created_at | formatDate }}</td>
-            <td  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].return_type }}</td>
+            <td  @click="viewDetails(task.engagements[0].id)" v-if="task.engagements[0].title != null">{{ task.engagements[0].title }}</td>
+            <td  @click="viewDetails(task.engagements[0].id)" v-else>None</td>
+            <td  @click="viewDetails(task.engagements[0].id)" v-if="task.engagements[0].type == 'taxreturn'">{{ task.engagements[0].return_type }}</td>
+            <td  @click="viewDetails(task.engagements[0].id)" v-else>None</td>
             <td  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].year }}</td>
             <td class="px-0">
                 <b-btn variant="primary" class="mr-2" size="sm" @click="requestUpdate(task.id, task.engagements[0].workflow_id)" data-toggle="tooltip" data-placement="top" title="Update Engagement Task"><i class="fas fa-pen-square mr-2"></i>Update</b-btn>
@@ -187,6 +194,13 @@ export default {
     },
     viewDetails(id) {
       this.$router.push('/engagement/'+ id)
+    },
+    fixCasing(string) {
+      if(string == 'taxreturn') {
+        const newString = string.replace("taxreturn", "Tax Return")
+
+        return newString
+      }
     }
   },
   created() {

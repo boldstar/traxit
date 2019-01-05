@@ -60,6 +60,7 @@
               <tr>
                 <th scope="col">Batch</th>
                 <th scope="col">Client</th>
+                <th scope="col">Type</th>
                 <th scope="col">Status</th>
                 <th scope="col">Assigned To</th>
                 <th scope="col">Return Type</th>
@@ -70,9 +71,12 @@
               <tr v-for="(engagement, index) in filteredEngagements" :key="index" v-if="engagement.workflow_id === selectedWorkflowID">
                 <th scope="row" class="custom-control custom-checkbox"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements.engagements" class="custom-control-input" :id="`${engagement.id}`"><label class="custom-control-label pb-3 ml-4" :for="`${engagement.id}`"></label></th>
                 <th>{{ engagement.name}}</th>
+                <td class="text-capitalize" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</td>
+                <td class="text-capitalize" v-else>{{ engagement.type }}</td>
                 <td>{{ engagement.status }}</td>
                 <td>{{ engagement.assigned_to }}</td>
-                <td>{{ engagement.return_type }}</td>
+                <td v-if="engagement.return_type != null">{{ engagement.return_type }}</td>
+                <td v-else>None</td>
                 <td>{{ engagement.year }}</td>
               </tr>
             </tbody>
@@ -205,6 +209,13 @@ export default {
         }
       }, 3000);
     },
+    fixCasing(string) {
+      if(string == 'taxreturn') {
+        const newString = string.replace("taxreturn", "Tax Return")
+
+        return newString
+      }
+    }
   },
   created() {
     this.listLoaded = true;

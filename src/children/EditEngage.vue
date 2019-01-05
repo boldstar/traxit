@@ -22,8 +22,44 @@
   <form @submit.prevent="editThisEngagement" class="d-flex-column justify-content-center">
       <div class="form-group">
 
+        <div class="d-flex justify-content-between mb-3 p-2 custom-control custom-checkbox bg-white form-control" v-bind:class="{'input-error' : nothingChecked}" v-if="engagement.type == 'bookkeeping'">
+          <div class="d-flex">
+            <span class="mr-3 font-weight-bold h6">Monthly</span>
+            <input type="checkbox" v-model="monthChecked" class="custom-control-input ml-3" id="customCheck1" @change="selectedMonthRange">
+            <label class="custom-control-label ml-3" for="customCheck1"></label>
+          </div>
+          <div class="d-flex">
+            <span class="mr-3 font-weight-bold h6">Quarterly</span>
+            <input type="checkbox" v-model="quarterChecked" class="custom-control-input ml-3" id="customCheck2" @change="selectedQuarterRange">
+            <label class="custom-control-label ml-3" for="customCheck2"></label>
+          </div>
+          <div class="d-flex">
+            <span class="mr-3 font-weight-bold h6">Annual</span>
+            <input type="checkbox" v-model="annualChecked" class="custom-control-input ml-3" id="customCheck3" @change="selectedAnnualRange">
+            <label class="custom-control-label ml-3" for="customCheck3"></label>
+          </div>
+        </div>
+
         <input type="text" class="form-control mb-3" placeholder="Year" v-model="engagement.year">
         
+
+         <div class="input-group my-3" v-if="monthRange">
+          <div class="input-group-prepend">
+            <label class="input-group-text text-primary" for="option">Month Of</label>
+          </div>
+          <select class="form-control" id="type" v-model="engagement.title" name="Title">
+              <option v-for="(month, index) in monthly" :key="index" :value="month">{{ month }}</option>
+          </select>
+        </div>
+
+        <div class="input-group my-3" v-if="quarterRange">
+          <div class="input-group-prepend">
+            <label class="input-group-text text-primary" for="option">Quarter Of</label>
+          </div>
+          <select class="form-control" id="type" v-model="engagement.title" name="Title">
+              <option v-for="(quarter, index) in quarterly" :key="index" :value="quarter">{{ quarter }}</option>
+          </select>
+        </div>
 
         <div class="input-group my-3">
           <div class="input-group-prepend">
@@ -36,7 +72,7 @@
           </select>
         </div>
 
-       <div class="input-group my-3">
+       <div class="input-group my-3" v-if="engagement.type == 'taxreturn'">
           <div class="input-group-prepend">
             <label class="input-group-text text-primary" for="option">Return Type</label>
           </div>
@@ -100,7 +136,15 @@ export default {
   name: 'EditEngagement',
   data() {
     return {
-      
+      monthRange: false,
+      quarterRange: false,
+      annualRange: false,
+      monthChecked: false,
+      quarterChecked: false,
+      annualChecked: false,
+      nothingChecked: false,
+      monthly: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      quarterly: ['Jan-Mar', 'Apr-Jun', 'Jul-Sep', 'Oct-Dec'],
     }
   },
   components:{
@@ -123,11 +167,18 @@ export default {
     ...mapActions(['updateEngagement']),
 
     editThisEngagement(id) {
-        if(!this.engagement.return_type || !this.engagement.year ) return;
+        if(!this.engagement.year ) return;
+        if(this.annualChecked === true) {
+          this.engagement.title = 'Annual'
+        }
         
         this.updateEngagement({
           id: this.engagement.id,
           client_id: this.engagement.client_id,
+          workflow_id: this.engagement.workflow_id,
+          type: this.engagement.type,
+          title: this.engagement.title,
+          description: this.engagement.description,
           return_type: this.engagement.return_type,
           year: this.engagement.year,
           assigned_to: this.engagement.assigned_to,
@@ -152,6 +203,30 @@ export default {
     isActive: function (menuItem) {
       return this.activeItem === menuItem
     },
+    selectedMonthRange() {
+      this.monthRange = !this.monthRange
+      this.quarterRange = false
+      this.annualRange = false
+      this.quarterChecked = false
+      this.annualChecked = false
+      this.nothingChecked = false
+    },
+    selectedQuarterRange() {
+      this.quarterRange = !this.quarterRange
+      this.monthRange = false
+      this.annualRange = false
+      this.monthChecked = false
+      this.annualChecked = false
+      this.nothingChecked = false
+    },
+    selectedAnnualRange() {
+      this.annualRange = !this.annualRange
+      this.monthRange = false
+      this.quarterRange = false
+      this.monthChecked = false
+      this.quarterChecked = false
+      this.nothingChecked = false
+    }
   },
   created: function(){
     this.$store.dispatch('getEngagement', this.$route.params.id);

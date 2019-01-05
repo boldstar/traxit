@@ -383,12 +383,23 @@ export default new Router({
         },
         {
           // this is the children route for adding a new engagement
-          path: 'engagement',
-          component: () => import('@/children/EngagementForm.vue'),
+          path: 'engagement/taxform',
+          component: () => import('@/children/TaxForm.vue'),
             meta: {
               requiresAuth: true,
               breadCrumb: [
-                { name: 'New Engagement' }
+                { name: 'New Tax Engagement' }
+            ]
+          },
+        },
+        {
+          // this is the children route for adding a new engagement
+          path: 'engagement/bookkeepingform',
+          component: () => import('@/children/BookkeepingForm.vue'),
+            meta: {
+              requiresAuth: true,
+              breadCrumb: [
+                { name: 'New Bookkeeping Engagement' }
             ]
           },
         }

@@ -47,11 +47,11 @@
 
     <!-- if engagement is selected this section will show -->
     <div class="d-flex flex-column justify-content-center align-items-center mt-5" v-if="engagementsCard && $route.name == 'add'">
-      <div class="card-body py-3 px-5 col-sm-12 col-md-10 col-lg-5 d-flex justify-content-between">
+      <div class="card-body py-3 px-5 col-sm-12 col-md-10 col-lg-8 d-flex justify-content-between">
         <span class="font-weight-bold h3 text-primary align-self-center m-0">Choose Engagement Type</span>
         <button type="button" @click="engagementsCard=false" class="btn btn-outline-secondary btn-sm">Back</button>
       </div>
-      <div class="d-flex flex-row mt-2 col-sm-12 col-md-10 col-lg-5 flex-sm-wrap" v-if="$route.name == 'add'">
+      <div class="d-flex flex-row mt-2 col-sm-12 col-md-10 col-lg-8 flex-sm-wrap" v-if="$route.name == 'add'">
         <!-- contact card -->
         <div class="col-sm-6 col-md-6">
           <div class="card-style card-body bg-light border shadow-sm p-5">

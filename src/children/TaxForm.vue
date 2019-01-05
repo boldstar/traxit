@@ -30,7 +30,7 @@
         <span class="form-error" v-show="errors.has('Category')">{{ errors.first('Category') }}</span>
 
        
-        <div class="input-group my-3" v-if="engagement.category == 'personal'">
+        <div class="input-group my-3" v-if="engagement.category == 'Personal'">
           <div class="input-group-prepend">
             <label class="input-group-text text-primary" for="option">Find Contact</label>
           </div>
@@ -43,7 +43,7 @@
         </div>
         <span class="form-error" v-show="errors.has('Contact')">{{ errors.first('Contact') }}</span>
 
-        <div class="input-group my-3" v-if="engagement.category == 'business'">
+        <div class="input-group my-3" v-if="engagement.category == 'Business'">
           <div class="input-group-prepend">
             <label class="input-group-text text-primary" for="option">Find Contact</label>
           </div>
@@ -56,7 +56,7 @@
         </div>
         <span class="form-error" v-show="errors.has('Business Contact')">{{ errors.first('Business Contact') }}</span>
 
-        <div class="input-group my-3" v-if="engagement.category == 'business'">
+        <div class="input-group my-3" v-if="engagement.category == 'Business'">
           <div class="input-group-prepend">
             <label class="input-group-text text-primary" for="option">Find Business</label>
           </div>

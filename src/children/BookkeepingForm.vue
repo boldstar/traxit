@@ -13,19 +13,19 @@
     <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center bg-light px-3 pt-3 border pb-0">
       <div class="form-group">
 
-        <div class="d-flex mb-3 bg-light p-2 custom-control custom-checkbox bg-white form-control" v-bind:class="{'input-error' : nothingChecked}">
+        <div class="d-flex justify-content-between mb-3 p-2 custom-control custom-checkbox bg-white form-control" v-bind:class="{'input-error' : nothingChecked}">
           <div class="d-flex">
             <span class="mr-3 font-weight-bold h6">Monthly</span>
             <input type="checkbox" v-model="monthChecked" class="custom-control-input ml-3" id="customCheck1" @change="selectedMonthRange">
             <label class="custom-control-label ml-3" for="customCheck1"></label>
           </div>
           <div class="d-flex">
-            <span class="mr-3 font-weight-bold h6 mr-3">Quarterly</span>
+            <span class="mr-3 font-weight-bold h6">Quarterly</span>
             <input type="checkbox" v-model="quarterChecked" class="custom-control-input ml-3" id="customCheck2" @change="selectedQuarterRange">
             <label class="custom-control-label ml-3" for="customCheck2"></label>
           </div>
           <div class="d-flex">
-            <span class="mr-3 font-weight-bold h6 mr-3">Annual</span>
+            <span class="mr-3 font-weight-bold h6">Annual</span>
             <input type="checkbox" v-model="annualChecked" class="custom-control-input ml-3" id="customCheck3" @change="selectedAnnualRange">
             <label class="custom-control-label ml-3" for="customCheck3"></label>
           </div>
@@ -76,7 +76,7 @@
 
         <div class="input-group my-3" v-if="monthRange">
           <div class="input-group-prepend">
-            <label class="input-group-text text-primary" for="option">Monthly</label>
+            <label class="input-group-text text-primary" for="option">Month Of</label>
           </div>
           <select :class="{ 'input-error': errors.has('Title') }" class="form-control" id="type" v-model="engagement.title" v-validate="{ is_not: option }" name="Title">
               <option  selected disabled>{{ option }}</option>
@@ -87,7 +87,7 @@
 
         <div class="input-group my-3" v-if="quarterRange">
           <div class="input-group-prepend">
-            <label class="input-group-text text-primary" for="option">Quarterly</label>
+            <label class="input-group-text text-primary" for="option">Quarter Of</label>
           </div>
           <select :class="{ 'input-error': errors.has('Title') }" class="form-control" id="type" v-model="engagement.title" v-validate="{ is_not: option }" name="Title">
               <option  selected disabled>{{ option }}</option>
@@ -211,6 +211,9 @@ export default {
       },
     addNewEngagement() {
       if(!this.engagement.return_type || !this.engagement.year ) return;
+      if(this.annualChecked === true) {
+        this.engagement.title = 'Annual'
+      }
       this.addEngagement({
         id: this.idForEngagement,
         category: this.engagement.category,

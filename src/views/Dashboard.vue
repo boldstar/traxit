@@ -27,8 +27,8 @@
             </div>
 
             <div v-if="!loading && !noData">
-            <div class="d-flex flex-lg-row flex-sm-colum col-12 justify-content-around dashboard">
-                <div class="col-lg-4 col-md-4 col-sm-12 card-body p-3">
+            <div class="d-flex flex-lg-row flex-sm-colum col-12 justify-content-around mt-lg-3 mt-md-2">
+                <div class="col-lg-4 col-md-4 col-sm-12 card-body px-3 pt-0">
                     <div class="h4 py-3">
                         <i class="fas fa-home mr-2 text-primary"></i>
                         <span class="font-weight-bold">Firm</span>
@@ -36,7 +36,7 @@
                      <doughnut-chart v-if="chartData" :chart-data="workflowsetsfull"></doughnut-chart>
                 </div>
                 <!-- this is the doughnut chart for the overview of the firm -->
-                <div class="col-lg-4 col-md-4 col-sm-12 card-body p-3 mx-3">
+                <div class="col-lg-4 col-md-4 col-sm-12 card-body px-3 pt-0 mx-3">
                     <div class="col-lg-8 col-md-8 col-sm-12 carousel h4 py-2">
                         <carousel ref="carousel" :per-page="1"  :mouse-drag="false" :loop="true" :navigationEnabled="true" :paginationEnabled="false" @pageChange="handleClick" :navigationNextLabel='`<i class="fas fa-arrow-alt-circle-right text-primary"></i>`' :navigationPrevLabel='`<i class="fas fa-arrow-alt-circle-left text-primary"></i>`'>
                             <slide class="font-weight-bold p-2" ref="slide" v-for="workflow in mapWorkflowsWithIds" :key="workflow.workflow_id" :title="`${workflow.workflow_id}`">
@@ -47,14 +47,14 @@
                     <doughnut-chart v-if="chartData" :chart-data="datasetsfull"></doughnut-chart>
                 </div>
                 <!-- this is the dougnut chart for the tasks -->
-                <div class="col-lg-4 col-md-4 col-sm-12 card-body p-3">
+                <div class="col-lg-4 col-md-4 col-sm-12 card-body px-3 pt-0">
                     <div class="h4 py-3">
                         <i class="fas fa-list-ul mr-2 text-primary"></i>
                         <span class="font-weight-bold">Tasks</span>
                     </div>
                     <doughnut-chart v-if="chartData && tasks.length > 0" :chart-data="tasksetsfull"></doughnut-chart>
                     <div class="mt-3" v-else>
-                        <img src="@/assets/taskillustration.png" alt="" class="no-tasks-img mt-3">
+                       <span class="font-weight-bold">You currently have zero tasks</span>
                     </div>
                 </div>
             </div>

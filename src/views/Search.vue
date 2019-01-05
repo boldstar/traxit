@@ -55,7 +55,9 @@
                         <table class="table mb-0">
                             <thead class="text-primary">
                                 <tr>
+                                    <th scope="col">Type</th>
                                     <th scope="col">Return Type</th>
+                                    <th scope="col">Time Period</th>
                                     <th scope="col">Year</th>
                                     <th scope="col">Assigned To</th>
                                     <th scope="col">Status</th>
@@ -64,7 +66,12 @@
                             </thead>
                             <tbody class="table-bordered">
                                 <tr v-for="(engagement, index) in result.engagements" :key="index" >
-                                    <th scope="row">{{engagement.return_type}}</th>
+                                    <td class="text-capitalize" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</td>
+                                    <td class="text-capitalize" v-else>{{ engagement.type }}</td>
+                                    <td v-if="engagement.return_type != null">{{ engagement.return_type }}</td>
+                                    <td v-else>None</td>
+                                    <td v-if="engagement.type == 'bookkeeping'">{{engagement.title}}</td>
+                                    <td v-else>None</td>
                                     <td>{{engagement.year}}</td>
                                     <td>{{engagement.assigned_to}}</td>
                                     <td>{{engagement.status}}</td>
@@ -99,6 +106,15 @@ export default {
     },
     computed: {
        ...mapGetters(['searchResults', 'processing']) 
+    },
+    methods: {
+        fixCasing(string) {
+            if(string == 'taxreturn') {
+                const newString = string.replace("taxreturn", "Tax Return")
+
+                return newString
+            }
+        }
     },
     created() {
        this.keyword = this.$route.query.keyword

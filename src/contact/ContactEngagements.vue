@@ -18,11 +18,13 @@
 
     <div v-if="!engagementLoaded && $route.name == 'contact-engagements'">
     
-            <table class="table">
+            <table class="table table-hover">
                 <thead class="text-primary border">
                     <tr>
                     <th  scope="col">Category</th>
+                    <th  scope="col">Type</th>
                     <th  scope="col">Return Type</th>
+                    <th  scope="col">Time Period</th>
                     <th  scope="col">Year</th>
                     <th scope="col">Assigned To</th>
                     <th  scope="col">Status</th>
@@ -31,9 +33,14 @@
                     </tr>
                 </thead>
                 <tbody class="table-bordered">
-                    <tr v-for="(engagement, index) in clientEngagements" :key="index">
+                    <tr v-for="(engagement, index) in clientEngagements" :key="index" @click="viewDetails(engagement.id)">
                     <th class="text-capitalize">{{ engagement.category}}</th>
-                    <th>{{ engagement.return_type}}</th>
+                    <th class="text-capitalize" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</th>
+                    <th class="text-capitalize" v-else>{{ engagement.type }}</th>
+                    <th v-if="engagement.type == 'taxreturn'">{{ engagement.return_type}}</th>
+                    <th v-else>None</th>
+                    <th v-if="engagement.type == 'bookkeeping'">{{ engagement.title }}</th>
+                    <th v-else>None</th>
                     <th>{{ engagement.year }}</th>
                     <th>{{ engagement.assigned_to}}</th>
                     <th>{{ engagement.status }}</th>
@@ -76,6 +83,18 @@ export default {
     computed: {
     ...mapGetters(['clientEngagements', 'client']),
     },
+    methods: {
+        fixCasing(string) {
+            if(string == 'taxreturn') {
+                const newString = string.replace("taxreturn", "Tax Return")
+
+                return newString
+            }
+        },
+        viewDetails(id) {
+            this.$router.push({path: '/engagement/' + id})
+        }
+    },
     created() {
         this.$store.dispatch('getClientEngagements', this.$route.params.id);
         this.engagementLoaded = true;
@@ -93,6 +112,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+    tr {
+        cursor: pointer;
+    }
 
     .header {
         height: 4em;

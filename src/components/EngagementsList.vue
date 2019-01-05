@@ -8,73 +8,85 @@
                 </button>
             </div>
             <input v-if="showInput" class="form-control search-input" placeholder="Filter By Last Name" v-model="searchEngagement" type="search">
-            <div class="mr-auto d-flex">
-
-                    <div class="mx-2">
-                        <div class="input-group">
-                        <div class="input-group-prepend">
-                        <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Return Type</label>
-                        </div>
-                        <select class="custom-select" id="client_id" v-model="filterType">
-                            <option> {{ type }}</option>
-                            <option v-for="(returntype, index) in filterReturnTypes" :key="index">
-                            {{ returntype }}
-                            </option>
-                        </select>
-                        </div>
-                    </div>  
-                    <div class="mr-2">
-                        <div class="input-group">
-                        <div class="input-group-prepend">
-                        <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Category</label>
-                        </div>
-                        <select class="custom-select text-capitalize" id="category" v-model="filterCategory">
-                            <option> {{ type }}</option>
-                            <option v-for="(category, index) in filterCategories" :key="index">
-                            {{ category }}
-                            </option>
-                        </select>
-                        </div>
+            <div class="d-flex">
+                <div class="mx-2">
+                    <div class="input-group">
+                    <div class="input-group-prepend">
+                    <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Return Type</label>
                     </div>
-                    <div class="mr-2">
-                        <div class="input-group">
-                        <div class="input-group-prepend">
-                        <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Assigned To</label>
-                        </div>
-                        <select class="custom-select text-capitalize" id="category" v-model="filterAssigned">
-                            <option> {{ type }}</option>
-                            <option v-for="(name, index) in filterAssignedTo" :key="index">
-                            {{ name }}
-                            </option>
-                        </select>
-                        </div>
+                    <select class="custom-select" id="client_id" v-model="filterType">
+                        <option> {{ type }}</option>
+                        <option v-for="(returntype, index) in filterReturnTypes" :key="index" v-if="returntype != null">
+                        {{ returntype }}
+                        </option>
+                    </select>
                     </div>
-                    <div class="mr-2">
-                        <div class="input-group">
-                        <div class="input-group-prepend">
-                        <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Year</label>
-                        </div>
-                        <select class="custom-select text-capitalize" id="category" v-model="filterYear">
-                            <option> {{ type }}</option>
-                            <option v-for="(year, index) in filterYears" :key="index">
-                            {{ year }}
-                            </option>
-                        </select>
-                        </div>
+                </div>  
+                <div class="mr-2">
+                    <div class="input-group">
+                    <div class="input-group-prepend">
+                    <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Category</label>
                     </div>
-                    <div>
-                        <div class="input-group">
-                        <div class="input-group-prepend">
-                        <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Workflows</label>
-                        </div>
-                        <select class="custom-select text-capitalize" id="category" v-model="filterWorkflow">
-                            <option> {{ type }}</option>
-                            <option v-for="(workflow, index) in allWorkflows" :key="index" :value="workflow.id">
-                            {{ workflow.workflow }}
-                            </option>
-                        </select>
-                        </div>
+                    <select class="custom-select text-capitalize" id="category" v-model="filterCategory">
+                        <option> {{ type }}</option>
+                        <option v-for="(category, index) in filterCategories" :key="index">
+                        {{ category }}
+                        </option>
+                    </select>
                     </div>
+                </div>
+                <div class="mr-2">
+                    <div class="input-group">
+                    <div class="input-group-prepend">
+                    <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Assigned To</label>
+                    </div>
+                    <select class="custom-select text-capitalize" id="category" v-model="filterAssigned">
+                        <option> {{ type }}</option>
+                        <option v-for="(name, index) in filterAssignedTo" :key="index">
+                        {{ name }}
+                        </option>
+                    </select>
+                    </div>
+                </div>
+                <div class="mr-2">
+                    <div class="input-group">
+                    <div class="input-group-prepend">
+                    <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Year</label>
+                    </div>
+                    <select class="custom-select text-capitalize" id="category" v-model="filterYear">
+                        <option> {{ type }}</option>
+                        <option v-for="(year, index) in filterYears" :key="index">
+                        {{ year }}
+                        </option>
+                    </select>
+                    </div>
+                </div>
+                <div class="mr-2">
+                    <div class="input-group">
+                    <div class="input-group-prepend">
+                    <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Workflows</label>
+                    </div>
+                    <select class="custom-select text-capitalize" id="category" v-model="filterWorkflow">
+                        <option> {{ type }}</option>
+                        <option v-for="(workflow, index) in allWorkflows" :key="index" :value="workflow.id">
+                        {{ workflow.workflow }}
+                        </option>
+                    </select>
+                    </div>
+                </div>
+                <div>
+                    <div class="input-group">
+                    <div class="input-group-prepend">
+                    <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Type</label>
+                    </div>
+                    <select class="custom-select text-capitalize" id="category" v-model="filterEngageType">
+                        <option> {{ type }}</option>
+                        <option v-for="(engagetype, index) in filterTypes" :key="index">
+                        {{ engagetype }}
+                        </option>
+                    </select>
+                    </div>
+                </div>
             </div>
 
             <div class="btn-group ml-auto">
@@ -90,6 +102,7 @@
                 <tr>
                     <th scope="col">Client</th>
                     <th scope="col" @click="sort('category')">Category</th>
+                    <th scope="col">Engagement Type</th>
                     <th scope="col" @click="sort('return_type')">Return Type</th>
                     <th scope="col" @click="sort('year')">Year</th>
                     <th scope="col" @click="sort('assigned_to')">Assigned To</th>
@@ -101,7 +114,10 @@
                 <tr v-for="(engagement, index) in sortedEngagements"  :key="index" @click="viewDetails(engagement.id)">
                     <td class="text-capitalize">{{ engagement.name }}</td>
                     <td class="text-capitalize">{{ engagement.category }}</td>
-                    <td>{{ engagement.return_type }}</td>
+                    <td class="text-capitalize" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</td>
+                    <td class="text-capitalize" v-else>{{ engagement.type }}</td>
+                    <td v-if="engagement.return_type != null">{{ engagement.return_type }}</td>
+                    <td v-else>None</td>
                     <td>{{ engagement.year }}</td>
                     <td>{{ engagement.assigned_to }}</td>
                     <td>{{ engagement.status }}</td>
@@ -166,6 +182,7 @@ export default {
         return {
             tableLoaded: false,
             showInput: false,
+            filterEngageType: '',
             filterType: '',
             filterCategory: '',
             filterAssigned: '',
@@ -199,6 +216,8 @@ export default {
               if(this.filterYear === 'All'){ return engagement } else{ return engagement.year === this.filterYear} 
             }).filter(engagement => {
               if(this.filterWorkflow === 'All'){ return engagement } else{ return engagement.workflow_id === this.filterWorkflow} 
+            }).filter(engagement => {
+              if(this.filterEngageType === 'All'){ return engagement } else{ return engagement.type === this.filterEngageType} 
             }).filter( engagement => {
             return !this.searchEngagement || engagement.name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 })
             .filter((row, index) => {
@@ -239,6 +258,13 @@ export default {
 
             return result
         },
+        filterTypes() {
+            const type = this.engagements.map(engagement => engagement.type)
+
+            const result = type.filter((v, i) => type.indexOf(v) === i)
+
+            return result
+        }
     },
     methods:{
         sort:function(s) {
@@ -268,6 +294,13 @@ export default {
             this.filterYear = this.type
             this.filterWorkflow = this.type
             this.searchEngagement = ''
+        },
+        fixCasing(string) {
+            if(string == 'taxreturn') {
+                const newString = string.replace("taxreturn", "Tax Return")
+
+                return newString
+            }
         }
     },
     created() {
@@ -279,6 +312,7 @@ export default {
         this.filterAssigned = this.type
         this.filterYear = this.type
         this.filterWorkflow = this.type
+        this.filterEngageType = this.type
         this.pageSize = this.options[1]
         var self = this;
         setTimeout(() => {

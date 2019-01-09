@@ -2,8 +2,9 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import moment from 'moment';
-import { abilityPlugin, ability as appAbility } from './ability'
+import { abilityPlugin, ability as appAbility } from './ability.js'
 import storage from './storage.js'
+import router from './router.js'
 
 export const ability = appAbility
 Vue.use(Vuex)
@@ -555,12 +556,14 @@ export default new Vuex.Store({
             localStorage.removeItem('expires_on')
             context.commit('destroyToken')
             context.commit('destroySession')
+            router.push('/login')
             resolve(response)
           })
           .catch(error => {
             localStorage.removeItem('access_token')
             localStorage.removeItem('expires_on')
             context.commit('destroyToken')
+            router.push('/login')
             reject(error)
           })
         })
@@ -604,10 +607,12 @@ export default new Vuex.Store({
         status: task.status,
       })
       .then(response => {
-          context.commit('updateTask', response.data)
+          console.log(response.data)
+          context.commit('updateTask', response.data.task)
+          context.commit('successAlert', response.data.message)
       })
       .catch(error => {
-          console.log(error.response.data)
+          console.log(error)
       })           
     },
     retrieveUsers(context) {
@@ -675,7 +680,8 @@ export default new Vuex.Store({
         postal_code: client.postal_code,
       })
       .then(response => {
-        context.commit('getDetails', response.data)
+        context.commit('addClient', response.data.contact)
+        context.commit('successAlert', response.data.message)
       })
       .catch(error => {
         console.log(error.response.data)
@@ -850,7 +856,6 @@ export default new Vuex.Store({
         fax_number: business.fax_number
       })
       .then(response => {
-        context.commit('addBusiness', response.data.business)
         context.commit('successAlert', response.data.message)
       })
       .catch(error => {

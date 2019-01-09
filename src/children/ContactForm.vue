@@ -183,7 +183,7 @@ export default {
         .then(() => {
           this.client = "" 
           this.idForClient++
-          this.$router.push({path: '/contacts', query: {alert: 'The Contact Has Been Added Succesfully!'}})
+          this.$router.push({path: '/add'})
         })
         .catch(error => {
             this.serverError = error.response.data

@@ -20,7 +20,7 @@
         <li class="border">
           <div class="d-flex">
           <span class="border-right p-3 background width">Address</span>
-          <span class="ml-5 align-self-center">{{ accountDetails.address }}, {{ accountDetails.city }}, {{ accountDetails.state }} {{ accountDetails.postal_code }}</span>
+          <span class="ml-5 align-self-center" v-if="accountDetails.address">{{ accountDetails.address }}, {{ accountDetails.city }}, {{ accountDetails.state }} {{ accountDetails.postal_code }}</span>
           </div>
         </li>
         <li class="border">

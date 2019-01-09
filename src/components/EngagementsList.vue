@@ -2,14 +2,48 @@
     <div>
 
          <div class="d-flex mb-3">
-            <div>
-                <button type="button" class="btn btn-outline-primary" @click="showInput = true" v-if="!showInput">
+            <div class="btn-group mr-2">
+                <button type="button" class="btn btn-outline-primary" @click="showSearchInput">
                     <i class="fas fa-search"></i>
                 </button>
+                <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-secondary font-weight-bold dropdown-toggle dropdown-toggle-split">
+                    Filter Options
+                </button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <div class="dropdown-item d-flex justify-content-between py-0 px-1">
+                        <span class="pb-1 font-weight-bold">Type</span>
+                        <input type="checkbox" class="align-self-center" v-model="typeChecked">
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item d-flex justify-content-between py-0 px-1">
+                        <span class="pb-1 font-weight-bold">Category</span>
+                        <input type="checkbox" class="align-self-center" v-model="categoryChecked">
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item d-flex justify-content-between py-0 px-1">
+                        <span class="pb-1 font-weight-bold">Return Type</span>
+                        <input type="checkbox" class="align-self-center" v-model="returnChecked">
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item d-flex justify-content-between py-0 px-1">
+                        <span class="pb-1 font-weight-bold">Assigned To</span>
+                        <input type="checkbox" class="align-self-center" v-model="assignedChecked">
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item d-flex justify-content-between py-0 px-1">
+                        <span class="pb-1 font-weight-bold">Year</span>
+                        <input type="checkbox" class="align-self-center" v-model="yearChecked">
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item d-flex justify-content-between py-0 px-1">
+                        <span class="pb-1 font-weight-bold">Workflows</span>
+                        <input type="checkbox" class="align-self-center" v-model="workflowChecked">
+                    </div>
+                    <div class="dropdown-divider"></div>
+                </div>
             </div>
-            <input v-if="showInput" class="form-control search-input" placeholder="Filter By Last Name" v-model="searchEngagement" type="search">
             <div class="d-flex">
-                <div class="mx-2">
+                <div class="mx-2" v-if="returnChecked">
                     <div class="input-group">
                     <div class="input-group-prepend">
                     <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Return Type</label>
@@ -22,7 +56,7 @@
                     </select>
                     </div>
                 </div>  
-                <div class="mr-2">
+                <div class="mr-2" v-if="categoryChecked">
                     <div class="input-group">
                     <div class="input-group-prepend">
                     <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Category</label>
@@ -35,7 +69,7 @@
                     </select>
                     </div>
                 </div>
-                <div class="mr-2">
+                <div class="mr-2" v-if="assignedChecked">
                     <div class="input-group">
                     <div class="input-group-prepend">
                     <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Assigned To</label>
@@ -48,7 +82,7 @@
                     </select>
                     </div>
                 </div>
-                <div class="mr-2">
+                <div class="mr-2" v-if="yearChecked">
                     <div class="input-group">
                     <div class="input-group-prepend">
                     <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Year</label>
@@ -61,7 +95,7 @@
                     </select>
                     </div>
                 </div>
-                <div class="mr-2">
+                <div class="mr-2" v-if="workflowChecked">
                     <div class="input-group">
                     <div class="input-group-prepend">
                     <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Workflows</label>
@@ -74,7 +108,7 @@
                     </select>
                     </div>
                 </div>
-                <div>
+                <div v-if="typeChecked">
                     <div class="input-group">
                     <div class="input-group-prepend">
                     <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Type</label>
@@ -97,34 +131,37 @@
 
         </div>
 
-        <table class="table border table-light table-hover text-left">
-            <thead class="text-primary hover">
-                <tr>
-                    <th scope="col">Client</th>
-                    <th scope="col" @click="sort('category')">Category</th>
-                    <th scope="col">Engagement Type</th>
-                    <th scope="col" @click="sort('return_type')">Return Type</th>
-                    <th scope="col" @click="sort('year')">Year</th>
-                    <th scope="col" @click="sort('assigned_to')">Assigned To</th>
-                    <th scope="col" @click="sort('status')">Status</th>
-                    <th scope="col" class="text-center">Details</th>
-                </tr>
-            </thead> 
-            <tbody class="client-info table-bordered" v-if="!tableLoaded">
-                <tr v-for="(engagement, index) in sortedEngagements"  :key="index" @click="viewDetails(engagement.id)">
-                    <td class="text-capitalize">{{ engagement.name }}</td>
-                    <td class="text-capitalize">{{ engagement.category }}</td>
-                    <td class="text-capitalize" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</td>
-                    <td class="text-capitalize" v-else>{{ engagement.type }}</td>
-                    <td v-if="engagement.return_type != null">{{ engagement.return_type }}</td>
-                    <td v-else>None</td>
-                    <td>{{ engagement.year }}</td>
-                    <td>{{ engagement.assigned_to }}</td>
-                    <td>{{ engagement.status }}</td>
-                    <td class="text-center"><router-link v-bind:to="'/engagement/' + engagement.id"><i class="far fa-eye"></i></router-link></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="d-flex flex-column">
+            <input v-if="showInput" class="form-control mb-3" placeholder="Filter By Last Name" v-model="searchEngagement" type="search">
+            <table class="table border table-light table-hover text-left">
+                <thead class="text-primary hover">
+                    <tr>
+                        <th scope="col">Client</th>
+                        <th scope="col" @click="sort('category')">Category</th>
+                        <th scope="col">Engagement Type</th>
+                        <th scope="col" @click="sort('return_type')">Return Type</th>
+                        <th scope="col" @click="sort('year')">Year</th>
+                        <th scope="col" @click="sort('assigned_to')">Assigned To</th>
+                        <th scope="col" @click="sort('status')">Status</th>
+                        <th scope="col" class="text-center">Details</th>
+                    </tr>
+                </thead> 
+                <tbody class="client-info table-bordered" v-if="!tableLoaded">
+                    <tr v-for="(engagement, index) in sortedEngagements"  :key="index" @click="viewDetails(engagement.id)">
+                        <td class="text-capitalize">{{ engagement.name }}</td>
+                        <td class="text-capitalize">{{ engagement.category }}</td>
+                        <td class="text-capitalize" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</td>
+                        <td class="text-capitalize" v-else>{{ engagement.type }}</td>
+                        <td v-if="engagement.return_type != null">{{ engagement.return_type }}</td>
+                        <td v-else>None</td>
+                        <td>{{ engagement.year }}</td>
+                        <td>{{ engagement.assigned_to }}</td>
+                        <td>{{ engagement.status }}</td>
+                        <td class="text-center"><router-link v-bind:to="'/engagement/' + engagement.id"><i class="far fa-eye"></i></router-link></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
 
         <nav aria-label="pagination" class="d-flex" v-if="!tableLoaded">
@@ -180,6 +217,12 @@ export default {
     },
     data() {
         return {
+            typeChecked: false,
+            returnChecked: false,
+            categoryChecked: false,
+            assignedChecked: false,
+            yearChecked: false,
+            workflowChecked: false,
             tableLoaded: false,
             showInput: false,
             filterEngageType: '',
@@ -287,6 +330,12 @@ export default {
             this.$router.push({path: '/engagement/' + id})
         },
         clearFilters() {
+            this.typeChecked = false
+            this.categoryChecked = false
+            this.returnChecked = false
+            this.yearChecked = false
+            this.workflowChecked = false
+            this.assignedChecked = false
             this.showInput = false
             this.filterType = this.type
             this.filterCategory = this.type
@@ -301,6 +350,9 @@ export default {
 
                 return newString
             }
+        },
+        showSearchInput() {
+            this.showInput = !this.showInput
         }
     },
     created() {
@@ -323,6 +375,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.dropdown-item {
+    cursor: pointer;
+}
 .search-input {
     width: 200px;
 }

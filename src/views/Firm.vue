@@ -55,7 +55,7 @@
             </div>
             </div>
 
-          <table class="table border">
+          <table class="table border table-hover">
             <thead class="text-primary text-left">
               <tr>
                 <th scope="col">Batch</th>
@@ -68,7 +68,7 @@
               </tr>
             </thead>
             <tbody class="text-left">
-              <tr v-for="(engagement, index) in filteredEngagements" :key="index" v-if="engagement.workflow_id === selectedWorkflowID">
+              <tr v-for="(engagement, index) in filteredEngagements" :key="index" v-if="engagement.workflow_id === selectedWorkflowID" @click="viewDetails(engagement.id)">
                 <th scope="row" class="custom-control custom-checkbox"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements.engagements" class="custom-control-input" :id="`${engagement.id}`"><label class="custom-control-label pb-3 ml-4" :for="`${engagement.id}`"></label></th>
                 <th>{{ engagement.name}}</th>
                 <td class="text-capitalize" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</td>
@@ -215,6 +215,9 @@ export default {
 
         return newString
       }
+    },
+    viewDetails(id) {
+      this.$router.push('/engagement/' + id)
     }
   },
   created() {
@@ -238,6 +241,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+ tr {
+   cursor: pointer;
+ }
 
   li {
     list-style: none;

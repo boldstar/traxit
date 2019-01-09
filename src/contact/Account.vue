@@ -112,7 +112,7 @@
                     </li>
                     <li class="list-group-item text-left justify-content-between d-flex">
                         <span class="font-weight-bold">Address </span>
-                        <div class="text-right">{{ client.street_address }}, {{ client.city }}, {{ client.state }}, {{ client.postal_code }}</div>
+                        <div class="text-right" v-if="client.street_address">{{ client.street_address }}, {{ client.city }}, {{ client.state }}, {{ client.postal_code }}</div>
                     </li>
                 </ul>
             </div>

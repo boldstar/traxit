@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row">
             <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-              <div class="sidebar-sticky">
+              <div class="sidebar-sticky d-flex flex-column">
                 <ul class="nav nav-fill flex-column align-items-start mt-5">
                   <li class="nav-item w-100"  v-bind:class="{ 'is-active': isActive }">                                        
                       <router-link class="nav-link border-right text-left pl-4" to="/"><span><i class="fas fa-tachometer-alt"></i></span>Dashboard</router-link>    
@@ -23,6 +23,14 @@
                       <router-link class="nav-link border-right text-left pl-4" to="/add"><span><i class="far fa-plus-square"></i></span>Add New</router-link>  
                   </li>
                 </ul>
+                <div class="mt-auto">
+                    <transition name="router-animation" enter-active-class="animated bounceInLeft" leave-active-class="animated fadeOut" mode="out-in">
+                        <Toaster :message="successAlert" :type="'success'" v-if="successAlert" />
+                    </transition>   
+                    <transition name="router-animation" enter-active-class="animated bounceInLeft" leave-active-class="animated fadeOut" mode="out-in">
+                        <Toaster :message="errorAlert" :type="'error'" v-if="errorAlert" />
+                    </transition>   
+                </div>
               </div>
             </nav>
           </div>
@@ -30,13 +38,22 @@
 </template>
 
 <script>
+import Toaster from '@/components/Toaster.vue'
+import {mapGetters} from 'vuex'
+
 export default {
     name: 'sidebar',
+    components: {
+        Toaster
+    },
     data () {
         return {
         isActive: false,
         }
-  },
+    },
+    computed: {
+        ...mapGetters(['successAlert', 'errorAlert'])
+    }
 }
 </script>
 

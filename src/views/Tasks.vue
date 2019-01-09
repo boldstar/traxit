@@ -118,6 +118,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
+import Toaster from '@/components/Toaster.vue'
 
 export default {
   name: 'UserTasks',
@@ -127,6 +128,7 @@ export default {
       tasksLoaded: false,
       taskToUpdate: null,
       selectedWorkflow: null,
+      alert: '',
       taskData: false,
       task: {
         user_id: 0,
@@ -137,6 +139,7 @@ export default {
   },
    components:{
     'b-modal': bModal,
+    Toaster
   },
   directives: {
     'b-modal': bModalDirective
@@ -145,7 +148,8 @@ export default {
     ...mapGetters([
       'tasks',
       'users',
-      'allWorkflows'
+      'allWorkflows',
+      'successAlert'
     ]),
   },
   methods: {
@@ -166,6 +170,7 @@ export default {
             user_id: this.task.user_id,
             status: this.task.status
           }).then(() => {
+          this.alert = 'Tasks updated'
           this.$refs.modal.hide()
         }) 
         }

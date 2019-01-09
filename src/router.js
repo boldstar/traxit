@@ -129,7 +129,16 @@ export default new Router({
                 layout: "admin",
               },
           },
-      ] 
+          {
+            path: 'reports',
+            name: 'reports',
+            component: () => import('@/children/Reports.vue'),
+              meta: {
+                requiresAuth: true,
+                layout: "admin",
+              },
+          }
+      ]
     },
     {
       // this is the dashboard view

@@ -47,9 +47,9 @@ export default {
             var txt = chart.config.data.centerText;
             var color = centerConfig.color || '#000';
             var sidePadding = centerConfig.sidePadding || 20;
-            var sidePaddingCalculated = (sidePadding/100) * (chart.innerRadius * 2)
+            var sidePaddingCalculated = (sidePadding/100) * (chart.innerRadius * 2);
             //Start with a base font of 30px
-            ctx.font = "35px " + fontStyle;
+            ctx.font = "30px " + fontStyle;
             
             //Get the width of the string and also the width of the element minus 10 to give it 5px side padding
             var stringWidth = ctx.measureText(txt).width;
@@ -61,7 +61,7 @@ export default {
             var elementHeight = (chart.innerRadius * 2);
 
             // Pick a new font size so it will not be larger than the height of label.
-            var fontSizeToUse = Math.min(newFontSize, elementHeight);
+            var fontSizeToUse = Math.min(80, elementHeight);
 
             //Set font settings to draw it correctly.
             ctx.textAlign = 'center';
@@ -94,9 +94,9 @@ export default {
             var txt = chart.config.data.centerText;
             var color = centerConfig.color || '#000';
             var sidePadding = centerConfig.sidePadding || 20;
-            var sidePaddingCalculated = (sidePadding/100) * (chart.innerRadius * 2)
+            var sidePaddingCalculated = (sidePadding/100) * (chart.innerRadius * 2);
             //Start with a base font of 30px
-            ctx.font = "35px " + fontStyle;
+            ctx.font = "30px " + fontStyle;
             
             //Get the width of the string and also the width of the element minus 10 to give it 5px side padding
             var stringWidth = ctx.measureText(txt).width;
@@ -108,7 +108,7 @@ export default {
             var elementHeight = (chart.innerRadius * 2);
 
             // Pick a new font size so it will not be larger than the height of label.
-            var fontSizeToUse = Math.min(newFontSize, elementHeight);
+            var fontSizeToUse = Math.min(80, elementHeight);
 
             //Set font settings to draw it correctly.
             ctx.textAlign = 'center';

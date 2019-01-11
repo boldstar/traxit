@@ -36,7 +36,7 @@
           </div>
           <select :class="{ 'input-error': errors.has('Contact') }" class="form-control" id="client_id" v-model.number="engagement.client_id" v-validate="{ is_not: option }" name="Contact">
             <option disabled>{{ option }}</option>
-            <option v-for="client in allClients" :key="client.id" :value="client.id">
+            <option v-for="client in sortClients" :key="client.id" :value="client.id">
               {{ client.last_name }}, {{client.first_name}} <span v-if="client.has_spouse == 1"> & </span>{{client.spouse_first_name }}
             </option>
           </select>
@@ -49,7 +49,7 @@
           </div>
           <select :class="{ 'input-error': errors.has('Business Contact') }" class="form-control" id="client_id" v-model.number="engagement.client_id" v-validate="{ is_not: option }" name="Business Contact">
             <option disabled>{{ option }}</option>
-            <option v-for="client in allClients" :key="client.id" :value="client.id">
+            <option v-for="client in sortClients" :key="client.id" :value="client.id">
               {{ client.last_name }}, {{client.first_name}} <span v-if="client.has_spouse == 1"> & </span>{{client.spouse_first_name }}
             </option>
           </select>
@@ -172,12 +172,19 @@ export default {
           'returnTypes'
         ]
       ),
-  clientBusinesses() {
-    const client = this.allClients.filter(client => client.id === this.engagement.client_id)
-    const businesses = client.map(c => c.businesses)
-    const clientBusinesses = businesses.flat();
-    return clientBusinesses
-  }
+    clientBusinesses() {
+      const client = this.allClients.filter(client => client.id === this.engagement.client_id)
+      const businesses = client.map(c => c.businesses)
+      const clientBusinesses = businesses.flat();
+      return clientBusinesses
+    },
+    sortClients() {
+      return this.allClients.sort((a,b) => {
+        if(a.last_name < b.last_name) return -1;
+        if(a.last_name > b.last_name)  return 1;
+        return 0;
+      })
+    }
   },
   methods: {
     ...mapActions(['addEngagement']),

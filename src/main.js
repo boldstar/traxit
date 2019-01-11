@@ -45,11 +45,6 @@ Vue.filter('formatDate', function(created_at) {
   }
 });
 
-Vue.filter('formatNumber', function (number) {
-  return number.replace(/[^0-9]/g, '')
-  .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
-})
-
 
 //this is route protection
 router.beforeEach((to, from, next) => {

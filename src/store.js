@@ -266,16 +266,7 @@ export default new Vuex.Store({
     },
     updateEngagement(state, engagement) {
       const index = state.engagements.findIndex(item => item.id == engagement.id);
-      state.engagements.splice(index, 1, {
-        'id': engagement.id,
-        'client_id': engagement.client_id,
-        'workflow_id': engagement.workflow_id,
-        'return_type': engagement.return_type,
-        'year': engagement.year,
-        'assigned_to': engagement.assigned_to,
-        'status': engagement.status,
-        'done': false           
-      })
+      state.engagements.splice(index, 1, engagement)
     },
     updateCheckedEngagements(state, checkedEngagements) {
       checkedEngagements.forEach((engagement) => {
@@ -602,14 +593,14 @@ export default new Vuex.Store({
       axios.patch('/tasks/' + task.id, {
         user_id: task.user_id,
         status: task.status,
+        done: task.done
       })
       .then(response => {
-          console.log(response.data)
           context.commit('updateTask', response.data.task)
           context.commit('successAlert', response.data.message)
       })
       .catch(error => {
-          console.log(error)
+          console.log(error.response.data)
       })           
     },
     retrieveUsers(context) {
@@ -766,6 +757,8 @@ export default new Vuex.Store({
       })
     },
     addEngagement(context, engagement) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
       axios.post(('/engagements'), {
         category: engagement.category,
         client_id: engagement.client_id,
@@ -789,6 +782,8 @@ export default new Vuex.Store({
       })
     },
     updateEngagement(context, engagement) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
       axios.patch('/engagements/' + engagement.id, {
         client_id: engagement.client_id,
         workflow_id: engagement.workflow_id,
@@ -799,16 +794,19 @@ export default new Vuex.Store({
         year: engagement.year,
         assigned_to: engagement.assigned_to,
         status: engagement.status,
-        done: false
+        done: engagement.done
       })
       .then(response => {
-          context.commit('updateEngagement', response.data)
+          context.commit('updateEngagement', response.data.engagement)
+          context.commit('successAlert', response.data.message)
       })
       .catch(error => {
-          console.log(error.response.data)
+          console.log(error)
       })           
     },
-    updateCheckedEngagements(context, checkedEngagements) {  
+    updateCheckedEngagements(context, checkedEngagements) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
       axios.patch('/engagementsarray', {
         engagements: checkedEngagements.engagements,
         assigned_to: checkedEngagements.assigned_to,
@@ -818,16 +816,18 @@ export default new Vuex.Store({
           context.commit('updateCheckedEngagements', response.data)
       })
       .catch(error => {
-          console.log(error.response.data)
+          console.log(error)
       })           
     },
     deleteEngagement(context, id) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
       axios.delete('/engagements/' + id)
       .then(() => {
           context.commit('deleteEngagement', id)
       })
       .catch(error => {
-          console.log(error.response.data)
+          console.log(error)
       })                
     },
     getBusiness({commit}, id) {
@@ -876,7 +876,7 @@ export default new Vuex.Store({
         context.commit('updateBusiness', response.data)
       })
       .catch(error => {
-        console.log(error.response.data)
+        console.log(error)
       })
     },
     deleteBusiness(context, id) {
@@ -886,7 +886,7 @@ export default new Vuex.Store({
         context.commit('successAlert', response.data)
       })
       .catch(error => {
-        console.log(error.response.data)
+        console.log(error)
       })
     },
     getDependent({commit}, id) {
@@ -1050,7 +1050,7 @@ export default new Vuex.Store({
         context.commit('retrieveWorkflows', response.data)
       })
       .catch(error => {
-        console.log(error.response.data)
+        console.log(error)
       })
     },
     getWorkflow({commit}, id) {
@@ -1064,13 +1064,15 @@ export default new Vuex.Store({
     },
     addWorkflow(context, workflow) {
       axios.post(('/workflowstatuses'), {
-        name: workflow.name
+        name: workflow.name,
+        copy_workflow: workflow.copy_workflow,
+        workflow_id: workflow.workflow_id,
       })
       .then(response => {
         context.commit('addWorkflow', response.data)
       })
       .catch(error => {
-        console.log(error.response.data)
+        console.log(error)
       })
     },
     editWorkflow(context, payload) {
@@ -1106,7 +1108,7 @@ export default new Vuex.Store({
           context.commit('statusOrder', response.data)
       })
       .catch(error => {
-          console.log(error.response.data)
+          console.log(error)
       })           
     },
     deleteStatus(context, id) {
@@ -1117,7 +1119,7 @@ export default new Vuex.Store({
       })
       .catch(error => {       
           context.commit('errorAlert', error.response.data)
-          console.log(error.response.data)
+          console.log(error)
       })                
     },
     searchDatabase(context, data) {
@@ -1130,7 +1132,7 @@ export default new Vuex.Store({
         context.commit('stopProcessing')
       }).catch(error => {
         context.commit('stopProcessing')
-        console.log(error.response.data)
+        console.log(error)
       })
     },
     downloadEngagements(context) {
@@ -1144,7 +1146,7 @@ export default new Vuex.Store({
         link.click();
       })
       .catch(error => {
-        console.log(error.response.data)
+        console.log(error)
       })
     },
     downloadContacts(context) {
@@ -1158,7 +1160,7 @@ export default new Vuex.Store({
         link.click();
       })
       .catch(error => {
-        console.log(error.response.data)
+        console.log(error)
       })
     },
     uploadContacts(context, file) {
@@ -1173,7 +1175,7 @@ export default new Vuex.Store({
         context.commit('stopProcessing')
       })
       .catch(error => {
-        console.log(error.response.data)
+        console.log(error)
         context.commit('stopProcessing')
       })
     },
@@ -1183,7 +1185,7 @@ export default new Vuex.Store({
         context.commit('returnTypes', response.data)
       })
       .catch(error => {
-        console.log(error.response.data)
+        console.log(error)
       })
     },
     getAccountDetails(context) {
@@ -1192,7 +1194,7 @@ export default new Vuex.Store({
         context.commit('accountDetails', response.data)
       })
       .catch(error => {
-        console.log(error.response.data)
+        console.log(error)
       })
     },
     addAccountDetails(context, account) {
@@ -1212,7 +1214,7 @@ export default new Vuex.Store({
         context.commit('addAccountDetails', response.data)
       })
       .catch(error => {
-        console.log(error.response.data)
+        console.log(error)
       })
     },
     updateAccountDetails(context, account) {
@@ -1232,9 +1234,35 @@ export default new Vuex.Store({
         context.commit('updateAccountDetails', response.data)
       })
       .catch(error => {
+        console.log(error)
+      })
+    },
+    requestReport(context, data) {
+      axios.post('/reports', {
+          type: data.type,
+          fromValue: data.fromValue,
+          toValue:  data.toValue,
+          filters: data.filters,
+          return_type: data.return_type,
+          workflow: data.workflow,
+          status: data.status
+        },
+        {
+          responseType: 'blob'
+        }
+      )
+      .then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'engagements_report.xlsx');
+        document.body.appendChild(link);
+        link.click();
+      })
+      .catch(error => {
         console.log(error.response.data)
       })
-    }
+    },
   }, 
 })
 

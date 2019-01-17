@@ -74,9 +74,17 @@
       </table>
     </div>
           <!-- this is the modal for updating task -->
-            <b-modal ref="modal" hide-footer title="Update">
-                <form >
-                <div>
+            <b-modal ref="modal" hide-footer title="Update Engagement">
+                <div class="d-flex justify-content-around">
+                  <div>
+                    <button type="button" class="btn btn-secondary font-weight-bold" @click="showDropdowns">Update</button>
+                  </div>
+                  <div>
+                    <button type="button" class="btn btn-primary font-weight-bold" @click="showComplete">Complete</button>
+                  </div>
+                </div>
+                <form v-if="dropDowns">
+                <div class="card bg-light p-3 mt-3">
                   <div class="input-group my-3">
                   <div class="input-group-prepend">
                     <label class="input-group-text font-weight-bold bg-primary text-light" for="option">Assign To</label>
@@ -107,6 +115,16 @@
                   <b-btn class="mt-3 ml-auto" variant="outline-primary" @click="acceptUpdate">Confirm</b-btn>
                 </div>
                 </form>
+
+                <form v-if="completed">
+                  <div v-if="completed" class="bg-light card px-4 mt-3">
+                    <span class="font-weight-bold my-3 form-control">Are you sure you want to complete the engagement?</span>
+                  </div>
+                  <div class="d-flex">
+                    <b-btn class="mt-3" variant="secondary" @click="hideModal">Cancel</b-btn>
+                    <b-btn class="mt-3 ml-auto" variant="outline-primary" @click="acceptUpdate">Confirm</b-btn>
+                </div>
+                </form>
             </b-modal>
 
 <!-- this is the loading ring for the engagements -->
@@ -128,11 +146,14 @@ export default {
       tasksLoaded: false,
       taskToUpdate: null,
       selectedWorkflow: null,
+      dropDowns: false,
+      completed: false,
       alert: '',
       taskData: false,
       task: {
         user_id: 0,
-        status: null
+        status: null,
+        done: null,
       },
       option: 'Choose...',
     }
@@ -155,15 +176,19 @@ export default {
   methods: {
     showModal() {
         this.$refs.modal.show()
+        this.dropDowns = false
+        this.completed = false
         },
     hideModal() {
         this.$refs.modal.hide()
         this.selectedWorkflow = null
+        this.dropDowns = false
+        this.completed = false
     },
     ...mapActions(['updateTask']),
 
     acceptUpdate() {
-      if(this.taskToUpdate) {
+      if(this.taskToUpdate && this.dropDowns === true) {
           if(!this.task.user_id) return;
           this.updateTask({
             id: this.taskToUpdate,
@@ -172,6 +197,21 @@ export default {
           }).then(() => {
           this.alert = 'Tasks updated'
           this.$refs.modal.hide()
+          this.dropDowns = false
+          this.completed = false
+        }) 
+        }
+      if(this.taskToUpdate && this.completed === true) {
+          if(!this.task.user_id) return;
+          this.updateTask({
+            id: this.taskToUpdate,
+            done: this.task.done
+          }).then(() => {
+          this.alert = 'Tasks updated'
+          this.$refs.modal.hide()
+          this.dropDowns = false
+          this.completed = false
+          this.task.done = null
         }) 
         }
       },
@@ -206,6 +246,15 @@ export default {
 
         return newString
       }
+    },
+    showComplete() {
+      this.dropDowns = false
+      this.completed = true
+      this.task.done = true
+    },
+    showDropdowns() {
+      this.dropDowns = true
+      this.completed = false
     }
   },
   created() {

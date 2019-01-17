@@ -81,7 +81,7 @@
           </select>
         </div>
 
-        <div class="input-group my-3">
+        <div class="input-group my-3" :class="{'input-error':assignAUser}" @change="clearAlarm">
         <div class="input-group-prepend">
           <label class="input-group-text text-primary" for="option">Assign To</label>
         </div>
@@ -91,8 +91,9 @@
           </option>
         </select>
       </div>
+      <small class="text-danger" v-if="assignAUser">Please Assign Task To User</small>
 
-         <div v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id === engagement.workflow_id">
+      <div v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id === engagement.workflow_id">
       <div class="input-group my-3">
         <div class="input-group-prepend">
           <label class="input-group-text text-primary" for="option">Status</label>
@@ -103,6 +104,15 @@
           </option>
         </select>
         </div>
+      </div>
+
+      <div class="d-flex mb-3 bg-light p-2 custom-control custom-checkbox bg-white form-control">
+      <span class="mr-3 font-weight-bold mb-1 h6">Engagement Complete</span>
+      <input type="checkbox" v-model="engagement.done" class="custom-control-input" id="customCompleteCheck">
+      <label class="custom-control-label ml-3 align-self-start" for="customCompleteCheck"></label>
+      </div>
+      <div class="text-left mb-3 ml-1">
+        <small class="text-danger" v-if="engagement.done == true">Warning: If Engagement Box Is Checked, Engagement Will Be Marked As Completed Or Has Already Been Complete</small>
       </div>
 
       <button type="submit" class="btn btn-lg btn-primary d-flex justify-content-start">Save Changes</button>
@@ -143,6 +153,7 @@ export default {
       quarterChecked: false,
       annualChecked: false,
       nothingChecked: false,
+      assignAUser: false,
       monthly: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       quarterly: ['Jan-Mar', 'Apr-Jun', 'Jul-Sep', 'Oct-Dec'],
     }
@@ -171,6 +182,12 @@ export default {
         if(this.annualChecked === true) {
           this.engagement.title = 'Annual'
         }
+        if(this.engagement.done == false) {
+          if(this.engagement.assigned_to == 'Complete') {
+            this.assignAUser = true
+            return;
+          }
+        }
         
         this.updateEngagement({
           id: this.engagement.id,
@@ -183,9 +200,10 @@ export default {
           year: this.engagement.year,
           assigned_to: this.engagement.assigned_to,
           status: this.engagement.status,
+          done: this.engagement.done
         })   
         .then(() => {
-          this.$router.go(-1);
+          this.$router.push({ path: '/engagement/' + this.engagement.id});
         })
     },
     deleteEngagement(id) {
@@ -226,6 +244,9 @@ export default {
       this.monthChecked = false
       this.quarterChecked = false
       this.nothingChecked = false
+    },
+    clearAlarm() {
+      this.assignAUser = false
     }
   },
   created: function(){
@@ -233,6 +254,19 @@ export default {
     this.$store.dispatch('retrieveUsers')
     this.$store.dispatch('retrieveWorkflows')
     this.$store.dispatch('getReturnTypes')
+    if(this.engagement.description == 'Monthly') {
+      this.monthChecked = true
+      this.monthRange = true
+      this.quarterRange = false
+    }
+    if(this.engagement.description == 'Quarterly') {
+      this.quarterChecked = true
+      this.quarterRange = true
+      this.monthRange = false
+    }
+    if(this.engagement.description == 'Annual') {
+      this.annualChecked = true
+    }
   }
   
 }

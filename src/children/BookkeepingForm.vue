@@ -217,9 +217,16 @@ export default {
           });
       },
     addNewEngagement() {
-      if(!this.engagement.return_type || !this.engagement.year ) return;
+      if(!this.engagement.year) return;
       if(this.annualChecked === true) {
         this.engagement.title = 'Annual'
+        this.engagement.description = 'Annual'
+      }
+      if(this.monthChecked === true) {
+        this.engagement.description = 'Monthly'
+      }
+      if(this.quarterChecked === true) {
+        this.engagement.description = 'Quarterly'
       }
       this.addEngagement({
         id: this.idForEngagement,

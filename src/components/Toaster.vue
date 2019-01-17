@@ -1,6 +1,6 @@
 <template>
-    <div class="card mx-3" role="alert" aria-live="polite" aria-atomic="true" v-bind:class="{'border-success' : type === 'success' ? 'border-danger' : type === 'error'}">
-        <div class="card-header py-1 d-flex justify-content-between" v-bind:class="{'bg-success' : type === 'success' ? 'bg-danger' : type === 'error'}">
+    <div class="card mx-3" role="alert" aria-live="polite" aria-atomic="true" v-bind:class="{'border-primary' : type === 'success' ? 'border-danger' : type === 'error'}">
+        <div class="card-header py-1 d-flex justify-content-between" v-bind:class="{'bg-primary' : type === 'success' ? 'bg-danger' : type === 'error'}">
             <strong class="mr-auto font-weight-bold">Alert</strong>
             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close" @click="removeAlert">
                 <span aria-hidden="true">&times;</span>
@@ -39,7 +39,7 @@ export default {
 }
 
 .success {
-    color: green;
+    color: black;
 }
 </style>
 

@@ -68,21 +68,21 @@
               </tr>
             </thead>
             <tbody class="text-left">
-              <tr v-for="(engagement, index) in filteredEngagements" :key="index" v-if="engagement.workflow_id === selectedWorkflowID" @click="viewDetails(engagement.id)">
+              <tr v-for="(engagement, index) in filteredEngagements" :key="index" v-if="engagement.workflow_id === selectedWorkflowID" >
                 <th scope="row" class="custom-control custom-checkbox"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements.engagements" class="custom-control-input" :id="`${engagement.id}`"><label class="custom-control-label pb-3 ml-4" :for="`${engagement.id}`"></label></th>
-                <th>{{ engagement.name}}</th>
-                <td class="text-capitalize" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</td>
-                <td class="text-capitalize" v-else>{{ engagement.type }}</td>
-                <td>{{ engagement.status }}</td>
-                <td>{{ engagement.assigned_to }}</td>
-                <td v-if="engagement.return_type != null">{{ engagement.return_type }}</td>
-                <td v-else>None</td>
-                <td>{{ engagement.year }}</td>
+                <th @click="viewDetails(engagement.id)">{{ engagement.name}}</th>
+                <td class="text-capitalize" v-if="engagement.type == 'taxreturn'" @click="viewDetails(engagement.id)">{{ fixCasing(engagement.type) }}</td>
+                <td class="text-capitalize" v-else @click="viewDetails(engagement.id)">{{ engagement.type }}</td>
+                <td @click="viewDetails(engagement.id)">{{ engagement.status }}</td>
+                <td @click="viewDetails(engagement.id)">{{ engagement.assigned_to }}</td>
+                <td v-if="engagement.return_type != null" @click="viewDetails(engagement.id)">{{ engagement.return_type }}</td>
+                <td v-else @click="viewDetails(engagement.id)">None</td>
+                <td @click="viewDetails(engagement.id)">{{ engagement.year }}</td>
               </tr>
             </tbody>
           </table>
 
-            <form @submit.prevent="updateChecked" class="d-flex mb-5">
+            <form @submit.prevent="updateChecked" class="d-flex mb-5" v-if="$can('delete', admin)">
               
               <div class="input-group mr-3" v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id === selectedWorkflowID">
                 <div class="input-group-prepend">
@@ -133,6 +133,7 @@ import Welcome from '@/components/Welcome.vue'
 
 export default {
   name: 'FirmView',
+  props: ['admin'],
   components: {
     Alert,
     Welcome
@@ -185,7 +186,7 @@ export default {
         status: this.checkedEngagements.status
       }).then(() => {
         this.alert = 'Engagements Updated'
-        this.checkedEngagements.engagements = '';
+        this.checkedEngagements.engagements = [];
         this.checkedEngagements.assigned_to = this.option;
         this.checkedEngagements.status = this.option;
       }) 

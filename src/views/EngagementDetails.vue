@@ -4,22 +4,22 @@
     <div v-if="!detailsLoaded">
     <div v-if="$route.name == 'engagement-details'">
 
-      <Alert v-if="alert" v-bind:message="alert" />
+      <Alert v-if="successAlert" v-bind:message="successAlert" />
 
       <div class="flex-row justify-content-between d-flex mt-3 card-body shadow-sm p-3">
         <span class="h4 align-self-center m-0 text-left">Details | <strong class="text-primary"><router-link :to="'/contact/' +engagement.client.id + '/account'">{{ engagement.client.last_name}}, {{ engagement.client.first_name}} <span v-if="engagement.client.has_spouse"> & {{ engagement.client.spouse_first_name}}</span></router-link></strong></span>
 
         <div class="align-self-center text-capitalize h4" v-if="engagement.type == 'bookkeeping'">
-          {{engagement.type}}
+          {{engagement.type}} <span v-if="engagement.done == true" class="font-weight-bold text-primary">| Completed</span>
         </div>
         <div class="align-self-center text-capitalize h4" v-else>
-          {{ fixCasing(engagement.type) }}
+          {{ fixCasing(engagement.type) }} <span v-if="engagement.done == true" class="font-weight-bold text-primary">| Completed</span>
         </div>
 
 
         <div>
         <router-link to="/engagements" class="btn btn-outline-secondary mr-4"><i class="fas fa-arrow-circle-left mr-2"></i>All Engagements</router-link>
-        <router-link class="btn btn-primary mr-3" :to="'/engagement/' +this.engagement.id+ '/edit'"><i class="far fa-edit mr-2"></i>Edit</router-link> 
+        <router-link class="btn btn-primary mr-3" :to="'/engagement/' +engagement.id+ '/edit'" v-if="engagement.done == false"><i class="far fa-edit mr-2" ></i>Edit</router-link> 
         <b-btn class="outline-secondary" v-b-modal.myEngage v-if="$can('delete', engagement)"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
         </div>
       </div> 
@@ -35,7 +35,7 @@
               <th class="py-4" scope="col" v-if="engagement.type == 'bookkeeping'">Time Period</th>
               <th class="py-4" scope="col" v-if="engagement.type == 'taxreturn'">Return Type</th>
               <th class="py-4" scope="col">Year</th>
-              <th class="py-4" scope="col">Currently Assigned</th>
+              <th class="py-4" scope="col" v-if="engagement.done == false">Currently Assigned</th>
               <th class="py-4" scope="col">Status</th>
             </tr>
           </thead>
@@ -46,7 +46,7 @@
               <th class="py-5" v-if="engagement.type == 'bookkeeping'">{{ engagement.title}}</th>
               <th class="py-5" v-if="engagement.type == 'taxreturn'">{{ engagement.return_type}}</th>
               <th class="py-5">{{ engagement.year }}</th>
-              <th class="py-5">{{ engagement.assigned_to}}</th>
+              <th class="py-5" v-if="engagement.done == false">{{ engagement.assigned_to}}</th>
               <th class="py-5">{{ engagement.status }}</th>
             </tr>
           </tbody>
@@ -156,7 +156,7 @@ export default {
     'b-modal': bModalDirective
   },
   computed: {
-    ...mapGetters(['engagement','question']),
+    ...mapGetters(['engagement','question', 'successAlert']),
   },
   methods: {
     deleteEngagement(id) {

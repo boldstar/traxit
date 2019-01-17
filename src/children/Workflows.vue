@@ -5,7 +5,7 @@
         <span class="m-0">Workflows | </span>
         <span class="m-0 text-primary">{{ allWorkflows.length }}</span>
       </div>
-        <b-btn variant="primary" size="sm" @click="modalShow = !modalShow">Create New Workflow</b-btn>
+        <b-btn variant="primary" size="sm" @click="showModal">Create New Workflow</b-btn>
     </div>
     <hr>
 
@@ -40,14 +40,30 @@
     </div>
 
     <b-modal v-model="modalShow" id="myWorkflow" ref="myWorkflow" hide-footer title="New Workflow Form">
+      <div class="text-left"  v-if="workflowSelect">
+        <button type="button" class="btn btn-outline-secondary" @click="cancelCopy">Back</button>
+      </div>
       <form>
-        <div class="d-block text-left">
+        <div class="d-block text-left d-flex flex-column align-items-center">
           <br>
-            <input class="form-control" type="text" placeholder="Enter Worklow Name" v-model="newWorkflow.name">
-          <br>
+          <input class="form-control" type="text" placeholder="Enter Worklow Name" v-model="newWorkflow.name" v-if="newWorkflowInput">
+          <span class="font-weight-bold my-3" v-if="newWorkflowInput">Or</span>
+          <button type="button" class="btn btn-block font-weight-bold text-primary border-primary" @click="copyExisting">Copy Existing</button>
         </div>
+         <div class="input-group my-3" v-if="workflowSelect">
+          <div class="input-group-prepend">
+            <label class="input-group-text text-primary" for="option">Workflow To Copy</label>
+          </div>
+          <select class="form-control" v-model="existingWorkflow">
+            <option disabled>{{ option }}</option>
+            <option v-for="workflow in allWorkflows" :key="workflow.id" :value="workflow.id">
+              {{workflow.workflow}}
+            </option>
+          </select>
+        </div>
+           <input class="form-control" type="text" placeholder="New Worklow Name" v-model="newWorkflow.name" v-if="workflowSelect"> 
         <div class="d-flex">
-          <b-btn class="mt-3" variant="secondary" @click="modalShow = false">Cancel</b-btn>
+          <b-btn class="mt-3" variant="secondary" @click="closeModal">Cancel</b-btn>
           <b-btn class="mt-3 ml-auto" variant="outline-primary" @click="addThisWorkflow">Create</b-btn>
         </div>
       </form>
@@ -83,10 +99,14 @@ export default {
       modalShow: false,
       modalDelete: false,
       workflowToDelete: null,
+      newWorkflowInput: true,
+      workflowSelect: false,
+      existingWorkflow: null,
       alert: '',
       newWorkflow: {
         name: '',
       },
+      option: 'Choose...'
     }
   },
   components:{
@@ -104,14 +124,30 @@ export default {
     ...mapActions(['addWorkflow', 'workflowStatusOrder', 'deleteWorkflow']),
     addThisWorkflow() {
       if(!this.newWorkflow.name) return;
-      this.addWorkflow({
-        id: this.idForWorkflow,
-        name: this.newWorkflow.name
-      }).then(() => {
-        this.newWorkflow = "" 
-        this.idForWorkflow++
-        this.modalShow = false
-      })
+      if(this.newWorkflowInput === true) {
+        this.addWorkflow({
+          id: this.idForWorkflow,
+          name: this.newWorkflow.name,
+          copy_workflow: false
+        }).then(() => {
+          this.newWorkflow.name = '' 
+          this.idForWorkflow++
+          this.modalShow = false
+        })
+      } else if(this.newWorkflowInput === false) {
+        this.addWorkflow({
+          id: this.idForWorkflow,
+          name: this.newWorkflow.name,
+          workflow_id: this.existingWorkflow,
+          copy_workflow: true
+        }).then(() => {
+          this.newWorkflow.name = ''
+          this.newWorkflowInput = true
+          this.workflowSelect = false
+          this.idForWorkflow++
+          this.modalShow = false
+        })
+      }
     },
     updateStatusOrder(id, statuses) {
       statuses.map((status, index) => {
@@ -135,10 +171,32 @@ export default {
     requestDelete(id) {
       this.workflowToDelete = id
       this.modalDelete = true
+    },
+    copyExisting() {
+      this.newWorkflowInput = false
+      this.workflowSelect = true
+    },
+    showModal() {
+      this.modalShow = true
+      this.newWorkflowInput = true
+      this.workflowSelect = false
+      this.newWorkflow.name = ''
+    },
+    closeModal() {
+      this.modalShow = false
+      this.newWorkflowInput = true
+      this.workflowSelect = false
+      this.newWorkflow.name = ''
+    },
+    cancelCopy() {
+      this.newWorkflowInput = true
+      this.workflowSelect = false
+      this.newWorkflow.name = ''
     }
   },
   created: function() {
     this.$store.dispatch('retrieveWorkflows');
+    this.existingWorkflow = this.option
   },
 }
 </script>

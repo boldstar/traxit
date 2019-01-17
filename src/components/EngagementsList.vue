@@ -16,6 +16,11 @@
                     </div>
                     <div class="dropdown-divider"></div>
                     <div class="dropdown-item d-flex justify-content-between py-0 px-1">
+                        <span class="pb-1 font-weight-bold">Status</span>
+                        <input type="checkbox" class="align-self-center" v-model="statusChecked">
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item d-flex justify-content-between py-0 px-1">
                         <span class="pb-1 font-weight-bold">Category</span>
                         <input type="checkbox" class="align-self-center" v-model="categoryChecked">
                     </div>
@@ -121,6 +126,19 @@
                     </select>
                     </div>
                 </div>
+                <div v-if="statusChecked">
+                    <div class="input-group">
+                    <div class="input-group-prepend">
+                    <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Type</label>
+                    </div>
+                    <select class="custom-select text-capitalize" id="category" v-model="filterStatusType">
+                        <option> {{ type }}</option>
+                        <option v-for="(status, index) in filterStatuses" :key="index">
+                        {{ status }}
+                        </option>
+                    </select>
+                    </div>
+                </div>
             </div>
 
             <div class="btn-group ml-auto">
@@ -218,6 +236,7 @@ export default {
     data() {
         return {
             typeChecked: false,
+            statusChecked: false,
             returnChecked: false,
             categoryChecked: false,
             assignedChecked: false,
@@ -226,6 +245,7 @@ export default {
             tableLoaded: false,
             showInput: false,
             filterEngageType: '',
+            filterStatusType: '',
             filterType: '',
             filterCategory: '',
             filterAssigned: '',
@@ -261,6 +281,8 @@ export default {
               if(this.filterWorkflow === 'All'){ return engagement } else{ return engagement.workflow_id === this.filterWorkflow} 
             }).filter(engagement => {
               if(this.filterEngageType === 'All'){ return engagement } else{ return engagement.type === this.filterEngageType} 
+            }).filter(engagement => {
+              if(this.filterStatusType === 'All'){ return engagement } else{ return engagement.status === this.filterStatusType} 
             }).filter( engagement => {
             return !this.searchEngagement || engagement.name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 })
             .filter((row, index) => {
@@ -274,6 +296,14 @@ export default {
             const returns = this.engagements.map(engagement => engagement.return_type)
             //filter duplicates
             const result = returns.filter((v, i) => returns.indexOf(v) === i)
+            //return result
+            return result
+        },
+        filterStatuses() {
+            //map return types
+            const statuses = this.engagements.map(engagement => engagement.status)
+            //filter duplicates
+            const result = statuses.filter((v, i) => statuses.indexOf(v) === i)
             //return result
             return result
         },
@@ -331,12 +361,15 @@ export default {
         },
         clearFilters() {
             this.typeChecked = false
+            this.statusChecked = false
             this.categoryChecked = false
             this.returnChecked = false
             this.yearChecked = false
             this.workflowChecked = false
             this.assignedChecked = false
             this.showInput = false
+            this.filterEngageType = this.type
+            this.filterStatusType = this.type
             this.filterType = this.type
             this.filterCategory = this.type
             this.filterAssigned = this.type
@@ -365,6 +398,7 @@ export default {
         this.filterYear = this.type
         this.filterWorkflow = this.type
         this.filterEngageType = this.type
+        this.filterStatusType = this.type
         this.pageSize = this.options[1]
         var self = this;
         setTimeout(() => {

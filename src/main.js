@@ -8,6 +8,8 @@ import VueCharts from 'vue-chartjs';
 import jQuery from 'jquery';
 import Popper from 'popper.js';
 import VueCarousel from 'vue-carousel';
+import VCalendar from 'v-calendar';
+import 'v-calendar/lib/v-calendar.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import { Button } from 'bootstrap-vue/es/components';
@@ -37,6 +39,10 @@ Vue.use(VeeValidate);
 Vue.use(VueCharts);
 Vue.use(VueCarousel);
 Vue.use(abilitiesPlugin, ability);
+Vue.use(VCalendar, {
+  firstDayOfWeek: 2,  // 2 = Monday
+  //defaults go here
+});
 
 //this is a filter for dates
 Vue.filter('formatDate', function(created_at) {

@@ -99,7 +99,7 @@
         </div>
         <select :class="{ 'input-error': errors.has('Assigned User') }" class="form-control" id="user_id" v-model="engagement.assigned_to" v-validate="{ is_not: option }" name="Assigned User">
           <option  selected disabled>{{ option }}</option>
-          <option v-for="user in users" :key="user.id" :value="user.id">
+          <option v-for="user in users" :key="user.id" :value="user.id" v-if="user.name != 'Admin'">
             {{ user.name }}
           </option>
         </select>

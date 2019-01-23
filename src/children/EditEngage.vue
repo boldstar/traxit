@@ -86,7 +86,7 @@
           <label class="input-group-text text-primary" for="option">Assign To</label>
         </div>
         <select class="form-control" id="user_id" v-model="engagement.assigned_to">
-          <option v-for="user in users" :key="user.id" :value="user.name">
+          <option v-for="user in users" :key="user.id" :value="user.name" v-if="user.name != 'Admin'">
             {{ user.name }}
           </option>
         </select>

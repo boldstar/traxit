@@ -91,7 +91,7 @@
                   </div>
                   <select class="custom-select" id="client_id" v-model.number="task.user_id">
                     <option  selected disabled>{{ option }}</option>
-                    <option v-for="user in users" :key="user.id" :value="user.id">
+                    <option v-for="user in users" :key="user.id" :value="user.id" v-if="user.name != 'Admin'">
                       {{ user.name }}
                     </option>
                   </select>

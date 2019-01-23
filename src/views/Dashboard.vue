@@ -27,13 +27,13 @@
             </div>
 
             <div v-if="!loading && !noData">
-            <div class="d-flex flex-lg-row flex-sm-colum col-12 justify-content-around mt-lg-3 mt-md-2">
+            <div class="d-flex flex-lg-row flex-sm-colum col-12 justify-content-around mt-5">
                 <div class="col-lg-4 col-md-4 col-sm-12 card-body px-3 pt-0">
                     <div class="h4 py-3">
                         <i class="fas fa-home mr-2 text-primary"></i>
-                        <span class="font-weight-bold">Firm</span>
+                        <span class="font-weight-bold">Active</span>
                     </div>
-                     <doughnut-chart v-if="chartData" :chart-data="workflowsetsfull"></doughnut-chart>
+                     <doughnut-chart v-if="chartData" :chart-data="firmsetsfull"></doughnut-chart>
                 </div>
                 <!-- this is the doughnut chart for the overview of the firm -->
                 <div class="col-lg-4 col-md-4 col-sm-12 card-body px-3 pt-0 mx-3">
@@ -44,7 +44,7 @@
                             </slide>
                         </carousel>
                     </div>
-                    <doughnut-chart v-if="chartData" :chart-data="datasetsfull"></doughnut-chart>
+                    <doughnut-chart v-if="chartData" :chart-data="workflowsetsfull"></doughnut-chart>
                 </div>
                 <!-- this is the dougnut chart for the tasks -->
                 <div class="col-lg-4 col-md-4 col-sm-12 card-body px-3 pt-0">
@@ -61,6 +61,20 @@
         </div>
         
 
+        <div v-if="!loading" class="my-4">
+            <div class="d-flex justify-content-center">
+                <div class="h4 py-3 my-5">
+                    <i class="far fa-folder-open mr-2 text-primary"></i>
+                    <span class="font-weight-bold">Completed </span>
+                    <span class="text-primary font-weight-bold">| {{countCompleteEngagements}} |</span>
+                </div>
+                <select name="selectYear" id="selectYear" class="ml-2 form-control col-1 align-self-center">
+                    <option selected>2018</option>
+                </select>
+            </div>
+            <bar-chart :chart-data="barData"></bar-chart>
+        </div>
+
         <div v-if="noData && !loading">
             <welcome></welcome> 
         </div>
@@ -70,6 +84,7 @@
 
 <script>
 import DoughnutChart from '@/components/DoughnutChart.vue'
+import BarChart from '@/components/BarChart.vue'
 import Welcome from '@/components/Welcome.vue'
 import { mapGetters } from 'vuex'
 
@@ -77,6 +92,7 @@ export default {
     name: 'dashboard',
     components: {
         DoughnutChart,
+        BarChart,
         Welcome
     },
     data () {
@@ -113,7 +129,7 @@ export default {
             workflow_id: id,
             statuses: statuses.reduce((acc, cur) => {
 
-            const count = this.allEngagements.filter(({workflow_id, status}) => workflow_id === id && status === cur.status).length;
+            const count = this.allEngagements.filter(({workflow_id, status, done}) => workflow_id === id && status === cur.status && done == false).length;
 
             acc.push(count);
 
@@ -126,7 +142,12 @@ export default {
         countEngagementsBySelectedWorkflow() {
             const workflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
             const id = workflow.map(({id}) => id)
-            const res = this.allEngagements.filter(engagement => engagement.workflow_id === id[0]).length
+            const res = this.allEngagements.filter(engagement => engagement.workflow_id === id[0] && engagement.done == false).length
+            
+            return res
+        },
+        countCompleteEngagements() {
+            const res = this.allEngagements.filter(engagement => engagement.done == true).length
             
             return res
         },
@@ -140,12 +161,25 @@ export default {
             return workflows
         },
         countEngagementsLengthByWorkflow () {
-       
-
         const workflows = this.allWorkflows.map(({id, workflow}) => ({
             workflow_id: id,
             workflow: workflow,
-            count: this.allEngagements.filter(({workflow_id}) => workflow_id === id).length
+            count: this.allEngagements.filter(({workflow_id, done}) => workflow_id === id && done == false).length
+        }))
+
+        const res = workflows.reduce((acc, workflow) => {
+            acc.push(workflow.count)
+
+            return acc
+        }, [])
+
+        return res
+        },
+        countEngagementsCompleteByWorkflow () {
+        const workflows = this.allWorkflows.map(({id, workflow}) => ({
+            workflow_id: id,
+            workflow: workflow,
+            count: this.allEngagements.filter(({workflow_id, done}) => workflow_id === id && done == true).length
         }))
 
         const res = workflows.reduce((acc, workflow) => {
@@ -170,7 +204,7 @@ export default {
 
             return statuses
         },
-        workflowsetsfull() {
+        firmsetsfull() {
             return {
                 labels: this.mapWorkflows,
                 datasets: [
@@ -199,10 +233,10 @@ export default {
                     data: this.countEngagementsLengthByWorkflow
                     }
                 ],
-                centerText: this.allEngagements.length
+                centerText: this.allEngagements.filter(engagement => engagement.done == false).length
             }
         },
-        datasetsfull() {
+        workflowsetsfull() {
             return {
                 labels: this.mapStatuses[0].statuses,
                 datasets: [
@@ -266,6 +300,32 @@ export default {
                     }
                 ],
                 centerText: this.tasks.length
+            }
+        },
+        barData () {
+            return {
+                labels: this.mapWorkflows,
+                datasets: [
+                    {
+                    backgroundColor: [
+                            '#0077ff', 
+                            '#0022ff',
+                            '#1133bb',
+                            '#0088aa',
+                            '#11ffdd',
+                            '#1a75ff',
+                            '#22aabb',
+                            '#006699',
+                            '#66ccff',
+                            '#0077bb',
+                            '#0000cc',
+                            '#007788',
+                            '#0077aa',
+                            '#0077cc',
+                        ],
+                    data: this.countEngagementsCompleteByWorkflow
+                    }
+                ]
             }
         },
     },

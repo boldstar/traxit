@@ -61,7 +61,7 @@
                     </select>
                     </div>
                 </div>  
-                <div class="mr-2" v-if="categoryChecked">
+                <div class="mx-2" v-if="categoryChecked">
                     <div class="input-group">
                     <div class="input-group-prepend">
                     <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Category</label>
@@ -74,20 +74,20 @@
                     </select>
                     </div>
                 </div>
-                <div class="mr-2" v-if="assignedChecked">
+                <div class="mx-2" v-if="assignedChecked">
                     <div class="input-group">
                     <div class="input-group-prepend">
                     <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Assigned To</label>
                     </div>
                     <select class="custom-select text-capitalize" id="category" v-model="filterAssigned">
                         <option> {{ type }}</option>
-                        <option v-for="(name, index) in filterAssignedTo" :key="index">
+                        <option v-for="(name, index) in filterAssignedTo" :key="index" v-if="name != 'Complete'">
                         {{ name }}
                         </option>
                     </select>
                     </div>
                 </div>
-                <div class="mr-2" v-if="yearChecked">
+                <div class="mx-2" v-if="yearChecked">
                     <div class="input-group">
                     <div class="input-group-prepend">
                     <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Year</label>
@@ -100,7 +100,7 @@
                     </select>
                     </div>
                 </div>
-                <div class="mr-2" v-if="workflowChecked">
+                <div class="mx-2" v-if="workflowChecked">
                     <div class="input-group">
                     <div class="input-group-prepend">
                     <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Workflows</label>
@@ -113,7 +113,7 @@
                     </select>
                     </div>
                 </div>
-                <div v-if="typeChecked">
+                <div class="mx-2" v-if="typeChecked">
                     <div class="input-group">
                     <div class="input-group-prepend">
                     <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Type</label>
@@ -126,10 +126,10 @@
                     </select>
                     </div>
                 </div>
-                <div v-if="statusChecked">
+                <div class="mx-2" v-if="statusChecked">
                     <div class="input-group">
                     <div class="input-group-prepend">
-                    <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Type</label>
+                    <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Status</label>
                     </div>
                     <select class="custom-select text-capitalize" id="category" v-model="filterStatusType">
                         <option> {{ type }}</option>

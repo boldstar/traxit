@@ -1,12 +1,28 @@
 <template>
   <div class="mt-3">
     <div class="d-flex justify-content-between">
-      <div class="h3">
-        <span class="m-0">Account Details</span>
-      </div>
-      <div class=" align-self-center">
-        <router-link :to="{path: '/administrator/account/edit-account'}" class="btn btn-primary" v-if="accountDetails">Edit Details</router-link>
-        <router-link :to="{path: '/administrator/account/add-account'}" class="btn btn-primary" v-else>Add Details</router-link>
+      <h3 class="m-0">Account Details</h3>
+      <div class="d-flex">
+        <div>
+          <button type="button" class="btn btn-secondary mr-3" @click="addLogo = true" v-if="!addLogo">Add Logo</button>
+        </div>
+        <div class="input-group d-flex mr-3" v-if="addLogo">
+            <div class="mr-2">
+                <button class="btn btn-outline-secondary" @click="closeInput()">Cancel</button>
+            </div>
+            <div class="custom-file">
+                <label class="custom-file-label" for="inputGroupFile04" v-if="!hasFile">Choose file</label>
+                <label class="custom-file-label" for="inputGroupFile04" v-if="hasFile">{{ fileLabel }}</label>
+                <input type="file" class="custom-file-input px-2" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" v-on:change="selectedFile($event)">
+            </div>
+            <div class="input-group-append">
+                <button class="btn btn-primary" id="inputGroupFileAddon04" @click="uploadLogo">Submit</button>
+            </div>
+        </div>   
+        <div class=" align-self-center">
+          <router-link :to="{path: '/administrator/account/edit-account'}" class="btn btn-primary" v-if="accountDetails">Edit Details</router-link>
+          <router-link :to="{path: '/administrator/account/add-account'}" class="btn btn-primary" v-else>Add Details</router-link>
+        </div>
       </div>
     </div>
     <hr>
@@ -44,7 +60,6 @@
         <li class="border">
           <div class="d-flex">
           <span class="border-right p-3 background width">Logo</span>
-          <span class="ml-5 align-self-center">Logo</span>
           </div>
         </li>
         <li class="border">
@@ -65,12 +80,35 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'account',
+  data() {
+    return {
+      file: '',
+      fileLabel: null,
+      hasFile: false,
+      uploadInput: false,
+      addLogo: false,
+    }
+  },
   computed: {
     ...mapGetters(
         [
           'accountDetails'
         ]
       ),
+  },
+  methods: {
+    selectedFile(event) {
+        this.file = event.target.files[0]
+        this.fileLabel = event.target.files[0].name
+        this.hasFile = true
+    },
+    uploadLogo() {
+
+    },
+    closeInput() {
+      this.addLogo = false
+      this.hasFile = false
+    }
   },
   created: function() {
     this.$store.dispatch('getAccountDetails')

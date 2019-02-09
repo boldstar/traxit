@@ -20,8 +20,8 @@ export default new Vuex.Store({
   ],
   state: {
     rules: '',
+    client: [],
     clients: [],
-    client:[],
     engagements: [],
     engagement: [],
     clientengagements: [],
@@ -231,6 +231,9 @@ export default new Vuex.Store({
     getDetails(state, client) {
       state.client = client
     },
+    editDetails(state, client) {
+      state.client = client
+    },
     updateClient(state, client) {
       const index = state.clients.findIndex(item => item.id == client.id);
       state.clients.splice(index, 1, {
@@ -325,12 +328,7 @@ export default new Vuex.Store({
     },
     updateQuestion(state, question) {
       const index = state.engagement.questions.findIndex(item => item.id == question.id);
-      state.engagement.questions.splice(index, 1, {
-        'id': question.id,
-        'engagement_id': question.engagement_id,
-        'question': question.question,
-        'answered': false           
-      })
+      state.engagement.questions.splice(index, 1, question)
     },
     updateAnswer(state, question) {
       const index = state.engagement.questions.findIndex(item => item.id == question.id);
@@ -639,6 +637,20 @@ export default new Vuex.Store({
         console.log(error)
       })
     },
+    editDetails({commit}, id) {
+      axios.get('/clients/'+id)
+      .then(response => {
+        const client = response.data
+        const taxpayer_dob = moment(String(client.dob)).format('MM/DD/YYYY')
+        const spouse_dob = moment(String(client.spouse_dob)).format('MM/DD/YYYY')
+        client.dob = taxpayer_dob
+        client.spouse_dob = spouse_dob
+        commit('editDetails', client)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
     addClient(context, client) {
       axios.post('/clients', {
         id: client.id,
@@ -704,7 +716,8 @@ export default new Vuex.Store({
         postal_code: client.postal_code,
       })
       .then(response => {
-          context.commit('updateClient', response.data)
+          context.commit('updateClient', response.data.client)
+          context.commit('successAlert', response.data.message)
       })
       .catch(error => {
           console.log(error)
@@ -947,16 +960,41 @@ export default new Vuex.Store({
       })
     },
     addQuestion(context, question) {
+      context.commit('startProcessing')
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
       axios.post(('/questions'), {
         engagement_id: question.engagement_id,
         question: question.question,
+        email: question.email,
+        email_sent: question.email_sent,
         answered: false
       })
       .then(response => {
-        context.commit('addQuestion', response.data)
+        context.commit('addQuestion', response.data.question)
+        context.commit('successAlert', response.data.message)
+        context.commit('stopProcessing')
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.response.data)
+        context.commit('stopProcessing')
+      })
+    },
+    sendEmail(context, id) {
+      context.commit('startProcessing')
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
+      axios.post(('/questionsEmail'), {
+        id: id
+      })
+      .then(response => {
+        context.commit('updateQuestion', response.data.question)
+        context.commit('successAlert', response.data.message)
+        context.commit('stopProcessing')
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        context.commit('stopProcessing')
       })
     },
     deleteQuestion(context, id) {

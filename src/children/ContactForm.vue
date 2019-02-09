@@ -46,7 +46,7 @@
  
         <div class="d-flex mb-3">
           <input type="text" class="form-control mr-2" placeholder="Occupation" v-model="client.occupation" name="Occupation">
-          <input type="text" class="form-control" placeholder="Date Of Birth" v-model="client.dob" name="Date Of Birth">
+          <date-input v-model="client.dob" :placeholder="'Date Of Birth'" mask-type="date" :name="'Date Format'"></date-input>
         </div>
 
         <div class="d-flex mb-3">
@@ -64,6 +64,7 @@
         
 
         <h5 class="text-left mb-3" v-if="client.has_spouse == true">Spouse:</h5>
+        <small v-if="clear_spouse_field" class="text-danger">Please clear spouse input fields if client does not have spouse</small>
         <div class="d-flex mb-3" v-if="client.has_spouse == true">
           <input type="text" class="form-control col-5" placeholder="First Name" v-model="client.spouse_first_name" name="Spouse First Name">
           <input type="text" class="form-control mx-2" placeholder="Middle Initial" v-model="client.spouse_middle_initial" name="Spouse Middle Inital">
@@ -72,7 +73,7 @@
 
         <div class="d-flex mb-3" v-if="client.has_spouse == true">
           <input type="text" class="form-control mr-2" placeholder="Occupation" v-model="client.spouse_occupation" name="Spouse Occupation">
-          <input type="text" class="form-control" placeholder="Date Of Birth" v-model="client.spouse_dob" name="Spouse Date Of Birth">
+          <date-input v-model="client.spouse_dob" :placeholder="'Date Of Birth'" mask-type="date" :name="'Spouse Date Format'"></date-input>
         </div>
 
         <div class="d-flex mb-3" v-if="client.has_spouse == true">
@@ -98,15 +99,18 @@
 <script>
 import { mapActions } from 'vuex'
 import NumberInput from '@/components/NumberInput.vue'
+import DateInput  from '@/components/DateInput.vue'
 
 export default {
   name: 'contact',
   components: {
-    NumberInput
+    NumberInput,
+    DateInput
   },
   data () {
     return {
       has_spouse_alert: false,
+      clear_spouse_field: false,
       client: {
         id: '',
         category: null,
@@ -145,6 +149,12 @@ export default {
             this.$validator.validateAll().then((result) => {
                 if(this.client.has_spouse == true && this.client.spouse_first_name === '') {
                   this.has_spouse_alert = true
+                  return;
+                }
+                if(this.client.has_spouse == false && this.client.spouse_first_name != '' || this.client.has_spouse == false && this.client.spouse_last_name != '') {
+                  this.clear_spouse_field = true
+                  this.client.has_spouse = true
+
                   return;
                 }
                 else if (result) {

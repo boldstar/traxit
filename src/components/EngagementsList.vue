@@ -208,10 +208,7 @@
         </div>
         <div class="ml-auto align-self-center">
             <label for="count" class="font-weight-bold">Viewing: </label>
-            <span id="count" v-if="sortedEngagements.length >= 10">
-                {{ sortedEngagements.length * currentPage }} of {{ engagements.length }}
-            </span>
-            <span id="count" v-else>
+            <span id="count">
                 {{ sortedEngagements.length }} of {{ engagements.length }}
             </span>
         </div>   

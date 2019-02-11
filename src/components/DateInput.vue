@@ -1,34 +1,43 @@
 <template>
-    <input 
-    class="form-control"
-    :placeholder="placeholder" 
-    v-model="addDashes" 
-    @blur="handleInputState"
-    @focus="handleInputState"
-    maxlength="10"
-  >
+    <div>
+        <input 
+        class="form-control"
+        :placeholder="placeholder" 
+        v-model="formatDate" 
+        @blur="handleInputState"
+        @focus="handleInputState"
+        maxlength="10"
+        v-validate="'date_format:DD/MM/YYYY'"
+        :name="name"
+        :class="{ 'input-error': errors.has(name) }"
+        >
+        <span class="form-error" v-show="errors.has(name)">{{ errors.first(name) }}</span>
+    </div>
 </template>
 
 <script>
+import moment from 'moment'
+
 const masks = {
-  number: {
+  date: {
     mask (value) {
       return value
     },
     unmask (value) {
-      value = value.replace(/[^0-9]/g, '')
-                .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
-      return value
+        value = value.replace(/[^0-9]/g, '')
+            .replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3')
+        return value;
     },
   },
 }
 
 export default {
-    name: 'number-input',
+    name: 'date-input',
     props: {
         value: null,
         maskType: String,
-        placeholder: ''
+        placeholder: '',
+        name: ''
     },
     data: function() {
         return {
@@ -47,7 +56,7 @@ export default {
         },
     },
     computed: {
-        addDashes: {
+        formatDate: {
             get: function() {
                 if (this.inputFocused) {
                 return this.value
@@ -63,3 +72,8 @@ export default {
 }
 </script>
 
+<style>
+ .input-error {
+        border: 1px solid red;
+    }
+</style>

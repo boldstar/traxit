@@ -1,6 +1,6 @@
 <template>
-    <div id="search" v-if="!processing">
-        <div v-if="searchResults.length > 0">
+    <div id="search">
+        <div v-if="searchResults != '' && !processing">
             <div class="d-flex justify-content-between">
                 <div class="d-flex">
                     <h2>Search Term</h2>
@@ -85,10 +85,10 @@
         </div>
         
 
+        <div v-if="processing">Searching Records...</div>
+        <div v-if="processing" class="lds-dual-ring justify-content-center"></div>
 
-        <div v-else-if="processing">Searching Records....</div>
-
-        <div v-else>
+        <div v-if="noResults">
             <img class="search-engine" src="@/assets/search-engine.png" alt="">
         </div>
     </div>
@@ -101,11 +101,13 @@ export default {
     name: 'search',
     data () {
         return {
-            keyword: ''
+            keyword: '',
+            processing: true,
+            noResults: false
         }
     },
     computed: {
-       ...mapGetters(['searchResults', 'processing']) 
+       ...mapGetters(['searchResults']) 
     },
     methods: {
         fixCasing(string) {
@@ -116,8 +118,20 @@ export default {
             }
         }
     },
+    mounted() {
+        setTimeout(() => {
+            if(this.searchResults != '' ) {
+                this.processing = false
+                this.noResults = false
+            } else {
+                this.processing = false
+                this.noResults = true
+            }
+        }, 4000)
+    },
     created() {
        this.keyword = this.$route.query.keyword
+       this.processing = true
     }
 }
 </script>

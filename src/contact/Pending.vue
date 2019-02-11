@@ -18,6 +18,9 @@
                             {{ engagement.return_type }}
                         </router-link>
                     </div>
+                    <div class="ml-3">
+                        <span class="email-sent-flag" v-if="question.email_sent == true"><i class="fas fa-check mr-2 text-primary"></i>Email Sent</span>
+                    </div>
                 </div>
                 <div>
                     <span class="font-weight-bold">
@@ -138,4 +141,10 @@ created: function(){
             height: 4em;
         }
 
+    .email-sent-flag {
+        border: 1px solid #0077ff;
+        border-radius: 4px;
+        padding: 3px;
+        font-weight: 600;
+    }
 </style>

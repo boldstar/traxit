@@ -5,7 +5,9 @@
     <div v-if="$route.name == 'engagement-details'">
 
       <Alert v-if="successAlert" v-bind:message="successAlert" />
+      <div class="sending-mail" v-if="processing"><i class="far fa-envelope mr-3"></i>Sending Mail...</div>
 
+      <!-- this is the header section of the engagement details -->
       <div class="flex-row justify-content-between d-flex mt-3 card-body shadow-sm p-3">
         <span class="h4 align-self-center m-0 text-left">Details | <strong class="text-primary"><router-link :to="'/contact/' +engagement.client.id + '/account'">{{ engagement.client.last_name}}, {{ engagement.client.first_name}} <span v-if="engagement.client.has_spouse"> & {{ engagement.client.spouse_first_name}}</span></router-link></strong></span>
 
@@ -20,7 +22,7 @@
         <div>
         <router-link to="/engagements" class="btn btn-outline-secondary mr-4"><i class="fas fa-arrow-circle-left mr-2"></i>All Engagements</router-link>
         <router-link class="btn btn-primary mr-3" :to="'/engagement/' +engagement.id+ '/edit'" v-if="engagement.done == false"><i class="far fa-edit mr-2" ></i>Edit</router-link> 
-        <b-btn class="outline-secondary" v-b-modal.myEngage v-if="$can('delete', engagement)"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
+        <b-btn class="outline-secondary" @click="requestEngagementDelete()" v-if="$can('delete', engagement)"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
         </div>
       </div> 
 
@@ -66,14 +68,14 @@
       </div>
 
       <!-- this is the modal to confirm or cancel the delete for the engagement -->
-      <b-modal id="myEngage" ref="myEngage" hide-footer title="Delete Engagement">
+      <b-modal v-model="modalEngage" hide-footer title="Delete Engagement">
         <div class="d-block text-left">
           <h5>Are you sure you want to delete engagement?</h5>
           <br>
           <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
         </div>
         <div class="d-flex">
-          <b-btn class="mt-3" variant="danger" @click="hideEngageModal">Cancel</b-btn>
+          <b-btn class="mt-3" variant="danger" @click="modalEngage = false">Cancel</b-btn>
           <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteEngagement(engagement.id)">Confirm</b-btn>
         </div>
       </b-modal>
@@ -84,8 +86,15 @@
     <div class="card mb-3"  v-for="(question, index) in engagement.questions" :key="index" v-if="$route.name == 'engagement-details'">
         <div class="card-header">
           <div class="h6 m-0 justify-content-between d-flex">
-            <router-link v-if="question.answered == 0 && $can('update', engagement)" class="btn btn-sm btn-primary mr-3" :to="'/engagement/' +engagement.id+ '/edit-question/' + question.id" ><i class="far fa-edit mr-2" ></i>Edit</router-link> 
-            <b-btn v-if="$can('delete', engagement)" class="outline-secondary" size="sm" @click="modalShow = !modalShow"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
+            <div class="d-flex">
+              <span v-if="question.email_sent == true" class="align-self-center mail-sent-flag"><i class="fas fa-check mr-2 text-primary"></i>Email Sent</span>
+              <router-link v-if="question.answered == 0 && $can('update', engagement) && question.email_sent == false" class="btn btn-sm btn-primary mr-3" :to="'/engagement/' +engagement.id+ '/edit-question/' + question.id"><i class="far fa-edit mr-2" ></i>Edit</router-link>
+              <b-btn class="outline-secondary" size="sm" @click="sendEmailRequest(question.id)" v-if="question.email_sent == false && engagement.type != 'bookkeeping' && engagement.client.email"><i class="far fa-envelope mr-2" :disabled="processing"></i>
+              <span v-if="!processing">Send Email</span>
+              <span v-if="processing">Sending...</span>
+              </b-btn> 
+            </div>
+            <b-btn v-if="$can('delete', engagement)" class="outline-secondary" size="sm" @click="requestDelete(engagement, question.id)"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
           </div>
         </div>
         <div class="card-body bg-light d-flex justify-content-between">
@@ -109,15 +118,26 @@
         </div>
 
           <!-- this is the modal for deleting a question -->
-        <b-modal v-model="modalShow" id="myQuestion" ref="myQuestion" hide-footer title="Delete Question">
+        <b-modal v-model="modalShow" :id='`${idForModal}`' :ref="`${refForModal}`" hide-footer title="Delete Question">
           <div class="d-block text-left">
             <h5>Are you sure you want to delete question?</h5>
             <br>
             <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
           </div>
           <div class="d-flex">
-            <b-btn class="mt-3" variant="danger" @click="modalShow = false">Cancel</b-btn>
-            <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteQuestion(engagement, question.id)">Confirm</b-btn>
+            <b-btn class="mt-3" variant="danger" @click="modalShow = !modalShow">Cancel</b-btn>
+            <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteQuestion()">Confirm</b-btn>
+          </div>
+        </b-modal>
+
+          <!-- this is the modal for confirming to send an email -->
+        <b-modal v-model="modalEmail" id="myQuestion" ref="myQuestion" hide-footer title="Send Email">
+          <div class="d-block text-left">
+            <span>Are you sure you would like to send an email?</span>
+          </div>
+          <div class="d-flex">
+            <b-btn class="mt-3" variant="danger" @click="modalEmail = false">Cancel</b-btn>
+            <b-btn class="mt-3 ml-auto" variant="outline-success" @click="sendEmail()">Confirm</b-btn>
           </div>
         </b-modal>
       
@@ -144,8 +164,13 @@ export default {
   data() {
     return {
       detailsLoaded: false,
-      alert: '',
+      idForModal: null,
+      refForModal: null,
+      modalEngage: false,
       modalShow: false,
+      modalEmail: false,
+      questionToDelete: null,
+      questionToEmail: null,
     }
   },
   components:{
@@ -156,27 +181,22 @@ export default {
     'b-modal': bModalDirective
   },
   computed: {
-    ...mapGetters(['engagement','question', 'successAlert']),
+    ...mapGetters(['engagement','question', 'successAlert', 'processing', 'errorMsgAlert']),
   },
   methods: {
     deleteEngagement(id) {
       this.$store.dispatch('deleteEngagement', id)
       .then(() => {
-        this.$router.push({path: '/engagements', query: {alert: 'Engagement Was Succesfully Deleted'}});
+        this.modalEngage = false
+        this.$router.push({path: '/engagements'});
       })
     },
-    deleteQuestion(engagement, id) {
-      this.$store.dispatch('deleteQuestion', id)
+    deleteQuestion() {
+      this.$store.dispatch('deleteQuestion', this.questionToDelete)
       .then(() => {
         this.modalShow = false
-        this.$router.push({path: '/engagement/' +this.engagement.id , query: {alert: 'The Question Was Succesfully Deleted'}});
+        this.$router.push({path: '/engagement/' +this.engagement.id});
       })
-    },
-    showEngageModal () {
-      this.$refs.myEngage.show()
-    },
-    hideEngageModal () {
-      this.$refs.myEngage.hide()
     },
     isActive: function (menuItem) {
       return this.activeItem === menuItem
@@ -187,6 +207,25 @@ export default {
 
         return newString
       }
+    },
+    sendEmailRequest(id) {
+      this.modalEmail = true
+      this.questionToEmail = id
+    },
+    sendEmail() {
+      this.$store.dispatch('sendEmail', this.questionToEmail)
+      .then(() => {
+        this.modalEmail = false
+      })
+    },
+    requestDelete(engagement, id) {
+      this.modalShow = true
+      this.questionToDelete = id
+      this.idForModal = id
+      this.refForModal = id
+    },
+    requestEngagementDelete() {
+      this.modalEngage = true
     }
   },
   watch: {
@@ -214,5 +253,19 @@ export default {
 
 
 <style scoped lang="scss">
+  .mail-sent-flag {
+    border: 1px solid #0077ff;
+    padding: 4px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
 
+  .sending-mail {
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #0077ff;
+    font-size: 1.25rem;
+    color: white;
+    font-weight: 600;
+  }
 </style>

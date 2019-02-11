@@ -61,7 +61,7 @@
         </div>
         
 
-        <div v-if="!loading" class="my-4">
+        <div v-if="!loading && !noData" class="my-4">
             <div class="d-flex justify-content-center">
                 <div class="h4 py-3 my-5">
                     <i class="far fa-folder-open mr-2 text-primary"></i>

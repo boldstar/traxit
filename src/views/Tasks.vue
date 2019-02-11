@@ -11,7 +11,8 @@
             </span>
           </p>
           <div class="align-self-center">
-            <button class="btn btn-sm btn-outline-primary" @click="refreshTask"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
+            <button class="btn btn-sm btn-secondary mr-2 font-weight-bold" @click="searchInput = !searchInput"><i class="fas fa-search mr-2"></i>Filter</button>
+            <button class="btn btn-sm btn-outline-primary font-weight-bold" @click="refreshTask"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
           </div>
         </div>
       </div>
@@ -22,11 +23,14 @@
             <thead class="bg-primary text-light">
               <tr>
                 <th scope="col">Task</th>
+                <th scope="col">Type</th>
                 <th scope="col">Client</th>
-                <th scope="col">Created On</th>
+                <th scope="col">Assigned On</th>
+                <th scope="col">Time Period</th>
                 <th scope="col">Return Type</th>
                 <th scope="col">Year</th>
                 <th scope="col">Action</th>
+                <th scope="col">Engagement</th>
               </tr>
             </thead>
          </table>
@@ -36,12 +40,13 @@
       </div>
 <!-- this is the list of the assigned user tasks -->
     <div v-else>
+     <input v-if="searchInput" class="form-control mb-3" placeholder="Filter Task By Client Name" v-model="searchTasks" type="search">
       <table class="table table-hover" v-if="!tasksLoaded && taskData">
         <thead class="bg-primary text-light">
           <tr>
             <th scope="col">Task</th>
             <th scope="col">Type</th>
-            <th scope="col">Client</th>
+            <th scope="col" @click="sort('name')">Client</th>
             <th scope="col">Assigned On</th>
             <th scope="col">Time Period</th>
             <th scope="col">Return Type</th>
@@ -51,12 +56,12 @@
           </tr>
         </thead>
         <tbody class="table-bordered">
-          <tr v-for="(task, index) in tasks"  :key="index">
+          <tr v-for="(task, index) in sortedTasks"  :key="index">
             <th  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].status }}</th>
             <th  @click="viewDetails(task.engagements[0].id)" class="text-capitalize" v-if="task.engagements[0].type == 'taxreturn'">{{fixCasing(task.engagements[0].type)}}</th>
             <th  @click="viewDetails(task.engagements[0].id)" class="text-capitalize" v-else>{{task.engagements[0].type}}</th>
             <td  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].name }}</td>
-            <td  @click="viewDetails(task.engagements[0].id)">{{ task.created_at | formatDate }}</td>
+            <td  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].updated_at | formatDate }}</td>
             <td  @click="viewDetails(task.engagements[0].id)" v-if="task.engagements[0].title != null">{{ task.engagements[0].title }}</td>
             <td  @click="viewDetails(task.engagements[0].id)" v-else>None</td>
             <td  @click="viewDetails(task.engagements[0].id)" v-if="task.engagements[0].type == 'taxreturn'">{{ task.engagements[0].return_type }}</td>
@@ -148,14 +153,17 @@ export default {
       selectedWorkflow: null,
       dropDowns: false,
       completed: false,
-      alert: '',
       taskData: false,
+      searchInput:  false,
       task: {
         user_id: 0,
         status: null,
         done: null,
       },
       option: 'Choose...',
+      searchTasks: '',
+      currentSort: 'name',
+      currentSortDir: 'asc',
     }
   },
    components:{
@@ -172,8 +180,25 @@ export default {
       'allWorkflows',
       'successAlert'
     ]),
+    sortedTasks:function() {
+        return this.tasks.sort((a,b) => {
+        let modifier = 1;
+        if(this.currentSortDir === 'desc') modifier = -1;
+        if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+        if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+        return 0;
+        }).filter( task => {
+        return !this.searchTasks || task.engagements[0].name.toLowerCase().indexOf(this.searchTasks.toLowerCase()) >= 0 })
+    },
   },
   methods: {
+    sort:function(s) {
+      //if s == current sort, reverse
+      if(s === this.currentSort) {
+          this.currentSortDir = this.currentSortDir==='asc'?'desc':'asc';
+      }
+      this.currentSort = s;
+      },
     showModal() {
         this.$refs.modal.show()
         this.dropDowns = false
@@ -284,96 +309,4 @@ export default {
   label {
     width: 6em;
   }
-
-  //this is the css for the loading spinner
-    .lds-dual-ring {
-        display: inline-block;
-        width: 64px;
-        height: 64px;
-        margin-top: 100px;
-        margin-bottom: 100px;
-    }
-
-    .lds-dual-ring:after {
-        content: " ";
-        display: block;
-        width: 46px;
-        height: 46px;
-        margin: 1px;
-        border-radius: 50%;
-        border: 5px solid #0077ff;
-        border-color: #0077ff transparent #0077ff transparent;
-        animation: lds-dual-ring 1.2s linear infinite;
-    }
-        @keyframes lds-dual-ring {
-        0% {
-            transform: rotate(0deg);
-        }
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-
-    .lds-ellipsis-container {
-        position: absolute;
-        right: 50%;
-        padding-right: 20px;
-    }
-
-    .lds-ellipsis {
-        display: inline-block;
-        position: relative;
-        width: 64px;
-        height: 11px;
-    }
-
-    .lds-ellipsis div {
-        position: absolute;
-        width: 11px;
-        height: 11px;
-        border-radius: 50%;
-        background: #fff;
-        animation-timing-function: cubic-bezier(0, 1, 1, 0);
-    }
-
-    .lds-ellipsis div:nth-child(1) {
-        left: 6px;
-        animation: lds-ellipsis1 0.6s infinite;
-    }
-    .lds-ellipsis div:nth-child(2) {
-        left: 6px;
-        animation: lds-ellipsis2 0.6s infinite;
-    }
-    .lds-ellipsis div:nth-child(3) {
-        left: 26px;
-        animation: lds-ellipsis2 0.6s infinite;
-    }
-    .lds-ellipsis div:nth-child(4) {
-        left: 45px;
-        animation: lds-ellipsis3 0.6s infinite;
-    }
-    @keyframes lds-ellipsis1 {
-        0% {
-            transform: scale(0);
-        }
-        100% {
-            transform: scale(1);
-        }
-        }
-        @keyframes lds-ellipsis3 {
-        0% {
-            transform: scale(1);
-        }
-        100% {
-            transform: scale(0);
-        }
-        }
-        @keyframes lds-ellipsis2 {
-        0% {
-            transform: translate(0, 0);
-        }
-        100% {
-            transform: translate(19px, 0);
-        }
-    }
 </style>

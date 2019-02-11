@@ -82,9 +82,13 @@
 <script>
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
+import DateInput from '@/components/DateInput.vue'
 
 export default {
   name: 'EditContact',
+  components: {
+    DateInput
+  },
   data () {
     return {
       has_spouse_alert: false,
@@ -148,12 +152,12 @@ export default {
         postal_code: this.client.postal_code,
       })
       .then(() => {
-        this.$router.push({path: '/contact/' +this.client.id+ '/account', query: {alert: 'The Contact Has Been Updated'}})
+        this.$router.push({path: '/contact/' +this.client.id+ '/account'})
       })
     }
     },
     created: function() {
-      this.$store.dispatch('getDetails', this.$route.params.id);
+      this.$store.dispatch('editDetails', this.$route.params.id);
       this.client.category = this.categories[0]
     }
 }

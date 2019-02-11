@@ -50,6 +50,7 @@
         </div>      
 
         <div class="btn-group ml-auto" v-if="!uploadInput">
+              <button class="btn btn-outline-primary" @click="clearFilters" data-toggle="tooltip" data-placement="top" title="Clear Filters"><i class="fas fa-filter"></i></button>
             <button class="btn btn-outline-success font-weight-bold" @click="uploadInput = true" data-toggle="tooltip" data-placement="top" title="Upload Contacts"><i class="far fa-file-excel"></i></button>
             <button class="btn btn-outline-secondary font-weight-bold" @click="downloadContacts" data-toggle="tooltip" data-placement="top" title="Download Contacts"><i class="far fa-file-excel"></i></button>
             <router-link to="/add" class="btn btn-primary pt-2" data-toggle="tooltip" data-placement="top" title="Add New Contact"><i class="far fa-plus-square"></i></router-link>
@@ -114,10 +115,7 @@
         </div>
         <div class="ml-auto align-self-center">
             <label for="count" class="font-weight-bold">Viewing: </label>
-            <span id="count" v-if="sortedClients.length >= 10">
-                {{ (sortedClients.length * pageSize) * currentPage }} of {{ clients.length }}
-            </span>
-            <span id="count" v-else>
+            <span id="count">
                 {{ sortedClients.length }} of {{ clients.length }}
             </span>
         </div>  
@@ -211,7 +209,12 @@ export default {
         },
         viewDetails(id) {
             this.$router.push({path: '/contact/'+ id + '/account'})
-        }
+        },
+        clearFilters() {
+            this.searchClient = ''
+            this.filterType = 'All'
+            this.filterActive = 'All'
+        },
     },
     created() {
         this.$store.dispatch('retrieveClients');

@@ -23,8 +23,8 @@ export default new Vuex.Store({
   ],
   state: {
     rules: '',
+    client: [],
     clients: [],
-    client:[],
     engagements: [],
     engagement: [],
     clientengagements: [],
@@ -54,6 +54,7 @@ export default new Vuex.Store({
     sidebarOpen: true,
     alert: '',
     successAlert: '',
+    errorAlert: '',
     resetError:'',
     resetSuccess: '',
     passwordAlert: '',
@@ -140,6 +141,9 @@ export default new Vuex.Store({
     },
     successAlert(state) {
       return state.successAlert
+    },
+    errorMsgAlert(state) {
+      return state.errorAlert
     },
     resetSuccess(state) {
       return state.resetSuccess
@@ -232,6 +236,9 @@ export default new Vuex.Store({
       state.clients.splice(index, 1);
     },
     getDetails(state, client) {
+      state.client = client
+    },
+    editDetails(state, client) {
       state.client = client
     },
     updateClient(state, client) {
@@ -328,12 +335,7 @@ export default new Vuex.Store({
     },
     updateQuestion(state, question) {
       const index = state.engagement.questions.findIndex(item => item.id == question.id);
-      state.engagement.questions.splice(index, 1, {
-        'id': question.id,
-        'engagement_id': question.engagement_id,
-        'question': question.question,
-        'answered': false           
-      })
+      state.engagement.questions.splice(index, 1, question)
     },
     updateAnswer(state, question) {
       const index = state.engagement.questions.findIndex(item => item.id == question.id);
@@ -399,6 +401,9 @@ export default new Vuex.Store({
     },
     successAlert(state, alert) {
       state.successAlert = alert
+    },
+    errorMsgAlert(state, alert) {
+      state.errorAlert = alert
     },
     clearAlert(state) {
       state.alert = ''
@@ -642,6 +647,20 @@ export default new Vuex.Store({
         console.log(error)
       })
     },
+    editDetails({commit}, id) {
+      axios.get('/clients/'+id)
+      .then(response => {
+        const client = response.data
+        const taxpayer_dob = moment(String(client.dob)).format('MM/DD/YYYY')
+        const spouse_dob = moment(String(client.spouse_dob)).format('MM/DD/YYYY')
+        client.dob = taxpayer_dob
+        client.spouse_dob = spouse_dob
+        commit('editDetails', client)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
     addClient(context, client) {
       axios.post('/clients', {
         id: client.id,
@@ -707,7 +726,8 @@ export default new Vuex.Store({
         postal_code: client.postal_code,
       })
       .then(response => {
-          context.commit('updateClient', response.data)
+          context.commit('updateClient', response.data.client)
+          context.commit('successAlert', response.data.message)
       })
       .catch(error => {
           console.log(error)
@@ -782,6 +802,7 @@ export default new Vuex.Store({
       })
       .catch(error => {
         console.log(error.response.data)
+        context.commit('errorMsgAlert', error.response.data.message)
       })
     },
     updateEngagement(context, engagement) {
@@ -805,6 +826,7 @@ export default new Vuex.Store({
       })
       .catch(error => {
           console.log(error)
+          context.commit('errorMsgAlert', error.response.data.message)
       })           
     },
     updateCheckedEngagements(context, checkedEngagements) {
@@ -820,6 +842,7 @@ export default new Vuex.Store({
       })
       .catch(error => {
           console.log(error)
+          context.commit('errorMsgAlert', error.response.data.message)
       })           
     },
     deleteEngagement(context, id) {
@@ -860,6 +883,7 @@ export default new Vuex.Store({
       })
       .catch(error => {
         console.log(error)
+        context.commit('errorMsgAlert', error.response.data.message)
       })
     },
     updateBusiness(context, business) {
@@ -880,6 +904,7 @@ export default new Vuex.Store({
       })
       .catch(error => {
         console.log(error)
+        context.commit('errorMsgAlert', error.response.data.message)
       })
     },
     deleteBusiness(context, id) {
@@ -914,6 +939,7 @@ export default new Vuex.Store({
       })
       .catch(error => {
         console.log(error)
+        context.commit('errorMsgAlert', error.response.data.message)
       })
     },
     deleteDependent(context, id) {
@@ -938,6 +964,7 @@ export default new Vuex.Store({
       })
       .catch(error => {
           console.log(error)
+          context.commit('errorMsgAlert', error.response.data.message)
       })           
     },
     getQuestion({commit}, id) {
@@ -950,16 +977,45 @@ export default new Vuex.Store({
       })
     },
     addQuestion(context, question) {
+      if(question.email_sent) {
+        context.commit('startProcessing')
+      }
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
       axios.post(('/questions'), {
         engagement_id: question.engagement_id,
         question: question.question,
+        email: question.email,
+        email_sent: question.email_sent,
         answered: false
       })
       .then(response => {
-        context.commit('addQuestion', response.data)
+        context.commit('addQuestion', response.data.question)
+        context.commit('successAlert', response.data.message)
+        context.commit('stopProcessing')
       })
       .catch(error => {
         console.log(error)
+        context.commit('errorMsgAlert', error.response.data.message)
+        context.commit('stopProcessing')
+      })
+    },
+    sendEmail(context, id) {
+      context.commit('startProcessing')
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
+      axios.post(('/questionsEmail'), {
+        id: id
+      })
+      .then(response => {
+        context.commit('updateQuestion', response.data.question)
+        context.commit('successAlert', response.data.message)
+        context.commit('stopProcessing')
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        context.commit('errorMsgAlert', error.response.data.message)
+        context.commit('stopProcessing')
       })
     },
     deleteQuestion(context, id) {
@@ -982,6 +1038,7 @@ export default new Vuex.Store({
       })
       .catch(error => {
           console.log(error)
+          context.commit('errorMsgAlert', error.response.data.message)
       })           
     },
     updateAnswer(context, question) {
@@ -994,6 +1051,7 @@ export default new Vuex.Store({
       })
       .catch(error => {
           console.log(error)
+          context.commit('errorMsgAlert', error.response.data.message)
       })           
     },
     getClientNotes({commit}, id) {
@@ -1024,6 +1082,7 @@ export default new Vuex.Store({
       })
       .catch(error => {
         console.log(error)
+        context.commit('errorMsgAlert', error.response.data.message)
       })
     },
     deleteNote(context, id) {
@@ -1045,6 +1104,7 @@ export default new Vuex.Store({
       })
       .catch(error => {
           console.log(error)
+          context.commit('errorMsgAlert', error.response.data.message)
       })           
     },
     retrieveWorkflows(context) {
@@ -1180,6 +1240,7 @@ export default new Vuex.Store({
       .catch(error => {
         console.log(error)
         context.commit('stopProcessing')
+        context.commit('errorMsgAlert', error.response.data.message)
       })
     },
     getReturnTypes(context) {

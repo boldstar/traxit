@@ -5,6 +5,7 @@
     <div v-if="$route.name == 'engagement-details'">
 
       <Alert v-if="successAlert" v-bind:message="successAlert" />
+      <div class="sending-mail" v-if="processing"><i class="far fa-envelope mr-3"></i>Sending Mail...</div>
 
       <!-- this is the header section of the engagement details -->
       <div class="flex-row justify-content-between d-flex mt-3 card-body shadow-sm p-3">
@@ -88,7 +89,7 @@
             <div class="d-flex">
               <span v-if="question.email_sent == true" class="align-self-center mail-sent-flag"><i class="fas fa-check mr-2 text-primary"></i>Email Sent</span>
               <router-link v-if="question.answered == 0 && $can('update', engagement) && question.email_sent == false" class="btn btn-sm btn-primary mr-3" :to="'/engagement/' +engagement.id+ '/edit-question/' + question.id"><i class="far fa-edit mr-2" ></i>Edit</router-link>
-              <b-btn class="outline-secondary" size="sm" @click="sendEmailRequest(question.id)" v-if="question.email_sent == false && engagement.type != 'bookkeeping'"><i class="far fa-envelope mr-2" :disabled="processing"></i>
+              <b-btn class="outline-secondary" size="sm" @click="sendEmailRequest(question.id)" v-if="question.email_sent == false && engagement.type != 'bookkeeping' && engagement.client.email"><i class="far fa-envelope mr-2" :disabled="processing"></i>
               <span v-if="!processing">Send Email</span>
               <span v-if="processing">Sending...</span>
               </b-btn> 
@@ -180,7 +181,7 @@ export default {
     'b-modal': bModalDirective
   },
   computed: {
-    ...mapGetters(['engagement','question', 'successAlert', 'processing']),
+    ...mapGetters(['engagement','question', 'successAlert', 'processing', 'errorMsgAlert']),
   },
   methods: {
     deleteEngagement(id) {
@@ -256,6 +257,15 @@ export default {
     border: 1px solid #0077ff;
     padding: 4px;
     border-radius: 3px;
+    font-weight: 600;
+  }
+
+  .sending-mail {
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #0077ff;
+    font-size: 1.25rem;
+    color: white;
     font-weight: 600;
   }
 </style>

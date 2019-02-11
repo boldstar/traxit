@@ -28,7 +28,7 @@
                         <Toaster :message="successAlert" :type="'success'" v-if="successAlert" />
                     </transition>   
                     <transition name="router-animation" enter-active-class="animated bounceInLeft" leave-active-class="animated fadeOut" mode="out-in">
-                        <Toaster :message="errorAlert" :type="'error'" v-if="errorAlert" />
+                        <Toaster :message="errorMsgAlert" :type="'error'" v-if="errorMsgAlert" />
                     </transition>   
                 </div>
               </div>
@@ -52,7 +52,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['successAlert', 'errorAlert'])
+        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert'])
     }
 }
 </script>

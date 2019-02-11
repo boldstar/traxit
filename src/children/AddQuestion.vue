@@ -16,7 +16,8 @@
 
             <div class="d-flex justify-content-between">
               <button class="btn btn-primary d-flex justify-content-start" @click="addNewQuestion" v-if="engagement.type === 'bookkeeping'">Create</button>
-              <button class="btn btn-primary d-flex justify-content-start" @click="submitRequest" v-else>Create</button>
+              <button class="btn btn-primary d-flex justify-content-start" @click="submitRequest" v-else-if="engagement.client.email">Create</button>
+              <button class="btn btn-primary d-flex justify-content-start" @click="addNewQuestion" v-else>Contact Has No Email, Add Question Only</button>
               <router-link v-bind:to="'/engagement/' +engagement.id " class="btn btn-secondary float-right">Cancel</router-link>
             </div>
       
@@ -25,10 +26,10 @@
         <b-modal v-model="modalShow" id="myQuestion" ref="myQuestion" size="lg" hide-footer title="New Question">
           <div class="d-block text-left">
             <h5 class="mb-4">Would you like to send this as an email to the client?</h5>
-            <h6 class="ml-2 font-weight-bold"><i class="far fa-envelope mr-2"></i>Email Preview</h6>
+            <h5 class="ml-2 font-weight-bold text-primary"><i class="far fa-envelope mr-2"></i>Email Preview</h5>
             <div class="card">
                 <div class="card-header d-flex flex-column font-weight-bold">
-                    <span>To: {{ engagement.client.email }}</span>
+                    <span v-if="engagement.client.email">To: {{ engagement.client.email }}</span>
                     <span v-if="engagement.client.spouse_email != null">CC: {{ engagement.client.spouse_email }}</span>
                 </div>
                 <div class="p-3">
@@ -38,7 +39,9 @@
                         <p>Note: The following questions and issues were raised during the performance of our work. Please provide responses to the following items so that we can continue.</p>
                     </div>
                     <h5>Pending Questions:</h5>
-                    <div v-html="question.question" class="bg-light p-2"></div>
+                    <div class="questions-border">
+                        <div v-html="question.question" class="bg-light p-2"></div>
+                    </div>
                     <div>
                         <h5>For questions and concerns</h5>
                         <div class="mb-2" style="display: flex;">
@@ -158,7 +161,12 @@ export default {
 </script>
 
 
-<style>
-
+<style scoped>
+    .questions-border {
+        border: 1px solid #0077ff;
+        border-radius: 5px;
+        padding: 5px;
+        margin-bottom: 5px;
+    }
 </style>
 

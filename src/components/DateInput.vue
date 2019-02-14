@@ -7,7 +7,7 @@
         @blur="handleInputState"
         @focus="handleInputState"
         maxlength="10"
-        v-validate="'date_format:DD/MM/YYYY'"
+        v-validate="'date_format:MM/DD/YYYY'"
         :name="name"
         :class="{ 'input-error': errors.has(name) }"
         >

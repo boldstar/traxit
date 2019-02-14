@@ -11,7 +11,7 @@
             </span>
           </p>
           <div class="align-self-center">
-            <button class="btn btn-sm btn-secondary mr-2 font-weight-bold" @click="searchInput = !searchInput"><i class="fas fa-search mr-2"></i>Filter</button>
+            <button class="btn btn-sm btn-secondary mr-2 font-weight-bold" @click="searchInputMethod"><i class="fas fa-search mr-2"></i>Filter</button>
             <button class="btn btn-sm btn-outline-primary font-weight-bold" @click="refreshTask"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
           </div>
         </div>
@@ -280,6 +280,10 @@ export default {
     showDropdowns() {
       this.dropDowns = true
       this.completed = false
+    },
+    searchInputMethod() {
+      this.searchInput = !this.searchInput
+      this.searchTasks = ''
     }
   },
   created() {

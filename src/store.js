@@ -171,6 +171,9 @@ export default new Vuex.Store({
     accountDetails(state, account) {
       state.account = account[0]
     },
+    addAccountDetails(state, account) {
+      state.account = account
+    },
     updateAccountDetails(state, account) {
       state.account = account
     },
@@ -1258,7 +1261,7 @@ export default new Vuex.Store({
         context.commit('accountDetails', response.data)
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.response.data)
       })
     },
     addAccountDetails(context, account) {
@@ -1327,6 +1330,22 @@ export default new Vuex.Store({
         console.log(error.response.data)
       })
     },
+    uploadLogo(context, file) {
+      context.commit('startProcessing')
+      let formData = new FormData();
+      formData.append('file', file)
+      axios.post('/uploadLogo', formData, { headers: {
+        'Content-Type': 'multipart/form-data'
+      }})
+      .then(res => {
+        context.commit('stopProcessing')
+        context.commit('addAccountDetails', res.data)
+      })
+      .catch(err => {
+        context.commit('stopProcessing')
+        console.log(err.response.data)
+      })
+    }
   }, 
 })
 

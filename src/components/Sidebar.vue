@@ -5,10 +5,10 @@
               <div class="sidebar-sticky d-flex flex-column">
                 <ul class="nav nav-fill flex-column align-items-start mt-5">
                   <li class="nav-item w-100"  v-bind:class="{ 'is-active': isActive }">                                        
-                      <router-link class="nav-link border-right text-left pl-4" to="/"><span><i class="fas fa-tachometer-alt"></i></span>Dashboard</router-link>    
+                      <router-link class="nav-link border-right text-left pl-4" to="/"><span><i class="fas fa-tachometer-alt"></i></span>Dashboard</router-link>      
                   </li>
                   <li class="nav-item w-100"  v-bind:class="{ 'is-active': isActive }">                                        
-                      <router-link class="nav-link border-right text-left pl-4" to="/firm"><span><i class="fas fa-home"></i></span>Firm</router-link>    
+                      <router-link class="nav-link border-right text-left pl-4" to="/firm"><span><i class="fas fa-home"></i></span>Firm</router-link>  
                   </li>
                   <li class="nav-item w-100"  v-bind:class="{ 'is-active': isActive }">                                        
                       <router-link class="nav-link border-right text-left pl-4" to="/tasks"><span><i class="fas fa-list-ul"></i></span>Tasks</router-link>  
@@ -117,12 +117,26 @@ export default {
         }
     }
 
+    
+
     .is-active {
         background:rgb(223, 231, 253);
-        border-left: 5px solid #0077ff;
 
         i {
             color: #0077ff;
+        }
+
+        &:after {
+            content: " ";
+            position: absolute;
+            height: 0;
+            width: 0;
+            border-bottom: 15px solid transparent;
+            border-top: 15px solid transparent;
+            border-right: 15px solid white;
+            margin-top: 0;
+            left: 308px;
+            transition: 8s;
         }
 
     }

@@ -4,9 +4,13 @@
       <h3 class="m-0">Account Details</h3>
       <div class="d-flex">
         <div>
-          <button type="button" class="btn btn-secondary mr-3" @click="addLogo = true" v-if="!addLogo">Add Logo</button>
+          <button type="button" class="btn btn-secondary mr-3" @click="addLogo = true" v-if="!addLogo" :disabled="processing">
+            <span v-if="processing">Adding Your Logo...</span>
+            <span v-else>Add Logo</span>
+          </button>
         </div>
         <div class="input-group d-flex mr-3" v-if="addLogo">
+            <span v-if="alert" class="font-weight-bold align-self-center text-danger mr-3">{{ alert }}</span>
             <div class="mr-2">
                 <button class="btn btn-outline-secondary" @click="closeInput()">Cancel</button>
             </div>
@@ -27,44 +31,45 @@
     </div>
     <hr>
       <ul class="h4 text-left" v-if="$route.name == 'app-account' && accountDetails">
-        <li class="border">
+        <li>
           <div class="d-flex">
-          <span class="border-right p-3 background width">Business Name</span>
+          <span class="p-3 background width">Business Name</span>
           <span class="ml-5 align-self-center">{{ accountDetails.business_name }}</span>
           </div>
         </li>
-        <li class="border">
+        <li>
           <div class="d-flex">
-          <span class="border-right p-3 background width">Address</span>
+          <span class="p-3 background width">Address</span>
           <span class="ml-5 align-self-center" v-if="accountDetails.address">{{ accountDetails.address }}, {{ accountDetails.city }}, {{ accountDetails.state }} {{ accountDetails.postal_code }}</span>
           </div>
         </li>
-        <li class="border">
+        <li>
           <div class="d-flex">
-          <span class="border-right p-3 background width">Account Email</span>
+          <span class="p-3 background width">Account Email</span>
           <span class="ml-5 align-self-center">{{ accountDetails.email }}</span>
           </div>
         </li>
-        <li class="border">
+        <li>
           <div class="d-flex">
-          <span class="border-right p-3 background width">Phone Number</span>
+          <span class="p-3 background width">Phone Number</span>
           <span class="ml-5 align-self-center">{{ accountDetails.phone_number }}</span>
           </div>
         </li>
-        <li class="border">
+        <li>
           <div class="d-flex">
-          <span class="border-right p-3 background width">Fax Number</span>
+          <span class="p-3 background width">Fax Number</span>
           <span class="ml-5 align-self-center">{{ accountDetails.fax_number }}</span>
           </div>
         </li>
-        <li class="border">
+        <li>
           <div class="d-flex">
-          <span class="border-right p-3 background width">Logo</span>
+          <span class="p-3 background width">Logo</span>
+          <img class="ml-5" v-if="accountDetails.logo" v-bind:src="logo" />
           </div>
         </li>
-        <li class="border">
+        <li>
           <div class="d-flex">
-          <span class="border-right p-3 background width">Subscription</span>
+          <span class="p-3 background width">Subscription</span>
           <span class="ml-5 align-self-center">{{ accountDetails.subscription }}</span>
           </div>
         </li>
@@ -87,28 +92,46 @@ export default {
       hasFile: false,
       uploadInput: false,
       addLogo: false,
+      image: '',
+      alert: ''
     }
   },
   computed: {
     ...mapGetters(
         [
-          'accountDetails'
+          'accountDetails',
+          'processing'
         ]
       ),
+      logo() {
+        return `data:image/png;base64, ${this.accountDetails.logo}`
+      }
   },
   methods: {
     selectedFile(event) {
-        this.file = event.target.files[0]
+      this.alert = ''
+      this.file = event.target.files[0]
         this.fileLabel = event.target.files[0].name
         this.hasFile = true
     },
     uploadLogo() {
-
+      if(this.file.size > 45000) {
+        this.alert = 'File is to large. Must be 45kb or less'
+        return
+        
+      } else {
+        this.$store.dispatch('uploadLogo', this.file)
+        .then(() => {
+          this.addLogo = false
+          this.hasFile = false
+          this.file = ''
+        })
+      }
     },
     closeInput() {
       this.addLogo = false
       this.hasFile = false
-    }
+    },
   },
   created: function() {
     this.$store.dispatch('getAccountDetails')
@@ -117,20 +140,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 
   li {
-    list-style: none;
-    margin: 20px 0;
-    border-radius: 10px;
-
-    .background {
-      background-color: #0077ff3d;
-      color: gray;
+    
+    .width {
+      width: 200px;
+      background-color: #e7e7e7;
+      
     }
   }
 
-  .width {
-    width: 300px;
-    text-align: right;
+  li:nth-of-type(1) {
+    border-radius: 10px;
   }
+}
+
 </style>

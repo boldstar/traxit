@@ -6,19 +6,19 @@
         <ul class="navbar-nav mr-3 d-flex flex-row">
             <li v-if="loggedIn" class="mr-3">
                 <div class="input-group input-group-sm" @keyup.enter="searchDatabase">
-                <div class="input-group-prepend">
-                    <select v-model="category" class="btn btn-light text-primary">
-                        <option disabled>{{option}}</option>
-                        <option value="name">Name</option>
-                        <option value="taxpayer">Taxpayer</option>
-                        <option value="spouse">Spouse</option>
-                        <option value="number">Phone #</option>
-                    </select>
-                </div>
-                <input type="text" placeholder="Type Here.." class="form-control" v-model="search">
-                <div class="input-group-append">
-                    <button class="btn btn-secondary" @click="searchDatabase">Search</button>
-                </div>
+                    <div class="input-group-prepend">
+                        <select v-model="category" class="btn text-primary font-weight-bold">
+                            <option disabled>{{option}}</option>
+                            <option value="name">Name</option>
+                            <option value="taxpayer">Taxpayer</option>
+                            <option value="spouse">Spouse</option>
+                            <option value="number">Phone #</option>
+                        </select>
+                    </div>
+                    <input type="text" placeholder="Enter Keyword.." class="form-control search-input" v-model="search">
+                    <div class="input-group-append">
+                        <button class="btn btn-light text-primary search-btn" @click="searchDatabase"><i class="fas fa-search"></i></button>
+                    </div>
                 </div>
             </li>
             <li v-if="loggedIn" class="dropdown align-self-center"> 
@@ -46,7 +46,7 @@ export default {
         isActive: false,
         search: '',
         category: '',
-        option: 'Choose..'
+        option: 'All'
         }
     },
     computed: {
@@ -62,12 +62,16 @@ export default {
             })
         },
         searchDatabase() {
-            this.$store.dispatch('searchDatabase', { keyword: this.search, category: this.category})
-            .then(() => {
-                this.$router.push({path: '/search', query: {keyword: this.search }})
-                this.search = ''
-                this.category = this.option
-            })
+            if(this.search != '') {
+                this.$store.dispatch('searchDatabase', { keyword: this.search, category: this.category})
+                .then(() => {
+                    this.$router.push({path: '/search', query: {keyword: this.search }})
+                    this.search = ''
+                    this.category = this.option
+                })
+            } else {
+                return;
+            }
         }
     },
     created() {
@@ -124,8 +128,24 @@ export default {
         background-color: rgba(187, 187, 187, 0.486);
     }
 
-    input .search{
-        border-radius: 100px;
+    .search-input {
+        background-color: rgba(255, 255, 255, 0.5);
+
+        &:focus {
+            background-color: white;
+            outline: none!important;
+        }
     }
+
+    .search-btn {
+        padding: 1px 5px !important;
+        font-size: 1.15rem !important;
+    }
+
+    input::placeholder {
+        color: white;
+        font-weight: 600 !important;
+    }
+
 
 </style>

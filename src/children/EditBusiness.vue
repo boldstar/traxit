@@ -8,7 +8,6 @@
 
                 <div class="form-group">
                     <input type="text" class="form-control mb-3" v-model="business.business_name" placeholder="Business Name">
-                    <input type="text" class="form-control mb-3" v-model="business.business_type" placeholder="LLC SCORP CORP">
                     <input type="text" class="form-control mb-3" v-model="business.address" placeholder="Address">
                     <input type="text" class="form-control mb-3" v-model="business.city" placeholder="City">
                     <input type="text" class="form-control mb-3" v-model="business.state" placeholder="State">
@@ -51,7 +50,6 @@ export default {
         id: this.business.id,
         client_id: this.business.client_id,
         business_name: this.business.business_name,
-        business_type: this.business.business_type,
         address: this.business.address,
         city: this.business.city,
         state: this.business.state,
@@ -61,7 +59,7 @@ export default {
         fax_number: this.business.fax_number
       })   
       .then(() => {
-        this.$router.push({path: '/contact/' +this.client.id+ '/account', query: {alert: 'The business has been edited!'}});
+        this.$router.push({path: '/contact/' +this.client.id+ '/account'});
       })
     },
   },

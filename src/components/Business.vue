@@ -11,10 +11,6 @@
            <div class="card-body">
             <div class="d-flex flex-column">
                 <div class="d-flex justify-content-between mb-2">
-                    <span class="font-weight-bold">Type</span>
-                    <span>{{business.business_type}}</span>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
                     <span class="font-weight-bold">Address</span>
                     <span>{{business.address}}</span>
                 </div>

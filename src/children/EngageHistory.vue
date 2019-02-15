@@ -7,16 +7,16 @@
       <thead class="text-primary hover">
           <tr>
               <th scope="col">Event</th>
+              <th scope="col">Moved By</th>
               <th scope="col">Status</th>
-              <th scope="col">Assigned To</th>
               <th scope="col">Date</th>
           </tr>
       </thead> 
       <tbody class="client-info table-bordered">
           <tr  v-for="(history, index) in engagementHistory" :key="index">
               <td class="text-capitalize">{{history.action}}</td>
-              <td class="text-capitalize">{{history.status}}</td>
               <td class="text-capitalize">{{ userName(history.user_id) }}</td>
+              <td class="text-capitalize">{{history.status}}</td>
               <td>{{history.created_at | formatDate}}</td>
           </tr>
       </tbody>

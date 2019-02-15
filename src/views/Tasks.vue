@@ -82,10 +82,11 @@
             <b-modal ref="modal" hide-footer title="Update Engagement">
                 <div class="d-flex justify-content-around">
                   <div>
-                    <button type="button" class="btn btn-secondary font-weight-bold" @click="showDropdowns">Update</button>
+                    <button type="button" class="btn btn-primary font-weight-bold" @click="showDropdowns">Update Status</button>
                   </div>
+                  <span class="align-self-center font-weight-bold h5 mb-0">Or</span>
                   <div>
-                    <button type="button" class="btn btn-primary font-weight-bold" @click="showComplete">Complete</button>
+                    <button type="button" class="btn btn-primary font-weight-bold" @click="showComplete">Complete Engagement</button>
                   </div>
                 </div>
                 <form v-if="dropDowns">

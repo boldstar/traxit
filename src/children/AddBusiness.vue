@@ -8,7 +8,6 @@
 
                 <div class="form-group">
                     <input type="text" class="form-control mb-3" v-model="business.business_name" placeholder="Business Name">
-                    <input type="text" class="form-control mb-3" v-model="business.business_type" placeholder="LLC SCORP CORP">
                     <input type="text" class="form-control mb-3" v-model="business.address" placeholder="Address">
                     <input type="text" class="form-control mb-3" v-model="business.city" placeholder="City">
                     <input type="text" class="form-control mb-3" v-model="business.state" placeholder="State">
@@ -42,7 +41,6 @@ export default {
         return {
             business: {
                 business_name: '',
-                business_type: '',
                 address: '',
                 city: '',
                 state: '',
@@ -69,7 +67,6 @@ export default {
         id: this.idForBusiness,
         client_id: this.client.id,
         business_name: this.business.business_name,
-        business_type: this.business.business_type,
         address: this.business.address,
         city: this.business.city,
         state: this.business.state,

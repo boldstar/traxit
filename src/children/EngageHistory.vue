@@ -21,6 +21,11 @@
           </tr>
       </tbody>
     </table>
+    <div v-if="engagementHistory.length == 0" class="p-auto text-center">
+      <span class="mx-auto">
+        There Are Zero Events For This Engagement
+      </span>
+    </div>
   </div>
   <div class="card-body radius shadow ml-3 text-left">
     <h2>Timelapse</h2>
@@ -79,10 +84,19 @@ export default {
 
           var one_day=1000*60*60*24;
           var started = this.engagementHistory.filter(history => history.action == 'created');
+
+          if(started.length == 0) {
+            return '0'
+          }
+
+          var updatedEvents = this.engagementHistory.filter(history => history.action == 'updated');
           var completed = this.engagementHistory.filter(history => history.action == 'completed');
 
           if(completed.length == 0) {
-              return '0'
+              var updated =  updatedEvents.filter((v, i) => updatedEvents.lastIndexOf(v) === i)
+              var date1_ms = moment(started[0].created_at);
+              var date2_ms = moment(updated[0].created_at);
+              return date2_ms.diff(date1_ms, 'days');
             } else {
             // Convert both dates to moment object
             var date1_ms = moment(started[0].created_at);

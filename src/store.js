@@ -26,6 +26,7 @@ export default new Vuex.Store({
     engagement: [],
     clientengagements: [],
     engagementquestions: [],
+    history: [],
     dependent: [],
     dependents: [],
     questions: [],
@@ -90,6 +91,9 @@ export default new Vuex.Store({
     },
     allEngagements(state) {
       return state.engagements;
+    },
+    engagementHistory(state) {
+      return state.history;
     },
     client(state) {
       return state.client;
@@ -216,6 +220,9 @@ export default new Vuex.Store({
     //this is for all engagements
     retrieveEngagements(state, engagements) {
       state.engagements = engagements
+    },
+    engagementHistory(state, history) {
+      state.history = history
     },
     //this is for all engagements belonging to client
     getClientEngagements(state, clientengagements) {
@@ -756,6 +763,15 @@ export default new Vuex.Store({
       axios.get('/clientengagement/'+id)
       .then(response => {
         commit('getEngagement', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    getEngagementHistory({commit}, id) {
+      axios.get('/engagementhistory/'+id)
+      .then(response => {
+        commit('engagementHistory', response.data)
       })
       .catch(error => {
         console.log(error)

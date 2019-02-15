@@ -18,11 +18,16 @@
           {{ fixCasing(engagement.type) }} <span v-if="engagement.done == true" class="font-weight-bold text-primary">| Completed</span>
         </div>
 
-
-        <div>
-        <router-link to="/engagements" class="btn btn-outline-secondary mr-4"><i class="fas fa-arrow-circle-left mr-2"></i>All Engagements</router-link>
-        <router-link class="btn btn-primary mr-3" :to="'/engagement/' +engagement.id+ '/edit'" v-if="engagement.done == false"><i class="far fa-edit mr-2" ></i>Edit</router-link> 
-        <b-btn class="outline-secondary" @click="requestEngagementDelete()" v-if="$can('delete', engagement)"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-cogs mr-2"></i>  Action
+          </button>
+          <div class="dropdown-menu mr-4">
+            <router-link class="dropdown-item" :to="'/engagement/' +engagement.id+ '/edit'" v-if="engagement.done == false"><i class="far fa-edit mr-2" ></i>Edit</router-link> 
+            <router-link class="dropdown-item" :to="'/engagement/' +engagement.id+ '/history'"><i class="fas fa-history mr-2"></i>History</router-link> 
+            <div class="dropdown-divider"></div>
+            <b-btn class="dropdown-item text-danger" @click="requestEngagementDelete()" v-if="$can('delete', engagement)"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
+          </div>
         </div>
       </div> 
 

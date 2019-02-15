@@ -872,7 +872,6 @@ export default new Vuex.Store({
       axios.post(('/businesses'), {
         client_id: business.client_id,
         business_name: business.business_name,
-        business_type: business.business_type,
         address: business.address,
         city: business.city,
         state: business.state,
@@ -893,7 +892,6 @@ export default new Vuex.Store({
       axios.patch(('/businesses/' + business.id ), {
         client_id: business.client_id,
         business_name: business.business_name,
-        business_type: business.business_type,
         address: business.address,
         city: business.city,
         state: business.state,

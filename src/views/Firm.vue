@@ -59,11 +59,10 @@
             <thead class="text-primary text-left">
               <tr>
                 <th scope="col">Batch</th>
-                <th scope="col">Client</th>
-                <th scope="col">Type</th>
+                <th scope="col" @click="sort('name')">Client</th>
+                <th scope="col" @click="sort('created_at')">Created On</th>
                 <th scope="col">Status</th>
                 <th scope="col">Assigned To</th>
-                <th scope="col">Return Type</th>
                 <th scope="col">Year</th>
               </tr>
             </thead>
@@ -71,12 +70,9 @@
               <tr v-for="(engagement, index) in filteredEngagements" :key="index" v-if="engagement.workflow_id === selectedWorkflowID" >
                 <th scope="row" class="custom-control custom-checkbox"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements.engagements" class="custom-control-input" :id="`${engagement.id}`"><label class="custom-control-label pb-3 ml-4" :for="`${engagement.id}`"></label></th>
                 <th @click="viewDetails(engagement.id)">{{ engagement.name}}</th>
-                <td class="text-capitalize" v-if="engagement.type == 'taxreturn'" @click="viewDetails(engagement.id)">{{ fixCasing(engagement.type) }}</td>
-                <td class="text-capitalize" v-else @click="viewDetails(engagement.id)">{{ engagement.type }}</td>
+                <td @click="viewDetails(engagement.id)">{{ engagement.created_at | formatDate }}</td>
                 <td @click="viewDetails(engagement.id)">{{ engagement.status }}</td>
                 <td @click="viewDetails(engagement.id)">{{ engagement.assigned_to }}</td>
-                <td v-if="engagement.return_type != null" @click="viewDetails(engagement.id)">{{ engagement.return_type }}</td>
-                <td v-else @click="viewDetails(engagement.id)">None</td>
                 <td @click="viewDetails(engagement.id)">{{ engagement.year }}</td>
               </tr>
             </tbody>
@@ -152,12 +148,20 @@ export default {
       listLoaded: false,
       engagementFilterKey: 'Received',
       option: 'Choose...',
+      currentSort: 'created_at',
+      currentSortDir: 'asc',
     }
   },
   computed: {
     ...mapGetters(['allEngagements', 'users', 'allWorkflows']),
     filteredEngagements () {
-      return this.allEngagements.filter((engagement) => engagement.status === this.engagementFilterKey)
+      return this.allEngagements.sort((a,b) => {
+      let modifier = 1;
+      if(this.currentSortDir === 'desc') modifier = -1;
+      if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+      if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+      return 0;
+      }).filter((engagement) => engagement.status === this.engagementFilterKey)
       .filter( engagement => {
       return !this.searchEngagement || engagement.name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 });
     },
@@ -175,7 +179,7 @@ export default {
         }, [])
       }))
       return res
-    }
+    },
   },
   methods: {
     ...mapActions(['updateCheckedEngagements']),
@@ -200,6 +204,8 @@ export default {
     refreshList() {
       this.listLoaded = true
       this.$store.dispatch('retrieveEngagements');
+      this.currentSort = 'created_at'
+      this.currentSortDir = 'asc'
       var self = this;
       setTimeout(() => {
         self.listLoaded = false;
@@ -219,7 +225,14 @@ export default {
     },
     viewDetails(id) {
       this.$router.push('/engagement/' + id)
+    },
+    sort:function(s) {
+        //if s == current sort, reverse
+        if(s === this.currentSort) {
+        this.currentSortDir = this.currentSortDir==='asc'?'desc':'asc';
     }
+        this.currentSort = s;
+    },
   },
   created() {
     this.listLoaded = true;

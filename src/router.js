@@ -476,6 +476,16 @@ export default new Router({
         },
       },
       {
+        path: 'history',
+        component: () => import('@/children/EngageHistory.vue'),
+          meta: {
+            requiresAuth: true,
+            breadCrumb: [
+              { name: 'Engagement History' }
+          ]
+        },
+      },
+      {
         path: 'add-question',
         component: () => import('@/children/AddQuestion.vue'),
           meta: {

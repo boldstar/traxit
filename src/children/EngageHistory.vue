@@ -1,52 +1,58 @@
 <template>
-  <div class="mt-1 d-flex justify-content-between mb-5" v-if="dataReceived">
-
-  <div class="card-body radius shadow text-left" v-if="engagementHistory">
-    <h2>History</h2>    
-    <table class="table border table-light table-hover text-left">
-      <thead class="text-primary hover">
-          <tr>
-              <th scope="col">Event</th>
-              <th scope="col">Moved By</th>
-              <th scope="col">Status</th>
-              <th scope="col">Date</th>
-          </tr>
-      </thead> 
-      <tbody class="client-info table-bordered">
-          <tr  v-for="(history, index) in engagementHistory" :key="index">
-              <td class="text-capitalize">{{history.action}}</td>
-              <td class="text-capitalize">{{ userName(history.user_id) }}</td>
-              <td class="text-capitalize">{{history.status}}</td>
-              <td>{{history.created_at | formatDate}}</td>
-          </tr>
-      </tbody>
-    </table>
-    <div v-if="engagementHistory.length == 0" class="p-auto text-center">
-      <span class="mx-auto">
-        There Are Zero Events For This Engagement
-      </span>
+  <div class="mt-1">
+  <div class="d-flex justify-content-between mb-5" v-if="dataReceived">
+    <div class="card-body radius shadow text-left p-0" v-if="engagementHistory">
+      <h2 class="p-3"><i class="fas fa-history mr-2"></i>History</h2>    
+      <table class="table table-light table-hover text-left">
+        <thead class="text-primary hover">
+            <tr>
+                <th scope="col">Event</th>
+                <th scope="col">Moved By</th>
+                <th scope="col">Status</th>
+                <th scope="col">Date</th>
+            </tr>
+        </thead> 
+        <tbody class="client-info font-weight-bold">
+            <tr  v-for="(history, index) in engagementHistory" :key="index">
+                <td class="text-capitalize">{{history.action}}</td>
+                <td class="text-capitalize">{{ userName(history.user_id) }}</td>
+                <td class="text-capitalize">{{history.status}}</td>
+                <td>{{history.created_at | formatDate}}</td>
+            </tr>
+        </tbody>
+      </table>
+      <div v-if="engagementHistory.length == 0" class="p-auto text-center">
+        <span class="mx-auto">
+          There Are Zero Events For This Engagement
+        </span>
+      </div>
     </div>
+    <div class="card-body radius shadow ml-3 text-left">
+      <h2><i class="far fa-clock mr-2"></i>Timelapse</h2>
+      <div v-if="engagementHistory" class="day">
+        <span class="d-flex justify-content-center">
+          {{ calculateDifference }} Days
+        </span>
+      </div>
+    </div>
+
+
+    <b-modal id="myModal" ref="myModalRef" hide-footer title="Delete Client">
+      <div class="d-block text-left">
+        <h5>Are you sure you want to delete engagement?</h5>
+        <br>
+        <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
+      </div>
+      <div class="d-flex">
+        <b-btn class="mt-3" variant="danger" @click="hideModal">Cancel</b-btn>
+        <b-btn class="mt-3 ml-auto" variant="outline-success">Confirm</b-btn>
+      </div>
+    </b-modal>
+
+
   </div>
-  <div class="card-body radius shadow ml-3 text-left">
-    <h2>Timelapse</h2>
-    <div v-if="engagementHistory" class="day">
-      {{ calculateDifference }} Days
-    </div>
-  </div>
 
-
-  <b-modal id="myModal" ref="myModalRef" hide-footer title="Delete Client">
-    <div class="d-block text-left">
-      <h5>Are you sure you want to delete engagement?</h5>
-      <br>
-      <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
-    </div>
-    <div class="d-flex">
-      <b-btn class="mt-3" variant="danger" @click="hideModal">Cancel</b-btn>
-      <b-btn class="mt-3 ml-auto" variant="outline-success">Confirm</b-btn>
-    </div>
-  </b-modal>
-
+    <div v-if="!dataReceived" class="lds-dual-ring justify-content-center"></div>
 
   </div>
 </template>
@@ -89,13 +95,12 @@ export default {
             return '0'
           }
 
-          var updatedEvents = this.engagementHistory.filter(history => history.action == 'updated');
           var completed = this.engagementHistory.filter(history => history.action == 'completed');
 
           if(completed.length == 0) {
-              var updated =  updatedEvents.filter((v, i) => updatedEvents.lastIndexOf(v) === i)
+              var current = new Date(moment())
               var date1_ms = moment(started[0].created_at);
-              var date2_ms = moment(updated[0].created_at);
+              var date2_ms = moment(current);
               return date2_ms.diff(date1_ms, 'days');
             } else {
             // Convert both dates to moment object

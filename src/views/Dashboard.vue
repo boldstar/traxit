@@ -201,20 +201,40 @@ export default {
             return title
         },
         countTasksLengthByStatus() {
-           const statuses = this.tasks.map(task => task.title)
+           const statuses = this.tasks.map(task => task.engagements[0])
 
-           const title = statuses.filter((v, i) => statuses.indexOf(v) === i)
+            const arr = statuses.map(({status}) => ({
+            title: status,
+            count: this.tasks.filter(task => task.engagements[0].status == status).length
+            }))
 
-           const res = statuses.reduce((acc, status) => {
-               const count = this.tasks.filter(task => task.title === status).length
+            const unique =  this.getUnique(arr, 'title')
 
-               acc.push(count)
+            const res = unique.reduce((acc, count) => {
+                acc.push(count.count)
 
-               return acc
-           }, [])
+                return acc
+            }, [])
 
-            const length = res.filter((v, i) => res.indexOf(v) === i)
-            return length
+            return res
+        },
+        getTaskLabels() {
+           const statuses = this.tasks.map(task => task.engagements[0])
+
+            const arr = statuses.map(({status}) => ({
+            title: status,
+            count: this.tasks.filter(task => task.engagements[0].status == status).length
+            }))
+
+            const unique =  this.getUnique(arr, 'title')
+
+            const res = unique.reduce((acc, count) => {
+                acc.push(count.title)
+
+                return acc
+            }, [])
+
+            return res
         },
         firmsetsfull() {
             return {
@@ -282,7 +302,7 @@ export default {
         },
         tasksetsfull() {
             return {
-                labels: this.tasksLabels,
+                labels: this.getTaskLabels,
                 datasets: [
                 {
                     label: 'Data One',
@@ -363,6 +383,10 @@ export default {
             const index = this.$refs.slide[0].$parent.currentPage
             const id = this.$refs.slide[index].title
             this.workflowKey = JSON.parse(id)
+        },
+        getUnique(arr, comp) {
+            const unique = arr.map(e => e[comp]).map((e, i, final) => final.indexOf(e) === i && i).filter(e => arr[e]).map(e => arr[e]);
+            return unique
         }
     },
     created() {

@@ -194,15 +194,27 @@ export default {
             return this.tasks.length
         },
         tasksLabels() {
-            const engagements = this.tasks.map(task => task.engagements)
+            const statuses = this.tasks.map(task => task.title)
 
-            const statuses = engagements.reduce((acc, engagement) => {
-                acc.push(engagement[0].status)
+           const title = statuses.filter((v, i) => statuses.indexOf(v) === i)
 
-                return acc
-            }, [])
+            return title
+        },
+        countTasksLengthByStatus() {
+           const statuses = this.tasks.map(task => task.title)
 
-            return statuses
+           const title = statuses.filter((v, i) => statuses.indexOf(v) === i)
+
+           const res = statuses.reduce((acc, status) => {
+               const count = this.tasks.filter(task => task.title === status).length
+
+               acc.push(count)
+
+               return acc
+           }, [])
+
+            const length = res.filter((v, i) => res.indexOf(v) === i)
+            return length
         },
         firmsetsfull() {
             return {
@@ -294,9 +306,7 @@ export default {
                             '#0077aa',
                             '#0077cc',
                         ],
-                    data: [
-                        this.countTasks
-                        ]  
+                    data: this.countTasksLengthByStatus
                     }
                 ],
                 centerText: this.tasks.length

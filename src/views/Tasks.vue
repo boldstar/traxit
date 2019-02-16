@@ -57,7 +57,7 @@
         </thead>
         <tbody class="table-bordered">
           <tr v-for="(task, index) in sortedTasks"  :key="index">
-            <th  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].status }}</th>
+            <th  @click="viewDetails(task.engagements[0].id)">{{ task.title }}</th>
             <th  @click="viewDetails(task.engagements[0].id)" class="text-capitalize" v-if="task.engagements[0].type == 'taxreturn'">{{fixCasing(task.engagements[0].type)}}</th>
             <th  @click="viewDetails(task.engagements[0].id)" class="text-capitalize" v-else>{{task.engagements[0].type}}</th>
             <td  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].name }}</td>

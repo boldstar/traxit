@@ -85,7 +85,8 @@
             </tr>
         </tbody>
     </table>
-        <div v-if="tableLoaded" class="lds-dual-ring justify-content-center"></div>
+
+        <spinner v-if="tableLoaded"></spinner>
 
 
     <!-- this is the pagination and dropdown for per page option -->
@@ -125,7 +126,7 @@
 </template>
 
 <script>
-
+import Spinner from '@/components/Spinner.vue'
 
 export default {
     name: 'client-info',
@@ -134,6 +135,9 @@ export default {
             type: Array,
             default: () => []
         }
+    },
+    components: {
+        Spinner
     },
     data() {
         return {

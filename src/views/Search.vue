@@ -85,8 +85,8 @@
         </div>
         
 
-        <div v-if="processing">Searching Records...</div>
-        <div v-if="processing" class="lds-dual-ring justify-content-center"></div>
+        <div v-if="processing" class="font-weight-bold">Searching Records...</div>
+        <spinner v-if="processing"></spinner>
 
         <div v-if="noResults">
             <img class="search-engine" src="@/assets/search-engine.png" alt="">
@@ -96,9 +96,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import Spinner from '@/components/Spinner.vue'
 
 export default {
     name: 'search',
+    components: {
+        Spinner
+    },
     data () {
         return {
             keyword: '',

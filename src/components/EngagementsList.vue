@@ -214,13 +214,14 @@
         </div>   
     </nav>
   
-        <div v-if="tableLoaded" class="lds-dual-ring justify-content-center"></div>
+        <spinner v-if="tableLoaded"></spinner>
 
     </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
+import Spinner from '@/components/Spinner.vue'
 
 export default {
     name: 'EngagementsList',
@@ -229,6 +230,9 @@ export default {
             type: Array,
             default: () => []
         }
+    },
+    components: {
+        Spinner
     },
     data() {
         return {

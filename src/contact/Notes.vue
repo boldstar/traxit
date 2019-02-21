@@ -53,7 +53,7 @@
 
         
     <!-- this is the loading ring for the notes -->
-    <div v-if="notesLoaded" class="lds-dual-ring justify-content-center"></div>
+    <spinner v-if="notesLoaded"></spinner>
 
     </div>
 </template>
@@ -62,6 +62,7 @@
 import { mapGetters } from 'vuex'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
+import Spinner from '@/components/Spinner.vue'
 
 
 export default {
@@ -75,6 +76,7 @@ export default {
     },
     components:{
         'b-modal': bModal,
+        Spinner
     },
     directives: {
         'b-modal': bModalDirective

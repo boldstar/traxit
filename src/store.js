@@ -207,6 +207,12 @@ export default new Vuex.Store({
       const index = state.tasks.findIndex(item => item.id == task.id);
       state.tasks.splice(index, 1);
     },
+    batchUpdateTasks(state, checkedTasks) {
+      checkedTasks.forEach((id) => {
+        const index = state.tasks.findIndex(e => e.id === id);
+        state.tasks.splice(index, 1)
+      })
+    },
     addUser(state, user) {
       state.users.push(user)
     },
@@ -620,6 +626,21 @@ export default new Vuex.Store({
       .catch(error => {
           console.log(error.response.data)
       })           
+    },
+    batchUpdateTasks(context, tasks) {
+      axios.patch('/batchUpdateTasks', {
+        tasksToUpdate: tasks.tasksToUpdate,
+        user_id: tasks.user_id,
+        status: tasks.status
+      })
+      .then(response => {
+        context.commit('successAlert', response.data.message)
+        context.commit('batchUpdateTasks', response.data.tasks)
+      })
+      .catch(err => {
+        console.log(err)
+        context.commit('errorMsgAlert', err.response.data.message)
+      })
     },
     retrieveUsers(context) {
       axios.get('/users')

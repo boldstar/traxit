@@ -61,7 +61,7 @@
 
         
     <!-- this is the loading ring for the engagements -->
-    <div v-if="engagementLoaded" class="lds-dual-ring justify-content-center"></div>
+    <spinner v-if="engagementLoaded"></spinner>
 
     </div>
 
@@ -71,9 +71,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import Spinner from '@/components/Spinner.vue'
 
 export default {
     name: 'contact-engagements',
+    components: {
+        Spinner
+    },
     data() {
         return {
             engagementLoaded: false,

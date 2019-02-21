@@ -116,9 +116,8 @@
 
   <div v-if="noEngagements &&!listLoaded" class="mt-5"><welcome></welcome></div>
 
-  <div v-if="listLoaded" class="lds-dual-ring justify-content-center"></div>
+  <spinner v-if="listLoaded"></spinner>
     
-
   </div>
 </template>
 
@@ -126,13 +125,14 @@
 import { mapGetters, mapActions } from 'vuex'
 import Alert from '@/components/Alert.vue'
 import Welcome from '@/components/Welcome.vue'
+import Spinner from '@/components/Spinner.vue'
 
 export default {
   name: 'FirmView',
   props: ['admin'],
   components: {
     Alert,
-    Welcome
+    Spinner
   },
   data() {
     return {
@@ -284,94 +284,5 @@ export default {
     color: #0077ff;
   }
 
- .lds-dual-ring {
-        display: inline-block;
-        width: 64px;
-        height: 64px;
-        margin-top: 100px;
-        margin-bottom: 100px;
-    }
-
-    .lds-dual-ring:after {
-        content: " ";
-        display: block;
-        width: 46px;
-        height: 46px;
-        margin: 1px;
-        border-radius: 50%;
-        border: 5px solid #0077ff;
-        border-color: #0077ff transparent #0077ff transparent;
-        animation: lds-dual-ring 1.2s linear infinite;
-    }
-        @keyframes lds-dual-ring {
-        0% {
-            transform: rotate(0deg);
-        }
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-
-    .lds-ellipsis-container {
-        position: absolute;
-        right: 50%;
-        padding-right: 20px;
-    }
-
-    .lds-ellipsis {
-        display: inline-block;
-        position: relative;
-        width: 64px;
-        height: 11px;
-    }
-
-    .lds-ellipsis div {
-        position: absolute;
-        width: 11px;
-        height: 11px;
-        border-radius: 50%;
-        background: #fff;
-        animation-timing-function: cubic-bezier(0, 1, 1, 0);
-    }
-
-    .lds-ellipsis div:nth-child(1) {
-        left: 6px;
-        animation: lds-ellipsis1 0.6s infinite;
-    }
-    .lds-ellipsis div:nth-child(2) {
-        left: 6px;
-        animation: lds-ellipsis2 0.6s infinite;
-    }
-    .lds-ellipsis div:nth-child(3) {
-        left: 26px;
-        animation: lds-ellipsis2 0.6s infinite;
-    }
-    .lds-ellipsis div:nth-child(4) {
-        left: 45px;
-        animation: lds-ellipsis3 0.6s infinite;
-    }
-    @keyframes lds-ellipsis1 {
-        0% {
-            transform: scale(0);
-        }
-        100% {
-            transform: scale(1);
-        }
-        }
-        @keyframes lds-ellipsis3 {
-        0% {
-            transform: scale(1);
-        }
-        100% {
-            transform: scale(0);
-        }
-        }
-        @keyframes lds-ellipsis2 {
-        0% {
-            transform: translate(0, 0);
-        }
-        100% {
-            transform: translate(19px, 0);
-        }
-    }
+ 
 </style>

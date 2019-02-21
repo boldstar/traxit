@@ -151,7 +151,7 @@
     </div>
 
 
-    <div v-if="detailsLoaded && $route.name == 'engagement-details'" class="lds-dual-ring justify-content-center"></div>
+    <spinner v-if="detailsLoaded && $route.name == 'engagement-details'"></spinner>
 
 <!-- this will show the child view if the route matches-->
   <router-view ></router-view>
@@ -163,6 +163,7 @@ import { mapGetters } from 'vuex'
 import Alert from '@/components/Alert.vue'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
+import Spinner from '@/components/Spinner.vue'
 
 export default {
   name: 'EngagementDetails',
@@ -180,7 +181,8 @@ export default {
   },
   components:{
     'b-modal': bModal,
-    Alert
+    Alert,
+    Spinner
   },
   directives: {
     'b-modal': bModalDirective

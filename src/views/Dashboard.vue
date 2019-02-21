@@ -78,7 +78,7 @@
         <div v-if="noData && !loading">
             <welcome></welcome> 
         </div>
-        <div v-if="loading && !noData" class="lds-dual-ring justify-content-center"></div>
+            <spinner v-if="loading && !noData"></spinner>
         </div>  
 </template>
 
@@ -86,6 +86,7 @@
 import DoughnutChart from '@/components/DoughnutChart.vue'
 import BarChart from '@/components/BarChart.vue'
 import Welcome from '@/components/Welcome.vue'
+import Spinner from '@/components/Spinner.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -93,7 +94,8 @@ export default {
     components: {
         DoughnutChart,
         BarChart,
-        Welcome
+        Welcome,
+        Spinner
     },
     data () {
         return {
@@ -103,6 +105,22 @@ export default {
             loading: false,
             noData: false,
             selected: false,
+            backgroundColors: [
+                '#0077ff', 
+                '#0022ff',
+                '#1133bb',
+                '#0088aa',
+                '#11ffdd',
+                '#1a75ff',
+                '#22aabb',
+                '#006699',
+                '#66ccff',
+                '#0077bb',
+                '#0000cc',
+                '#007788',
+                '#0077aa',
+                '#0077cc',
+            ]
         }
     },
     computed: {
@@ -193,13 +211,6 @@ export default {
         countTasks() {
             return this.tasks.length
         },
-        tasksLabels() {
-            const statuses = this.tasks.map(task => task.title)
-
-           const title = statuses.filter((v, i) => statuses.indexOf(v) === i)
-
-            return title
-        },
         countTasksLengthByStatus() {
            const statuses = this.tasks.map(task => task.engagements[0])
 
@@ -246,22 +257,7 @@ export default {
                     pointBackgroundColor: 'white',
                     borderWidth: 1,
                     pointBorderColor: 'white',
-                    backgroundColor: [
-                            '#0077ff', 
-                            '#0022ff',
-                            '#1133bb',
-                            '#0088aa',
-                            '#11ffdd',
-                            '#1a75ff',
-                            '#22aabb',
-                            '#006699',
-                            '#66ccff',
-                            '#0077bb',
-                            '#0000cc',
-                            '#007788',
-                            '#0077aa',
-                            '#0077cc',
-                        ],
+                    backgroundColor: this.backgroundColors,
                     data: this.countEngagementsLengthByWorkflow
                     }
                 ],
@@ -278,22 +274,7 @@ export default {
                     pointBackgroundColor: 'white',
                     borderWidth: 1,
                     pointBorderColor: 'white',
-                    backgroundColor: [
-                            '#0077ff', 
-                            '#0022ff',
-                            '#1133bb',
-                            '#0088aa',
-                            '#11ffdd',
-                            '#1a75ff',
-                            '#22aabb',
-                            '#006699',
-                            '#66ccff',
-                            '#0077bb',
-                            '#0000cc',
-                            '#007788',
-                            '#0077aa',
-                            '#0077cc',
-                        ],
+                    backgroundColor: this.backgroundColors,
                     data: this.countEngagementsByStatus[0].statuses
                     }
                 ],
@@ -310,22 +291,7 @@ export default {
                     pointBackgroundColor: 'white',
                     borderWidth: 1,
                     pointBorderColor: 'white',
-                    backgroundColor: [
-                            '#0077ff', 
-                            '#0022ff',
-                            '#1133bb',
-                            '#0088aa',
-                            '#11ffdd',
-                            '#1a75ff',
-                            '#22aabb',
-                            '#006699',
-                            '#66ccff',
-                            '#0077bb',
-                            '#0000cc',
-                            '#007788',
-                            '#0077aa',
-                            '#0077cc',
-                        ],
+                    backgroundColor: this.backgroundColors,
                     data: this.countTasksLengthByStatus
                     }
                 ],
@@ -337,22 +303,7 @@ export default {
                 labels: this.mapWorkflows,
                 datasets: [
                     {
-                    backgroundColor: [
-                            '#0077ff', 
-                            '#0022ff',
-                            '#1133bb',
-                            '#0088aa',
-                            '#11ffdd',
-                            '#1a75ff',
-                            '#22aabb',
-                            '#006699',
-                            '#66ccff',
-                            '#0077bb',
-                            '#0000cc',
-                            '#007788',
-                            '#0077aa',
-                            '#0077cc',
-                        ],
+                    backgroundColor: this.backgroundColors,
                     data: this.countEngagementsCompleteByWorkflow
                     }
                 ]

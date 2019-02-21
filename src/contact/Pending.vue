@@ -59,7 +59,8 @@
                     </form>
             </b-modal>
 
-        <div v-if="detailsLoaded" class="lds-dual-ring justify-content-center"></div>
+
+        <spinner v-if="detailsLoaded"></spinner>
     </div>
 </template>
 
@@ -68,6 +69,7 @@ import { mapGetters, mapActions } from 'vuex'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 import { VueEditor } from "vue2-editor";
+import Spinner from '@/components/Spinner.vue'
 
 export default {
 name: 'Pending',
@@ -83,7 +85,8 @@ data() {
 },
 components:{
     'b-modal': bModal,
-    VueEditor
+    VueEditor,
+    Spinner
 },
 directives: {
     'b-modal': bModalDirective

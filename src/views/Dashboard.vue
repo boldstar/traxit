@@ -108,6 +108,7 @@ export default {
             backgroundColors: [
                 '#0077ff', 
                 '#0022ff',
+                '#0050ff',
                 '#1133bb',
                 '#0088aa',
                 '#11ffdd',
@@ -120,6 +121,11 @@ export default {
                 '#007788',
                 '#0077aa',
                 '#0077cc',
+                '#2d8fff',
+                '#2673cc',
+                '#00d8ff',
+                '#0043d3',
+                '#0015ff'
             ]
         }
     },

@@ -11,7 +11,8 @@
             </span>
           </p>
           <div class="align-self-center">
-            <button class="btn btn-sm btn-secondary mr-2 font-weight-bold" @click="searchInputMethod"><i class="fas fa-search mr-2"></i>Filter</button>
+            <button class="btn btn-sm btn-outline-dark mr-2 font-weight-bold" @click="showBatchColumn"><i class="fas fa-tasks mr-2"></i>Batch</button>
+            <button class="btn btn-sm btn-outline-secondary mr-2 font-weight-bold" @click="searchInputMethod"><i class="fas fa-search mr-2"></i>Filter</button>
             <button class="btn btn-sm btn-outline-primary font-weight-bold" @click="refreshTask"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
           </div>
         </div>
@@ -46,8 +47,8 @@
       <table class="table table-hover text-center" v-if="!tasksLoaded && taskData">
         <thead class="bg-primary text-light">
           <tr>
-            <th scope="col">Batch</th>
-            <th scope="col" @click="sort('workflow')">Workflow</th>
+            <th scope="col" v-if="batchUpdateColumn">Batch</th>
+            <th scope="col" v-if="batchUpdateColumn" @click="sort('workflow')">Workflow</th>
             <th scope="col">Task</th>
             <th scope="col">Type</th>
             <th scope="col" @click="sort('name')">Client</th>
@@ -61,8 +62,8 @@
         </thead>
         <tbody class="table-bordered">
           <tr v-for="(task, index) in sortedTasks"  :key="index" :class="{'highlight-row': checkedTasks.includes(task.id)}">
-            <th class="task-border" data-toggle="tooltip" data-placement="left" title="Click To Batch Update" @click="checkTask(task.id, task.engagements[0].workflow_id)" :class="{'checkedtasks': checkedTasks.includes(task.id)}"><i v-if="checkedTasks.includes(task.id)" class="fas fa-check"></i></th>
-            <th  @click="viewDetails(task.engagements[0].id)">{{ workflowName(task.engagements[0].workflow_id) }}</th>
+            <th v-if="batchUpdateColumn" class="task-border" data-toggle="tooltip" data-placement="left" title="Click To Batch Update" @click="checkTask(task.id, task.engagements[0].workflow_id)" :class="{'checkedtasks': checkedTasks.includes(task.id)}"><i v-if="checkedTasks.includes(task.id)" class="fas fa-check"></i></th>
+            <th v-if="batchUpdateColumn"  @click="viewDetails(task.engagements[0].id)">{{ workflowName(task.engagements[0].workflow_id) }}</th>
             <th  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].status }}</th>
             <th  @click="viewDetails(task.engagements[0].id)" class="text-capitalize" v-if="task.engagements[0].type == 'taxreturn'">{{fixCasing(task.engagements[0].type)}}</th>
             <th  @click="viewDetails(task.engagements[0].id)" class="text-capitalize" v-else>{{task.engagements[0].type}}</th>
@@ -84,7 +85,7 @@
         </tbody>
       </table>
 
-      <div class="d-flex" v-if="batchUpdate">
+      <div class="d-flex mb-4" v-if="batchUpdate">
         <button v-if="batchUpdate" class="btn btn-primary font-weight-bold mr-3" @click="requestBatchUpdate">Batch Update</button>
         <button v-if="batchUpdate" class="btn btn-secondary font-weight-bold" @click="clearBatch">Cancel Batch Update</button>
       </div>
@@ -210,6 +211,7 @@ export default {
       completed: false,
       taskData: false,
       searchInput:  false,
+      batchUpdateColumn: false,
       batchUpdate: false,
       batchModal: false,
       userError: false,
@@ -254,6 +256,14 @@ export default {
   },
   methods: {
     ...mapActions(['updateTask', 'batchUpdateTasks']),
+    showBatchColumn() {
+      this.batchUpdateColumn = !this.batchUpdateColumn
+      this.batchAlert = ''
+      this.batchModal = false
+      this.batchUpdate = false
+      this.formError = false
+      this.checkedTasks = []
+    },
     requestBatchUpdate() {
         this.$store.dispatch('retrieveUsers');
         this.$store.dispatch('retrieveWorkflows');
@@ -338,8 +348,6 @@ export default {
         this.dropDowns = false
         this.completed = false
     },
-    
-
     acceptUpdate() {
       if(this.taskToUpdate && this.dropDowns === true) {
           if(!this.task.user_id) return;

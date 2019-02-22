@@ -8,7 +8,8 @@ import router from './router'
 
 export const ability = appAbility
 Vue.use(Vuex)
-axios.defaults.baseURL = 'http://staging.traxit.test/api'
+axios.defaults.baseURL = process.env.VUE_APP_ROOT_API
+
 
 export default new Vuex.Store({
   plugins: [

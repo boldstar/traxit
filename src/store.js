@@ -8,12 +8,7 @@ import router from './router.js'
 
 export const ability = appAbility
 Vue.use(Vuex)
-<<<<<<< HEAD
 axios.defaults.baseURL = 'https://aewcpa.traxit.pro/api'
-=======
-axios.defaults.baseURL = process.env.VUE_APP_ROOT_API
-
->>>>>>> developer
 
 export default new Vuex.Store({
   plugins: [  

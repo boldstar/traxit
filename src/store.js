@@ -9,9 +9,6 @@ import router from './router.js'
 export const ability = appAbility
 Vue.use(Vuex)
 axios.defaults.baseURL = 'https://staging.traxit.pro/api'
-axios.defaults.headers.common['header1'] = {
-  'X-Requested-With': 'XMLHttpRequest',
-}
 
 export default new Vuex.Store({
   plugins: [  

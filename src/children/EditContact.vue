@@ -34,8 +34,8 @@
 
         <div class="d-flex mb-3">
           <input type="text" class="form-control" placeholder="email@example.com" v-model="client.email">
-          <input type="text" class="form-control mx-2" placeholder="Cell Phone #" v-model="client.cell_phone">
-          <input type="text" class="form-control" placeholder="Work Phone #" v-model="client.work_phone">
+          <number-input :placeholder="'Cell Phone'" v-model="client.cell_phone" mask-type="number" class="mx-2"></number-input>
+          <number-input :placeholder="'Work Phone'" v-model="client.work_phone" mask-type="number"></number-input>
         </div>
 
         <div v-if="client.has_spouse == true">
@@ -53,8 +53,8 @@
 
           <div class="d-flex mb-3">
             <input type="text" class="form-control" placeholder="email@example.com" v-model="client.spouse_email">
-            <input type="text" class="form-control mx-2" placeholder="Cell Phone #" v-model="client.spouse_cell_phone">
-            <input type="text" class="form-control" placeholder="Work Phone #" v-model="client.spouse_work_phone">
+            <number-input :placeholder="'Cell Phone'"  v-model="client.spouse_cell_phone" mask-type="number" class="mx-2"></number-input>
+          <number-input :placeholder="'Work Phone'"  v-model="client.spouse_work_phone" mask-type="number"></number-input>
           </div>
         </div>
         
@@ -83,11 +83,13 @@
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
 import DateInput from '@/components/DateInput.vue'
+import NumberInput from '@/components/NumberInput.vue'
 
 export default {
   name: 'EditContact',
   components: {
-    DateInput
+    DateInput,
+    NumberInput
   },
   data () {
     return {

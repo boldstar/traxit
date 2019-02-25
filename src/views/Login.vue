@@ -31,7 +31,7 @@
                             <div v-if="loading">
                             <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                             </div>
-                            <span v-show="!loading">Login</span>
+                            <span v-show="!loading"  class="font-weight-bold">Login</span>
                         </button>
                         <div class="forgot d-flex justify-content-between">
                             <span>Forgot password?  </span> <router-link to="/get-reset-link">Click Here</router-link>
@@ -108,12 +108,12 @@ export default {
     .lds-ellipsis {
   display: inline-block;
   position: relative;
-  width: 64px;
-  height: 64px;
+  width:60px;
+  height: 20px;
     }
     .lds-ellipsis div {
     position: absolute;
-    top: 27px;
+    top: 8px;
     width: 11px;
     height: 11px;
     border-radius: 50%;

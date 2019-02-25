@@ -21,6 +21,7 @@
             <table class="table table-hover">
                 <thead class="text-primary border">
                     <tr>
+                    <th  scope="col">Name</th>
                     <th  scope="col">Category</th>
                     <th  scope="col">Type</th>
                     <th  scope="col">Return Type</th>
@@ -34,6 +35,7 @@
                 </thead>
                 <tbody class="table-bordered">
                     <tr v-for="(engagement, index) in clientEngagements" :key="index" @click="viewDetails(engagement.id)">
+                    <th class="text-capitalize">{{ engagement.name }}</th>
                     <th class="text-capitalize">{{ engagement.category}}</th>
                     <th class="text-capitalize" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</th>
                     <th class="text-capitalize" v-else>{{ engagement.type }}</th>

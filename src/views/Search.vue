@@ -55,6 +55,7 @@
                         <table class="table mb-0">
                             <thead class="text-primary">
                                 <tr>
+                                    <th scope="col">Name</th>
                                     <th scope="col">Type</th>
                                     <th scope="col">Return Type</th>
                                     <th scope="col">Time Period</th>
@@ -66,6 +67,7 @@
                             </thead>
                             <tbody class="table-bordered">
                                 <tr v-for="(engagement, index) in result.engagements" :key="index" >
+                                     <th>{{engagement.name}}</th>
                                     <td class="text-capitalize" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</td>
                                     <td class="text-capitalize" v-else>{{ engagement.type }}</td>
                                     <td v-if="engagement.return_type != null">{{ engagement.return_type }}</td>

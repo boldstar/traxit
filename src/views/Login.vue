@@ -31,7 +31,7 @@
                             <div v-if="loading">
                             <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                             </div>
-                            <span v-show="!loading">Login</span>
+                            <span v-show="!loading"  class="font-weight-bold">Login</span>
                         </button>
                         <div class="forgot d-flex justify-content-between">
                             <span>Forgot password?  </span> <router-link to="/get-reset-link">Click Here</router-link>
@@ -104,4 +104,61 @@ export default {
     .forgot {
         font-size: 12px;
     }
+
+    .lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width:60px;
+  height: 20px;
+    }
+    .lds-ellipsis div {
+    position: absolute;
+    top: 8px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #fff;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+    }
+    .lds-ellipsis div:nth-child(1) {
+    left: 6px;
+    animation: lds-ellipsis1 0.6s infinite;
+    }
+    .lds-ellipsis div:nth-child(2) {
+    left: 6px;
+    animation: lds-ellipsis2 0.6s infinite;
+    }
+    .lds-ellipsis div:nth-child(3) {
+    left: 26px;
+    animation: lds-ellipsis2 0.6s infinite;
+    }
+    .lds-ellipsis div:nth-child(4) {
+    left: 45px;
+    animation: lds-ellipsis3 0.6s infinite;
+    }
+    @keyframes lds-ellipsis1 {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+    }
+    @keyframes lds-ellipsis3 {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0);
+    }
+    }
+    @keyframes lds-ellipsis2 {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(19px, 0);
+    }
+    }
+
 </style>

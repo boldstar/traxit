@@ -57,7 +57,8 @@ export default new Vuex.Store({
     resetError:'',
     resetSuccess: '',
     passwordAlert: '',
-    chartData: ''
+    chartData: '',
+    subscribe: null
   },
   getters: {
     chartDataLength(state) {
@@ -161,6 +162,9 @@ export default new Vuex.Store({
     },
     accountDetails(state) {
       return state.account
+    },
+    subscribeView(state) {
+      return state.subscribe
     }
   },
   mutations: {
@@ -447,6 +451,9 @@ export default new Vuex.Store({
     },
     clearResetToken(state) {
       state.resetToken = ''
+    },
+    subscribeView(state, data) {
+      state.subscribe = data
     }
   },
   actions: {
@@ -1293,8 +1300,11 @@ export default new Vuex.Store({
     getAccountDetails(context) {
       axios.get('/account')
       .then(response => {
-        console.log(response.data)
-        context.commit('accountDetails', response.data)
+        if(typeof(response.data) === 'object') {
+          context.commit('accountDetails', response.data)
+        } else {
+          context.commit('subscribeView', response.data)
+        }
       })
       .catch(error => {
         console.log(error.response.data)

@@ -5,15 +5,15 @@
         </div>
         <div class="col-6 card-body bg-light">
             <form @submit.prevent="addThisAccount" class="d-flex-column justify-content-center">
-              <input type="text" class="form-control mb-3" placeholder="Business Name" v-model="account.business_name">
-              <input type="text" class="form-control mb-3" placeholder="Address" v-model="account.address">
-              <input type="text" class="form-control mb-3" placeholder="City" v-model="account.city">
-              <input type="text" class="form-control mb-3" placeholder="State" v-model="account.state">
-              <input type="text" class="form-control mb-3" placeholder="Postal Code" v-model="account.postal_code">
-              <input type="text" class="form-control mb-3" placeholder="Email" v-model="account.email">
-              <input type="text" class="form-control mb-3" placeholder="Phone Number" v-model="account.phone_number">
-              <input type="text" class="form-control mb-3" placeholder="Fax Number" v-model="account.fax_number">
-              <input type="text" class="form-control mb-3" placeholder="Subscription" v-model="account.subscription">
+              <input type="text" class="form-control mb-3" placeholder="Business Name" v-model="accountDetails.business_name">
+              <input type="text" class="form-control mb-3" placeholder="Address" v-model="accountDetails.address">
+              <input type="text" class="form-control mb-3" placeholder="City" v-model="accountDetails.city">
+              <input type="text" class="form-control mb-3" placeholder="State" v-model="accountDetails.state">
+              <input type="text" class="form-control mb-3" placeholder="Postal Code" v-model="accountDetails.postal_code">
+              <input type="text" class="form-control mb-3" placeholder="Email" v-model="accountDetails.email">
+              <input type="text" class="form-control mb-3" placeholder="Phone Number" v-model="accountDetails.phone_number">
+              <input type="text" class="form-control mb-3" placeholder="Fax Number" v-model="accountDetails.fax_number">
+              <input type="text" class="form-control mb-3" placeholder="Subscription" v-model="accountDetails.subscription">
               <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-primary">Update</button>
                 <router-link to="/administrator/account" class="btn btn-secondary">Cancel</router-link>
@@ -27,20 +27,10 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-    name: 'EditDependent',
+    name: 'EditAccount',
     data() {
       return {
-        account: {
-          business_name: '',
-          email: '',
-          phone_number: '',
-          fax_number: '',
-          address: '',
-          city: '',
-          state: '',
-          postal_code: '',
-          subscription: '',
-        }
+       // not needed for now
       }
     },
     computed: {
@@ -53,16 +43,16 @@ export default {
       
       this.addAccountDetails({
         id: this.idForAccount,
-        business_name: this.account.business_name,
-        email: this.account.email,
-        phone_number: this.account.phone_number,
-        fax_number: this.account.fax_number,
-        address: this.account.address,
-        city: this.account.city,
-        state: this.account.state,
-        postal_code: this.account.postal_code,
-        logo: this.account.logo,
-        subscription: this.account.subscription
+        business_name: this.accountDetails.business_name,
+        email: this.accountDetails.email,
+        phone_number: this.accountDetails.phone_number,
+        fax_number: this.accountDetails.fax_number,
+        address: this.accountDetails.address,
+        city: this.accountDetails.city,
+        state: this.accountDetails.state,
+        postal_code: this.accountDetails.postal_code,
+        logo: this.accountDetails.logo,
+        subscription: this.accountDetails.subscription
       })   
       .then(() => {
         this.idForAccount++ 

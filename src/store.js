@@ -70,7 +70,7 @@ export default new Vuex.Store({
       return state.user
     },
     loggedIn(state) {
-      return state.token != null;
+      return state.token != null || undefined;
     },
     resetToken(state) {
       return state.resetToken
@@ -587,11 +587,13 @@ export default new Vuex.Store({
               password: credentials.password,
           })
           .then(response => {
-              const token = response.data.access_token
+            const token = response.data.access_token
+            if(token != null || token != undefined) {
               const date = new Date(moment().add(1, 'day').toDate());
-              localStorage.setItem('expires_on', date)
-              localStorage.setItem('access_token', token)
-              commit('createSession', response.data)
+              localStorage.setItem('expires_on', date);
+              localStorage.setItem('access_token', token);
+              commit('createSession', response.data);
+              }
               resolve(response)
           })
           .catch(error => {
@@ -1291,6 +1293,7 @@ export default new Vuex.Store({
     getAccountDetails(context) {
       axios.get('/account')
       .then(response => {
+        console.log(response.data)
         context.commit('accountDetails', response.data)
       })
       .catch(error => {

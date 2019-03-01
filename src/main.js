@@ -59,7 +59,8 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {     
     // this route requires auth, check if logged in
     // if not, redirect to login page.
-    if (!store.getters.loggedIn) {
+    var token = store.getters.loggedIn;
+    if (!token || token == null || token == undefined ) {
       next({
         path: '/login',
       })
@@ -69,7 +70,7 @@ router.beforeEach((to, from, next) => {
   }else if (to.matched.some(record => record.meta.requiresVisitor)) {
     // this route requires auth, check if logged in
     // if yes, redirect to home page.
-    if (store.getters.loggedIn) {
+    if (token || token != null || token != undefined) {
       next({
         path: '/',
       })
@@ -77,7 +78,7 @@ router.beforeEach((to, from, next) => {
       next()
     }
   } else if(to.matched.some(record => record.meta.passwordReset)) {
-    if(store.getters.loggedIn || !store.getters.loggedIn) {
+    if(token || !token) {
       next()
     }
   }

@@ -1391,6 +1391,15 @@ export default new Vuex.Store({
         context.commit('stopProcessing')
         console.log(err.response.data)
       })
+    },
+    getSubscription(context) {
+      axios.get('/subscription')
+      .then(response => {
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
     }
   }, 
 })

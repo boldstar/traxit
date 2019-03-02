@@ -81,6 +81,15 @@ export default new Router({
             ]
           },
           {
+            path: 'subscription',
+            name: 'subscription',
+            component: () => import('@/children/Subscription.vue'),
+            meta: {
+              requiresAuth: true,
+              layout: "admin"
+            }
+          },
+          {
           path: 'workflows',
           name: 'workflows',
           component: () => import('@/children/Workflows.vue'),

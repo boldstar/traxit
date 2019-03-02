@@ -5,6 +5,7 @@
             <div class="col-2 p-0 sidebar">
                 <ul class="admin-nav text-right h5 d-flex flex-column p-0 m-0">
                     <router-link class="py-3 text-muted pr-4" to="/administrator/account" :class="{ 'is-selected': $route.name === 'app-account' }">Account</router-link>
+                    <router-link class="py-3 text-muted pr-4" to="/administrator/subscription" :class="{ 'is-selected': $route.name === 'subscription' }">Subscription</router-link>
                     <router-link class="py-3 text-muted pr-4" to="/administrator/users" :class="{ 'is-selected': $route.name === 'users' }">Team</router-link>
                     <router-link class="py-3 text-muted pr-4" to="/administrator/workflows" :class="{ 'is-selected': $route.name === 'workflows' }">Workflows</router-link>
                     <router-link class="py-3 text-muted pr-4" to="/administrator/reports" :class="{ 'is-selected': $route.name === 'reports' }">Reports</router-link>

@@ -1433,7 +1433,19 @@ export default new Vuex.Store({
       .catch(error => {
         console.log(error.response.data)
       })
-    }
+    },
+    cancelSubscription(context) {
+      axios.post('/cancel-subscription')
+      .then(response => {
+        console.log(response.data)
+        context.dispatch('destroyToken')
+        router.push('/login')
+        context.commit('subscribeView', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    } 
   }, 
 })
 

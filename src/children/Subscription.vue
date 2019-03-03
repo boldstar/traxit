@@ -1,10 +1,15 @@
 <template>
   <div class="mt-3">
+    <div v-if="$route.name == 'subscription'">
+
     <div class="d-flex justify-content-between">
       <h3 class="m-0">Subscription</h3>
       <div class="d-flex">
         <div class=" align-self-center">
-          <router-link :to="{path: '/administrator/account/add-account'}" class="btn btn-primary font-weight-bold">View Plans</router-link>
+          <button class="btn btn-secondary font-weight-bold mr-3" @click="requestToCancel()">Cancel Subscription</button>
+        </div>
+        <div class=" align-self-center">
+          <router-link to="/administrator/subscription/plans" class="btn btn-primary font-weight-bold">View Plans</router-link>
         </div>
       </div>
     </div>
@@ -21,8 +26,8 @@
            </ul>
          </div>
          <div class="card-header d-flex justify-content-between">
-           <button class="btn btn-sm btn-secondary font-weight-bold">Cancel</button>
-           <button class="btn btn-sm btn-primary font-weight-bold">Upgrade</button>
+           <button class="btn btn-sm btn-secondary font-weight-bold" @click="requestToCancel()">Cancel</button>
+           <router-link to="/administrator/subscription/plans" class="btn btn-sm btn-primary font-weight-bold">Upgrade</router-link>
          </div>
        </div>
        <div class="w-75 text-left">
@@ -49,20 +54,39 @@
         </table>
        </div>
      </div>
+    </div>
 
-      <!-- this is for viewing the account form -->
-      <router-view></router-view>
+      <b-modal v-model="cancelModal" ref="modal" hide-footer title="Cancel Subscription">
+          <div class="p-3 d-flex flex-column align-items-center">
+            <i class="far fa-frown fa-5x mb-3 text-primary"></i>
+            <span class="h5">
+              Are your sure you would like to cancel your subscription?
+            </span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <button class="btn btn-primary btn-sm" @click="cancelModal = false">Cancel</button>
+            <button class="btn btn-secondary btn-sm font-weight-bold" @click="confirmCancel">Confirm</button>
+          </div>
+      </b-modal>
+
+      <!-- this is for viewing the subscription plans -->
+      <router-view :plans="plans" v-if="$route.name == 'plans'"></router-view>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import bModal from 'bootstrap-vue/es/components/modal/modal'
+import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 
 export default {
   name: 'subscription',
+  components: {
+    'b-modal': bModal,
+  },
   data() {
     return {
-      
+      cancelModal: false
     }
   },
   computed: {
@@ -79,7 +103,15 @@ export default {
       }
   },
   methods: {
-   
+    requestToCancel() {
+      this.cancelModal = true
+    },
+    confirmCancel() {
+      this.$store.dispatch('cancelSubscription')
+      .then(() => {
+        this.cancelModal = false
+      })
+    }
   },
   created: function() {
     this.$store.dispatch('getInvoices')

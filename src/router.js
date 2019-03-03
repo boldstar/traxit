@@ -87,7 +87,18 @@ export default new Router({
             meta: {
               requiresAuth: true,
               layout: "admin"
-            }
+            },
+            children: [
+              {
+                path: 'plans',
+                name: 'plans',
+                component: () => import('@/children/Plans.vue'),
+                meta: {
+                  requiresAuth: true,
+                  layout: "admin"
+                },
+              }
+            ]
           },
           {
           path: 'workflows',

@@ -58,7 +58,10 @@ export default new Vuex.Store({
     resetSuccess: '',
     passwordAlert: '',
     chartData: '',
-    subscribe: null
+    subscribe: null,
+    invoices: '',
+    plan: '',
+    plans: ''
   },
   getters: {
     chartDataLength(state) {
@@ -165,6 +168,15 @@ export default new Vuex.Store({
     },
     subscribeView(state) {
       return state.subscribe
+    },
+    invoices(state) {
+      return state.invoices
+    },
+    plan(state) {
+      return state.plan
+    },
+    plans(state) {
+      return state.plans
     }
   },
   mutations: {
@@ -454,6 +466,15 @@ export default new Vuex.Store({
     },
     subscribeView(state, data) {
       state.subscribe = data
+    },
+    subscriptionInvoices(state, data) {
+      state.invoices = data
+    },
+    subscriptionPlan(state, data) {
+      state.plan = data
+    },
+    subscriptionPlans(state, data) {
+      state.plans = data
     }
   },
   actions: {
@@ -1392,10 +1413,22 @@ export default new Vuex.Store({
         console.log(err.response.data)
       })
     },
-    getSubscription(context) {
+    getInvoices(context) {
       axios.get('/subscription')
       .then(response => {
         console.log(response.data)
+        context.commit('subscriptionInvoices', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    getPlans(context) {
+      axios.get('/plans')
+      .then(response => {
+        console.log(response.data)
+        context.commit('subscriptionPlan', response.data.plan);
+        context.commit('subscriptionPlans', response.data.plans);
       })
       .catch(error => {
         console.log(error.response.data)

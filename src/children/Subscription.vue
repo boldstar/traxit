@@ -70,7 +70,7 @@
       </b-modal>
 
       <!-- this is for viewing the subscription plans -->
-      <router-view :plans="plans" v-if="$route.name == 'plans'"></router-view>
+      <router-view :plans="plans" :current="plan.id" v-if="$route.name == 'plans'"></router-view>
   </div>
 </template>
 
@@ -86,7 +86,8 @@ export default {
   },
   data() {
     return {
-      cancelModal: false
+      cancelModal: false,
+      current: ''
     }
   },
   computed: {
@@ -124,5 +125,9 @@ export default {
 
 ul {
   list-style: none!important;
+}
+
+.card {
+  max-height: 300px !important;
 }
 </style>

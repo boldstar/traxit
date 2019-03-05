@@ -1434,6 +1434,17 @@ export default new Vuex.Store({
         console.log(error.response.data)
       })
     },
+    swapPlan(context, plan) {
+      axios.post('/upgrade-subscription', {
+        product: plan.product
+      })
+      .then(response => {
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
     cancelSubscription(context) {
       axios.post('/cancel-subscription')
       .then(response => {

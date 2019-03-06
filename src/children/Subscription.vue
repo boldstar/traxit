@@ -18,7 +18,7 @@
     <hr>
     <Alert v-if="successAlert" :message="successAlert" />
     <div class="processing p-2 mb-3 font-weight-bold text-light text-center bg-primary" v-if="processing">Resuming Your Account, Just A Moment!</div>
-     <div class="d-flex justify-content-between">
+     <div class="d-flex justify-content-between" v-if="plan">
        <div class="card w-25 mr-3">
          <div class="card-header d-flex justify-content-between">
            <span class="font-weight-bold h5">{{plan.nickname}}</span>
@@ -59,7 +59,7 @@
          <div class="card-header d-flex justify-content-between">
            <button class="btn btn-sm btn-secondary font-weight-bold" @click="requestToCancel()" v-if="!subscription.cancel_at_period_end">Cancel</button>
            <button class="btn btn-sm btn-secondary font-weight-bold" @click="resumeSub()" v-if="subscription.cancel_at_period_end">Resume</button>
-           <router-link to="/administrator/subscription/plans" class="btn btn-sm btn-primary font-weight-bold">Upgrade</router-link>
+           <router-link to="/administrator/subscription/plans" class="btn btn-sm btn-primary font-weight-bold">Change</router-link>
          </div>
        </div>
        <div class="w-75 text-left">

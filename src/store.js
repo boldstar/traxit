@@ -1448,13 +1448,17 @@ export default new Vuex.Store({
       })
     },
     swapPlan(context, plan) {
+      context.commit('startProcessing')
       axios.post('/upgrade-subscription', {
         product: plan.product
       })
       .then(response => {
-        console.log(response.data)
+        context.commit('stopProcessing')
+        router.push('/administrator/subscription')
+        context.commit('successAlert', response.data.message)
       })
       .catch(error => {
+        context.commit('stopProcessing')
         console.log(error.response.data)
       })
     },
@@ -1483,7 +1487,6 @@ export default new Vuex.Store({
     checkGracePeriod(context) {
       axios.get('/grace')
       .then(response => {
-        console.log(response.data)
         if(response.data != false) {
           context.commit('gracePeriod', response.data)
         }

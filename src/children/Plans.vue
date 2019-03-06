@@ -9,6 +9,7 @@
       </div>
     </div>
     <hr>
+    <div v-if="processing" class="p-2 bg-primary text-light font-weight-bold processing mb-3">Switching Plans, Please Hold...</div>
      <div class="d-flex justify-content-between">
        <div class="card w-25 mr-3" :class="{'current' : plan.id === current}" v-for="(plan, index) in computedPlans" :key="index">
          <div class="card-header d-flex justify-content-between">
@@ -48,7 +49,9 @@
            </ul>
          </div>
          <div class="card-footer d-flex justify-content-between" v-if="plan.id != current">
-           <button class="btn btn-sm btn-primary font-weight-bold" @click="requestSwap(plan.id, plan.nickname)">Upgrade</button>
+            <button class="btn btn-sm btn-primary font-weight-bold" @click="requestSwap(plan.id, plan.nickname)" :disabled="processing">
+              Switch
+            </button>
          </div>
          <div class="card-footer d-flex justify-content-center" v-else>
            <span class="current-label">Current</span>
@@ -56,16 +59,16 @@
        </div>
      </div>
 
-     <b-modal v-model="upgradeModal" ref="modal" hide-footer title="Change Subscription Plan">
-          <div class="p-3 d-flex flex-column align-items-center">
-            <span class="h5">
-              Are your sure you would like to change your subscription to the <strong class="text-primary">{{ name }}</strong> plan?
-            </span>
-          </div>
-          <div class="d-flex justify-content-between">
-            <button class="btn btn-primary btn-sm font-weight-bold" @click="upgradeModal = false">Nevermind</button>
-            <button class="btn btn-secondary btn-sm font-weight-bold" @click="confirmSwap">Yes, Continue</button>
-          </div>
+      <b-modal v-model="upgradeModal" ref="modal" hide-footer title="Change Subscription Plan">
+        <div class="p-3 d-flex flex-column align-items-center">
+          <span class="h5">
+            Are your sure you would like to change your subscription to the <strong class="text-primary">{{ name }}</strong> plan?
+          </span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <button class="btn btn-primary btn-sm font-weight-bold" @click="upgradeModal = false">Nevermind</button>
+          <button class="btn btn-secondary btn-sm font-weight-bold" @click="confirmSwap">Yes, Continue</button>
+        </div>
       </b-modal>
 
   </div>
@@ -114,7 +117,6 @@ export default {
         this.upgradeModal = false
         this.name = ''
         this.plan_id = ''
-        this.$router.push('/administrator/subscription')
       })
     }
   }
@@ -141,5 +143,9 @@ ul {
 
 li {
   margin-bottom: 5px;
+}
+
+.processing {
+  border-radius: 8px;
 }
 </style>

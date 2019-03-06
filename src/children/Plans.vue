@@ -11,13 +11,40 @@
     <hr>
      <div class="d-flex justify-content-between">
        <div class="card w-25 mr-3" :class="{'current' : plan.id === current}" v-for="(plan, index) in computedPlans" :key="index">
-         <div class="card-header">
+         <div class="card-header d-flex justify-content-between">
            <span class="font-weight-bold h5">{{plan.nickname}}</span>
+           <span class="font-weight-bold h5 text-primary">{{plan.amount}}/{{plan.interval}}</span>
          </div>
          <div class="card-body">
            <ul class="p-0 text-left font-weight-bold">
-             <li class="mb-3">Active: <input type="checkbox" v-model="plan.active"></li>
-             <li>Amount: {{plan.amount}}/{{plan.interval}}</li>
+             <li class="d-flex justify-content-between">
+               <span>Tasks</span>
+               <span><i class="fas fa-check"></i></span>
+             </li>
+             <li class="d-flex justify-content-between">
+               <span>Workflows</span>
+               <span><i class="fas fa-check"></i></span>
+             </li>
+             <li class="d-flex justify-content-between">
+               <span>Reports</span>
+               <span><i class="fas fa-check"></i></span>
+             </li>
+             <li class="d-flex justify-content-between">
+               <span>Data Visualization</span>
+               <span><i class="fas fa-check"></i></span>
+             </li>
+             <li class="d-flex justify-content-between">
+               <span>Team</span>
+               <span class="text-primary">{{plan.metadata.team}}</span>
+             </li>
+             <li class="d-flex justify-content-between">
+               <span>Engagements</span>
+               <span class="text-primary">{{plan.metadata.engagements}}</span>
+             </li>
+             <li class="d-flex justify-content-between">
+               <span>Support</span>
+               <span class="text-primary">{{plan.metadata.support}}</span>
+             </li>
            </ul>
          </div>
          <div class="card-footer d-flex justify-content-between" v-if="plan.id != current">
@@ -36,8 +63,8 @@
             </span>
           </div>
           <div class="d-flex justify-content-between">
-            <button class="btn btn-primary btn-sm" @click="upgradeModal = false">Cancel</button>
-            <button class="btn btn-secondary btn-sm font-weight-bold" @click="confirmSwap">Confirm</button>
+            <button class="btn btn-primary btn-sm font-weight-bold" @click="upgradeModal = false">Nevermind</button>
+            <button class="btn btn-secondary btn-sm font-weight-bold" @click="confirmSwap">Yes, Continue</button>
           </div>
       </b-modal>
 
@@ -110,5 +137,9 @@ ul {
   padding: 5px 20px;
   border-radius: 20px;
   color: white;
+}
+
+li {
+  margin-bottom: 5px;
 }
 </style>

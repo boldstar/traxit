@@ -4,9 +4,11 @@
 
     <div class="d-flex justify-content-between">
       <h3 class="m-0">Subscription</h3>
+      <span v-if="subscription.cancel_at_period_end" class="align-self-center font-weight-bold">Account Will Expire On: {{formatDate(subscription.cancel_at)}}</span>
       <div class="d-flex">
         <div class=" align-self-center">
-          <button class="btn btn-secondary font-weight-bold mr-3" @click="requestToCancel()">Cancel Subscription</button>
+          <button class="btn btn-secondary font-weight-bold mr-3" @click="requestToCancel()" v-if="!subscription.cancel_at_period_end">Cancel Subscription</button>
+          <button class="btn btn-secondary font-weight-bold mr-3" @click="resumeSub()" v-if="subscription.cancel_at_period_end">Resume Subscription</button>
         </div>
         <div class=" align-self-center">
           <router-link to="/administrator/subscription/plans" class="btn btn-primary font-weight-bold">View Plans</router-link>
@@ -14,6 +16,8 @@
       </div>
     </div>
     <hr>
+    <Alert v-if="successAlert" :message="successAlert" />
+    <div class="processing p-2 mb-3 font-weight-bold text-light text-center bg-primary" v-if="processing">Resuming Your Account, Just A Moment!</div>
      <div class="d-flex justify-content-between">
        <div class="card w-25 mr-3">
          <div class="card-header">
@@ -26,7 +30,8 @@
            </ul>
          </div>
          <div class="card-header d-flex justify-content-between">
-           <button class="btn btn-sm btn-secondary font-weight-bold" @click="requestToCancel()">Cancel</button>
+           <button class="btn btn-sm btn-secondary font-weight-bold" @click="requestToCancel()" v-if="!subscription.cancel_at_period_end">Cancel</button>
+           <button class="btn btn-sm btn-secondary font-weight-bold" @click="resumeSub()" v-if="subscription.cancel_at_period_end">Resume</button>
            <router-link to="/administrator/subscription/plans" class="btn btn-sm btn-primary font-weight-bold">Upgrade</router-link>
          </div>
        </div>
@@ -76,6 +81,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import Alert from '@/components/Alert.vue'
+import moment from 'moment';
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 
@@ -83,6 +90,7 @@ export default {
   name: 'subscription',
   components: {
     'b-modal': bModal,
+    Alert
   },
   data() {
     return {
@@ -96,7 +104,9 @@ export default {
           'processing',
           'invoices',
           'plan',
-          'plans'
+          'plans',
+          'subscription',
+          'successAlert'
         ]
       ),
       computedInvoices() {
@@ -112,6 +122,13 @@ export default {
       .then(() => {
         this.cancelModal = false
       })
+    },
+    resumeSub() {
+      this.$store.dispatch('resumeSubscription')
+    },
+    formatDate(date) {
+      const formattedDate = moment.unix(date).format('d/m/Y');
+      return formattedDate
     }
   },
   created: function() {
@@ -129,5 +146,9 @@ ul {
 
 .card {
   max-height: 300px !important;
+}
+
+.processing {
+  border-radius: 8px;
 }
 </style>

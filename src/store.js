@@ -61,7 +61,9 @@ export default new Vuex.Store({
     subscribe: null,
     invoices: '',
     plan: '',
-    plans: ''
+    plans: '',
+    subscription: '',
+    grace: null
   },
   getters: {
     chartDataLength(state) {
@@ -177,6 +179,12 @@ export default new Vuex.Store({
     },
     plans(state) {
       return state.plans
+    },
+    subscription(state) {
+      return state.subscription
+    },
+    grace(state) {
+      return state.grace
     }
   },
   mutations: {
@@ -475,6 +483,12 @@ export default new Vuex.Store({
     },
     subscriptionPlans(state, data) {
       state.plans = data
+    },
+    subscriptionSub(state, data) {
+      state.subscription = data
+    },
+    gracePeriod(state, data) {
+      state.grace = data
     }
   },
   actions: {
@@ -1416,7 +1430,6 @@ export default new Vuex.Store({
     getInvoices(context) {
       axios.get('/subscription')
       .then(response => {
-        console.log(response.data)
         context.commit('subscriptionInvoices', response.data)
       })
       .catch(error => {
@@ -1426,9 +1439,9 @@ export default new Vuex.Store({
     getPlans(context) {
       axios.get('/plans')
       .then(response => {
-        console.log(response.data)
         context.commit('subscriptionPlan', response.data.plan);
         context.commit('subscriptionPlans', response.data.plans);
+        context.commit('subscriptionSub', response.data.subscription);
       })
       .catch(error => {
         console.log(error.response.data)
@@ -1448,10 +1461,32 @@ export default new Vuex.Store({
     cancelSubscription(context) {
       axios.post('/cancel-subscription')
       .then(response => {
-        console.log(response.data)
-        context.dispatch('destroyToken')
-        router.push('/login')
         context.commit('subscribeView', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    resumeSubscription(context) {
+      context.commit('startProcessing')
+      axios.post('/resume-subscription')
+      .then(response=> {
+        context.commit('stopProcessing')
+        context.commit('successAlert', response.data.message)
+        context.commit('subscriptionSub', response.data.subscription)
+      })
+      .catch(error => {
+        context.commit('stopProcessing')
+        console.log(error.response.data)
+      })
+    },
+    checkGracePeriod(context) {
+      axios.get('/grace')
+      .then(response => {
+        console.log(response.data)
+        if(response.data != false) {
+          context.commit('gracePeriod', response.data)
+        }
       })
       .catch(error => {
         console.log(error.response.data)

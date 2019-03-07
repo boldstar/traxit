@@ -11,6 +11,9 @@
           <button class="btn btn-secondary font-weight-bold mr-3" @click="resumeSub()" v-if="subscription.cancel_at_period_end">Resume Subscription</button>
         </div>
         <div class=" align-self-center">
+          <router-link to="/administrator/subscription/update-card" class="btn btn-info font-weight-bold mr-3">Update Card</router-link>
+        </div>
+        <div class=" align-self-center">
           <router-link to="/administrator/subscription/plans" class="btn btn-primary font-weight-bold">View Other Plans</router-link>
         </div>
       </div>
@@ -102,7 +105,7 @@
       </b-modal>
 
       <!-- this is for viewing the subscription plans -->
-      <router-view :plans="plans" :current="plan.id" v-if="$route.name == 'plans'"></router-view>
+      <router-view :plans="plans" :current="plan.id" v-if="$route.name == 'plans' || $route.name == 'update-card'"></router-view>
   </div>
 </template>
 

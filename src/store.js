@@ -1494,6 +1494,22 @@ export default new Vuex.Store({
       .catch(error => {
         console.log(error.response.data)
       })
+    },
+    updateCard(context, card) {
+      context.commit('startProcessing')
+      axios.post('/update-card', {
+        name: card.name_on_card,
+        stripeToken: card.stripeToken
+      })
+      .then(response => {
+        context.commit('stopProcessing')
+        router.push('/administrator/subscription')
+        context.commit('successAlert', response.data.message)
+      })
+      .catch(error => {
+        context.commit('stopProcessing')
+        console.log(error.response.data)
+      })
     } 
   }, 
 })

@@ -97,7 +97,16 @@ export default new Router({
                   requiresAuth: true,
                   layout: "admin"
                 },
-              }
+              },
+              {
+                path: 'update-card',
+                name: 'update-card',
+                component: () => import('@/children/ChangeCard.vue'),
+                meta: {
+                  requiresAuth: true,
+                  layout: "admin"
+                },
+              },
             ]
           },
           {

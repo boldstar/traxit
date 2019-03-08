@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div v-if="stripekey">
         <card class='stripe-card form-control pt-2'
           :class='{ complete }'
-          stripe='pk_test_KYFZxHTonLt3CcLZGG802H7i'
+          :stripe="{stripekey}"
           :options='stripeOptions'
           @change='change($event)'
         />
@@ -12,6 +12,7 @@
 
 <script>
     import { Card, createToken } from 'vue-stripe-elements-plus'
+    import { mapGetters } from 'vuex'
     export default {
         components: { Card },
         data () {
@@ -39,10 +40,16 @@
             }
           }
         },
+        computed: {
+          ...mapGetters(['stripekey'])
+        },
         methods: {
             change(event) {
                 this.errorMessage = event.error ? event.error.message : ''
             }
+      },
+      created() {
+        this.$store.dispatch('getStripeKey');
       }
     }
 </script>

@@ -2,7 +2,7 @@
 <div>
     <div class="d-flex justify-content-between">
         <span class="h3 m-0">Update Card</span>
-        <router-link :to="'users'" class="btn btn-primary">Back</router-link>
+        <router-link to="/administrator/subscription" class="btn btn-primary">Back</router-link>
     </div>
     <hr>
     <div class="container d-flex justify-content-center mt-4">

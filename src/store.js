@@ -63,7 +63,8 @@ export default new Vuex.Store({
     plan: '',
     plans: '',
     subscription: '',
-    grace: null
+    grace: null,
+    stripekey: null
   },
   getters: {
     chartDataLength(state) {
@@ -185,6 +186,9 @@ export default new Vuex.Store({
     },
     grace(state) {
       return state.grace
+    },
+    stripekey(state) {
+      return state.stripekey
     }
   },
   mutations: {
@@ -489,6 +493,9 @@ export default new Vuex.Store({
     },
     gracePeriod(state, data) {
       state.grace = data
+    },
+    stripeKey(state, data) {
+      state.stripekey = data
     }
   },
   actions: {
@@ -1508,6 +1515,16 @@ export default new Vuex.Store({
       })
       .catch(error => {
         context.commit('stopProcessing')
+        console.log(error.response.data)
+      })
+    },
+    getStripeKey(context) {
+      axios.get('/stripe-key')
+      .then(response => {
+        context.commit('stripeKey', response.data)
+        console.log(response.data)
+      })
+      .catch(error => {
         console.log(error.response.data)
       })
     } 

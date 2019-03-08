@@ -5,7 +5,7 @@
     <div class="d-flex justify-content-between">
       <h3 class="m-0">Subscription</h3>
       <span v-if="subscription.cancel_at_period_end" class="align-self-center font-weight-bold">Account Will Expire On: {{formatDate(subscription.cancel_at)}}</span>
-      <div class="d-flex">
+      <div class="d-flex" v-if="plan">
         <div class=" align-self-center">
           <button class="btn btn-secondary font-weight-bold mr-3" @click="requestToCancel()" v-if="!subscription.cancel_at_period_end">Cancel Subscription</button>
           <button class="btn btn-secondary font-weight-bold mr-3" @click="resumeSub()" v-if="subscription.cancel_at_period_end">Resume Subscription</button>

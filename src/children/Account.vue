@@ -5,8 +5,8 @@
       <div class="d-flex">
         <div>
           <button type="button" class="btn btn-secondary mr-3" @click="addLogo = true" v-if="!addLogo" :disabled="processing">
-            <span v-if="processing">Adding Your Logo...</span>
-            <span v-else>Add Logo</span>
+            <span v-if="processing" class="font-weight-bold">Adding Your Logo...</span>
+            <span class="font-weight-bold" v-else>Add Logo</span>
           </button>
         </div>
         <div class="input-group d-flex mr-3" v-if="addLogo">
@@ -24,8 +24,8 @@
             </div>
         </div>   
         <div class=" align-self-center">
-          <router-link :to="{path: '/administrator/account/edit-account'}" class="btn btn-primary" v-if="accountDetails">Edit Details</router-link>
-          <router-link :to="{path: '/administrator/account/add-account'}" class="btn btn-primary" v-else>Add Details</router-link>
+          <router-link :to="{path: '/administrator/account/edit-account'}" class="btn btn-primary font-weight-bold" v-if="accountDetails">Edit Details</router-link>
+          <router-link :to="{path: '/administrator/account/add-account'}" class="btn btn-primary font-weight-bold" v-else>Add Details</router-link>
         </div>
       </div>
     </div>

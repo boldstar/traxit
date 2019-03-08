@@ -13,9 +13,8 @@
               <input type="text" class="form-control mb-3" placeholder="Email" v-model="accountDetails.email">
               <input type="text" class="form-control mb-3" placeholder="Phone Number" v-model="accountDetails.phone_number">
               <input type="text" class="form-control mb-3" placeholder="Fax Number" v-model="accountDetails.fax_number">
-              <input type="text" class="form-control mb-3" placeholder="Subscription" v-model="accountDetails.subscription">
               <div class="d-flex justify-content-between">
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
                 <router-link to="/administrator/account" class="btn btn-secondary">Cancel</router-link>
               </div>
             </form>
@@ -27,15 +26,21 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-    name: 'EditAccount',
+    name: 'AddAccount',
     data() {
       return {
-       // not needed for now
+       accountDetails: {
+         business_name: '',
+         email: '',
+         phone_number: '',
+         fax_number: '',
+         address: '',
+         city: '',
+         state: '',
+         postal_code: '',
+       }
       }
     },
-    computed: {
-    ...mapGetters(['accountDetails']),
-  },
   methods: {
     ...mapActions(['addAccountDetails']),
     
@@ -51,8 +56,6 @@ export default {
         city: this.accountDetails.city,
         state: this.accountDetails.state,
         postal_code: this.accountDetails.postal_code,
-        logo: this.accountDetails.logo,
-        subscription: this.accountDetails.subscription
       })   
       .then(() => {
         this.idForAccount++ 

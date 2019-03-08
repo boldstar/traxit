@@ -26,7 +26,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-    name: 'EditDependent',
+    name: 'EditAccount',
     computed: {
     ...mapGetters(['accountDetails']),
   },
@@ -46,7 +46,6 @@ export default {
         state: this.accountDetails.state,
         postal_code: this.accountDetails.postal_code,
         logo: this.accountDetails.logo,
-        subscription: this.accountDetails.subscription
       })   
       .then(() => {
         this.$router.push({path: '/administrator/account'});

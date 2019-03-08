@@ -1362,8 +1362,6 @@ export default new Vuex.Store({
         city: account.city,
         state: account.state,
         postal_code: account.postal_code,
-        logo: account.logo,
-        subscription: account.subscription
       })
       .then(response => {
         context.commit('addAccountDetails', response.data)
@@ -1382,8 +1380,6 @@ export default new Vuex.Store({
         city: account.city,
         state: account.state,
         postal_code: account.postal_code,
-        logo: account.logo,
-        subscription: account.subscription
       })
       .then(response => {
         context.commit('updateAccountDetails', response.data)

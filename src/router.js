@@ -81,6 +81,35 @@ export default new Router({
             ]
           },
           {
+            path: 'subscription',
+            name: 'subscription',
+            component: () => import('@/children/Subscription.vue'),
+            meta: {
+              requiresAuth: true,
+              layout: "admin"
+            },
+            children: [
+              {
+                path: 'plans',
+                name: 'plans',
+                component: () => import('@/children/Plans.vue'),
+                meta: {
+                  requiresAuth: true,
+                  layout: "admin"
+                },
+              },
+              {
+                path: 'update-card',
+                name: 'update-card',
+                component: () => import('@/children/ChangeCard.vue'),
+                meta: {
+                  requiresAuth: true,
+                  layout: "admin"
+                },
+              },
+            ]
+          },
+          {
           path: 'workflows',
           name: 'workflows',
           component: () => import('@/children/Workflows.vue'),

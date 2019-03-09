@@ -10,6 +10,9 @@
                 <breadcrumb class="mt-3 ml-3 p-2" :route="route"></breadcrumb>
             </div>
         </div>
+        <div v-if="grace">
+            <span class="font-weight-bold" v-if="computedGrace.cancel_at_period_end">Account Will Expire On: <span class="text-danger">{{computedGrace.cancel_at}}</span></span>  
+        </div>
         <button class="bg-light" data-toggle="tooltip" data-placement="bottom" title="Toggle Drawer">
             <i class="fas fa-bars"></i>
         </button>
@@ -18,6 +21,7 @@
 
 <script>
 import Breadcrumb from '@/components/Breadcrumb.vue'
+import {mapGetters} from 'vuex'
 
 export default {
     name: 'toolbar',
@@ -28,14 +32,18 @@ export default {
         'route'
     ],
     computed: {
+        ...mapGetters(['grace']),
         open () {
             return this.$store.state.sidebarOpen
-        }
+        },
+        computedGrace() {
+            return this.grace.data
+        },
     },
     methods: {
         handleClick () {
             this.$store.dispatch('toggleSidebar')
-        }
+        },
     }
 }
 </script>

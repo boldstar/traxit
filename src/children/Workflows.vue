@@ -5,7 +5,7 @@
         <span class="m-0">Workflows | </span>
         <span class="m-0 text-primary">{{ allWorkflows.length }}</span>
       </div>
-        <b-btn variant="primary" size="sm" @click="showModal">Create New Workflow</b-btn>
+        <b-btn class="font-weight-bold" variant="primary" size="sm" @click="showModal">Create New Workflow</b-btn>
     </div>
     <hr>
 

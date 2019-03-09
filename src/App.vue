@@ -1,18 +1,22 @@
 <template>
     <div id="app">
-        <component :is="layout"> 
-                <router-view/>
+        <component :is="layout" v-if="subscribeView">
+            <div v-html="subscribeView"></div>
         </component> 
+        <component :is="layout" v-else> 
+                <router-view/>
+        </component>
     </div>
 </template>
 
 <script>
 const default_layout = "default";
-import {mapActions} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 import moment from 'moment'
 
 export default {
     computed: {
+        ...mapGetters(['subscribeView']),
         layout() {
             return (this.$route.meta.layout || default_layout) + '-layout';
         },
@@ -38,7 +42,7 @@ export default {
     },
     mounted() {
         this.destroySessionIfTokenIsExpired()
-    }
+    },
 }
 </script>
 

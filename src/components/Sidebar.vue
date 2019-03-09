@@ -3,7 +3,7 @@
         <div class="row">
             <nav class="col-md-2 d-none d-md-block bg-light sidebar">
               <div class="sidebar-sticky d-flex flex-column">
-                <ul class="nav nav-fill flex-column align-items-start mt-5">
+                <ul class="nav nav-fill flex-column align-items-start">
                   <li class="nav-item w-100"  v-bind:class="{ 'is-active': isActive }">                                        
                       <router-link class="nav-link border-right text-left pl-4" to="/"><span><i class="fas fa-tachometer-alt"></i></span>Dashboard</router-link>      
                   </li>
@@ -65,7 +65,7 @@ export default {
         bottom: 0;
         left: 0;
         z-index: 100; /* Behind the navbar */
-        padding: 35px 0 0; /* Height of navbar */
+        padding: 52px 0 0; /* Height of navbar */
         box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
 
     }
@@ -73,7 +73,7 @@ export default {
     .sidebar-sticky {
         position: relative;
         top: 0;
-        height: calc(100vh - 48px);
+        height: calc(100vh - 52px);
         padding-top: .5rem;
         overflow-x: hidden;
         overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
@@ -147,6 +147,10 @@ export default {
         text-transform: uppercase;
         font-weight: bold;
         letter-spacing: .2em;
+    }
+
+    .nav {
+        margin-top: 32px!important;
     }
 
 </style>

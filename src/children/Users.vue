@@ -3,7 +3,7 @@
     <div v-if="$route.name == 'users'">
       <div class="d-flex justify-content-between">
         <span class="h3 m-0">Team Members</span>
-        <router-link :to="'add-user'" class="btn btn-primary">Add Team Member</router-link>
+        <router-link :to="'add-user'" class="btn btn-primary font-weight-bold">Add Team Member</router-link>
       </div>
       <hr>
       <Alert v-if="passwordAlert" v-bind:message="passwordAlert.message" />
@@ -18,7 +18,7 @@
             </tr>
         </thead> 
         <tbody class="client-info table-bordered">
-            <tr v-for="(user, index) in computedUsers"  :key="index" v-if="users.length > 0">
+            <tr v-for="(user, index) in computedUsers"  :key="index" v-if="users.length > 0 && user.user != 'Admin'">
                 <td class="text-capitalize">{{ user.user }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.role.name }}</td>

@@ -48,6 +48,9 @@ export default {
       return this.$store.getters.sidebarOpen
     }
   },
+  created() {
+    this.$store.dispatch('checkGracePeriod');
+  }
 }
 </script>
 

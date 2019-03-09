@@ -56,7 +56,14 @@ export default new Vuex.Store({
     resetError:'',
     resetSuccess: '',
     passwordAlert: '',
-    chartData: ''
+    chartData: '',
+    subscribe: null,
+    invoices: '',
+    plan: '',
+    plans: '',
+    subscription: '',
+    grace: null,
+    stripekey: null
   },
   getters: {
     chartDataLength(state) {
@@ -69,7 +76,7 @@ export default new Vuex.Store({
       return state.user
     },
     loggedIn(state) {
-      return state.token != null;
+      return state.token != null || undefined;
     },
     resetToken(state) {
       return state.resetToken
@@ -160,6 +167,27 @@ export default new Vuex.Store({
     },
     accountDetails(state) {
       return state.account
+    },
+    subscribeView(state) {
+      return state.subscribe
+    },
+    invoices(state) {
+      return state.invoices
+    },
+    plan(state) {
+      return state.plan
+    },
+    plans(state) {
+      return state.plans
+    },
+    subscription(state) {
+      return state.subscription
+    },
+    grace(state) {
+      return state.grace
+    },
+    stripekey(state) {
+      return state.stripekey
     }
   },
   mutations: {
@@ -446,6 +474,27 @@ export default new Vuex.Store({
     },
     clearResetToken(state) {
       state.resetToken = ''
+    },
+    subscribeView(state, data) {
+      state.subscribe = data
+    },
+    subscriptionInvoices(state, data) {
+      state.invoices = data
+    },
+    subscriptionPlan(state, data) {
+      state.plan = data
+    },
+    subscriptionPlans(state, data) {
+      state.plans = data
+    },
+    subscriptionSub(state, data) {
+      state.subscription = data
+    },
+    gracePeriod(state, data) {
+      state.grace = data
+    },
+    stripeKey(state, data) {
+      state.stripekey = data
     }
   },
   actions: {
@@ -586,11 +635,13 @@ export default new Vuex.Store({
               password: credentials.password,
           })
           .then(response => {
-              const token = response.data.access_token
+            const token = response.data.access_token
+            if(token != null || token != undefined) {
               const date = new Date(moment().add(1, 'day').toDate());
-              localStorage.setItem('expires_on', date)
-              localStorage.setItem('access_token', token)
-              commit('createSession', response.data)
+              localStorage.setItem('expires_on', date);
+              localStorage.setItem('access_token', token);
+              commit('createSession', response.data);
+              }
               resolve(response)
           })
           .catch(error => {
@@ -1290,7 +1341,11 @@ export default new Vuex.Store({
     getAccountDetails(context) {
       axios.get('/account')
       .then(response => {
-        context.commit('accountDetails', response.data)
+        if(typeof(response.data) === 'object') {
+          context.commit('accountDetails', response.data)
+        } else {
+          context.commit('subscribeView', response.data)
+        }
       })
       .catch(error => {
         console.log(error.response.data)
@@ -1306,8 +1361,6 @@ export default new Vuex.Store({
         city: account.city,
         state: account.state,
         postal_code: account.postal_code,
-        logo: account.logo,
-        subscription: account.subscription
       })
       .then(response => {
         context.commit('addAccountDetails', response.data)
@@ -1326,8 +1379,6 @@ export default new Vuex.Store({
         city: account.city,
         state: account.state,
         postal_code: account.postal_code,
-        logo: account.logo,
-        subscription: account.subscription
       })
       .then(response => {
         context.commit('updateAccountDetails', response.data)
@@ -1377,7 +1428,101 @@ export default new Vuex.Store({
         context.commit('stopProcessing')
         console.log(err.response.data)
       })
-    }
+    },
+    getInvoices(context) {
+      axios.get('/subscription')
+      .then(response => {
+        context.commit('subscriptionInvoices', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    getPlans(context) {
+      axios.get('/plans')
+      .then(response => {
+        context.commit('subscriptionPlan', response.data.plan);
+        context.commit('subscriptionPlans', response.data.plans);
+        context.commit('subscriptionSub', response.data.subscription);
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    swapPlan(context, plan) {
+      context.commit('startProcessing')
+      axios.post('/upgrade-subscription', {
+        product: plan.product
+      })
+      .then(response => {
+        context.commit('stopProcessing')
+        router.push('/administrator/subscription')
+        context.commit('successAlert', response.data.message)
+      })
+      .catch(error => {
+        context.commit('stopProcessing')
+        console.log(error.response.data)
+      })
+    },
+    cancelSubscription(context) {
+      axios.post('/cancel-subscription')
+      .then(response => {
+        context.commit('subscribeView', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    resumeSubscription(context) {
+      context.commit('startProcessing')
+      axios.post('/resume-subscription')
+      .then(response=> {
+        context.commit('stopProcessing')
+        context.commit('successAlert', response.data.message)
+        context.commit('subscriptionSub', response.data.subscription)
+      })
+      .catch(error => {
+        context.commit('stopProcessing')
+        console.log(error.response.data)
+      })
+    },
+    checkGracePeriod(context) {
+      axios.get('/grace')
+      .then(response => {
+        if(response.data != false) {
+          context.commit('gracePeriod', response.data)
+        }
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    updateCard(context, card) {
+      context.commit('startProcessing')
+      axios.post('/update-card', {
+        name: card.name_on_card,
+        stripeToken: card.stripeToken
+      })
+      .then(response => {
+        context.commit('stopProcessing')
+        router.push('/administrator/subscription')
+        context.commit('successAlert', response.data.message)
+      })
+      .catch(error => {
+        context.commit('stopProcessing')
+        console.log(error.response.data)
+      })
+    },
+    getStripeKey(context) {
+      axios.get('/stripe-key')
+      .then(response => {
+        context.commit('stripeKey', response.data)
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    } 
   }, 
 })
 

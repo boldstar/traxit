@@ -12,11 +12,18 @@
                 <div class="mx-2 mb-3">
                     <div v-for="oldStatus in workflow.statuses" :key="oldStatus.id" class="d-flex mt-3">
                         <input class="form-control" type="text" v-model="oldStatus.status">
+                        <label class="check-container">
+                            <input type="checkbox" v-model="oldStatus.notify_client">
+                            <span class="checkmark"></span>
+                        </label>
                         <button type="button" class="btn btn-outline-danger btn-sm ml-3 font-weight-bold" @click="requestDelete(oldStatus.id)">X</button>
-
                     </div>
                     <div v-for="(status, index) in workflowData.newStatuses" :key="index" class="d-flex mt-3">
                         <input class="form-control" type="text" placeholder="Add Status" v-model="status.value">
+                         <label class="check-container">
+                            <input type="checkbox" v-model="status.notify_client">
+                            <span class="checkmark"></span>
+                        </label>
                         <button type="button" class="btn btn-outline-danger btn-sm ml-3 font-weight-bold" @click="deleteField(index)">X</button>
                     </div>
                     <button type="button" class="btn btn-sm btn-primary mt-3" @click="addField()">
@@ -49,7 +56,7 @@
         </b-modal>
 
     </div>
-         <div v-if="workflowLoaded" class="lds-dual-ring justify-content-center"></div>
+         <spinner v-if="workflowLoaded"></spinner>
     </div>
 </template>
 
@@ -58,6 +65,7 @@ import { mapGetters, mapActions } from 'vuex'
 import Alert from '@/components/Alert.vue'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
+import Spinner from '@/components/Spinner.vue'
 
 
 export default {
@@ -74,7 +82,8 @@ export default {
     },
     components:{
         'b-modal': bModal,
-        Alert
+        Alert,
+        Spinner
     },
     directives: {
         'b-modal': bModalDirective
@@ -106,7 +115,7 @@ export default {
             this.modalShow = true
         },
         addField() {
-            this.workflowData.newStatuses.push({ value: '', order: this.workflowData.newStatuses.length });
+            this.workflowData.newStatuses.push({ value: '', notify_client: false, order: this.workflowData.newStatuses.length });
         },
         deleteField(index) {
             this.workflowData.newStatuses.splice(index, 1);
@@ -128,95 +137,90 @@ export default {
 
 
 <style lang="scss" scoped>
- .lds-dual-ring {
-        display: inline-block;
-        width: 64px;
-        height: 64px;
-        margin-top: 100px;
-        margin-bottom: 100px;
+    .btn-outline-danger {
+        width: 38px!important;
+    }
+    /* The container */
+    .check-container {
+    display: block;
+    position: relative;
+    left: 7px;
+    padding-left: 35px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+     &:before {
+         content: "Email";
+         position: absolute;
+         font-size: .7rem;
+         width: 37px;
+         bottom: 15px;
+         right: -2px;
+         z-index: 1;
+         background-color: #0077ff;
+         border-radius: 3px 3px 0 0;
+         color: white;
+         border-bottom: 1px solid black;
+     }
     }
 
-    .lds-dual-ring:after {
-        content: " ";
-        display: block;
-        width: 46px;
-        height: 46px;
-        margin: 1px;
-        border-radius: 50%;
-        border: 5px solid #0077ff;
-        border-color: #0077ff transparent #0077ff transparent;
-        animation: lds-dual-ring 1.2s linear infinite;
-    }
-        @keyframes lds-dual-ring {
-        0% {
-            transform: rotate(0deg);
-        }
-        100% {
-            transform: rotate(360deg);
-        }
+    /* Hide the browser's default checkbox */
+    .check-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
     }
 
-    .lds-ellipsis-container {
-        position: absolute;
-        right: 50%;
-        padding-right: 20px;
+    /* Create a custom checkbox */
+    .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 38px;
+    width:38px;
+    background-color: #eee;
+    border-radius: 3px;
     }
 
-    .lds-ellipsis {
-        display: inline-block;
-        position: relative;
-        width: 64px;
-        height: 11px;
+    /* On mouse-over, add a grey background color */
+    .check-container:hover input ~ .checkmark {
+    background-color: #ccc;
     }
 
-    .lds-ellipsis div {
-        position: absolute;
-        width: 11px;
-        height: 11px;
-        border-radius: 50%;
-        background: #fff;
-        animation-timing-function: cubic-bezier(0, 1, 1, 0);
+    /* When the checkbox is checked, add a blue background */
+    .check-container input:checked ~ .checkmark {
+    background-color: #0077ff;
     }
 
-    .lds-ellipsis div:nth-child(1) {
-        left: 6px;
-        animation: lds-ellipsis1 0.6s infinite;
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
     }
-    .lds-ellipsis div:nth-child(2) {
-        left: 6px;
-        animation: lds-ellipsis2 0.6s infinite;
+
+    /* Show the checkmark when checked */
+    .check-container input:checked ~ .checkmark:after {
+    display: block;
     }
-    .lds-ellipsis div:nth-child(3) {
-        left: 26px;
-        animation: lds-ellipsis2 0.6s infinite;
-    }
-    .lds-ellipsis div:nth-child(4) {
-        left: 45px;
-        animation: lds-ellipsis3 0.6s infinite;
-    }
-    @keyframes lds-ellipsis1 {
-        0% {
-            transform: scale(0);
-        }
-        100% {
-            transform: scale(1);
-        }
-        }
-        @keyframes lds-ellipsis3 {
-        0% {
-            transform: scale(1);
-        }
-        100% {
-            transform: scale(0);
-        }
-        }
-        @keyframes lds-ellipsis2 {
-        0% {
-            transform: translate(0, 0);
-        }
-        100% {
-            transform: translate(19px, 0);
-        }
+
+    /* Style the checkmark/indicator */
+    .check-container .checkmark:after {
+    left: 15px;
+    top: 17px;
+    width: 8px;
+    height: 15px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
     }
 </style>
 

@@ -19,7 +19,7 @@
       </main>
     </div>
         
-          
+    <notify-modal v-if="notify"></notify-modal>
   </div>
 </template>
 
@@ -27,12 +27,15 @@
 import Navbar from '@/components/Navbar.vue'
 import Toolbar from '@/components/Toolbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
+import NotifyModal from '@/components/NotifyModal.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
     Navbar,
     Toolbar,
     Sidebar,
+    NotifyModal
   },
   data () {
     return {
@@ -46,7 +49,8 @@ export default {
     },
     toggleSidebar() {
       return this.$store.getters.sidebarOpen
-    }
+    },
+    ...mapGetters(['notify'])
   },
   created() {
     this.$store.dispatch('checkGracePeriod');

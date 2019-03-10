@@ -35,7 +35,7 @@
             <tr v-for="(status, index) in workflow.statuses" :key="index">
               <th scope="row" class="status-th"><div class="status-order"></div> {{ index + 1 }}</th>
               <td>{{ status.status }}</td>
-              <td class="text-center"><i class="fas fa-check text-primary"></i></td>
+              <td class="text-center"><i class="fas fa-check text-primary" v-if="status.notify_client"></i></td>
             </tr>
             </draggable>
           </table>

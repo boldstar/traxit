@@ -9,6 +9,7 @@ import router from './router'
 export const ability = appAbility
 Vue.use(Vuex)
 axios.defaults.baseURL = process.env.VUE_APP_ROOT_API
+axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access_token')
 
 
 export default new Vuex.Store({
@@ -64,7 +65,9 @@ export default new Vuex.Store({
     plans: '',
     subscription: '',
     grace: null,
-    stripekey: null
+    stripekey: null,
+    notify: false,
+    tasknotify: ''
   },
   getters: {
     chartDataLength(state) {
@@ -189,6 +192,12 @@ export default new Vuex.Store({
     },
     stripekey(state) {
       return state.stripekey
+    },
+    notify(state) {
+      return state.notify
+    },
+    taskForNotification(state) {
+      return state.tasknotify
     }
   },
   mutations: {
@@ -238,6 +247,10 @@ export default new Vuex.Store({
         const index = state.tasks.findIndex(e => e.id === id);
         state.tasks.splice(index, 1)
       })
+    },
+    notifyClientModal(state, task) {
+      state.notify = !state.notify
+      state.tasknotify = task
     },
     addUser(state, user) {
       state.users.push(user)
@@ -669,12 +682,31 @@ export default new Vuex.Store({
         done: task.done
       })
       .then(response => {
+        if(response.data.notify) {
+          context.commit('notifyClientModal', response.data.task)
+        }
           context.commit('updateTask', response.data.task)
           context.commit('successAlert', response.data.message)
       })
       .catch(error => {
           console.log(error.response.data)
       })           
+    },
+    notifyClient(context, task) {
+      context.commit('startProcessing')
+      axios.post('/notify-client', {
+        id: task.id
+      })
+      .then(response => {
+        context.commit('stopProcessing')
+        context.commit('notifyClientModal')
+        context.commit('successAlert', 'The Contact Has Been Notified')
+        console.log(response.data)
+      })
+      .catch(error => {
+        context.commit('stopProcessing')
+        console.log(error.response.data)
+      })
     },
     batchUpdateTasks(context, tasks) {
       axios.patch('/batchUpdateTasks', {
@@ -1232,9 +1264,11 @@ export default new Vuex.Store({
         newStatuses: payload.newStatuses
       })
       .then(response => {
-          context.commit('editWorkflow', response.data)
+          context.commit('editWorkflow', response.data.workflow)
+          context.commit('successAlert', response.data.message)
       })
       .catch(error => {
+        console.log(error.response.data)
           context.commit('editWorkflow', error.response.data.workflow)
           context.commit('errorAlert', error.response.data.message)
       })           

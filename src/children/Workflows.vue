@@ -19,7 +19,7 @@
          <div class="card-header d-flex justify-content-between">
            <span class="align-self-center font-weight-bold"><i class="fas fa-route mr-2 text-primary"></i>{{ workflow.workflow }}</span>
            <div>
-            <router-link class="btn btn-sm btn-outline-primary font-weight-bold" :to="{ path: '/administrator/workflows/edit-workflow/' + workflow.id }">Edit</router-link>
+            <router-link class="btn btn-sm btn-primary font-weight-bold" :to="{ path: '/administrator/workflows/edit-workflow/' + workflow.id }">Edit</router-link>
            </div>
           </div>
           <table class="table table-hover mb-0">

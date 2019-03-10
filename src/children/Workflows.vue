@@ -5,7 +5,7 @@
         <span class="m-0">Workflows | </span>
         <span class="m-0 text-primary">{{ allWorkflows.length }}</span>
       </div>
-        <b-btn class="font-weight-bold" variant="primary" size="sm" @click="showModal">Create New Workflow</b-btn>
+        <b-btn class="font-weight-bold" variant="primary" size="sm" @click="showModal">Create Workflow</b-btn>
     </div>
     <hr>
 
@@ -15,15 +15,14 @@
     <Alert v-if="successAlert && $route.name === 'workflows'" v-bind:message="successAlert" />
 
     <div class="d-flex flex-wrap justify-content-around" v-if="$route.name == 'workflows'">
-      <div class="workflow-card border p-0 mb-3" v-for="workflow in allWorkflows" :key="workflow.id">
+      <div class="workflow-card border p-0 mb-3 shadow" v-for="workflow in allWorkflows" :key="workflow.id">
          <div class="card-header d-flex justify-content-between">
-           <span class="align-self-center">{{ workflow.workflow }}</span>
+           <span class="align-self-center font-weight-bold"><i class="fas fa-route mr-2 text-primary"></i>{{ workflow.workflow }}</span>
            <div>
-             <button type="button" class="btn btn-secondary btn-sm mr-3" @click="requestDelete(workflow.id)">Delete</button>
-            <router-link class="btn btn-sm btn-outline-primary" :to="{ path: '/administrator/workflows/edit-workflow/' + workflow.id }">Edit</router-link>
+            <router-link class="btn btn-sm btn-outline-primary font-weight-bold" :to="{ path: '/administrator/workflows/edit-workflow/' + workflow.id }">Edit</router-link>
            </div>
           </div>
-          <table class="table table-hover">
+          <table class="table table-hover mb-0">
             <thead>
               <tr class="text-left">
                 <th scope="col" class="font-weight-bold">Order</th>
@@ -39,6 +38,9 @@
             </tr>
             </draggable>
           </table>
+          <div class="card-footer text-right">
+            <button type="button" class="btn btn-secondary btn-sm font-weight-bold" @click="requestDelete(workflow.id)">Delete</button>
+          </div>
       </div>
     </div>
 

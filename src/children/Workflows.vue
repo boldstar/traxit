@@ -15,7 +15,7 @@
     <Alert v-if="successAlert && $route.name === 'workflows'" v-bind:message="successAlert" />
 
     <div class="d-flex flex-wrap justify-content-around" v-if="$route.name == 'workflows'">
-      <div class="workflow-card border p-0 mb-3 shadow" v-for="workflow in allWorkflows" :key="workflow.id">
+      <div class="workflow-card d-flex flex-column align-self-start border p-0 mb-3 shadow" v-for="workflow in allWorkflows" :key="workflow.id">
          <div class="card-header d-flex justify-content-between">
            <span class="align-self-center font-weight-bold"><i class="fas fa-route mr-2 text-primary"></i>{{ workflow.workflow }}</span>
            <div>

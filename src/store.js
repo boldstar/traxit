@@ -8,7 +8,7 @@ import router from './router'
 
 export const ability = appAbility
 Vue.use(Vuex)
-axios.defaults.baseURL = process.env.VUE_APP_ROOT_API
+axios.defaults.baseURL = 'http://' + localStorage.getItem('fqdn_api_url') + '/api'
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access_token')
 
 
@@ -509,6 +509,9 @@ export default new Vuex.Store({
     },
     stripeKey(state, data) {
       state.stripekey = data
+    },
+    clearAccountDetails(state) {
+      state.account = ''
     }
   },
   actions: {
@@ -649,17 +652,27 @@ export default new Vuex.Store({
               password: credentials.password,
           })
           .then(response => {
-            const token = response.data.access_token
+            commit('clearAlert')
+            commit('clearAccountDetails')
+            const token = response.data.rules.access_token
             if(token != null || token != undefined) {
+              localStorage.removeItem('fqdn_api_url')
               const date = new Date(moment().add(1, 'day').toDate());
+              localStorage.setItem('fqdn_api_url', response.data.fqdn)
               localStorage.setItem('expires_on', date);
-              localStorage.setItem('access_token', token);
-              commit('createSession', response.data);
+              axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+              axios.defaults.baseURL = 'http://' + response.data.fqdn + '/api'
+              setTimeout(() => {
+                commit('createSession', response.data.rules);
+                localStorage.setItem('access_token', token);
+                router.push('/')
+              }, 2000)
               }
               resolve(response)
           })
           .catch(error => {
               console.log(error.response.data)
+              commit('errorAlert', error.response.data)
               reject(error)
           })
       })

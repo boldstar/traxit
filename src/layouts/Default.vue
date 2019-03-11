@@ -53,7 +53,9 @@ export default {
     ...mapGetters(['notify'])
   },
   created() {
-    this.$store.dispatch('checkGracePeriod');
+    if(localStorage.getItem('access_token') != null) {
+      this.$store.dispatch('checkGracePeriod');
+    }
   }
 }
 </script>

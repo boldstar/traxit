@@ -1,14 +1,15 @@
 <template>
     <div class="login-form page-wrapper col-lg-5 col-md-7 col-sm-12">
 
-        <div class="d-flex justify-content-center mb-3 p-0" v-if="successMessage || serverError">
+        <div class="d-flex justify-content-center mb-3 p-0" v-if="successMessage || serverError && !building">
             <div class="col-lg-9 p-0">
                 <span class="success-message" v-if="successMessage">{{ successMessage }}</span>
                 <span class="server-error" v-if="serverError">{{ serverError }}</span>
+                <span class="server-error" v-if="errorAlert">{{ errorAlert }}</span>
             </div>
         </div>
 
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center" v-if="!building">
             <div class="card shadow p-0 col-lg-8">
                 <div class="card-header bg-light text-primary border-primary d-flex justify-content-between">
                     <span class="font-weight-bold align-self-center">Company</span>
@@ -40,17 +41,25 @@
                 </div>
             </div>
         </div>
+
+        <div v-if="building">
+            <cogs></cogs>
+        </div>
     </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
+import Cogs from '@/components/Cogs.vue'
 export default {
     name: 'login-form',
     props: {
         dataSuccessMessage: {
             type: String,
         }
+    },
+    components: {
+        Cogs
     },
     data () {
         return {
@@ -60,10 +69,11 @@ export default {
             successMessage: this.dataSuccessMessage,
             loading: false,
             trying: false,
+            building: false
         }
     },
     computed: {
-        ...mapGetters(['accountDetails']),
+        ...mapGetters(['accountDetails', 'errorAlert']),
     },
     methods: {
         validateBeforeSubmit() {
@@ -81,9 +91,7 @@ export default {
                 password: this.password,
             })
             .then(response => {
-                this.trying =false
-                this.loading = false
-                this.$router.push('/')
+                this.building = true
             })
             .catch(error => {
                 this.trying = false
@@ -95,7 +103,9 @@ export default {
         }
     },
      created: function() {
-    this.$store.dispatch('getAccountDetails')
+         if(localStorage.getItem('fqdn_api_url') != null) {
+             this.$store.dispatch('getAccountDetails')
+         }
   },
 }
 </script>

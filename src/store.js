@@ -11,7 +11,7 @@ Vue.use(Vuex)
 if(localStorage.getItem('fqdn_api_url')!= null) {
   axios.defaults.baseURL = 'https://' + localStorage.getItem('fqdn_api_url') + '/api'
 }else {
-  axios.defaults.baseURL = 'https://traxit.test/api'
+  axios.defaults.baseURL = 'https://traxit.pro/api'
 }
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access_token')
 

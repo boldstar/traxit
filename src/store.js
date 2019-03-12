@@ -70,7 +70,8 @@ export default new Vuex.Store({
     grace: null,
     stripekey: null,
     notify: false,
-    tasknotify: ''
+    tasknotify: '',
+    statusesnotupdated: ''
   },
   getters: {
     chartDataLength(state) {
@@ -201,6 +202,9 @@ export default new Vuex.Store({
     },
     taskForNotification(state) {
       return state.tasknotify
+    },
+    statusesNotUpdated(state) {
+      return state.statusesnotupdated
     }
   },
   mutations: {
@@ -436,6 +440,9 @@ export default new Vuex.Store({
     editWorkflow(state, workflow) {
       const index = state.workflows.findIndex(item => item.id == workflow.id);
       state.workflows.splice(index, 1, workflow)
+    },
+    statusesNotUpdated(state, statuses) {
+      state.statusesnotupdated = statuses
     },
     deleteWorkflow(state, id) {
       const index = state.workflows.findIndex(workflow => workflow.id == id);
@@ -1284,11 +1291,12 @@ export default new Vuex.Store({
       .then(response => {
           context.commit('editWorkflow', response.data.workflow)
           context.commit('successAlert', response.data.message)
-      })
-      .catch(error => {
-        console.log(error.response.data)
+        })
+        .catch(error => {
+          console.log(error)
           context.commit('editWorkflow', error.response.data.workflow)
           context.commit('errorAlert', error.response.data.message)
+          context.commit('statusesNotUpdated', error.response.data.statuses)
       })           
     },
     deleteWorkflow(context, id) {

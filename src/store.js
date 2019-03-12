@@ -8,7 +8,11 @@ import router from './router.js'
 
 export const ability = appAbility
 Vue.use(Vuex)
-axios.defaults.baseURL = 'https://' + localStorage.getItem('fqdn_api_url') + '/api'
+if(localStorage.getItem('fqdn_api_url')!= null) {
+  axios.defaults.baseURL = 'https://' + localStorage.getItem('fqdn_api_url') + '/api'
+}else {
+  axios.defaults.baseURL = 'https://traxit.test/api'
+}
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access_token')
 
 export default new Vuex.Store({
@@ -646,7 +650,7 @@ export default new Vuex.Store({
     retrieveToken({ commit }, credentials) {
 
       return new Promise((resolve, reject) => {
-          axios.post('https://traxit.pro/api/login', {
+          axios.post('/login', {
               username: credentials.username,
               password: credentials.password,
               fqdn: localStorage.getItem('fqdn_api_url')
@@ -662,7 +666,7 @@ export default new Vuex.Store({
               localStorage.setItem('fqdn_api_url', response.data.fqdn)
               localStorage.setItem('expires_on', date);
               axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-              axios.defaults.baseURL = 'https://' + response.data.fqdn + '/api'
+              axios.defaults.baseURL = 'http://' + response.data.fqdn + '/api'
               setTimeout(() => {
                 commit('createSession', response.data.rules);
                 localStorage.setItem('access_token', token);

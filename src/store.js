@@ -663,7 +663,7 @@ export default new Vuex.Store({
               localStorage.setItem('fqdn_api_url', response.data.fqdn)
               localStorage.setItem('expires_on', date);
               axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-              axios.defaults.baseURL = 'https://' + response.data.fqdn + '/api'
+              axios.defaults.baseURL = 'http://' + response.data.fqdn + '/api'
               setTimeout(() => {
                 commit('createSession', response.data.rules);
                 localStorage.setItem('access_token', token);

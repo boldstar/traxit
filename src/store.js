@@ -8,7 +8,11 @@ import router from './router'
 
 export const ability = appAbility
 Vue.use(Vuex)
-axios.defaults.baseURL = 'http://' + localStorage.getItem('fqdn_api_url') + '/api'
+if(localStorage.getItem('fqdn_api_url')!= null) {
+  axios.defaults.baseURL = 'http://' + localStorage.getItem('fqdn_api_url') + '/api'
+}else {
+  axios.defaults.baseURL = 'http://traxit.test/api'
+}
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access_token')
 
 
@@ -647,7 +651,7 @@ export default new Vuex.Store({
     retrieveToken({ commit }, credentials) {
 
       return new Promise((resolve, reject) => {
-          axios.post('http://traxit.test/api/login', {
+          axios.post('/login', {
               username: credentials.username,
               password: credentials.password,
               fqdn: localStorage.getItem('fqdn_api_url')

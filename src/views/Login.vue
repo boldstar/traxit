@@ -37,6 +37,9 @@
                         <div class="forgot d-flex justify-content-between">
                             <span>Forgot password?  </span> <router-link to="/get-reset-link">Click Here</router-link>
                         </div>
+                        <div class="forgot d-flex justify-content-between">
+                            <span>Switch Companies?  </span> <a href="/login" @click="removeFqdn">Click Here</a>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -100,6 +103,9 @@ export default {
                 this.password = ''
                 this.successMessage = ''
             })
+        },
+        removeFqdn() {
+            localStorage.removeItem('fqdn_api_url')
         }
     },
      created: function() {

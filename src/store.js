@@ -647,15 +647,17 @@ export default new Vuex.Store({
     retrieveToken({ commit }, credentials) {
 
       return new Promise((resolve, reject) => {
-          axios.post('/login', {
+          axios.post('http://traxit.test/api/login', {
               username: credentials.username,
               password: credentials.password,
+              fqdn: localStorage.getItem('fqdn_api_url')
           })
           .then(response => {
             commit('clearAlert')
             commit('clearAccountDetails')
             const token = response.data.rules.access_token
-            if(token != null || token != undefined) {
+            const fqdn = response.data.fqdn
+            if(token != null || token != undefined && fqdn != null || fqdn != undefined) {
               localStorage.removeItem('fqdn_api_url')
               const date = new Date(moment().add(1, 'day').toDate());
               localStorage.setItem('fqdn_api_url', response.data.fqdn)

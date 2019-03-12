@@ -23,7 +23,7 @@
                       <router-link class="nav-link border-right text-left pl-4" to="/add"><span><i class="far fa-plus-square"></i></span>Add New</router-link>  
                   </li>
                 </ul>
-                <div class="mt-auto">
+                <div class="mt-auto mb-3">
                     <transition name="router-animation" enter-active-class="animated bounceInLeft" leave-active-class="animated fadeOut" mode="out-in">
                         <Toaster :message="successAlert" :type="'success'" v-if="successAlert" />
                     </transition>   

@@ -5,7 +5,7 @@
         <span class="m-0">Workflows | </span>
         <span class="m-0 text-primary">{{ allWorkflows.length }}</span>
       </div>
-        <b-btn class="font-weight-bold" variant="primary" size="sm" @click="showModal">Create New Workflow</b-btn>
+        <b-btn class="font-weight-bold" variant="primary" size="sm" @click="showModal">Create Workflow</b-btn>
     </div>
     <hr>
 
@@ -15,27 +15,32 @@
     <Alert v-if="successAlert && $route.name === 'workflows'" v-bind:message="successAlert" />
 
     <div class="d-flex flex-wrap justify-content-around" v-if="$route.name == 'workflows'">
-      <div class="workflow-card border p-0 mb-3" v-for="workflow in allWorkflows" :key="workflow.id">
+      <div class="workflow-card d-flex flex-column align-self-start border p-0 mb-3 shadow" v-for="workflow in allWorkflows" :key="workflow.id">
          <div class="card-header d-flex justify-content-between">
-           <span class="align-self-center">{{ workflow.workflow }}</span>
+           <span class="align-self-center font-weight-bold"><i class="fas fa-route mr-2 text-primary"></i>{{ workflow.workflow }}</span>
            <div>
-             <button type="button" class="btn btn-secondary btn-sm mr-3" @click="requestDelete(workflow.id)">Delete</button>
-            <router-link class="btn btn-sm btn-outline-primary" :to="{ path: '/administrator/workflows/edit-workflow/' + workflow.id }">Edit</router-link>
+            <router-link class="btn btn-sm btn-primary font-weight-bold" :to="{ path: '/administrator/workflows/edit-workflow/' + workflow.id }">Edit</router-link>
            </div>
           </div>
-        <ul class="status-body">
-        <draggable v-model="workflow.statuses" @start="drag=true" @end="drag=false" @change="updateStatusOrder(workflow.id, workflow.statuses)">
-         <li class="pb-3 status-list d-flex" v-for="(status, index) in workflow.statuses" :key="index">
-           <span class="mr-3 draggable-order">
-            {{ index + 1 }}
-           </span>
-           <a class="text-muted">{{ status.status }}</a>
-         </li>
-        </draggable>
-        </ul>
-        <div class="mb-5" v-if="workflow.statuses == 0">
-          <router-link class="btn btn-sm btn-primary" :to="{ path: '/administrator/workflows/edit-workflow/' + workflow.id }">Add Statuses</router-link>
-        </div>
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr class="text-left">
+                <th scope="col" class="font-weight-bold">Order</th>
+                <th scope="col" class="font-weight-bold">Status</th>
+                <th scope="col" class="font-weight-bold text-center"><i class="far fa-envelope text-primary"></i></th>
+              </tr>
+            </thead>
+            <draggable class="text-left" :element="'tbody'" v-model="workflow.statuses" @start="drag=true" @end="drag=false" @change="updateStatusOrder(workflow.id, workflow.statuses)" >
+            <tr v-for="(status, index) in workflow.statuses" :key="index">
+              <th scope="row" class="status-th"><div class="status-order"></div> {{ index + 1 }}</th>
+              <td>{{ status.status }}</td>
+              <td class="text-center"><i class="fas fa-check text-primary" v-if="status.notify_client"></i></td>
+            </tr>
+            </draggable>
+          </table>
+          <div class="card-footer text-right">
+            <button type="button" class="btn btn-secondary btn-sm font-weight-bold" @click="requestDelete(workflow.id)">Delete</button>
+          </div>
       </div>
     </div>
 
@@ -202,50 +207,52 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.table {
+  width: 400px;
+}
+
 .workflow-card {
- width: 400px;
+  border-radius: 10px;
 }
 
-li {
-  border-left: 4px solid #576663;
+tr {
+  z-index: -3!important;
   cursor: move;
-
-  
 }
 
-.status-body {
-  margin: 30px;
-  display: flex;
-  justify-content: center;
-}
-
-.status-list {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  font-weight: 600;
-
-  a {
-      &:hover {
-      color: black !important;
-    }
-  }
-  
-}
-
-.draggable-order {
-  position: relative;
-  background: #0077ff;
-  border-radius: 50%;
-  width: 1.5em;
+.status-th {
+  padding-left: 30px;
   color: white;
-  right: 14px;
- 
 }
 
-.status-body li:last-child {
-  border-left: 4px solid transparent;
+.status-order {
+  position: relative;
+  right: 8px;
+
+  &:before{
+    content: " ";
+    position: absolute;
+    height: 25px;
+    width: 25px;
+    background-color: #0077ff;
+    z-index: -1;
+    border-radius: 50%;
+    padding-right: 5px;
+  }
+
+  &:after {
+    content: " ";
+    position: absolute;
+    left: 10px;
+    z-index: -2;
+    height: 50px;
+    border-right: 5px solid black;
+  }
+
 }
 
+table tr:last-child .status-order:after {
+  border-color: transparent;
+}
 
 </style>

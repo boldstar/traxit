@@ -8,7 +8,8 @@ import router from './router.js'
 
 export const ability = appAbility
 Vue.use(Vuex)
-axios.defaults.baseURL = process.env.VUE_APP_ROOT_API
+axios.defaults.baseURL = 'http://' + localStorage.getItem('fqdn_api_url') + '/api'
+axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access_token')
 
 export default new Vuex.Store({
   plugins: [  
@@ -63,7 +64,9 @@ export default new Vuex.Store({
     plans: '',
     subscription: '',
     grace: null,
-    stripekey: null
+    stripekey: null,
+    notify: false,
+    tasknotify: ''
   },
   getters: {
     chartDataLength(state) {
@@ -188,6 +191,12 @@ export default new Vuex.Store({
     },
     stripekey(state) {
       return state.stripekey
+    },
+    notify(state) {
+      return state.notify
+    },
+    taskForNotification(state) {
+      return state.tasknotify
     }
   },
   mutations: {
@@ -237,6 +246,10 @@ export default new Vuex.Store({
         const index = state.tasks.findIndex(e => e.id === id);
         state.tasks.splice(index, 1)
       })
+    },
+    notifyClientModal(state, task) {
+      state.notify = !state.notify
+      state.tasknotify = task
     },
     addUser(state, user) {
       state.users.push(user)
@@ -495,6 +508,9 @@ export default new Vuex.Store({
     },
     stripeKey(state, data) {
       state.stripekey = data
+    },
+    clearAccountDetails(state) {
+      state.account = ''
     }
   },
   actions: {
@@ -630,22 +646,34 @@ export default new Vuex.Store({
     retrieveToken({ commit }, credentials) {
 
       return new Promise((resolve, reject) => {
-          axios.post('/login', {
+          axios.post('http://traxit.test/api/login', {
               username: credentials.username,
               password: credentials.password,
+              fqdn: localStorage.getItem('fqdn_api_url')
           })
           .then(response => {
-            const token = response.data.access_token
-            if(token != null || token != undefined) {
+            commit('clearAlert')
+            commit('clearAccountDetails')
+            const token = response.data.rules.access_token
+            const fqdn = response.data.fqdn
+            if(token != null || token != undefined && fqdn != null || fqdn != undefined) {
+              localStorage.removeItem('fqdn_api_url')
               const date = new Date(moment().add(1, 'day').toDate());
+              localStorage.setItem('fqdn_api_url', response.data.fqdn)
               localStorage.setItem('expires_on', date);
-              localStorage.setItem('access_token', token);
-              commit('createSession', response.data);
+              axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+              axios.defaults.baseURL = 'http://' + response.data.fqdn + '/api'
+              setTimeout(() => {
+                commit('createSession', response.data.rules);
+                localStorage.setItem('access_token', token);
+                router.push('/')
+              }, 2000)
               }
               resolve(response)
           })
           .catch(error => {
               console.log(error.response.data)
+              commit('errorAlert', error.response.data)
               reject(error)
           })
       })
@@ -668,12 +696,31 @@ export default new Vuex.Store({
         done: task.done
       })
       .then(response => {
+        if(response.data.notify) {
+          context.commit('notifyClientModal', response.data.task)
+        }
           context.commit('updateTask', response.data.task)
           context.commit('successAlert', response.data.message)
       })
       .catch(error => {
           console.log(error.response.data)
       })           
+    },
+    notifyClient(context, task) {
+      context.commit('startProcessing')
+      axios.post('/notify-client', {
+        id: task.id
+      })
+      .then(response => {
+        context.commit('stopProcessing')
+        context.commit('notifyClientModal')
+        context.commit('successAlert', 'The Contact Has Been Notified')
+        console.log(response.data)
+      })
+      .catch(error => {
+        context.commit('stopProcessing')
+        console.log(error.response.data)
+      })
     },
     batchUpdateTasks(context, tasks) {
       axios.patch('/batchUpdateTasks', {
@@ -1231,9 +1278,11 @@ export default new Vuex.Store({
         newStatuses: payload.newStatuses
       })
       .then(response => {
-          context.commit('editWorkflow', response.data)
+          context.commit('editWorkflow', response.data.workflow)
+          context.commit('successAlert', response.data.message)
       })
       .catch(error => {
+        console.log(error.response.data)
           context.commit('editWorkflow', error.response.data.workflow)
           context.commit('errorAlert', error.response.data.message)
       })           

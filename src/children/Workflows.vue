@@ -11,8 +11,14 @@
 
     <!-- this is the alert options -->
     <Alert v-if="alert" v-bind:message="alert" />
-    <Alert v-if="errorAlert && $route.name === 'workflows'" v-bind:message="errorAlert" />
+    <Alert v-if="errorMsgAlert && $route.name === 'workflows'" v-bind:message="errorMsgAlert" />
     <Alert v-if="successAlert && $route.name === 'workflows'" v-bind:message="successAlert" />
+    <div v-if="engagementsExist && $route.name === 'workflows'" class="text-left d-flex mb-3">
+      <i class="indicator"></i>
+      <span class="ml-2 font-weight-bold">
+        Statuses That Are Currently Being Used
+      </span>
+    </div>
 
     <div class="d-flex flex-wrap justify-content-around" v-if="$route.name == 'workflows'">
       <div class="workflow-card d-flex flex-column align-self-start border p-0 mb-3 shadow" v-for="workflow in allWorkflows" :key="workflow.id">
@@ -31,8 +37,8 @@
               </tr>
             </thead>
             <draggable class="text-left" :element="'tbody'" v-model="workflow.statuses" @start="drag=true" @end="drag=false" @change="updateStatusOrder(workflow.id, workflow.statuses)" >
-            <tr v-for="(status, index) in workflow.statuses" :key="index">
-              <th scope="row" class="status-th"><div class="status-order"></div> {{ index + 1 }}</th>
+            <tr v-for="(status, index) in workflow.statuses" :key="index" :class="{'highlight-status': checkValue(status.id)}">
+              <th scope="row" class="status-th"><div class="status-order"></div> {{ appendZero(index + 1) }}</th>
               <td>{{ status.status }}</td>
               <td class="text-center"><i class="fas fa-check text-primary" v-if="status.notify_client"></i></td>
             </tr>
@@ -107,6 +113,7 @@ export default {
       newWorkflowInput: true,
       workflowSelect: false,
       existingWorkflow: null,
+      engagementsExist: false,
       alert: '',
       newWorkflow: {
         name: '',
@@ -123,7 +130,7 @@ export default {
     'b-modal': bModalDirective
   },
   computed: {
-    ...mapGetters(['allWorkflows', 'errorAlert', 'successAlert']),
+    ...mapGetters(['allWorkflows', 'errorMsgAlert', 'successAlert', 'statusesNotUpdated']),
   },
   methods: {
     ...mapActions(['addWorkflow', 'workflowStatusOrder', 'deleteWorkflow']),
@@ -197,6 +204,25 @@ export default {
       this.newWorkflowInput = true
       this.workflowSelect = false
       this.newWorkflow.name = ''
+    },
+    appendZero(number) {
+      if(number < 10) {
+        var changednumber = '0' + number
+        return changednumber
+      } else {
+        return number
+      }
+    },
+    checkValue(id) {
+      if(this.statusesNotUpdated) {
+        const check = this.statusesNotUpdated.includes(id)
+        if(check) {
+          this.engagementsExist = true
+          return true;
+        } else {
+          this.engagementsExist = false
+        }
+      }
     }
   },
   created: function() {
@@ -215,6 +241,15 @@ export default {
   border-radius: 10px;
 }
 
+.indicator {
+  margin-top: 3px;
+  width: 20px;
+  height: 20px;
+  background-color: rgba(255, 0, 0, 0.192);
+  border: 1px solid black;
+  border-radius: 3px;
+}
+
 tr {
   z-index: -3!important;
   cursor: move;
@@ -227,32 +262,37 @@ tr {
 
 .status-order {
   position: relative;
-  right: 8px;
+  padding-right: 2px;
+  right: 5px;
 
   &:before{
-    content: " ";
+    content: "";
     position: absolute;
-    height: 25px;
-    width: 25px;
+    height: 27px;
+    width: 27px;
     background-color: #0077ff;
+    top: -1px;
     z-index: -1;
     border-radius: 50%;
-    padding-right: 5px;
   }
 
   &:after {
-    content: " ";
+    content: "";
     position: absolute;
     left: 10px;
     z-index: -2;
     height: 50px;
-    border-right: 5px solid black;
+    border: 3px solid black;
   }
 
 }
 
 table tr:last-child .status-order:after {
   border-color: transparent;
+}
+
+.highlight-status {
+  background-color: rgba(255, 0, 0, 0.192);
 }
 
 </style>

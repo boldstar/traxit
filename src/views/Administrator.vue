@@ -8,6 +8,7 @@
                     <router-link class="py-3 text-muted pr-4 link" to="/administrator/users" :class="{ 'is-selected': $route.name === 'users' }">Team<i class="fas fa-users ml-2"></i></router-link>
                     <router-link class="py-3 text-muted pr-4 link" to="/administrator/workflows" :class="{ 'is-selected': $route.name === 'workflows' }">Workflows<i class="fas fa-route ml-2"></i></router-link>
                     <router-link class="py-3 text-muted pr-4 link" to="/administrator/reports" :class="{ 'is-selected': $route.name === 'reports' }">Reports<i class="fas fa-database ml-2"></i></router-link>
+                    <router-link class="py-3 text-muted pr-4 link" to="/administrator/templates" :class="{ 'is-selected': $route.name === 'templates' }">Templates<i class="far fa-envelope ml-2"></i></router-link>
                     <router-link class="py-3 text-muted pr-4 link" to="/administrator/subscription" :class="{ 'is-selected': $route.name === 'subscription' }">Subscription<i class="fas fa-money-check-alt ml-2"></i></router-link>
                 </ul>
             </div>

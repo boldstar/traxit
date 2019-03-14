@@ -166,7 +166,27 @@ export default new Router({
                 requiresAuth: true,
                 layout: "admin",
               },
-          }
+          },
+          {
+            path: 'templates',
+            name: 'templates',
+            component: () => import('@/children/Templates.vue'),
+              meta: {
+                requiresAuth: true,
+                layout: "admin",
+              },
+              children: [
+                {
+                  path: 'edit-template/:template',
+                  name: 'edit-template',
+                  component: () => import('@/children/EditTemplate.vue'),
+                  meta: {
+                    requiresAuth: true,
+                    layout: "admin",
+                  },
+                }
+              ]
+            },
       ]
     },
     {

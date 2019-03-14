@@ -67,12 +67,6 @@
           <img class="ml-5" v-if="accountDetails.logo" v-bind:src="logo" />
           </div>
         </li>
-        <li>
-          <div class="d-flex">
-          <span class="p-3 background width">Subscription</span>
-          <span class="ml-5 align-self-center">{{ accountDetails.subscription }}</span>
-          </div>
-        </li>
       </ul>
 
       <!-- this is for viewing the account form -->

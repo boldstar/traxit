@@ -72,7 +72,8 @@ export default new Vuex.Store({
     stripekey: null,
     notify: false,
     tasknotify: '',
-    statusesnotupdated: ''
+    statusesnotupdated: '',
+    templates: ''
   },
   getters: {
     chartDataLength(state) {
@@ -206,6 +207,9 @@ export default new Vuex.Store({
     },
     statusesNotUpdated(state) {
       return state.statusesnotupdated
+    },
+    templates(state) {
+      return state.templates
     }
   },
   mutations: {
@@ -523,6 +527,9 @@ export default new Vuex.Store({
     },
     clearAccountDetails(state) {
       state.account = ''
+    },
+    emailTemplates(state, templates) {
+      state.templates = templates
     }
   },
   actions: {
@@ -1140,7 +1147,7 @@ export default new Vuex.Store({
         context.commit('stopProcessing')
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.response.data)
         context.commit('errorMsgAlert', error.response.data.message)
         context.commit('stopProcessing')
       })
@@ -1580,6 +1587,15 @@ export default new Vuex.Store({
       .then(response => {
         context.commit('stripeKey', response.data)
         console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    getTemplates(context) {
+      axios.get('/templates')
+      .then(response => {
+        context.commit('emailTemplates', response.data)
       })
       .catch(error => {
         console.log(error.response.data)

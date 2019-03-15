@@ -35,7 +35,10 @@
             </div>
             <div class="d-flex">
               <button type="button" class="btn btn-sm btn-secondary mr-2" @click="sendTest">Edit</button>
-              <button type="button" class="btn btn-sm btn-primary" @click="sendTest">Send Test</button>
+              <button :disabled="processing" type="button" class="btn btn-sm btn-primary" @click="sendTest(selectedTemplate[0].id)">
+                <span v-if="processing">Sending Test...</span>
+                <span v-if="!processing">Send Test</span>
+              </button>
             </div>
           </div>
           <div v-html="selectedTemplate[0].html_template" class="p-3 text-left"></div>  
@@ -73,8 +76,8 @@ export default {
     changeCurrent(title) {
       this.current = title
     },
-    sendTest() {
-
+    sendTest(id) {
+      this.$store.dispatch('sendTestMail', id)
     }
   },
   created: function() {

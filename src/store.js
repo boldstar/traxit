@@ -1600,6 +1600,20 @@ export default new Vuex.Store({
       .catch(error => {
         console.log(error.response.data)
       })
+    },
+    sendTestMail(context, id) {
+      context.commit('startProcessing')
+      axios.post('/send-test-mail', {
+        id: id
+      })
+      .then(response => {
+        console.log(response.data)
+        context.commit('stopProcessing')
+      })
+      .catch(error => {
+        context.commit('stopProcessing')
+        console.log(error.response.data)
+      })
     } 
   }, 
 })

@@ -1,5 +1,5 @@
 <template>
-    <div class="container card-body bg-light">
+    <div class="container card-body bg-light" v-if="engagement">
         <div class="text-left mb-3">
             <h6><strong>Note:</strong> If question is for an engagement with the type of <strong>"Tax Return"</strong>, you will be asked if you would like to send an email.</h6>
             <h6><strong>Note:</strong> If question is for an engagement with the type of <strong>"Bookkeeping"</strong>, you will <strong>not</strong>  be asked about email. No email is currently provided.</h6>
@@ -14,7 +14,7 @@
             </div>
 
 
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between" v-if="engagement">
               <button class="btn btn-primary d-flex justify-content-start" @click="addNewQuestion" v-if="engagement.type === 'bookkeeping'">Create</button>
               <button class="btn btn-primary d-flex justify-content-start" @click="submitRequest" v-else-if="engagement.client.email">Create</button>
               <button class="btn btn-primary d-flex justify-content-start" @click="addNewQuestion" v-else>Contact Has No Email, Add Question Only</button>

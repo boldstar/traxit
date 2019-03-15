@@ -1609,9 +1609,11 @@ export default new Vuex.Store({
       .then(response => {
         console.log(response.data)
         context.commit('stopProcessing')
+        context.commit('successAlert', response.data)
       })
       .catch(error => {
         context.commit('stopProcessing')
+        context.commit('successAlert', error.response.data)
         console.log(error.response.data)
       })
     } 

@@ -4,6 +4,7 @@
       <h3 class="m-0">Templates</h3>
     </div>
     <hr>
+    <Alert v-if="successAlert" :message="successAlert.message" />
     <div class="d-flex justify-content-between">
       <div class="col-md-2">
         <div class="card text-left">
@@ -35,9 +36,10 @@
             </div>
             <div class="d-flex">
               <button type="button" class="btn btn-sm btn-secondary mr-2" @click="sendTest">Edit</button>
-              <button :disabled="processing" type="button" class="btn btn-sm btn-primary" @click="sendTest(selectedTemplate[0].id)">
+              <button :disabled="processing" type="button" class="btn btn-sm btn-primary">
                 <span v-if="processing">Sending Test...</span>
-                <span v-if="!processing">Send Test</span>
+                <span v-if="!processing && !verify" @click="verify = true">Send Test</span>
+                <span v-if="verify && !processing" @click="sendTest(selectedTemplate[0].id)">Are You Sure?</span>
               </button>
             </div>
           </div>
@@ -53,19 +55,25 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import Alert from '@/components/Alert.vue'
 
 export default {
   name: 'Templates',
+  components: {
+    Alert
+  },
   data() {
     return {
-      current: 'Pending Questions'
+      current: 'Pending Questions',
+      verify: false
     }
   },
   computed: {
     ...mapGetters(
         [
           'processing',
-          'templates'
+          'templates',
+          'successAlert'
         ]
       ),
       selectedTemplate() {
@@ -78,6 +86,9 @@ export default {
     },
     sendTest(id) {
       this.$store.dispatch('sendTestMail', id)
+      .then(() => {
+        this.verify = false
+      })
     }
   },
   created: function() {

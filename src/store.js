@@ -1138,7 +1138,7 @@ export default new Vuex.Store({
         engagement_id: question.engagement_id,
         question: question.question,
         email: question.email,
-        email_sent: question.email_sent,
+        email_sent: false,
         send_to: question.send_to,
         answered: false
       })

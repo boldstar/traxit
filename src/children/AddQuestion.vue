@@ -34,10 +34,14 @@
                 </div>
                 <div class="p-3">
                     <div>
+                        <span>Hi, <strong>{{ engagement.client.first_name }} <span v-if="engagement.client.spouse_first_name"> & {{engagement.client.spouse_first_name}}</span> {{ engagement.client.last_name}} </strong></span>
+                    </div>
+                    <br>
+                    <div>
                         <p>We are currently working on your {{ engagement.year }}, {{ engagement.return_type }} tax return for the name of "{{ engagement.name }}". The following questions and issues were raised during the performance of our work. Please provide responses to the following items so that we can continue.</p>
                     </div>
-                    <h5>Pending Questions:</h5>
                     <div class="questions-border">
+                        <h5>Pending Questions:</h5>
                         <div v-html="question.question" class="bg-light p-2"></div>
                     </div>
                     <div>

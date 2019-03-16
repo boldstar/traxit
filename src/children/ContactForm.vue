@@ -54,7 +54,7 @@
           <number-input :placeholder="'Cell Phone'" v-model="client.cell_phone" mask-type="number" class="mx-2"></number-input>
           <number-input :placeholder="'Work Phone'" v-model="client.work_phone" mask-type="number"></number-input>
         </div>
-        <label for="spouse_email" class="text-danger font-weight-bold" v-if="taxpayerEmailInvalid">Please Remove Or Provide A Valid Email</label>
+        <label for="email" class="text-danger font-weight-bold" v-if="taxpayerEmailInvalid">Please Remove Or Provide A Valid Email</label>
 
 
         <div class="d-flex mb-3 bg-light p-2 custom-control custom-checkbox bg-white form-control" v-bind:class="{'input-error' : has_spouse_alert}">
@@ -243,6 +243,7 @@ export default {
               return true;
             }
          }
+         return true;
     },
   },
   created: function() {

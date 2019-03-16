@@ -15,8 +15,9 @@
                     <input :class="{ 'input-error': errors.has('Name') }" class="form-control" type="text" placeholder="Name" v-model="name" v-validate="'required'" name="Name">.
                     <span class="form-error" v-show="errors.has('Name')">{{ errors.first('Name') }}</span>
                     <br>
-                    <input :class="{ 'input-error': errors.has('Email') }" class="form-control" type="text" placeholder="Email" v-model="email" v-validate="'required'" name="Email">
+                    <input :class="{ 'input-error': errors.has('Email'), 'input-error': invalidEmail }" class="form-control" type="email" placeholder="Email" v-model="email" v-validate="'required'" name="Email" @change="invalidEmail = false">
                     <span class="form-error"  v-show="errors.has('Email')">{{ errors.first('Email') }}</span>
+                    <span v-if="invalidEmail" class="text-danger font-weight-bold mb-1">Please provide valid email: email@example.com</span>
                     <br>
                     <input :class="{ 'input-error': errors.has('Password') }" class="form-control" type="text" placeholder="Password" v-model="password" v-validate="'required|min:6'" name="Password">
                     <span class="form-error"  v-show="errors.has('Password')">{{ errors.first('Password') }}</span>
@@ -48,12 +49,17 @@ export default {
             password: '',
             role: null,
             roles: ['Admin', 'Manager', 'User'],
-            option: 'Choose Role...'
+            option: 'Choose Role...',
+            invalidEmail: false,
         }
     },
   methods: {
     ...mapActions(['addUser']),
     validateBeforeSubmit() {
+            const validate = this.validateEmail()
+            if(!validate) {
+                return;
+            }
             this.$validator.validateAll().then((result) => {
                 if (result) {
                     this.addNewUser();
@@ -69,7 +75,20 @@ export default {
       }).then(() => {
           this.$router.push({path: '/administrator/users'});
       })
-    }
+    },
+    validateEmail() {
+         var email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+         var user = this.email
+         if(user) {
+            const s = email.test(String(user).toLowerCase());
+            if(!s) {
+              this.invalidEmail = true
+              return false
+            } else {
+              return true;
+            }
+         }
+    },
   },
   created() {
       this.role = this.option

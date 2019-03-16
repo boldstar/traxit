@@ -29,14 +29,12 @@
             <h5 class="ml-2 font-weight-bold text-primary"><i class="far fa-envelope mr-2"></i>Email Preview</h5>
             <div class="card">
                 <div class="card-header d-flex flex-column font-weight-bold">
-                    <span v-if="engagement.client.email">To: {{ engagement.client.email }}</span>
-                    <span v-if="engagement.client.spouse_email != null">CC: {{ engagement.client.spouse_email }}</span>
+                    <span v-if="engagement.client.email">Tax Payer: {{ engagement.client.email }}</span>
+                    <span v-if="engagement.client.spouse_email != null">Spouse: {{ engagement.client.spouse_email }}</span>
                 </div>
                 <div class="p-3">
                     <div>
-                        <p>We are currently working on your {{ engagement.year }}, {{ engagement.return_type }} tax return for the name of "{{ engagement.name }}" and have some questions for you</p>
-
-                        <p>Note: The following questions and issues were raised during the performance of our work. Please provide responses to the following items so that we can continue.</p>
+                        <p>We are currently working on your {{ engagement.year }}, {{ engagement.return_type }} tax return for the name of "{{ engagement.name }}". The following questions and issues were raised during the performance of our work. Please provide responses to the following items so that we can continue.</p>
                     </div>
                     <h5>Pending Questions:</h5>
                     <div class="questions-border">
@@ -44,8 +42,8 @@
                     </div>
                     <div>
                         <h5>For questions and concerns</h5>
-                        <div class="mb-2" style="display: flex;">
-                            <p style="margin: 0 5px; align-self: center">please feel free to call us at: </p>
+                        <div class="mb-2 d-flex">
+                            <p class="align-self-center m-0">Please feel free to call us at: </p>
                             <h6 style="margin: 0; align-self: center">{{ accountDetails.phone_number }}</h6>
                         </div>
                         <p>Please reply to this email to verify you received it and let me know when you will be able to get me this information.</p>
@@ -62,10 +60,24 @@
             <br>
           </div>
           <div class="d-flex justify-content-between">
-            <b-btn class="" variant="primary" @click="addNewQuestionWithEmail()">Yes, Send Email</b-btn>
-            <div class="d-flex">
-                <b-btn class="mr-3 ml-auto" variant="danger" @click="modalShow = false">Cancel, To Edit</b-btn>
-                <b-btn class="ml-auto" variant="secondary" @click="addNewQuestion()">No, Add Question Only</b-btn>
+            <b-btn class="font-weight-bold" variant="primary" @click="verify = true" v-if="!verify">Yes, Send Email</b-btn>
+            <div v-if="verify && !invalidEmail" class="d-flex">
+                <div class="pt-2">
+                    <p class="font-weight-bold h4 mb-0 align-self-end mr-3">Send To: </p>
+                </div>
+                <button @click="addNewQuestionWithEmail('both')" class="btn btn-primary font-weight-bold" v-if="engagement.client.spouse_email &&engagement.client.email">Both</button>
+                <p class="h3  mx-2">|</p>
+                <button @click="addNewQuestionWithEmail('taxpayer')" v-if="engagement.client.email" class="btn btn-secondary font-weight-bold">Tax Payer Only</button>
+                <p class="h3  mx-2">|</p>
+                <button @click="addNewQuestionWithEmail('spouse')" v-if="engagement.client.spouse_email" class="btn btn-info font-weight-bold">Spouse Only</button>
+            </div>
+            <div v-if="invalidEmail" class="d-flex">
+                <span class="text-danger font-weight-bold align-self-center">Sorry but the email provided is invalid</span>
+                <router-link class="font-weight-bold ml-3 align-self-center" :to="{path: '/contact/' + engagement.client.id + '/account/edit'}">Edit Email</router-link>
+            </div>
+            <div class="d-flex " v-if="!verify || invalidEmail">
+                <b-btn class="mr-3 ml-auto font-weight-bold" variant="danger" @click="cancelToEdit()">Cancel, To Edit</b-btn>
+                <b-btn class="ml-auto font-weight-bold" variant="secondary" @click="addNewQuestion()">No, Add Question Only</b-btn>
             </div>
           </div>
         </b-modal>
@@ -93,7 +105,9 @@ export default {
                 question: '',
                 email: false,
             },
-            modalShow: false
+            modalShow: false,
+            verify: false,
+            invalidEmail: false,
         }
     },
     computed: {
@@ -119,13 +133,20 @@ export default {
         question: this.question.question,
       })   
       .then(() => {
+        this.verify = false
         this.question = "" 
         this.idForQuestion++
         this.$router.push({path: '/engagement/' +this.engagement.id});
       })
     },
-    addNewQuestionWithEmail() {
+    addNewQuestionWithEmail(to) {
+      const validate = this.validateEmail(to)
+      console.log(validate)
       if(!this.question ) return;
+      if(!validate) {
+          this.invalidEmail = true;
+          return
+      }
       this.question.email = true
       
       this.addQuestion({
@@ -134,12 +155,31 @@ export default {
         email: this.question.email,
         email_sent: true,
         question: this.question.question,
+        send_to: to
       })   
       .then(() => {
         this.question = "" 
         this.idForQuestion++
         this.$router.push({path: '/engagement/' +this.engagement.id});
       })
+    },
+    validateEmail(to) {
+         var email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+         var taxpayer = this.engagement.client.email
+         var spouse = this.engagement.client.spouse_email
+         if(to == 'both') {
+            if(email.test(String(taxpayer).toLowerCase()) && email.test(String(spouse).toLowerCase())) {
+                return true;
+            } else {
+                return false
+            }
+         } 
+         if(to == 'taxpayer') {
+            return email.test(String(taxpayer).toLowerCase());
+         }
+         if(to == 'spouse') {
+            return email.test(String(spouse).toLowerCase());
+         }
     },
     submitRequest() {
         this.modalShow = true
@@ -152,6 +192,11 @@ export default {
       } else {
           return string;
       }
+    },
+    cancelToEdit() {
+        this.modalShow = false
+        this.verify = false
+        this.invalidEmail = false
     }
   },
   created: function() {

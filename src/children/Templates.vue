@@ -23,7 +23,7 @@
             </div>
             <div class="card-body p-2">
               <ul class="p-0 mb-0">
-                <li><strong>Bold</strong>: Variable</li>
+                <li class="pl-2"><strong>Bold</strong>: Variable</li>
               </ul>
             </div>
           </div>
@@ -31,16 +31,20 @@
       <div class="flex-fill">
         <div v-if="templates" class="card">
           <div class="card-header d-flex justify-content-between">
-            <div>
-              <strong>{{ selectedTemplate[0].title}}: <span class="text-primary">Template</span></strong>
+            <div class="pt-1">
+              <strong class="align-self-center">{{ selectedTemplate[0].title}}: <span class="text-primary">Template</span></strong>
+            </div>
+            <div v-if="noEmail">
+              <span class="text-danger font-weight-bold">Please Add Account Email Before Sending Test</span>
             </div>
             <div class="d-flex">
-              <button type="button" class="btn btn-sm btn-secondary mr-2" @click="sendTest">Edit</button>
-              <button :disabled="processing" type="button" class="btn btn-sm btn-primary">
+              <button :disabled="processing" type="button" class="btn btn-sm btn-primary font-weight-bold" v-if="!verify">
                 <span v-if="processing">Sending Test...</span>
-                <span v-if="!processing && !verify" @click="verify = true">Send Test</span>
-                <span v-if="verify && !processing" @click="sendTest(selectedTemplate[0].id)">Are You Sure?</span>
+                <span v-if="!processing && !verify" @click="verifySend()">Send Test</span>
               </button>
+              <span v-if="verify && !processing" class="font-weight-bold align-self-center">Are You Sure?</span>
+              <button v-if="verify" class="btn btn-sm btn-primary ml-3" @click="sendTest(selectedTemplate[0].id)">Yes, Send</button>
+              <button v-if="verify" class="btn btn-sm btn-secondary ml-3" @click="verify = false">Cancel</button>
             </div>
           </div>
           <div v-html="selectedTemplate[0].html_template" class="p-3 text-left"></div>  
@@ -65,7 +69,8 @@ export default {
   data() {
     return {
       current: 'Pending Questions',
-      verify: false
+      verify: false,
+      noEmail: false,
     }
   },
   computed: {
@@ -73,7 +78,8 @@ export default {
         [
           'processing',
           'templates',
-          'successAlert'
+          'successAlert',
+          'accountDetails'
         ]
       ),
       selectedTemplate() {
@@ -85,15 +91,28 @@ export default {
       this.current = title
     },
     sendTest(id) {
+      if(this.accountDetails.email == null) {
+        this.noEmail = true
+        this.verify = false
+        return;
+      }
+      this.verify = false
       this.$store.dispatch('sendTestMail', id)
       .then(() => {
         this.verify = false
       })
+    },
+    verifySend() {
+      this.verify = true
+      var self = this
+      setTimeout(() => {
+        self.verify = false
+      }, 7000)
     }
   },
   created: function() {
     this.$store.dispatch('getTemplates')
-
+    this.$store.dispatch('getAccountDetails')
   },
 }
 </script>

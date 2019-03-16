@@ -1139,6 +1139,7 @@ export default new Vuex.Store({
         question: question.question,
         email: question.email,
         email_sent: question.email_sent,
+        send_to: question.send_to,
         answered: false
       })
       .then(response => {

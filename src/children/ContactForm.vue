@@ -10,7 +10,7 @@
       <h4 class="text-left text-primary m-0"><i class="far fa-address-book mr-2"></i>New Contact</h4>
     </div>
 
-    <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center bg-light border px-3 pt-3 pb-0 mb-3">
+    <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center bg-light border px-3 pt-3 pb-0 mb-3 text-left">
       <div class="form-group">
 
         <div class="input-group mb-3">
@@ -50,10 +50,12 @@
         </div>
 
         <div class="d-flex mb-3">
-          <input type="text" class="form-control" placeholder="email@example.com" v-model="client.email" name="Email">
+          <input type="email" class="form-control" placeholder="email@example.com" v-model="client.email" name="Email" :class="{'border-danger':taxpayerEmailInvalid}" @change="taxpayerEmailInvalid = false">
           <number-input :placeholder="'Cell Phone'" v-model="client.cell_phone" mask-type="number" class="mx-2"></number-input>
           <number-input :placeholder="'Work Phone'" v-model="client.work_phone" mask-type="number"></number-input>
         </div>
+        <label for="spouse_email" class="text-danger font-weight-bold" v-if="taxpayerEmailInvalid">Please Remove Or Provide A Valid Email</label>
+
 
         <div class="d-flex mb-3 bg-light p-2 custom-control custom-checkbox bg-white form-control" v-bind:class="{'input-error' : has_spouse_alert}">
           <span class="mr-3 font-weight-bold mb-1 h6">Does Contact Have Spouse?</span>
@@ -77,10 +79,11 @@
         </div>
 
         <div class="d-flex mb-3" v-if="client.has_spouse == true">
-          <input type="text" class="form-control" placeholder="email@example.com" v-model="client.spouse_email" name="Spouse Email">
+          <input type="email" id="spouse_email" class="form-control" placeholder="email@example.com" v-model="client.spouse_email" name="Spouse Email" :class="{'border-danger': spouseEmailInvalid}" @change="spouseEmailInvalid = false">
           <number-input :placeholder="'Cell Phone'"  v-model="client.spouse_cell_phone" mask-type="number" class="mx-2"></number-input>
           <number-input :placeholder="'Work Phone'"  v-model="client.spouse_work_phone" mask-type="number"></number-input>
         </div>
+        <label for="spouse_email" class="text-danger font-weight-bold" v-if="spouseEmailInvalid">Please Remove Or Provide A Valid Email</label>
 
         <h5 class="text-left mb-3">Address:</h5>
         <div class="d-flex mb-4">
@@ -111,6 +114,8 @@ export default {
     return {
       has_spouse_alert: false,
       clear_spouse_field: false,
+      spouseEmailInvalid: false,
+      taxpayerEmailInvalid: false,
       client: {
         id: '',
         category: null,
@@ -146,6 +151,10 @@ export default {
     ...mapActions(['addClient']),
 
     validateBeforeSubmit() {
+            const validate = this.validateEmail()
+            if(!validate) {
+              return;
+            }
             this.$validator.validateAll().then((result) => {
                 if(this.client.has_spouse == true && this.client.spouse_first_name === '') {
                   this.has_spouse_alert = true
@@ -198,6 +207,42 @@ export default {
         .catch(error => {
             this.serverError = error.response.data
         })
+    },
+    validateEmail() {
+         var email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+         var taxpayer = this.client.email
+         var spouse = this.client.spouse_email
+         if(taxpayer != '' && spouse != '') {
+            if(email.test(String(taxpayer).toLowerCase()) && email.test(String(spouse).toLowerCase())) {
+                return true;
+            } else {
+              if(!email.test(String(taxpayer).toLowerCase())) {
+                this.taxpayerEmailInvalid = true
+              }
+              if(!email.test(String(spouse).toLowerCase())) {
+                this.spouseEmailInvalid = true
+              }
+                return false
+            }
+         }
+         if(taxpayer != '') {
+            const t = email.test(String(taxpayer).toLowerCase());
+            if(!t) {
+              this.taxpayerEmailInvalid = true
+              return false;
+            } else {
+              return true;
+            }
+         }
+         if(spouse != '') {
+            const s = email.test(String(spouse).toLowerCase());
+            if(!s) {
+              this.spouseEmailInvalid = true
+              return false
+            } else {
+              return true;
+            }
+         }
     },
   },
   created: function() {

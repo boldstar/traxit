@@ -75,6 +75,9 @@
                 <p class="h3  mx-2">|</p>
                 <button @click="addNewQuestionWithEmail('spouse')" v-if="engagement.client.spouse_email" class="btn btn-info font-weight-bold">Spouse Only</button>
             </div>
+            <div v-if="verify && !invalid">
+                <button class="btn mt-1 btn-secondary font-weight-bold" @click="verify = false">Back</button>
+            </div>
             <div v-if="invalidEmail" class="d-flex">
                 <span class="text-danger font-weight-bold align-self-center">Sorry but the email provided is invalid</span>
                 <router-link class="font-weight-bold ml-3 align-self-center" :to="{path: '/contact/' + engagement.client.id + '/account/edit'}">Edit Email</router-link>

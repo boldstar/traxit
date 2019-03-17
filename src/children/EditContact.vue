@@ -169,7 +169,7 @@ export default {
          var email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
          var taxpayer = this.client.email
          var spouse = this.client.spouse_email
-         if(taxpayer != '' || null && spouse != '' || null) {
+         if(taxpayer != null && spouse !=  null) {
             if(email.test(String(taxpayer).toLowerCase()) && email.test(String(spouse).toLowerCase())) {
                 return true;
             } else {
@@ -182,7 +182,7 @@ export default {
                 return false
             }
          }
-         if(taxpayer != '' || null) {
+         if(taxpayer !=  null) {
             const t = email.test(String(taxpayer).toLowerCase());
             if(!t) {
               this.taxpayerEmailInvalid = true
@@ -191,7 +191,7 @@ export default {
               return true;
             }
          }
-         if(spouse != '' || null) {
+         if(spouse !=  null) {
             const s = email.test(String(spouse).toLowerCase());
             if(!s) {
               this.spouseEmailInvalid = true

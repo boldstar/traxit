@@ -26,11 +26,18 @@
           </div>
         </div>
         <div class="d-flex justify-content-between mt-4">
-          <button type="button" class="btn btn-primary btn-sm" @click="sendMail()" :disabled="processing">
+          <button type="button" class="btn btn-primary btn-sm" @click="selectTo = true" :disabled="processing" v-if="!selectTo">
             <span v-if="!processing">Yes, Send Email</span>
             <span v-if="processing">Sending Mail...</span>
           </button>
-          <button type="button" class="btn btn-danger btn-sm" @click="closeModal()">No Thanks</button>
+          <div class="d-flex" v-if="selectTo && !processing">
+            <button type="button" class="btn btn-primary btn-sm" @click="sendMail('both')">Both</button>
+            <p class="h5  mx-2">|</p>
+            <button type="button" class="btn btn-info btn-sm" @click="sendMail('taxpayer')">Tax Payer</button>
+            <p class="h5  mx-2">|</p>
+            <button type="button" class="btn btn-secondary btn-sm" @click="sendMail('spouse')">Spouse</button>
+          </div>
+          <button type="button" class="btn btn-danger btn-sm" @click="closeModal()" v-if="!processing">No Thanks</button>
         </div>
       </b-modal>
     </div>
@@ -46,6 +53,7 @@ export default {
     data() {
       return {
         notifyModal: true,
+        selectTo: false
       }
     },
     components:{
@@ -61,14 +69,11 @@ export default {
       closeModal() {
         this.$store.commit('notifyClientModal')
       },
-      sendMail() {
-        this.$store.dispatch('notifyClient', this.taskForNotification)
+      sendMail(send_to) {
+        this.selectTo = false
+        this.$store.dispatch('notifyClient', {task: this.taskForNotification, send_to: send_to})
       }
     },
-    mounted() {
-     
-    }
-
 }
 </script>
 

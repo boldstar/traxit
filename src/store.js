@@ -728,7 +728,8 @@ export default new Vuex.Store({
     notifyClient(context, task) {
       context.commit('startProcessing')
       axios.post('/notify-client', {
-        id: task.id
+        id: task.task.id,
+        send_to: task.send_to
       })
       .then(response => {
         context.commit('stopProcessing')

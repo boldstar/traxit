@@ -2,7 +2,7 @@
   <div class="page-wrapper mt-1">
 
 
-  <form @submit.prevent="updateThisClient" class="d-flex-column justify-content-center">
+  <form @submit.prevent="updateThisClient" class="d-flex-column justify-content-center text-left">
       <div class="form-group">
         <select class="form-control mb-3" id="category" v-model="client.category">
           <option v-for="category in categories" :key="category.id" :value="category">{{ category }}</option>
@@ -33,10 +33,11 @@
         </div>
 
         <div class="d-flex mb-3">
-          <input type="text" class="form-control" placeholder="email@example.com" v-model="client.email">
+          <input type="text" class="form-control" placeholder="email@example.com" v-model="client.email" :class="{'border-danger' : taxpayerEmailInvalid}" @change="taxpayerEmailInvalid = false">
           <number-input :placeholder="'Cell Phone'" v-model="client.cell_phone" mask-type="number" class="mx-2"></number-input>
           <number-input :placeholder="'Work Phone'" v-model="client.work_phone" mask-type="number"></number-input>
         </div>
+        <label for="email" class="text-danger font-weight-bold" v-if="taxpayerEmailInvalid">Please Remove Or Provide A Valid Email</label>
 
         <div v-if="client.has_spouse == true">
           <h5 class="text-left mb-3">Spouse:</h5>
@@ -52,10 +53,11 @@
           </div>
 
           <div class="d-flex mb-3">
-            <input type="text" class="form-control" placeholder="email@example.com" v-model="client.spouse_email">
+            <input type="text" class="form-control" placeholder="email@example.com" v-model="client.spouse_email" :class="{'border-danger' : spouseEmailInvalid}" @change="spouseEmailInvalid = false">
             <number-input :placeholder="'Cell Phone'"  v-model="client.spouse_cell_phone" mask-type="number" class="mx-2"></number-input>
-          <number-input :placeholder="'Work Phone'"  v-model="client.spouse_work_phone" mask-type="number"></number-input>
+            <number-input :placeholder="'Work Phone'"  v-model="client.spouse_work_phone" mask-type="number"></number-input>
           </div>
+          <label for="spouse_email" class="text-danger font-weight-bold" v-if="spouseEmailInvalid">Please Remove Or Provide A Valid Email</label>
         </div>
         
         <h5 class="text-left mb-3">Address:</h5>
@@ -94,7 +96,9 @@ export default {
   data () {
     return {
       has_spouse_alert: false,
-        categories: [ 'Choose Category...', 'Client', 'Prospect'],
+      spouseEmailInvalid: false,
+      taxpayerEmailInvalid: false,
+      categories: [ 'Choose Category...', 'Client', 'Prospect'],
     }
   },
   computed: {
@@ -126,6 +130,10 @@ export default {
         } 
     },
     proceedWithUpdate() {
+      const validate = this.validateEmail()
+      if(!validate) {
+        return;
+      }
       this.updateClient( {
         id: this.client.id,
         active: this.client.active,
@@ -156,7 +164,44 @@ export default {
       .then(() => {
         this.$router.push({path: '/contact/' +this.client.id+ '/account'})
       })
-    }
+    },
+     validateEmail() {
+         var email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+         var taxpayer = this.client.email
+         var spouse = this.client.spouse_email
+         if(taxpayer != null && spouse !=  null) {
+            if(email.test(String(taxpayer).toLowerCase()) && email.test(String(spouse).toLowerCase())) {
+                return true;
+            } else {
+              if(!email.test(String(taxpayer).toLowerCase())) {
+                this.taxpayerEmailInvalid = true
+              }
+              if(!email.test(String(spouse).toLowerCase())) {
+                this.spouseEmailInvalid = true
+              }
+                return false
+            }
+         }
+         if(taxpayer !=  null) {
+            const t = email.test(String(taxpayer).toLowerCase());
+            if(!t) {
+              this.taxpayerEmailInvalid = true
+              return false;
+            } else {
+              return true;
+            }
+         }
+         if(spouse !=  null) {
+            const s = email.test(String(spouse).toLowerCase());
+            if(!s) {
+              this.spouseEmailInvalid = true
+              return false
+            } else {
+              return true;
+            }
+         }
+         return true;
+    },
     },
     created: function() {
       this.$store.dispatch('editDetails', this.$route.params.id);

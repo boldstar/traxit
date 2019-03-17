@@ -71,7 +71,8 @@ export default new Vuex.Store({
     stripekey: null,
     notify: false,
     tasknotify: '',
-    statusesnotupdated: ''
+    statusesnotupdated: '',
+    templates: ''
   },
   getters: {
     chartDataLength(state) {
@@ -205,6 +206,9 @@ export default new Vuex.Store({
     },
     statusesNotUpdated(state) {
       return state.statusesnotupdated
+    },
+    templates(state) {
+      return state.templates
     }
   },
   mutations: {
@@ -522,6 +526,9 @@ export default new Vuex.Store({
     },
     clearAccountDetails(state) {
       state.account = ''
+    },
+    emailTemplates(state, templates) {
+      state.templates = templates
     }
   },
   actions: {
@@ -720,7 +727,8 @@ export default new Vuex.Store({
     notifyClient(context, task) {
       context.commit('startProcessing')
       axios.post('/notify-client', {
-        id: task.id
+        id: task.task.id,
+        send_to: task.send_to
       })
       .then(response => {
         context.commit('stopProcessing')
@@ -1130,7 +1138,8 @@ export default new Vuex.Store({
         engagement_id: question.engagement_id,
         question: question.question,
         email: question.email,
-        email_sent: question.email_sent,
+        email_sent: false,
+        send_to: question.send_to,
         answered: false
       })
       .then(response => {
@@ -1139,7 +1148,7 @@ export default new Vuex.Store({
         context.commit('stopProcessing')
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.response.data)
         context.commit('errorMsgAlert', error.response.data.message)
         context.commit('stopProcessing')
       })
@@ -1581,6 +1590,31 @@ export default new Vuex.Store({
         console.log(response.data)
       })
       .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    getTemplates(context) {
+      axios.get('/templates')
+      .then(response => {
+        context.commit('emailTemplates', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    sendTestMail(context, id) {
+      context.commit('startProcessing')
+      axios.post('/send-test-mail', {
+        id: id
+      })
+      .then(response => {
+        console.log(response.data)
+        context.commit('stopProcessing')
+        context.commit('successAlert', response.data)
+      })
+      .catch(error => {
+        context.commit('stopProcessing')
+        context.commit('successAlert', error.response.data)
         console.log(error.response.data)
       })
     } 

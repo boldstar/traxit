@@ -4,13 +4,14 @@
         <h4 class="text-left text-primary m-0"><i class="far fa-address-book mr-2"></i>Edit Account Details</h4>
         </div>
         <div class="col-6 card-body bg-light">
-            <form @submit.prevent="editThisAccount" class="d-flex-column justify-content-center">
+            <form @submit.prevent="editThisAccount" class="d-flex-column justify-content-center text-left">
               <input type="text" class="form-control mb-3" placeholder="Business Name" v-model="accountDetails.business_name">
               <input type="text" class="form-control mb-3" placeholder="Address" v-model="accountDetails.address">
               <input type="text" class="form-control mb-3" placeholder="City" v-model="accountDetails.city">
               <input type="text" class="form-control mb-3" placeholder="State" v-model="accountDetails.state">
               <input type="text" class="form-control mb-3" placeholder="Postal Code" v-model="accountDetails.postal_code">
-              <input type="text" class="form-control mb-3" placeholder="Email" v-model="accountDetails.email">
+              <input type="text" class="form-control" placeholder="Email" v-model="accountDetails.email" :class="{'border-danger' : invalidEmail, 'mb-3' : !invalidEmail}" @change="invalidEmail = false">
+              <span v-if="invalidEmail" class="text-danger font-weight-bold mb-1">Please remove or provide valid email</span>
               <input type="text" class="form-control mb-3" placeholder="Phone Number" v-model="accountDetails.phone_number">
               <input type="text" class="form-control mb-3" placeholder="Fax Number" v-model="accountDetails.fax_number">
               <div class="d-flex justify-content-between">
@@ -27,6 +28,11 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
     name: 'EditAccount',
+    data() {
+      return {
+        invalidEmail: false
+      }
+    },
     computed: {
     ...mapGetters(['accountDetails']),
   },
@@ -34,7 +40,10 @@ export default {
     ...mapActions(['updateAccountDetails']),
     
     editThisAccount() {
-      
+      const validate = this.validateEmail();
+      if(!validate) {
+        return;
+      }
       this.updateAccountDetails({
         id: this.accountDetails.id,
         business_name: this.accountDetails.business_name,
@@ -50,6 +59,19 @@ export default {
       .then(() => {
         this.$router.push({path: '/administrator/account'});
       })
+    },
+    validateEmail() {
+         var email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+         var accountEmail = this.accountDetails.email
+         if(accountEmail != '' || null) {
+            const s = email.test(String(accountEmail).toLowerCase());
+            if(!s) {
+              this.invalidEmail = true
+              return false
+            } else {
+              return true;
+            }
+         }
     },
   },
   created: function(){

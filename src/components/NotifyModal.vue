@@ -6,10 +6,12 @@
           <h4 class="text-primary font-weight-bold">Notify Contact</h4>
           <i class="far fa-envelope text-primary fa-2x"></i>
         </div>
-        <div class="py-4 bg-light" v-if="!processing">
+        <div class="pt-2 bg-light" v-if="!processing">
           <span class="font-weight-bold bg-light message">Would You Like To Notify The Contact Of The Following Status Update?</span>
-          <div class="mt-3">
-            <span class="font-weight-bold text-primary">"{{ taskForNotification.title }}"</span>
+          <div class="mt-3 mx-3 text-left">
+            <span class="font-weight-bold">Status: <span class="text-primary">"{{ taskForNotification.title }}"</span></span>
+            <p v-if="statusMessage.message" class="font-weight-bold">Message: <span class="text-primary">{{statusMessage.message}}</span></p>
+            <p class="font-weight-bold" v-else>Message: <span class="text-primary">No message provided.</span></p>
           </div>
         </div>
         <div v-if="processing" class="py-4 mb-5">
@@ -31,6 +33,7 @@
             <span v-if="processing">Sending Mail...</span>
           </button>
           <div class="d-flex" v-if="selectTo && !processing">
+            <p class="h5 mr-2">To:</p>
             <button type="button" class="btn btn-primary btn-sm" @click="sendMail('both')">Both</button>
             <p class="h5  mx-2">|</p>
             <button type="button" class="btn btn-info btn-sm" @click="sendMail('taxpayer')">Tax Payer</button>
@@ -63,7 +66,7 @@ export default {
         'b-modal': bModalDirective
     },
     computed: {
-      ...mapGetters(['taskForNotification', 'processing'])
+      ...mapGetters(['taskForNotification', 'statusMessage', 'processing'])
     },
     methods: {
       closeModal() {

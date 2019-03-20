@@ -21,9 +21,16 @@
               <span>Legend</span>
               <i class="fas fa-code align-self-center"></i>
             </div>
-            <div class="card-body p-2">
+            <div class="card-body px-0 mx-0 p-0">
               <ul class="p-0 mb-0">
-                <li class="pl-2"><strong>Bold</strong>: Variable</li>
+                <li class="px-3 py-2 d-flex justify-content-between border-bottom">
+                  <strong>Bold</strong>
+                  <span class="text-primary">Variable</span>
+                </li>
+                <li class="px-3 py-2 d-flex justify-content-between">
+                  <span>Regular</span>
+                  <span class="text-primary">Static</span>
+                </li>
               </ul>
             </div>
           </div>

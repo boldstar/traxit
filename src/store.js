@@ -72,7 +72,9 @@ export default new Vuex.Store({
     notify: false,
     tasknotify: '',
     statusesnotupdated: '',
-    templates: ''
+    templates: '',
+    statusmodal: false,
+    status: ''
   },
   getters: {
     chartDataLength(state) {
@@ -209,6 +211,12 @@ export default new Vuex.Store({
     },
     templates(state) {
       return state.templates
+    },
+    statusModal(state) {
+      return state.statusmodal
+    },
+    statusMessage(state) {
+      return state.status
     }
   },
   mutations: {
@@ -262,6 +270,9 @@ export default new Vuex.Store({
     notifyClientModal(state, task) {
       state.notify = !state.notify
       state.tasknotify = task
+    },
+    notifyClientMessage(state, status) {
+      state.status = status
     },
     addUser(state, user) {
       state.users.push(user)
@@ -529,6 +540,9 @@ export default new Vuex.Store({
     },
     emailTemplates(state, templates) {
       state.templates = templates
+    },
+    statusModal(state) {
+      state.statusmodal = !state.statusmodal
     }
   },
   actions: {
@@ -627,7 +641,6 @@ export default new Vuex.Store({
         token: data.token
       })
       .then(response => {
-        console.log(response.data)
         context.commit('resetSuccess', response.data)
         context.commit('loading')
       })
@@ -716,6 +729,7 @@ export default new Vuex.Store({
       .then(response => {
         if(response.data.notify) {
           context.commit('notifyClientModal', response.data.task)
+          context.commit('notifyClientMessage', response.data.status)
         }
           context.commit('updateTask', response.data.task)
           context.commit('successAlert', response.data.message)
@@ -734,7 +748,6 @@ export default new Vuex.Store({
         context.commit('stopProcessing')
         context.commit('notifyClientModal')
         context.commit('successAlert', 'The Contact Has Been Notified')
-        console.log(response.data)
       })
       .catch(error => {
         context.commit('stopProcessing')
@@ -1341,6 +1354,24 @@ export default new Vuex.Store({
           console.log(error)
       })                
     },
+    saveStatusMessage(context, status) {
+      context.commit('startProcessing')
+      axios.post('/message', {
+        id: status.id,
+        message: status.message
+      })
+      .then(response => {
+        context.commit('stopProcessing')
+        context.commit('editWorkflow', response.data.workflow)
+        context.commit('successAlert', response.data.message)
+        context.commit('statusModal')
+        router.push('/administrator/workflows')
+      })
+      .catch(error => {
+        context.commit('stopProcessing')
+        console.log(error.response.data)
+      })
+    },
     searchDatabase(context, data) {
       context.commit('startProcessing')
       axios.post('/search', {
@@ -1587,7 +1618,6 @@ export default new Vuex.Store({
       axios.get('/stripe-key')
       .then(response => {
         context.commit('stripeKey', response.data)
-        console.log(response.data)
       })
       .catch(error => {
         console.log(error.response.data)
@@ -1608,7 +1638,6 @@ export default new Vuex.Store({
         id: id
       })
       .then(response => {
-        console.log(response.data)
         context.commit('stopProcessing')
         context.commit('successAlert', response.data)
       })

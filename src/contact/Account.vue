@@ -15,7 +15,7 @@
                     <ul class="card-body px-5 h6 text-left">
                         <li class=" justify-content-between d-flex mb-2">
                             <span class="font-weight-bold">Date Of Birth </span>
-                            {{client.dob | formatDate}}
+                            <span v-if="client.dob">{{client.dob | formatDate}}</span> 
                         </li>
                         <li class=" text-capitalize justify-content-between d-flex mb-2">
                             <span class="font-weight-bold">Occupation </span>
@@ -40,7 +40,10 @@
                             <span class="card-title text-capitalize h4 mt-2 align-self-center">{{ client.spouse_first_name }} {{client.spouse_middle_initial}} {{client.spouse_last_name}}</span>
                     </div>
                     <ul class="card-body px-5 h6 text-left">
-                        <li class="justify-content-between d-flex mb-2"><span class="font-weight-bold">Date Of Birth </span> {{client.spouse_dob | formatDate}}</li>
+                        <li class="justify-content-between d-flex mb-2">
+                            <span class="font-weight-bold">Date Of Birth </span>   
+                            <span v-if="client.spouse_dob != 'Invalid date'">{{client.spouse_dob | formatDate}}</span>
+                        </li>
                         <li class="text-capitalize justify-content-between d-flex mb-2"><span class="font-weight-bold">Occupation </span> {{client.spouse_occupation}}</li>
                         <li class="justify-content-between d-flex mb-2"><span class="font-weight-bold">Email </span> {{client.spouse_email}}</li>
                         <li class="justify-content-between d-flex mb-2"><span class="font-weight-bold">Cell Phone </span> {{client.spouse_cell_phone}}</li>

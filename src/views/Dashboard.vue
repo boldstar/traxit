@@ -40,7 +40,7 @@
                     <div class="col-lg-8 col-md-8 col-sm-12 carousel h4 py-2">
                         <carousel ref="carousel" :per-page="1"  :mouse-drag="false" :loop="true" :navigationEnabled="true" :paginationEnabled="false" @pageChange="handleClick" :navigationNextLabel='`<i class="fas fa-arrow-alt-circle-right text-primary"></i>`' :navigationPrevLabel='`<i class="fas fa-arrow-alt-circle-left text-primary"></i>`'>
                             <slide class="font-weight-bold p-2" ref="slide" v-for="workflow in mapWorkflowsWithIds" :key="workflow.workflow_id" :title="`${workflow.workflow_id}`">
-                                <i class="fas fa-project-diagram mr-2 text-primary"></i>{{workflow.workflow}}
+                                <i class="fas fa-route mr-2 text-primary"></i>{{workflow.workflow}}
                             </slide>
                         </carousel>
                     </div>

@@ -36,12 +36,12 @@
                 <th scope="col" class="font-weight-bold text-center"><i class="far fa-envelope text-primary"></i></th>
               </tr>
             </thead>
-            <draggable class="text-left" :element="'tbody'" v-model="workflow.statuses" @start="drag=true" @end="drag=false" @change="updateStatusOrder(workflow.id, workflow.statuses)" >
-            <tr v-for="(status, index) in workflow.statuses" :key="index" :class="{'highlight-status': checkValue(status.id)}">
-              <th scope="row" class="status-th"><div class="status-order"></div> {{ appendZero(index + 1) }}</th>
-              <td>{{ status.status }}</td>
-              <td class="text-center"><i class="fas fa-check text-primary" v-if="status.notify_client"></i></td>
-            </tr>
+            <draggable :list="workflow.statuses" class="text-left" :element="'tbody'" v-model="workflow.statuses" @start="drag=true" @end="drag=false" @change="updateStatusOrder(workflow.id, workflow.statuses)" ref="table" :options="{animation: 200, handle: '.draggable'}" :sortable="true">
+              <tr v-for="(status, index) in workflow.statuses" :key="index"  :class="{'highlight-status': checkValue(status.id)}" class="draggable">
+                <th scope="row" class="status-th"><div class="status-order"></div> {{ appendZero(index + 1) }}</th>
+                <td>{{ status.status }}</td>
+                <td class="text-center" :class="{'notify': status.notify_client}" @click="showMessage(status)"><i  data-toggle="tooltip" data-placement="right" title="Add Custom Message" class="fas fa-check text-primary" v-if="status.notify_client"></i></td>
+              </tr>
             </draggable>
           </table>
           <div class="card-footer text-right">
@@ -90,7 +90,9 @@
           <b-btn class="mt-3 ml-auto" variant="outline-primary" @click="deleteThisWorkflow">Confirm</b-btn>
         </div>
       </form>
-    </b-modal>  
+    </b-modal> 
+
+    <message-modal :status="statusForModal" v-if="statusForModal && statusModal" @close-modal="removeModal"></message-modal> 
 
       <router-view></router-view>
   </div>
@@ -100,6 +102,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import draggable from 'vuedraggable'
 import Alert from '@/components/Alert.vue'
+import MessageModal from '@/components/MessageModal.vue'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 
@@ -114,7 +117,12 @@ export default {
       workflowSelect: false,
       existingWorkflow: null,
       engagementsExist: false,
+      addMessage: false,
+      selectedIndex: -1,
+      selectedWorkflow: -1,
+      message: '',
       alert: '',
+      statusForModal: '',
       newWorkflow: {
         name: '',
       },
@@ -124,13 +132,14 @@ export default {
   components:{
     'b-modal': bModal,
     draggable,
-    Alert
+    Alert,
+    MessageModal
   },
   directives: {
     'b-modal': bModalDirective
   },
   computed: {
-    ...mapGetters(['allWorkflows', 'errorMsgAlert', 'successAlert', 'statusesNotUpdated']),
+    ...mapGetters(['allWorkflows', 'errorMsgAlert', 'successAlert', 'statusesNotUpdated', 'statusModal']),
   },
   methods: {
     ...mapActions(['addWorkflow', 'workflowStatusOrder', 'deleteWorkflow']),
@@ -162,13 +171,12 @@ export default {
       }
     },
     updateStatusOrder(id, statuses) {
-      statuses.map((status, index) => {
-        status.order = index + 1;
-      })
+      var filteredStatuses = statuses.filter(status => status !== undefined)
+      filteredStatuses.map((status, index) => status.order = index +1 )
 
       this.workflowStatusOrder({
         id: id,
-        statuses: statuses
+        statuses: filteredStatuses
       }).then(() => {
         this.alert = 'Update Succesful'
       })
@@ -223,6 +231,17 @@ export default {
           this.engagementsExist = false
         }
       }
+    },
+    showMessage(status) {
+      if(status.notify_client) {
+        this.statusForModal = status
+        this.$store.commit('statusModal')
+      } else {
+        return
+      }
+    },
+    removeModal() {
+      this.statusForModal = ''
     }
   },
   created: function() {
@@ -293,6 +312,18 @@ table tr:last-child .status-order:after {
 
 .highlight-status {
   background-color: rgba(255, 0, 0, 0.192);
+}
+
+.notify {
+  cursor: pointer!important;
+
+  &:hover {
+    background-color: #0077ff4f;
+  }
+}
+
+.fa-check {
+  cursor: pointer!important;
 }
 
 </style>

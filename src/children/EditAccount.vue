@@ -63,15 +63,18 @@ export default {
     validateEmail() {
          var email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
          var accountEmail = this.accountDetails.email
-         if(accountEmail != '' || null) {
-            const s = email.test(String(accountEmail).toLowerCase());
-            if(!s) {
-              this.invalidEmail = true
-              return false
-            } else {
-              return true;
-            }
+         if(accountEmail != null) {
+           if(accountEmail.length > 0) {
+             const s = email.test(String(accountEmail).toLowerCase());
+             if(!s) {
+               this.invalidEmail = true
+               return false
+             } else {
+               return true;
+             }
+           }
          }
+         return true
     },
   },
   created: function(){

@@ -170,35 +170,41 @@ export default {
          var taxpayer = this.client.email
          var spouse = this.client.spouse_email
          if(taxpayer != null && spouse !=  null) {
-            if(email.test(String(taxpayer).toLowerCase()) && email.test(String(spouse).toLowerCase())) {
-                return true;
-            } else {
-              if(!email.test(String(taxpayer).toLowerCase())) {
-                this.taxpayerEmailInvalid = true
-              }
-              if(!email.test(String(spouse).toLowerCase())) {
-                this.spouseEmailInvalid = true
-              }
-                return false
-            }
+           if(taxpayer.length > 0 && spouse.length > 0) {
+             if(email.test(String(taxpayer).toLowerCase()) && email.test(String(spouse).toLowerCase())) {
+                 return true;
+             } else {
+               if(!email.test(String(taxpayer).toLowerCase())) {
+                 this.taxpayerEmailInvalid = true
+               }
+               if(!email.test(String(spouse).toLowerCase())) {
+                 this.spouseEmailInvalid = true
+               }
+                 return false
+             }
+           }
          }
          if(taxpayer !=  null) {
-            const t = email.test(String(taxpayer).toLowerCase());
-            if(!t) {
-              this.taxpayerEmailInvalid = true
-              return false;
-            } else {
-              return true;
-            }
+           if(taxpayer.length > 0) {
+             const t = email.test(String(taxpayer).toLowerCase());
+             if(!t) {
+               this.taxpayerEmailInvalid = true
+               return false;
+             } else {
+               return true;
+             }
+           }
          }
          if(spouse !=  null) {
-            const s = email.test(String(spouse).toLowerCase());
-            if(!s) {
-              this.spouseEmailInvalid = true
-              return false
-            } else {
-              return true;
-            }
+           if(spouse.length > 0 ) {
+             const s = email.test(String(spouse).toLowerCase());
+             if(!s) {
+               this.spouseEmailInvalid = true
+               return false
+             } else {
+               return true;
+             }
+           }
          }
          return true;
     },

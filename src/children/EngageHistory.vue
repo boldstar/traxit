@@ -27,8 +27,11 @@
         </span>
       </div>
     </div>
-    <div class="card-body radius shadow ml-3 text-left">
-      <h2><i class="far fa-clock mr-2"></i>Timelapse</h2>
+    <div class="card-body radius shadow ml-3 text-left align-self-start">
+      <h2><i class="far fa-clock mr-2"></i>
+        <span v-if="engagementComplete">Completed In</span>
+        <span v-else>Timelapse</span>
+      </h2>
       <div v-if="engagementHistory" class="day">
         <span class="d-flex justify-content-center">
           {{ calculateDifference }} Days
@@ -68,7 +71,8 @@ export default {
   name: 'EngagementHistory',
   data() {
     return {
-      dataReceived: false
+      dataReceived: false,
+      engagementComplete: false
     }
   },
   components:{
@@ -104,6 +108,7 @@ export default {
               return date2_ms.diff(date1_ms, 'days');
             } else {
             // Convert both dates to moment object
+            this.engagementComplete = true
             var date1_ms = moment(started[0].created_at);
             var date2_ms = moment(completed[0].created_at);
             return date2_ms.diff(date1_ms, 'days');

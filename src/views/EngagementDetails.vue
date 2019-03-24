@@ -17,7 +17,8 @@
               {{ modifyAmount(engagement.balance) }}
           </span>
         </div>
-        <span v-if="archiving" class="bg-light p-1 mr-3 font-weight-bold">Archiving..</span>
+        <span v-if="archiving && !engagement.archive" class="bg-light p-1 mr-3 font-weight-bold">Archiving..</span>
+        <span v-if="archiving && engagement.archive" class="bg-light p-1 mr-3 font-weight-bold">Unarchiving..</span>
         <div class="btn-group">
           <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-cogs mr-2"></i>  Action

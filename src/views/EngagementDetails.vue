@@ -122,7 +122,7 @@
           <span><router-link :to="'/engagement/' + engagement.id + '/add-question'" class="btn btn-sm btn-primary"><i class="far fa-plus-square"></i></router-link></span>
       </div>   
       
-      <div class="m-3 overflow">
+      <div class="m-3 question">
         <div class="mb-3" v-if="engagement.questions.length <= 0">
           <span class="font-weight-bold">There are currently no questions</span>
         </div>
@@ -145,7 +145,7 @@
               <div class="card-body pt-2 pb-0 d-flex justify-content-between">
                 <div class="h5 mr-5 d-flex flex-column text-left">
                   <span class="mb-2 h6 font-weight-bold">Question:</span>
-                  <span class="align-self-center h6 mb-0" v-html="question.question"></span>
+                  <span class="align-self-center h6 mb-0 question" v-html="question.question"></span>
                 </div>
                 <div class="ml-5 d-flex align-self-center">
                   <router-link class="btn btn-sm btn-primary" v-if="question.answered == 0" :to="{ path: '/engagement/' +engagement.id+ '/answer-question/' +question.id }"><i class="fas fa-comment-dots"></i></router-link>
@@ -341,5 +341,11 @@ export default {
 
   li {
     border-bottom: 1px solid #a9a9a9a4;
+  }
+
+  .question {
+    overflow-wrap: normal;
+    flex-basis: 100%;
+    max-width: 960px;
   }
 </style>

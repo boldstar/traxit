@@ -110,9 +110,9 @@
         </div>
 
       <!-- this is the section where the qustions will go -->
-      <div class="ml-3 d-flex flex-column flex-fill card shadow-sm align-self-start">
+      <div class="ml-3 d-flex flex-column align-items-center flex-fill card shadow-sm align-self-start">
 
-      <div class="d-flex justify-content-between card-header py-2 mb-2">
+      <div class="d-flex justify-content-between card-header py-2 mb-2 w-100">
           <div class="align-self-center">
             <span class="font-weight-bold">
               Questions |

@@ -18,9 +18,23 @@
 
         <div class="input-group my-3">
           <div class="input-group-prepend">
+            <label class="input-group-text text-primary" for="option">Difficulty</label>
+          </div>
+          <select :class="{ 'input-error': errors.has('Difficulty Level') }" class="form-control" id="difficulty" v-model="engagement.difficulty" v-validate="{ is_not: option }" name="Difficulty Level" v-on:change="removeSelected">
+            <option disabled>{{ option }}</option>
+            <option v-for="(level, index) in levels" :key="index" :value="level">
+              {{ level }}
+            </option>
+          </select>
+        </div>
+        <span class="form-error" v-show="errors.has('Difficulty Level')">{{ errors.first('Difficulty Level') }}</span>
+
+
+        <div class="input-group my-3">
+          <div class="input-group-prepend">
             <label class="input-group-text text-primary" for="option">Category</label>
           </div>
-          <select :class="{ 'input-error': errors.has('Category') }" class="form-control" id="client_id" v-model="engagement.category" v-validate="{ is_not: option }" name="Category" v-on:change="removeSelected">
+          <select :class="{ 'input-error': errors.has('Category') }" class="form-control" id="category" v-model="engagement.category" v-validate="{ is_not: option }" name="Category" v-on:change="removeSelected">
             <option disabled>{{ option }}</option>
             <option v-for="(category, index) in categories" :key="index" :value="category">
               {{ category }}
@@ -149,6 +163,7 @@ export default {
       client: '',
       engagement: {
         year: '',
+        difficulty: null,
         category: null,
         client_id: null,
         type: 'taxreturn',
@@ -160,7 +175,8 @@ export default {
       },
       option: 'Choose...',
       empty: 'Please select workflow first...',
-      categories:['Personal', 'Business']
+      categories:['Personal', 'Business'],
+      levels: [1,2,3,4,5]
     }
   },
   computed: {
@@ -212,6 +228,7 @@ export default {
         year: this.engagement.year,
         assigned_to: this.engagement.assigned_to,
         status: this.engagement.status,
+        difficulty: this.engagement.difficulty
       })   
       .then(() => {
         this.engagement = "" 
@@ -232,6 +249,7 @@ export default {
     this.engagement.status = this.option
     this.engagement.category = this.option
     this.engagement.name = this.option
+    this.engagement.difficulty = this.option
   },
 }
 </script>

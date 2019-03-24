@@ -1,28 +1,17 @@
 <template>
-  <div class="page-wrapper mt-1">
+  <div class="page-wrapper d-flex justify-content-center align-items-center col-12">
+    <div class="d-flex flex-column align-items-center col-md-6 shadow mb-5">
+    <div class="justify-content-between d-flex my-3 w-100">
+      <router-link v-bind:to="'/engagement/' + engagement.id" class="btn btn-outline-secondary"><i class="fas fa-arrow-circle-left mr-2"></i>Cancel</router-link>
+       <div class="h4">
+        <span class="mr-3"><i class="fas fa-user-edit"></i> </span>
+        {{ engagement.name }}
+      </div>
+    </div>  
 
-  <div class="flex-row justify-content-between d-flex my-3">
-    <router-link v-bind:to="'/engagement/' +this.engagement.id" class="btn btn-outline-secondary"><i class="fas fa-arrow-circle-left mr-2"></i>Cancel</router-link>
-    <div v-if="$can('delete', engagement)">
-      <b-btn class="outline-secondary" v-b-modal.myModal><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn> 
-    </div>
-  </div>  
-
-  <hr>
-
-  <div class="d-flex justify-content-start my-4 h4">
-    <div>
-      <span class="mr-3"><i class="fas fa-user-edit"></i> </span>
-      {{ engagement.name }}
-    </div>
-  </div>
-
-  <hr>
-
-  <form @submit.prevent="editThisEngagement" class="d-flex-column justify-content-center">
+    <form class="w-100 text-left">
       <div class="form-group">
-
-        <div class="d-flex justify-content-between mb-3 p-2 custom-control custom-checkbox bg-white form-control" v-bind:class="{'input-error' : nothingChecked}" v-if="engagement.type == 'bookkeeping'">
+        <div class="d-flex justify-content-between mb-2 p-2 custom-control custom-checkbox bg-white form-control" v-bind:class="{'input-error' : nothingChecked}" v-if="engagement.type == 'bookkeeping'">
           <div class="d-flex">
             <span class="mr-3 font-weight-bold h6">Monthly</span>
             <input type="checkbox" v-model="monthChecked" class="custom-control-input ml-3" id="customCheck1" @change="selectedMonthRange">
@@ -40,14 +29,12 @@
           </div>
         </div>
 
-        <input type="text" class="form-control mb-3" placeholder="Year" v-model="engagement.year">
-        
+        <label for="year">Year</label>
+        <input id="year" type="text" class="form-control mb-2" placeholder="Year" v-model="engagement.year">
 
-         <div class="input-group my-3" v-if="monthRange">
-          <div class="input-group-prepend">
-            <label class="input-group-text text-primary" for="option">Month Of</label>
-          </div>
-          <select class="form-control" id="type" v-model="engagement.title" name="Title">
+        <div class="mb-2" v-if="monthRange">
+          <label for="time">Month Of</label>
+          <select class="form-control" id="time" v-model="engagement.title" name="Title">
               <option v-for="(month, index) in monthly" :key="index" :value="month">{{ month }}</option>
           </select>
         </div>
@@ -61,86 +48,90 @@
           </select>
         </div>
 
-        <div class="input-group my-3">
-          <div class="input-group-prepend">
-            <label class="input-group-text text-primary" for="option">Workflow Type</label>
-          </div>
-          <select class="form-control" id="client_id" v-model.number="engagement.workflow_id">
-            <option v-for="workflow in allWorkflows" :key="workflow.id" :value="workflow.id">
-              {{ workflow.workflow }}
-            </option>
-          </select>
-        </div>
+        <label for="difficulty">Difficulty<span class="text-danger">*</span></label>
+        <select class="form-control mb-2" id="difficulty" v-model="engagement.difficulty">
+          <option v-for="(level, index) in levels" :key="index" :value="level">
+            {{ level }}
+          </option>
+        </select>
+  
+        <label for="workflow">Workflow Type<span class="text-danger">*</span></label>
+        <select class="form-control mb-2" id="workflow" v-model.number="engagement.workflow_id">
+          <option v-for="workflow in allWorkflows" :key="workflow.id" :value="workflow.id">
+            {{ workflow.workflow }}
+          </option>
+        </select>
 
-       <div class="input-group my-3" v-if="engagement.type == 'taxreturn'">
-          <div class="input-group-prepend">
-            <label class="input-group-text text-primary" for="option">Return Type</label>
-          </div>
+        <div class="mb-2" v-if="engagement.type == 'taxreturn'">
+          <label for="type">Return Type<span class="text-danger">*</span></label>
           <select class="form-control" id="type" v-model="engagement.return_type">
               <option v-for="type in returnTypes" :key="type.id" :value="type.return_type">{{ type.return_type }}</option>
           </select>
         </div>
 
-        <div class="input-group my-3" :class="{'input-error':assignAUser}" @change="clearAlarm">
-        <div class="input-group-prepend">
-          <label class="input-group-text text-primary" for="option">Assign To</label>
-        </div>
-        <select class="form-control" id="user_id" v-model="engagement.assigned_to">
+        <label for="user">Assign To<span class="text-danger">*</span></label>
+        <select class="form-control mb-2" id="user" v-model="engagement.assigned_to" :class="{'input-error':assignAUser}" @change="clearAlarm">
           <option v-for="user in users" :key="user.id" :value="user.name" v-if="user.name != 'Admin'">
             {{ user.name }}
           </option>
         </select>
-      </div>
-      <small class="text-danger" v-if="assignAUser">Please Assign Task To User</small>
+        <small class="text-danger" v-if="assignAUser">Please Assign Task To User</small>
 
-      <div v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id === engagement.workflow_id">
-      <div class="input-group my-3">
-        <div class="input-group-prepend">
-          <label class="input-group-text text-primary" for="option">Status</label>
+        <div class="mb-2" v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id === engagement.workflow_id">
+            <label for="status">Status<span class="text-danger">*</span></label>
+            <select class="form-control" id="status" v-model="engagement.status">
+            <option v-for="status in workflow.statuses" :key="status.id" :value="status.status">
+              {{ status.status }}
+            </option>
+          </select>
         </div>
-          <select class="form-control" id="status" v-model="engagement.status">
-          <option v-for="status in workflow.statuses" :key="status.id" :value="status.status">
-            {{ status.status }}
-          </option>
-        </select>
+
+
+        <div v-if="engagement.type == 'taxreturn'">
+        <label for="fee">Preparation Fee</label>
+        <currency-input id="fee" :placeholder="'Enter a amount'"  v-model="engagement.fee" mask-type="currency" class="mb-2"></currency-input>
+
+        <label for="balance">Balance</label>
+        <div class="input-group mb-3" >
+        <currency-input id="balance" :placeholder="'Enter a amount'"  v-model="engagement.balance" mask-type="currency" :class="{'border-danger': balance}"></currency-input>
+        <div class="input-group-append" @change="balance = false" v-if="engagement.balance != null" >
+          <div class="input-group-text" :class="{'choose-owed' : chooseOwed}">
+            <label class="mb-0 mr-1" for="owed">Owed:</label>
+            <input class="mr-2" type="radio" id="owed" v-model="owed" :value="JSON.parse(true)" @change="chooseOwed = false">
+            <label class="mb-0 mr-1" for="refund">Refunded:</label>
+            <input type="radio" id="refund" v-model="owed" :value="JSON.parse(false)" @change="chooseOwed = false">
+            <button type="button" @click="clearBalance" class="clear-owed">Clear Balance</button>
+          </div>
         </div>
-      </div>
-
-      <div class="d-flex mb-3 bg-light p-2 custom-control custom-checkbox bg-white form-control">
-      <span class="mr-3 font-weight-bold mb-1 h6">Engagement Complete</span>
-      <input type="checkbox" v-model="engagement.done" class="custom-control-input" id="customCompleteCheck">
-      <label class="custom-control-label ml-3 align-self-start" for="customCompleteCheck"></label>
-      </div>
-      <div class="text-left mb-3 ml-1">
-        <small class="text-danger" v-if="engagement.done == true">Warning: If Engagement Box Is Checked, Engagement Will Be Marked As Completed Or Has Already Been Complete</small>
-      </div>
-
-      <button type="submit" class="btn btn-lg btn-primary d-flex justify-content-start">Save Changes</button>
-      </div>
-    </form>
+        </div>
+        </div>
+        <small class="text-danger" v-if="balance">Balance must have an amount if "Owed" or "Refunded" is marked</small>
+        <small class="text-danger" v-if="chooseOwed">Please select "Owed" or "Refunded" if balance has an amount entered</small>
 
 
-  <b-modal id="myModal" ref="myModalRef" hide-footer title="Delete Client">
-    <div class="d-block text-left">
-      <h5>Are you sure you want to delete engagement?</h5>
-      <br>
-      <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
+        <div class="d-flex my-3 bg-light p-2 custom-control custom-checkbox bg-white form-control">
+        <span class="mr-3 font-weight-bold mb-1 h6">Engagement Complete</span>
+        <input type="checkbox" v-model="engagement.done" class="custom-control-input" id="customCompleteCheck">
+        <label class="custom-control-label ml-3 align-self-start" for="customCompleteCheck"></label>
+        </div>
+        <div class="text-left mb-3 ml-1">
+          <small class="text-danger" v-if="engagement.done == true">Warning: If Engagement Box Is Checked, Engagement Will Be Marked As Completed Or Has Already Been Complete</small>
+        </div>
+
+        <button type="button" class="btn btn-primary d-flex font-weight-bold" :disabled="processing" @click="editThisEngagement">
+          <span v-if="!processing">Save Changes</span>
+          <span v-if="processing">Saving...</span>
+        </button>
+        </div>
+      </form>
     </div>
-    <div class="d-flex">
-      <b-btn class="mt-3" variant="danger" @click="hideModal">Cancel</b-btn>
-      <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteEngagement(engagement.id)">Confirm</b-btn>
-    </div>
-  </b-modal>
-
-
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
-import bModal from 'bootstrap-vue/es/components/modal/modal'
-import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
+import CurrencyInput from '@/components/CurrencyInput.vue'
 
 export default {
   name: 'EditEngagement',
@@ -154,15 +145,16 @@ export default {
       annualChecked: false,
       nothingChecked: false,
       assignAUser: false,
+      balance: false,
+      chooseOwed: false,
       monthly: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       quarterly: ['Jan-Mar', 'Apr-Jun', 'Jul-Sep', 'Oct-Dec'],
+      levels: [1,2,3,4,5],
+      owed: null,
     }
   },
   components:{
-    'b-modal': bModal
-  },
-  directives: {
-    'b-modal': bModalDirective
+    CurrencyInput
   },
   computed: {
     ...mapGetters(
@@ -170,7 +162,8 @@ export default {
           'engagement',
           'users',
           'allWorkflows',
-          'returnTypes'
+          'returnTypes',
+          'processing'
         ]
       )
   },
@@ -179,6 +172,19 @@ export default {
 
     editThisEngagement(id) {
         if(!this.engagement.year ) return;
+        if(this.owed != null) {
+          if(this.engagement.balance == null || this.engagement.balance == '') {
+            this.balance = true
+            return
+          }
+        }
+        if(this.owed == null) {
+          if(this.engagement.balance != null) {
+            this.chooseOwed = true
+            return
+          }
+          this.owed = false
+        }
         if(this.annualChecked === true) {
           this.engagement.title = 'Annual'
         }
@@ -188,7 +194,7 @@ export default {
             return;
           }
         }
-        
+        this.engagement.owed = this.owed
         this.updateEngagement({
           id: this.engagement.id,
           client_id: this.engagement.client_id,
@@ -200,23 +206,18 @@ export default {
           year: this.engagement.year,
           assigned_to: this.engagement.assigned_to,
           status: this.engagement.status,
+          difficulty: this.engagement.difficulty,
+          fee: this.engagement.fee,
+          balance: this.engagement.balance,
+          owed: this.owed,
           done: this.engagement.done
-        })   
-        .then(() => {
-          this.$router.push({ path: '/engagement/' + this.engagement.id});
-        })
+        })  
     },
     deleteEngagement(id) {
       this.$store.dispatch('deleteEngagement', id)
       .then(() => {
         this.$router.push({path: '/engagements', query: {alert: 'Engagement Was Succesfully Deleted'}});
       })
-    },
-    showModal () {
-      this.$refs.myModalRef.show()
-    },
-    hideModal () {
-      this.$refs.myModalRef.hide()
     },
     isActive: function (menuItem) {
       return this.activeItem === menuItem
@@ -247,6 +248,10 @@ export default {
     },
     clearAlarm() {
       this.assignAUser = false
+    },
+    clearBalance() {
+      this.owed = null
+      this.engagement.balance = null
     }
   },
   created: function(){
@@ -267,6 +272,17 @@ export default {
     if(this.engagement.description == 'Annual') {
       this.annualChecked = true
     }
+    if(this.engagement.balance == null || this.engagement.balance == '') {
+      this.owed = null
+    }
+    if(this.engagement.balance != null ) {
+      if(this.engagement.owed) {
+        this.owed = true
+      }
+      if(!this.engagement.owed) {
+        this.owed = false
+      }
+    }
   }
   
 }
@@ -274,7 +290,21 @@ export default {
 
 
 <style scoped lang="scss">
- label {
-    width: 8em;
+  label {
+    font-weight: bold;
+    margin-left: 3px;
+    font-size: .85rem;
+  }
+  .choose-owed {
+    background: rgba(255, 0, 0, 0.349);
+  }
+  .clear-owed {
+    border: none;
+    padding: 0;
+    background: transparent;
+    font-size: 1rem;
+    font-weight: bold;
+    color: red;
+    margin-left: 5px;
   }
 </style>

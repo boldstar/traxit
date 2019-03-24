@@ -121,6 +121,8 @@ export default {
                 const newString = string.replace("taxreturn", "Tax Return")
 
                 return newString
+            } else {
+                return string
             }
         }
     },

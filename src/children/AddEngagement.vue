@@ -46,9 +46,21 @@
 
             <div class="input-group mb-3" v-if="taxChecked">
               <div class="input-group-prepend">
+                <label class="input-group-text text-primary" for="option">Difficulty</label>
+              </div>
+              <select class="form-control" id="difficulty" v-model="engagement.difficulty">
+                <option disabled>{{ option }}</option>
+                <option v-for="(level, index) in levels" :key="index" :value="level">
+                  {{ level }}
+                </option>
+              </select>
+            </div>
+
+            <div class="input-group mb-3" v-if="taxChecked">
+              <div class="input-group-prepend">
                 <label class="input-group-text text-primary" for="option">Category</label>
               </div>
-              <select class="form-control" id="client_id" v-model.number="engagement.category">
+              <select class="form-control" id="client_id" v-model="engagement.category">
                 <option disabled>{{ option }}</option>
                 <option v-for="(category, index) in categories" :key="index" :value="category">
                   {{ category }}
@@ -181,6 +193,7 @@ export default {
       nothingChecked: false,
       engagement: {
         workflow_id: null,
+        difficulty: null,
         type: '',
         title: '',
         description: null,
@@ -196,6 +209,7 @@ export default {
       categories: ['Personal', 'Business'],
       monthly: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       quarterly: ['Jan-Mar', 'Apr-Jun', 'Jul-Sep', 'Oct-Dec'],
+      levels: [1,2,3,4,5]
     }
   },
   computed: {
@@ -258,6 +272,7 @@ export default {
         year: this.engagement.year,
         assigned_to: this.engagement.assigned_to,
         status: this.engagement.status,
+        difficulty: this.engagement.difficulty
       })   
       .then(() => {
         this.engagement = "" 
@@ -312,6 +327,7 @@ export default {
     this.engagement.status = this.option
     this.engagement.category = this.option
     this.engagement.name = this.option
+    this.engagement.difficulty = this.option
   },
 }
 </script>

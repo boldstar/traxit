@@ -74,7 +74,8 @@ export default new Vuex.Store({
     statusesnotupdated: '',
     templates: '',
     statusmodal: false,
-    status: ''
+    status: '',
+    archiving: false
   },
   getters: {
     chartDataLength(state) {
@@ -217,6 +218,9 @@ export default new Vuex.Store({
     },
     statusMessage(state) {
       return state.status
+    },
+    archiving(state) {
+      return state.archiving
     }
   },
   mutations: {
@@ -240,6 +244,9 @@ export default new Vuex.Store({
     },
     startProcessing(state) {
       state.processing = true
+    },
+    archivingEngagement(state) {
+      state.archiving = !state.archiving
     },
     resetToken(state, token) {
       state.resetToken = token
@@ -352,8 +359,7 @@ export default new Vuex.Store({
       state.engagement = engagement
     },
     updateEngagement(state, engagement) {
-      const index = state.engagements.findIndex(item => item.id == engagement.id);
-      state.engagements.splice(index, 1, engagement)
+      state.engagement = engagement
     },
     updateCheckedEngagements(state, checkedEngagements) {
       checkedEngagements.forEach((engagement) => {
@@ -543,6 +549,9 @@ export default new Vuex.Store({
     },
     statusModal(state) {
       state.statusmodal = !state.statusmodal
+    },
+    engagementWorkflow(state, workflow) {
+      state.workflow = workflow
     }
   },
   actions: {
@@ -913,10 +922,11 @@ export default new Vuex.Store({
     getEngagement({commit}, id) {
       axios.get('/clientengagement/'+id)
       .then(response => {
-        commit('getEngagement', response.data)
+        commit('getEngagement', response.data.engagement)
+        commit('engagementWorkflow', response.data.workflow)
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.response.data)
       })
     },
     getEngagementHistory({commit}, id) {
@@ -961,6 +971,7 @@ export default new Vuex.Store({
         year: engagement.year,
         assigned_to: engagement.assigned_to,
         status: engagement.status,
+        difficulty: engagement.difficulty,
         done: false
       })
       .then(response => {
@@ -974,6 +985,7 @@ export default new Vuex.Store({
     },
     updateEngagement(context, engagement) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+      context.commit('startProcessing')
 
       axios.patch('/engagements/' + engagement.id, {
         client_id: engagement.client_id,
@@ -985,15 +997,22 @@ export default new Vuex.Store({
         year: engagement.year,
         assigned_to: engagement.assigned_to,
         status: engagement.status,
+        difficulty: engagement.difficulty,
+        fee: engagement.fee,
+        balance: engagement.balance,
+        owed: engagement.owed,
         done: engagement.done
       })
       .then(response => {
           context.commit('updateEngagement', response.data.engagement)
           context.commit('successAlert', response.data.message)
+          context.commit('stopProcessing')
+          router.push({ path: '/engagement/' + response.data.engagement.id})
       })
       .catch(error => {
-          console.log(error)
+          console.log(error.response.data)
           context.commit('errorMsgAlert', error.response.data.message)
+          context.commit('stopProcessing')
       })           
     },
     updateCheckedEngagements(context, checkedEngagements) {
@@ -1011,6 +1030,22 @@ export default new Vuex.Store({
           console.log(error)
           context.commit('errorMsgAlert', error.response.data.message)
       })           
+    },
+    archiveEngagement(context, id) {
+      context.commit('archivingEngagement')
+      axios.post('/archive', {
+        id: id
+      })
+      .then(response => {
+        context.commit('updateEngagement', response.data.engagement)
+        context.commit('successAlert', response.data.message)
+        context.commit('archivingEngagement')
+      })
+      .catch(error => {
+        context.commit('archivingEngagement')
+        context.commit('errorMsgAlert', error.response.data.message)
+        console.log(error.response.data)
+      })
     },
     deleteEngagement(context, id) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token

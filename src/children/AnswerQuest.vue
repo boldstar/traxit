@@ -13,7 +13,7 @@
           <form @submit.prevent="acceptAnswer" class="d-flex-column justify-content-center bg-light">
 
           <div class="form-group p-3 mb-0">
-              <vue-editor v-model="answerQuestion.answer"></vue-editor>
+              <vue-editor v-model="answerQuestion.answer" :editorToolbar="customToolbar"></vue-editor>
           </div>
 
 
@@ -41,7 +41,11 @@ export default {
          answerQuestion: {
             answer: '',
             answered: true,
-        }
+        },
+         customToolbar: [
+            ['bold', 'italic', 'underline'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }]
+          ]
       }
     },
     computed: {

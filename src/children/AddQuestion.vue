@@ -10,7 +10,7 @@
         <div class="d-flex-column justify-content-center">
 
             <div class="form-group">
-                <vue-editor v-model="question.question"></vue-editor>
+                <vue-editor v-model="question.question" :editorToolbar="customToolbar"></vue-editor>
             </div>
 
 
@@ -115,6 +115,10 @@ export default {
             modalShow: false,
             verify: false,
             invalidEmail: false,
+            customToolbar: [
+            ['bold', 'italic', 'underline'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }]
+          ]
         }
     },
     computed: {

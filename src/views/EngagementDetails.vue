@@ -5,7 +5,7 @@
     <div v-if="$route.name == 'engagement-details'">
 
       <Alert v-if="successAlert" v-bind:message="successAlert" />
-      <div class="sending-mail" v-if="processing"><i class="far fa-envelope mr-3"></i>Sending Mail...</div>
+      <div class="sending-mail" v-if="processing && !noteModal && !deleteNote"><i class="far fa-envelope mr-3"></i>Sending Mail...</div>
 
       <!-- this is the header section of the engagement details -->
       <div class="flex-row justify-content-between d-flex mt-0 card-body shadow-sm py-2 px-3">
@@ -50,63 +50,93 @@
         </b-modal>
 
       <div class="row px-3 my-3">
-        <div class="card col-md-4 px-0 shadow-sm align-self-start">
-          <div class="card-header d-flex justify-content-between">
-            <div class="text-primary font-weight-bold">
-              <span v-if="engagement.done == true"><i class="far fa-folder" v-if="engagement.done == true"></i> | Completed</span>
-              <span v-else><i class="far fa-folder-open"></i> | Active</span>
+        <div class="col-md-4">
+          <div class="card px-0 mb-3 shadow-sm align-self-start">
+            <div class="card-header d-flex justify-content-between">
+              <div class="text-primary font-weight-bold">
+                <span v-if="engagement.done == true"><i class="far fa-folder" v-if="engagement.done == true"></i> | Completed</span>
+                <span v-else><i class="far fa-folder-open"></i> | Active</span>
+              </div>
+              <span class="font-weight-bold text-capitalize">{{ fixCasing(engagement.type) }}</span>
             </div>
-            <span class="font-weight-bold text-capitalize">{{ fixCasing(engagement.type) }}</span>
-          </div>
-          <div class="card-body">
-              <div class="mt-2">
-                <div class="progress">
-                  <div class="progress-bar progress-bar-striped" :class="{'progress-bar-animated': currentWidth < 100}" role="progressbar" :aria-valuenow="`${currentWidth}`" aria-valuemin="0" aria-valuemax="100" :style='`width:${ currentWidth }%;`'></div>
+            <div class="card-body">
+                <div class="mt-2">
+                  <div class="progress">
+                    <div class="progress-bar progress-bar-striped" :class="{'progress-bar-animated': currentWidth < 100}" role="progressbar" :aria-valuenow="`${currentWidth}`" aria-valuemin="0" aria-valuemax="100" :style='`width:${ currentWidth }%;`'></div>
+                  </div>
+                </div>
+              <div class="d-flex justify-content-between">
+                <div>
+                  <i class="far fa-flag text-secondary"></i>
+                </div>
+                <div>
+                  <i class="fas fa-flag-checkered text-primary"></i>
                 </div>
               </div>
-            <div class="d-flex justify-content-between">
-              <div>
-                <i class="far fa-flag text-secondary"></i>
+              <ul class="p-0 m-0 mt-2">
+                <li class="d-flex justify-content-between p-2">
+                  <span class="font-weight-bold">Name</span>
+                  <span>{{ engagement.name}}</span>
+                </li>
+                <li class="d-flex justify-content-between p-2">
+                  <span class="font-weight-bold">Fee</span>
+                  <span>{{ amount(engagement.fee) }}</span>
+                </li>
+                <li class="d-flex justify-content-between p-2" v-if="engagement.type == 'bookkeeping'">
+                  <span class="font-weight-bold">Time Period</span>
+                  <span>{{ engagement.title}}</span>
+                </li>
+                <li class="d-flex justify-content-between p-2" v-if="engagement.type == 'taxreturn'">
+                  <span class="font-weight-bold">Return Type</span>
+                  <span>{{ engagement.return_type}}</span>
+                </li>
+                <li class="d-flex justify-content-between p-2">
+                  <span class="font-weight-bold">Year</span>
+                  <span>{{ engagement.year}}</span>
+                </li>
+                <li class="d-flex justify-content-between p-2" v-if="engagement.done == false">
+                  <span class="font-weight-bold">Currently Assigned</span>
+                  <span>{{ engagement.assigned_to}}</span>
+                </li>
+                <li class="d-flex justify-content-between p-2">
+                  <span class="font-weight-bold">Status</span>
+                  <span>{{ engagement.status}}</span>
+                </li>
+                <li class="d-flex justify-content-between p-2" v-if="engagement.type == 'taxreturn'">
+                  <span class="font-weight-bold">Estimated Date</span>
+                  <span>{{ engagement.estimated_date | formatDate }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+
+          <div class="card px-0 shadow-sm align-self-start">
+            <div class="card-header d-flex justify-content-between">
+              <div class="font-weight-bold">
+                <span class="align-self-center">Notes | <span class="text-primary">{{engagementNotes.length}}</span></span>
               </div>
+              <button class="btn btn-primary btn-sm" @click="addNoteModal"><i class="far fa-plus-square"></i></button>
+            </div>
+          </div>
+          <div v-if="engagementNotes.length <= 0" class="card-body shadow-sm border">
+            <span class="font-weight-bold">There are currrently no notes</span>
+          </div>
+            <div class="card-body text-left p-3 border" v-for="(note, index) in engagementNotes" :key="index">
               <div>
-                <i class="fas fa-flag-checkered text-primary"></i>
+                <div v-html="note.note"></div>
+                <span v-if="processing" class="note-btn">Deleting...</span>
+                <div class="text-right">
+                  <button type="button" class="edit-btn" @click="editNote(note)">Edit</button>  
+                  <span v-if="deleteNote && note.id == selectedNote" class="note-span">Are you sure?</span>
+                  <button type="button" class="note-btn">
+                    <span v-if="!deleteNote" @click="confirmDelete(note.id)">Delete</span>
+                    <span v-if="deleteNote && note.id == selectedNote" @click="deleteENote(note.id)">Yes</span>
+                  </button>
+                  <button class="note-btn ml-2" v-if="deleteNote && note.id == selectedNote" @click="deleteNote = false">Cancel</button>
+                </div>  
               </div>
             </div>
-            <ul class="p-0 m-0 mt-2">
-              <li class="d-flex justify-content-between p-2">
-                <span class="font-weight-bold">Name</span>
-                <span>{{ engagement.name}}</span>
-              </li>
-              <li class="d-flex justify-content-between p-2">
-                <span class="font-weight-bold">Fee</span>
-                <span>{{ amount(engagement.fee) }}</span>
-              </li>
-              <li class="d-flex justify-content-between p-2" v-if="engagement.type == 'bookkeeping'">
-                <span class="font-weight-bold">Time Period</span>
-                <span>{{ engagement.title}}</span>
-              </li>
-              <li class="d-flex justify-content-between p-2" v-if="engagement.type == 'taxreturn'">
-                <span class="font-weight-bold">Return Type</span>
-                <span>{{ engagement.return_type}}</span>
-              </li>
-              <li class="d-flex justify-content-between p-2">
-                <span class="font-weight-bold">Year</span>
-                <span>{{ engagement.year}}</span>
-              </li>
-              <li class="d-flex justify-content-between p-2" v-if="engagement.done == false">
-                <span class="font-weight-bold">Currently Assigned</span>
-                <span>{{ engagement.assigned_to}}</span>
-              </li>
-              <li class="d-flex justify-content-between p-2">
-                <span class="font-weight-bold">Status</span>
-                <span>{{ engagement.status}}</span>
-              </li>
-              <li class="d-flex justify-content-between p-2" v-if="engagement.type == 'taxreturn'">
-                <span class="font-weight-bold">Estimated Date</span>
-                <span>{{ engagement.estimated_date | formatDate }}</span>
-              </li>
-            </ul>
-          </div>
         </div>
 
       <!-- this is the section where the qustions will go -->
@@ -191,6 +221,9 @@
 
     <spinner v-if="detailsLoaded && $route.name == 'engagement-details'"></spinner>
 
+    <note-modal></note-modal>
+    <edit-note-modal :note="noteToEdit" v-if="editNoteModal"></edit-note-modal>
+
 <!-- this will show the child view if the route matches-->
   <router-view ></router-view>
   </div>
@@ -202,6 +235,8 @@ import Alert from '@/components/Alert.vue'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 import Spinner from '@/components/Spinner.vue'
+import NoteModal from '@/components/NoteModal.vue'
+import EditNoteModal from '@/components/EditNoteModal.vue'
 
 export default {
   name: 'EngagementDetails',
@@ -216,19 +251,24 @@ export default {
       questionToDelete: null,
       questionToEmail: null,
       balance: 0,
-      owed: null
+      owed: null,
+      deleteNote: false,
+      selectedNote: null,
+      noteToEdit: null,
     }
   },
   components:{
     'b-modal': bModal,
     Alert,
-    Spinner
+    Spinner,
+    NoteModal,
+    EditNoteModal
   },
   directives: {
     'b-modal': bModalDirective
   },
   computed: {
-    ...mapGetters(['engagement','question', 'successAlert', 'processing', 'errorMsgAlert', 'workflow','archiving']),
+    ...mapGetters(['engagement','question', 'successAlert', 'processing', 'errorMsgAlert', 'workflow','archiving', 'engagementNotes', 'noteModal', 'editNoteModal']),
     percentage() {
       const statuses = this.workflow.statuses
       const percentage = this.calcPercent(statuses.length)
@@ -257,8 +297,11 @@ export default {
         this.$router.push({path: '/engagement/' +this.engagement.id});
       })
     },
-    isActive: function (menuItem) {
-      return this.activeItem === menuItem
+    deleteENote(id) {
+      this.$store.dispatch('deleteEngagementNote', id)
+      .then(() => {
+        this.deleteNote = false
+      })
     },
     fixCasing(string) {
       if(string == 'taxreturn') {
@@ -307,10 +350,22 @@ export default {
       } else {
         return 'Tax Refunded: $' + fee
       }
-    }
+    },
+    addNoteModal() {
+      this.$store.commit('showNoteModal', this.engagement.id)
+    },
+    confirmDelete(id) {
+      this.selectedNote = id
+      this.deleteNote = true
+    },
+    editNote(note) {
+      this.noteToEdit = note
+      this.$store.commit('editNoteModal')
+    },
   },
   created: function(){
     this.$store.dispatch('getEngagement', this.$route.params.id);
+    this.$store.dispatch('getEngagementNotes', this.$route.params.id)
     this.detailsLoaded = true;
     var self = this;
     setTimeout(() => {
@@ -347,5 +402,34 @@ export default {
     overflow-wrap: normal;
     flex-basis: 100%;
     max-width: 960px;
+    width: 100%;
+  }
+
+  .note-btn {
+    font-size: .6rem;
+    border: none;
+    border-radius: 2px;
+    margin-right: 5px;
+    font-weight: bold;
+    color: white;
+    background: #a9a9a9;
+    cursor: pointer;
+  }
+
+  .edit-btn {
+    font-size: .6rem;
+    border: none;
+    border-radius: 2px;
+    margin-right: 5px;
+    font-weight: bold;
+    color: white;
+    background: #0077ff;
+    cursor: pointer;
+  }
+
+  .note-span {
+    font-size: .6rem;
+    font-weight: bold;
+    margin-right: 8px;
   }
 </style>

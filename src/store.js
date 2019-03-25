@@ -76,7 +76,11 @@ export default new Vuex.Store({
     templates: '',
     statusmodal: false,
     status: '',
-    archiving: false
+    archiving: false,
+    noteModal: false,
+    noteId: '',
+    enotes: '',
+    editNoteModal: false
   },
   getters: {
     chartDataLength(state) {
@@ -222,6 +226,18 @@ export default new Vuex.Store({
     },
     archiving(state) {
       return state.archiving
+    },
+    noteModal(state) {
+      return state.noteModal
+    },
+    editNoteModal(state) {
+      return state.editNoteModal
+    },
+    noteId(state) {
+      return state.noteId
+    },
+    engagementNotes(state) {
+      return state.enotes
     }
   },
   mutations: {
@@ -553,6 +569,24 @@ export default new Vuex.Store({
     },
     engagementWorkflow(state, workflow) {
       state.workflow = workflow
+    },
+    showNoteModal(state, id) {
+      state.noteModal = !state.noteModal
+      state.noteId = id
+    },
+    editNoteModal(state) {
+      state.editNoteModal = !state.editNoteModal
+    },
+    engagementNotes(state, notes) {
+      state.enotes = notes
+    },
+    deleteENote(state, id) {
+      const index = state.enotes.findIndex(note => note.id == id)
+      state.enotes.splice(index, 1)
+    },
+    updateENote(state, note) {
+      const index = state.enotes.findIndex(item => item.id == note.id)
+      state.enotes.splice(index, 1, note)
     }
   },
   actions: {
@@ -1109,12 +1143,15 @@ export default new Vuex.Store({
       })
     },
     deleteBusiness(context, id) {
+      context.commit('startProcessing')
       axios.delete('/businesses/' + id)
       .then(response => {
         context.commit('deleteBusiness', id)
         context.commit('successAlert', response.data)
+        context.commit('stopProcessing')
       })
       .catch(error => {
+        context.commit('stopProcessing')
         console.log(error)
       })
     },
@@ -1680,6 +1717,61 @@ export default new Vuex.Store({
       .catch(error => {
         context.commit('stopProcessing')
         context.commit('successAlert', error.response.data)
+        console.log(error.response.data)
+      })
+    },
+    addEngagementNote(context, note) {
+      context.commit('startProcessing')
+      axios.post('/add-e-note', {
+        engagement_id: note.engagement_id,
+        note: note.note
+      })
+      .then(response => {
+        context.commit('stopProcessing')
+        context.commit('showNoteModal', '')
+        context.commit('engagementNotes', response.data.notes)
+        context.commit('successAlert', response.data.message)
+      })
+      .catch(error => {
+        context.commit('stopProcessing')
+        console.log(error.response.data)
+      })
+    },
+    getEngagementNotes(context, id) {
+      axios.get('/e-notes/' + id)
+      .then(response => {
+        context.commit('engagementNotes', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    deleteEngagementNote(context, id) {
+      axios.delete('/delete-e-note/' + id)
+      .then(response => {
+        context.commit('deleteENote', id)
+        context.commit('successAlert', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    editEngagementNote(context, note) {
+      console.log(note)
+      context.commit('startProcessing')
+      axios.patch('/edit-e-note/' + note.id, {
+        engagement_id: note.engagement_id,
+        note: note.note
+      })
+      .then(response => {
+        console.log(response.data)
+        context.commit('stopProcessing')
+        context.commit('editNoteModal')
+        context.commit('updateENote', response.data.note)
+        context.commit('successAlert', response.data.message)
+      })
+      .catch(error => {
+        context.commit('stopProcessing')
         console.log(error.response.data)
       })
     } 

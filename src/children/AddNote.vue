@@ -3,7 +3,7 @@
         <form @submit.prevent="addNewNote" class="d-flex-column justify-content-center">
 
             <div class="form-group">
-                <vue-editor v-model="note.note"></vue-editor>
+                <vue-editor v-model="note.note" :editorToolbar="customToolbar"></vue-editor>
             </div>
 
 
@@ -29,7 +29,11 @@ export default {
         return {
             note: {
                 note: ''
-            }
+            },
+            customToolbar: [
+            ['bold', 'italic', 'underline'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }]
+          ]
         }
     },
     computed: {

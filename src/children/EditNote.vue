@@ -3,7 +3,7 @@
         <form @submit.prevent="editThisNote" class="d-flex-column justify-content-center">
 
             <div class="form-group">
-                <vue-editor v-model="note.note"></vue-editor>
+                <vue-editor v-model="note.note" :editorToolbar="customToolbar"></vue-editor>
             </div>
 
 
@@ -22,6 +22,14 @@ import { VueEditor } from "vue2-editor";
 
 export default {
     name: 'EditQuestion',
+    data() {
+      return {
+         customToolbar: [
+            ['bold', 'italic', 'underline'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }]
+          ]
+      }
+    },
     components: {
       VueEditor
     },

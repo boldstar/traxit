@@ -460,6 +460,17 @@ export default new Router({
                 { name: 'New Bookkeeping Engagement' }
             ]
           },
+        },
+        {
+          // this is the children route for adding a new engagement
+          path: 'engagement/customform',
+          component: () => import('@/children/CustomForm.vue'),
+            meta: {
+              requiresAuth: true,
+              breadCrumb: [
+                { name: 'New Custom Engagement' }
+            ]
+          },
         }
       ]
     },

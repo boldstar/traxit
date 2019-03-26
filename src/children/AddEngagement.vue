@@ -1,25 +1,31 @@
 <template>
-  <div class="mt-1">
-    <div class="add-engagement">
-      <div class="card-body bg-light border-primary mb-2 d-flex justify-content-between">
-        <h4 class="text-left text-primary m-0">New Engagement</h4>
-        <router-link class="btn btn-sm btn-outline-secondary" :to="{path: '/contact/'+client.id+ '/engagements'}">Cancel</router-link>
-      </div>
-
-        <div class="d-flex my-3 px-1">
-            <div class="d-flex">
-              <span class="mr-3 font-weight-bold h6">Tax Return</span>
-              <input type="checkbox" v-model="taxChecked" class="custom-control-input ml-3" id="customCheck1" @change="selectedTax">
-              <label class="custom-control-label ml-3" for="customCheck1"></label>
+  <div class="mt-1 d-flex justify-content-center">
+    <div class="add-engagement col-6">
+       <div class="card shadow mb-2">  
+        <div class="text-left pl-4">
+          <span class="text-primary font-weight-bold">Choose Engagement Type:</span>
+        </div>
+        <div class="d-flex p-2">
+            <div class="d-flex custom-control custom-checkbox">
+              <span class="font-weight-bold w-100 mr-1">Tax Return</span>
+              <input type="checkbox" v-model="taxChecked" class="custom-control-input " id="customCheck1" @change="selectedTax">
+              <label class="custom-control-label" for="customCheck1"></label>
             </div>
-            <div class="d-flex">
-              <span class="mr-3 font-weight-bold h6">Bookkeeping</span>
+            <div class="d-flex custom-control custom-checkbox">
+              <span class="font-weight-bold w-100 mr-1">Bookkeeping</span>
               <input type="checkbox" v-model="bookChecked" class="custom-control-input ml-3" id="customCheck2" @change="selectedBook">
-              <label class="custom-control-label ml-3" for="customCheck2"></label>
+              <label class="custom-control-label" for="customCheck2"></label>
+            </div>
+            <div class="d-flex custom-control custom-checkbox">
+              <span class="font-weight-bold w-100 mr-1">Custom</span>
+              <input type="checkbox" v-model="customChecked" class="custom-control-input" id="customCheck2.1" @change="selectedCustom">
+              <label class="custom-control-label" for="customCheck2.1"></label>
             </div>
         </div>
+       </div>
+      
 
-        <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center" v-if="viewForm">
+        <form @submit.prevent="validateBeforeSubmit" class="d-flex-column bg-light justify-content-center card p-3" v-if="viewForm">
           <div class="form-group">
 
 
@@ -44,7 +50,7 @@
 
             <input type="text" class="form-control mb-3" placeholder="Year" v-model="engagement.year">
 
-            <div class="input-group mb-3" v-if="taxChecked">
+            <div class="input-group mb-3" v-if="taxChecked || customChecked">
               <div class="input-group-prepend">
                 <label class="input-group-text text-primary" for="option">Difficulty</label>
               </div>
@@ -56,7 +62,7 @@
               </select>
             </div>
 
-            <div class="input-group mb-3" v-if="taxChecked">
+            <div class="input-group mb-3" v-if="taxChecked || customChecked">
               <div class="input-group-prepend">
                 <label class="input-group-text text-primary" for="option">Category</label>
               </div>
@@ -118,12 +124,12 @@
             </div>
             <span class="form-error" v-show="errors.has('Workflow')">{{ errors.first('Workflow') }}</span>
 
-            <div class="input-group mb-3" v-if="taxChecked">
+            <div class="input-group mb-3" v-if="taxChecked || customChecked">
               <div class="input-group-prepend">
                 <label class="input-group-text text-primary" for="option">Return Type</label>
               </div>
               <select class="form-control" id="type" v-model="engagement.return_type">
-              <option disabled>{{ option }}</option>
+              <option disabled>{{ return_option }}</option>
               <option v-for="type in returnTypes" :key="type.id" :value="type.return_type">{{ type.return_type }}</option>
               </select>
             </div>
@@ -184,6 +190,7 @@ export default {
       viewForm: false,
       taxChecked: false,
       bookChecked: false,
+      customChecked: false,
       monthRange: false,
       quarterRange: false,
       annualRange: false,
@@ -205,6 +212,7 @@ export default {
         status: null,
       },
       option: 'Choose..',
+      return_option: 'Choose..(Optional)',
       empty: 'Please select workflow first...',
       categories: ['Personal', 'Business'],
       monthly: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -241,23 +249,29 @@ export default {
           });
       },
     addNewEngagement() {
-      if(!this.engagement.year ) return;
-      if(this.annualChecked === true) {
+      if(!this.engagement.year) return;
+      if(this.annualChecked) {
         this.engagement.title = 'Annual'
         this.engagement.description = 'Annual'
       }
-      if(this.monthChecked === true) {
+      if(this.monthChecked) {
         this.engagement.description = 'Monthly'
       }
-      if(this.quarterChecked === true) {
+      if(this.quarterChecked) {
        this.engagement.description = 'Quarterly'
       }
-      if(this.bookChecked === true) {
+      if(this.bookChecked) {
         this.engagement.type = 'bookkeeping'
         this.engagement.category = 'Business'
       }
-      if(this.taxChecked === true) {
+      if(this.taxChecked) {
         this.engagement.type = 'taxreturn'
+      }
+      if(this.customChecked) {
+        this.engagement.type = 'custom'
+      }
+      if(this.engagement.return_type === this.return_option) {
+        this.engagement.return_type = null
       }
       this.addEngagement({
         id: this.idForEngagement,
@@ -281,13 +295,21 @@ export default {
       })
     },
     selectedTax() {
+      this.customChecked = false
       this.taxChecked = true
       this.bookChecked = false
       this.viewForm = true
     },
     selectedBook() {
+      this.customChecked = false
       this.taxChecked = false
       this.bookChecked = true
+      this.viewForm = true
+    },
+    selectedCustom() {
+      this.taxChecked = false
+      this.bookChecked = false
+      this.customChecked = true
       this.viewForm = true
     },
     selectedMonthRange() {
@@ -321,7 +343,7 @@ export default {
     this.$store.dispatch('getReturnTypes')
     this.$store.dispatch('retrieveWorkflows');
     this.$store.dispatch('retrieveUsers');
-    this.engagement.return_type = this.option
+    this.engagement.return_type = this.return_option
     this.engagement.workflow_id = this.option
     this.engagement.assigned_to = this.option
     this.engagement.status = this.option

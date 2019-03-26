@@ -47,12 +47,13 @@
 
     <!-- if engagement is selected this section will show -->
     <div class="d-flex flex-column justify-content-center align-items-center mt-5" v-if="engagementsCard && $route.name == 'add'">
-      <div class="card-body py-3 px-5 col-sm-12 col-md-10 col-lg-8 d-flex justify-content-between">
+      <div class="d-flex card p-0 col-sm-12 col-md-10 col-lg-8 flex-sm-wrap shadow m-3" v-if="$route.name == 'add'">
+      <div class="card-header d-flex justify-content-between">
         <span class="font-weight-bold h3 text-primary align-self-center m-0">Choose Engagement Type</span>
-        <button type="button" @click="engagementsCard=false" class="btn btn-outline-secondary btn-sm">Back</button>
+        <button type="button" @click="engagementsCard=false" class="btn btn-outline-secondary btn-sm font-weight-bold">Back</button>
       </div>
-      <div class="d-flex flex-row mt-2 col-sm-12 col-md-10 col-lg-8 flex-sm-wrap" v-if="$route.name == 'add'">
-        <!-- contact card -->
+      <div class="card-body d-flex flex-wrap">
+        <!-- tax return engagement form -->
         <div class="col-sm-6 col-md-6">
           <div class="card-style card-body bg-light border shadow-sm p-5">
             <div class="h3 mb-4 font-weight-bold">
@@ -63,7 +64,7 @@
             </div>
           </div>
         </div>
-        <!-- business card -->
+        <!-- bookkeeping engagement form -->
         <div class="col-sm-6 col-md-6">
           <div class="card-style card-body bg-light border shadow-sm p-5">
             <div class="h3 mb-4 font-weight-bold">
@@ -74,6 +75,18 @@
             </div>
           </div>
         </div>
+        <!-- custom engagement form -->
+        <div class="col-sm-6 col-md-6 mx-auto mt-4">
+          <div class="card-style card-body bg-light border shadow-sm p-5">
+            <div class="h3 mb-4 font-weight-bold">
+              <span>Custom</span>
+            </div>
+            <div class="mt-3">
+              <router-link to="add/engagement/customform" class="btn btn-style">Next</router-link>
+            </div>
+          </div>
+        </div>
+      </div>
       </div>
     </div>
 

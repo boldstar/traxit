@@ -992,7 +992,6 @@ export default new Vuex.Store({
     },
     addEngagement(context, engagement) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-
       axios.post(('/engagements'), {
         category: engagement.category,
         client_id: engagement.client_id,

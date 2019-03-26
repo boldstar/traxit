@@ -39,8 +39,7 @@
                     <th class="text-capitalize">{{ engagement.category}}</th>
                     <th class="text-capitalize" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</th>
                     <th class="text-capitalize" v-else>{{ engagement.type }}</th>
-                    <th v-if="engagement.type == 'taxreturn'">{{ engagement.return_type}}</th>
-                    <th v-else>None</th>
+                    <th >{{ checkType(engagement.type, engagement.return_type) }}</th>
                     <th v-if="engagement.type == 'bookkeeping'">{{ engagement.title }}</th>
                     <th v-else>None</th>
                     <th>{{ engagement.year }}</th>
@@ -99,6 +98,15 @@ export default {
         },
         viewDetails(id) {
             this.$router.push({path: '/engagement/' + id})
+        },
+        checkType(type, return_type) {
+            if(type == 'taxreturn') {
+                return return_type
+            } else if(type == 'custom' && return_type != null) {
+                return return_type
+            } else {
+                return 'None'
+            }
         }
     },
     created() {

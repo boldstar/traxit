@@ -57,7 +57,8 @@
                 <span v-if="engagement.done == true"><i class="far fa-folder" v-if="engagement.done == true"></i> | Completed</span>
                 <span v-else><i class="far fa-folder-open"></i> | Active</span>
               </div>
-              <span class="font-weight-bold text-capitalize">{{ fixCasing(engagement.type) }}</span>
+              <span class="font-weight-bold text-capitalize" v-if="engagement.type != 'custom'">{{ fixCasing(engagement.type) }}</span>
+              <span class="font-weight-bold text-capitalize" v-else>{{ engagement.description }}</span>
             </div>
             <div class="card-body">
                 <div class="mt-2">
@@ -85,6 +86,10 @@
                 <li class="d-flex justify-content-between p-2" v-if="engagement.type == 'bookkeeping'">
                   <span class="font-weight-bold">Time Period</span>
                   <span>{{ engagement.title}}</span>
+                </li>
+                <li class="d-flex justify-content-between p-2" v-if="engagement.type == 'custom'">
+                  <span class="font-weight-bold">Subject</span>
+                  <span>{{ engagement.description}}</span>
                 </li>
                 <li class="d-flex justify-content-between p-2" v-if="engagement.type == 'taxreturn'">
                   <span class="font-weight-bold">Return Type</span>
@@ -123,7 +128,7 @@
             <span class="font-weight-bold">There are currrently no notes</span>
           </div>
             <div class="card-body text-left p-3 border" v-for="(note, index) in engagementNotes" :key="index">
-              <div>
+              <div class="note">
                 <div v-html="note.note"></div>
                 <span v-if="processing" class="note-btn">Deleting...</span>
                 <div class="text-right">
@@ -431,5 +436,12 @@ export default {
     font-size: .6rem;
     font-weight: bold;
     margin-right: 8px;
+  }
+
+  .note {
+     &:hover {
+       background-color: rgba(0, 0, 0, 0.110);
+       padding: 5px;
+     }
   }
 </style>

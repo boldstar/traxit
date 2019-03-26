@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="card-body bg-light border mb-2">
-      <h4 class="text-left text-primary m-0"><i class="far fa-folder-open mr-2"></i>New Tax Engagement</h4>
+      <h4 class="text-left text-primary m-0"><i class="far fa-folder-open mr-2"></i>New Custom Engagement</h4>
     </div>
     <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center bg-light px-3 pt-3 border pb-0">
       <div class="form-group">
@@ -100,12 +100,11 @@
           <div class="input-group-prepend">
             <label class="input-group-text text-primary" for="option">Return Type</label>
           </div>
-          <select :class="{ 'input-error': errors.has('Return Type') }" class="form-control" id="type" v-model="engagement.return_type" v-validate="{ is_not: option }" name="Return Type">
-              <option  selected disabled>{{ option }}</option>
+          <select class="form-control" id="type" v-model="engagement.return_type">
+              <option  selected disabled>{{ return_option }}</option>
               <option v-for="type in returnTypes" :key="type.id" :value="type.return_type">{{ type.return_type }}</option>
           </select>
         </div>
-          <span class="form-error" v-show="errors.has('Return Type')">{{ errors.first('Return Type') }}</span>
 
         <div class="input-group my-3">
         <div class="input-group-prepend">
@@ -157,7 +156,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  name: 'TaxForm',
+  name: 'CustomForm',
   data() {
     return {
       client: '',
@@ -166,7 +165,7 @@ export default {
         difficulty: null,
         category: null,
         client_id: null,
-        type: 'taxreturn',
+        type: 'custom',
         name: null,
         workflow_id: null,
         return_type: null,
@@ -174,6 +173,7 @@ export default {
         status: null,
       },
       option: 'Choose...',
+      return_option: 'Choose..(Optional)',
       empty: 'Please select workflow first...',
       categories:['Personal', 'Business'],
       levels: [1,2,3,4,5]
@@ -217,6 +217,9 @@ export default {
       },
     addNewEngagement() {
       if(!this.engagement.return_type || !this.engagement.year ) return;
+      if(this.engagement.return_type === this.return_option) {
+        this.engagement.return_type = null
+      }
       this.addEngagement({
         id: this.idForEngagement,
         category: this.engagement.category,
@@ -242,7 +245,7 @@ export default {
     this.$store.dispatch('retrieveWorkflows');
     this.$store.dispatch('retrieveUsers');
     this.$store.dispatch('getReturnTypes')
-    this.engagement.return_type = this.option
+    this.engagement.return_type = this.return_option
     this.engagement.client_id = this.option
     this.engagement.workflow_id = this.option
     this.engagement.assigned_to = this.option

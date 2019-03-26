@@ -55,7 +55,7 @@
 
                     <!-- this will show if there is no engagements only -->
         <div v-else>
-            <div v-if="noEngagements & !engagementLoaded" class="mt-5">
+            <div v-if="noEngagements & !engagementLoaded && $route.name == 'contact-engagements'" class="mt-5">
                 This Contact Has No Engagements...
             </div>
         </div>

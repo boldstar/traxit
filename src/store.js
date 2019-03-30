@@ -80,7 +80,10 @@ export default new Vuex.Store({
     noteModal: false,
     noteId: '',
     enotes: '',
-    editNoteModal: false
+    editNoteModal: false,
+    createdEngagements: [],
+    completedEngagements: [],
+    noteToEdit: ''
   },
   getters: {
     chartDataLength(state) {
@@ -238,6 +241,15 @@ export default new Vuex.Store({
     },
     engagementNotes(state) {
       return state.enotes
+    },
+    completedEngagements(state) {
+      return state.completedEngagements
+    },
+    createdEngagements(state) {
+      return state.createdEngagements
+    },
+    noteToEdit(state) {
+      return state.noteToEdit
     }
   },
   mutations: {
@@ -374,6 +386,10 @@ export default new Vuex.Store({
     // this is to view the engagement
     getEngagement(state, engagement) {
       state.engagement = engagement
+    },
+    engagementsHistory(state, history) {
+      state.createdEngagements = history.created
+      state.completedEngagements = history.completed
     },
     updateEngagement(state, engagement) {
       state.engagement = engagement
@@ -583,6 +599,9 @@ export default new Vuex.Store({
     deleteENote(state, id) {
       const index = state.enotes.findIndex(note => note.id == id)
       state.enotes.splice(index, 1)
+    },
+    engagementNoteToEdit(state, note) {
+      state.noteToEdit = note
     },
     updateENote(state, note) {
       const index = state.enotes.findIndex(item => item.id == note.id)
@@ -952,6 +971,16 @@ export default new Vuex.Store({
       })
       .catch(error => {
         console.log(error)
+      })
+    },
+    getEngagementsHistory(context) {
+      axios.get('/engagements-history')
+      .then(response => {
+        console.log(response.data)
+        context.commit('engagementsHistory', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
       })
     },
     getEngagement({commit}, id) {
@@ -1756,9 +1785,9 @@ export default new Vuex.Store({
       })
     },
     editEngagementNote(context, note) {
-      console.log(note)
       context.commit('startProcessing')
-      axios.patch('/edit-e-note/' + note.id, {
+      axios.patch('/edit-e-note', {
+        id: note.id,
         engagement_id: note.engagement_id,
         note: note.note
       })
@@ -1771,6 +1800,15 @@ export default new Vuex.Store({
       })
       .catch(error => {
         context.commit('stopProcessing')
+        console.log(error.response.data)
+      })
+    },
+    showEngagementNote(context, id) {
+      axios.get('/show-e-note/' + id)
+      .then(response => {
+        context.commit('engagementNoteToEdit', response.data)
+      })
+      .catch(error => {
         console.log(error.response.data)
       })
     } 

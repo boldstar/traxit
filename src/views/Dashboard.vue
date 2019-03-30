@@ -1,92 +1,119 @@
 <template>
-
-    <div class="dashboard-layout flex-column justify-content-center">
-
-            <!-- workflow card for selecting workflows -->
-             <!-- <div class="workflow-card col-lg-6 col-md-6 col-sm-12 p-0">
-                    <div class="list-group p-0">
-                        <div class="d-flex justify-content-between list-group-item py-1 workflow-select font-weight-bold m-0" :value="workflow.workflow_id" v-for="workflow in mapWorkflowsWithIds" :key="workflow.workflow_id" @click="changeKey(workflow.workflow_id)" v-bind:class="{'selected': selected && workflow.workflow_id == workflowKey}" v-if="workflow.workflow_id == workflowKey">
-                            <span>{{ workflow.workflow }}</span>
-                            <span class="badge badge-primary align-self-center">{{ workflow.count }}</span>
-                        </div>
-                    </div>
-                </div> -->
-            
-
-            <!-- this is the header for the dashboard -->
-            <div class="card mb-3 shadow-sm">
-                <div class="d-flex justify-content-between card-body">
-                    <div class="h2 align-self-center m-0">
-                        <i class="fas fa-tachometer-alt text-primary"></i> 
-                    </div>
-                    <p class="h2 align-self-center">Dashboard</p>
-                    <div class="align-self-center">
-                        <button class="btn btn-sm btn-outline-primary" @click="refresh"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
-                    </div>
-                </div>
-            </div>
-
-            <div v-if="!loading && !noData">
-            <div class="d-flex flex-lg-row flex-sm-colum col-12 justify-content-around mt-5">
-                <div class="col-lg-4 col-md-4 col-sm-12 card-body px-3 pt-0">
-                    <div class="h4 py-3">
-                        <i class="fas fa-home mr-2 text-primary"></i>
-                        <span class="font-weight-bold">Active</span>
-                    </div>
-                     <doughnut-chart v-if="chartData" :chart-data="firmsetsfull"></doughnut-chart>
-                </div>
-                <!-- this is the doughnut chart for the overview of the firm -->
-                <div class="col-lg-4 col-md-4 col-sm-12 card-body px-3 pt-0 mx-3">
-                    <div class="col-lg-8 col-md-8 col-sm-12 carousel h4 py-2">
-                        <carousel ref="carousel" :per-page="1"  :mouse-drag="false" :loop="true" :navigationEnabled="true" :paginationEnabled="false" @pageChange="handleClick" :navigationNextLabel='`<i class="fas fa-arrow-alt-circle-right text-primary"></i>`' :navigationPrevLabel='`<i class="fas fa-arrow-alt-circle-left text-primary"></i>`'>
-                            <slide class="font-weight-bold p-2" ref="slide" v-for="workflow in mapWorkflowsWithIds" :key="workflow.workflow_id" :title="`${workflow.workflow_id}`">
-                                <i class="fas fa-route mr-2 text-primary"></i>{{workflow.workflow}}
-                            </slide>
-                        </carousel>
-                    </div>
-                    <doughnut-chart v-if="chartData" :chart-data="workflowsetsfull"></doughnut-chart>
-                </div>
-                <!-- this is the dougnut chart for the tasks -->
-                <div class="col-lg-4 col-md-4 col-sm-12 card-body px-3 pt-0">
-                    <div class="h4 py-3">
-                        <i class="fas fa-list-ul mr-2 text-primary"></i>
-                        <span class="font-weight-bold">Tasks</span>
-                    </div>
-                    <doughnut-chart v-if="chartData && tasks.length > 0" :chart-data="tasksetsfull"></doughnut-chart>
-                    <div class="mt-3" v-else>
-                       <span class="font-weight-bold">You currently have zero tasks</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-
-        <div v-if="!loading && !noData" class="my-4">
-            <div class="d-flex justify-content-center">
-                <div class="h4 py-3 my-5">
-                    <i class="far fa-folder-open mr-2 text-primary"></i>
-                    <span class="font-weight-bold">Completed </span>
-                    <span class="text-primary font-weight-bold">| {{countCompleteEngagements}} |</span>
-                </div>
-                <select name="selectYear" id="selectYear" class="ml-2 form-control col-1 align-self-center">
-                    <option selected>2018</option>
+    <div class="chart d-flex flex-column align-items-center justify-content-center">
+        <div class="card-header bg-white shadow w-100 d-flex justify-content-between border">
+            <div class="d-flex">
+                <span class="h5 mb-0 align-self-center">Dashboard</span>
+                <span class="h5 mb-0 align-self-center mx-2">|</span>
+                <select name="year" id="year" class="form-control form-control-sm">
+                    <option value="2018">2018</option>
                 </select>
             </div>
-            <bar-chart :chart-data="barData"></bar-chart>
+            <button class="btn btn-sm btn-outline-primary" @click="refresh"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
         </div>
+        <div class="d-flex justify-content-center w-100 shadow mb-3 pt-3 border">
 
-        <div v-if="noData && !loading">
-            <welcome></welcome> 
-        </div>
             <spinner v-if="loading && !noData"></spinner>
-        </div>  
+            <welcome v-if="noData && !loading" class="mb-5"></welcome>    
+
+            <div class="d-flex flex-column col-4" v-if="!loading && !noData">
+                <div class="card h-100 mb-3">
+                    <div class="card-header p-2 text-left">
+                        <span class="h5 mb-0 font-weight-bold align-self-center">{{accountDetails.business_name}}</span>
+                    </div>
+                    <div class="card-body px-0 pb-0">
+                        <img class="ml-5" v-if="accountDetails.logo" v-bind:src="logo" />
+                        <hr>
+                        <ul class="px-5">
+                            <li class="d-flex justify-content-between h5"> 
+                                <span class="mr-2 font-weight-bold">Active: </span>
+                                <span>{{ activeEngagements }}</span>
+                            </li>
+                            <li class="d-flex justify-content-between h5 my-3"> 
+                                <span class="mr-2 font-weight-bold">Complete: </span>
+                                <span>{{ countCompleteEngagements }}</span>
+                            </li>
+                            <li class="d-flex justify-content-between h5"> 
+                                <span class="mr-2 font-weight-bold">Tax Returns: </span>
+                                <span>{{ totalTaxReturns }}</span>
+                            </li>
+                            <li class="d-flex justify-content-between h5 my-3"> 
+                                <span class="mr-2 font-weight-bold">Bookkeeping: </span>
+                                <span>{{ totalBookkeeping }}</span>
+                            </li>
+                            <li class="d-flex justify-content-between h5"> 
+                                <span class="mr-2 font-weight-bold">Other: </span>
+                                <span>{{ totalCustom }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <line-chart class="w-100" :height="barHeight" :chart-data="lineData"></line-chart>
+                </div>
+            </div>
+            
+            <div class="d-flex flex-column col-8" v-if="!loading && !noData">
+                <div class="d-flex justify-content-between">
+                    <div class="doughnut card p-0">
+                        <div class="h5 card-header mb-0 p-2">
+                            <i class="fas fa-home mr-2 text-primary"></i>
+                            <span class="font-weight-bold">Active</span>
+                        </div>
+                        <div class="card-body">
+                            <doughnut-chart v-if="chartData" :chart-data="firmsetsfull"></doughnut-chart>
+                        </div>
+                    </div>
+                    <!-- this is the doughnut chart for the overview of the firm -->
+                    <div class="doughnut card p-0 mx-5">
+                        <div class="carousel card-header h5 mb-0 p-0">
+                            <carousel ref="carousel" :per-page="1"  :mouse-drag="false" :loop="true" :navigationEnabled="true" :paginationEnabled="false" @pageChange="handleClick" :navigationNextLabel='`<i class="fas fa-arrow-alt-circle-right text-primary"></i>`' :navigationPrevLabel='`<i class="fas fa-arrow-alt-circle-left text-primary"></i>`'>
+                                <slide class="font-weight-bold p-2" ref="slide" v-for="workflow in mapWorkflowsWithIds" :key="workflow.workflow_id" :title="`${workflow.workflow_id}`">
+                                    <i class="fas fa-route mr-2 text-primary"></i>{{workflow.workflow}}
+                                </slide>
+                            </carousel>
+                        </div>
+                        <div class="card-body">
+                            <doughnut-chart v-if="chartData" :chart-data="workflowsetsfull"></doughnut-chart>
+                        </div>
+                    </div>
+                    <!-- this is the dougnut chart for the tasks -->
+                    <div class="doughnut card p-0">
+                        <div class="h5 card-header mb-0 p-2">
+                            <i class="fas fa-list-ul mr-2 text-primary"></i>
+                            <span class="font-weight-bold">Tasks</span>
+                        </div>
+                        <div class="card-body">
+                            <doughnut-chart v-if="chartData && tasks.length > 0" :chart-data="tasksetsfull"></doughnut-chart>
+                            <div class="mt-3" v-else>
+                            <span class="font-weight-bold">You currently have zero tasks</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column align-items-center my-3">
+                    <div class="card w-100">
+                        <div class="d-flex justify-content-start card-header p-2">
+                            <div class="h5 mb-0 ml-3">
+                                <i class="fas fa-folder mr-2 text-primary"></i>
+                                <span class="font-weight-bold">Completed </span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <bar-chart class="w-100" :height="barHeight" :chart-data="barData"></bar-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>       
 </template>
 
 <script>
 import DoughnutChart from '@/components/DoughnutChart.vue'
 import BarChart from '@/components/BarChart.vue'
+import LineChart from '@/components/LineChart.vue'
 import Welcome from '@/components/Welcome.vue'
 import Spinner from '@/components/Spinner.vue'
+import moment from 'moment'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -94,11 +121,13 @@ export default {
     components: {
         DoughnutChart,
         BarChart,
+        LineChart,
         Welcome,
         Spinner
     },
     data () {
         return {
+            barHeight: 250,
             workflowKey: 1,
             chartData: false,
             taskData: false,
@@ -130,7 +159,22 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['allWorkflows', 'tasks', 'allEngagements']),
+        ...mapGetters(['allWorkflows', 'tasks', 'allEngagements', 'accountDetails', 'completedEngagements', 'createdEngagements']),
+        logo() {
+            return `data:image/png;base64, ${this.accountDetails.logo}`
+        },
+        activeEngagements() {
+            return this.allEngagements.filter(engagement => engagement.done == false).length
+        },
+        totalTaxReturns() {
+            return this.allEngagements.filter(engagement => engagement.type == 'taxreturn').length
+        },
+        totalBookkeeping() {
+            return this.allEngagements.filter(engagement => engagement.type == 'bookkeeping').length
+        },
+        totalCustom() {
+            return this.allEngagements.filter(engagement => engagement.type == 'custom').length
+        },
         mapStatuses() {
         const selectedWorkflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
 
@@ -253,6 +297,26 @@ export default {
 
             return res
         },
+        createdDates() {
+            const dates = this.createdEngagements.map(e => e.date)
+            const formateddates = dates.reduce((acc, date) => {
+                acc.push(moment(date).format('MM/DD/YYYY'))
+
+                return acc
+            }, [])
+            const filtereddates = this.mapCreatedDates(formateddates)
+            return filtereddates
+        },
+        completedDates() {
+            const dates = this.completedEngagements.map(e => e.date)
+            const formateddates = dates.reduce((acc, date) => {
+                acc.push(moment(date).format('MM/DD/YYYY'))
+
+                return acc
+            }, [])
+            const filtereddates = this.mapCreatedDates(formateddates)
+            return filtereddates
+        },
         firmsetsfull() {
             return {
                 labels: this.mapWorkflows,
@@ -315,6 +379,24 @@ export default {
                 ]
             }
         },
+        lineData () {
+            return {
+                datasets: [
+                    {
+                    label: 'Completed Engagements',
+                    pointBackgroundColor: 'black',
+                    backgroundColor: '#0077ff',
+                    data: this.createdDates
+                    },
+                    {
+                    label: 'Created Engagements',
+                    pointBackgroundColor: 'black',
+                    backgroundColor:  '#0022ff',
+                    data: this.completedDates
+                    }
+                ]
+            }
+        },
     },
     methods: {
         changeKey(id) {
@@ -344,12 +426,32 @@ export default {
         getUnique(arr, comp) {
             const unique = arr.map(e => e[comp]).map((e, i, final) => final.indexOf(e) === i && i).filter(e => arr[e]).map(e => arr[e]);
             return unique
+        },
+        mapCreatedDates(arr) {
+            var a = [], prev;
+
+            arr.sort();
+            for ( var i = 0; i < arr.length; i++ ) {
+                if ( arr[i] !== prev ) {
+                    a.push({
+                        x: arr[i],
+                        y: 1
+                    })
+                } else {
+                    a[a.length-1].y++
+                }
+                prev = arr[i];
+            }
+
+            return a;
         }
     },
     created() {
         this.$store.dispatch('retrieveWorkflows')
         this.$store.dispatch('retrieveEngagements')
         this.$store.dispatch('retrieveTasks')
+        this.$store.dispatch('getAccountDetails')
+        this.$store.dispatch('getEngagementsHistory')
         this.loading = true
         this.selected = true
         var self = this
@@ -383,13 +485,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .dashboard {
     margin-top: 50px;
 }
 
-.carousel {
-    margin-left: 75px;
+.doughnut {
+    width: 30%;
 }
+
 .no-tasks-img {
     height: 23em;
     width: 31em;

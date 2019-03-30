@@ -227,7 +227,7 @@
     <spinner v-if="detailsLoaded && $route.name == 'engagement-details'"></spinner>
 
     <note-modal></note-modal>
-    <edit-note-modal :note="noteToEdit" v-if="editNoteModal"></edit-note-modal>
+    <edit-note-modal :note="noteToEdit.id" v-if="editNoteModal"></edit-note-modal>
 
 <!-- this will show the child view if the route matches-->
   <router-view ></router-view>

@@ -1,31 +1,23 @@
 <script>
-import { Bar, mixins } from 'vue-chartjs'
+import { Line, mixins } from 'vue-chartjs'
 
 export default {
-    name: 'BarChart',
-    extends: Bar,
+    name: 'LineChart',
+    extends: Line,
     mixins: [mixins.reactiveProp],
 	data: function () {
 		return {
 			options: {
 				scales: {
 					yAxes: [{
-						ticks: {
-							beginAtZero: true
-						},
-						gridLines: {
-							display: true
-						}
+						stacked: true,
 					}],
 					xAxes: [{
-						ticks: {
-							beginAtZero: true
-						},
-						gridLines: {
-							display: false
-						},
-						barPercentage: 0.2
+						type: 'time',
 					}]
+				},
+				animation: {
+					duration: 750,
 				},
 				legend: {
 					display: false

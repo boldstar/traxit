@@ -28,7 +28,7 @@ export default {
 				},
 				responsive: true,
 				maintainAspectRatio: false,
-				height: 200
+				height: 200,
 			},
 		}
 	},

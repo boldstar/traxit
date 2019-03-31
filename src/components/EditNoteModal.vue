@@ -3,7 +3,7 @@
         <!-- this is the modal to notify client of status -->
       <b-modal v-model="modal"  hide-footer title="Edit Note">
         <form class="text-right">
-           <vue-editor v-model="note.note" :editorToolbar="customToolbar"></vue-editor>
+           <vue-editor v-model="noteToEdit.note" :editorToolbar="customToolbar"></vue-editor>
            <div class="d-flex justify-content-between mt-3">
                <button :disabled="processing" type="button" class="btn btn-primary btn-sm" @click="editNote">
                     <span v-if="processing">Editing note...</span>
@@ -31,7 +31,7 @@ export default {
         customToolbar: [
             ['bold', 'italic', 'underline'],
             [{ 'list': 'ordered'}, { 'list': 'bullet' }]
-          ]
+          ],
       }
     },
     components:{
@@ -42,22 +42,25 @@ export default {
         'b-modal': bModalDirective
     },
     computed: {
-      ...mapGetters(['processing', 'editNoteModal'])
+      ...mapGetters(['processing', 'editNoteModal', 'noteToEdit']),
     },
     methods: {
         editNote() {
             this.$store.dispatch('editEngagementNote', {
-                id: this.note.id,
-                engagement_id: this.note.engagement_id,
-                note: this.note.note
+                id: this.noteToEdit.id,
+                engagement_id: this.noteToEdit.engagement_id,
+                note: this.noteToEdit.note
             })
             .then(() => {
-                this.note = ''
+                
             })
         },
         closeModal() {
             this.$store.commit('editNoteModal')
         }
+    },
+    created() {
+        this.$store.dispatch('showEngagementNote', this.note)
     }
 }
 </script>

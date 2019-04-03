@@ -1,13 +1,16 @@
 <template>
-    <div class="container card-body bg-light" v-if="engagement">
-        <div class="text-left mb-3">
+    <div class="card col-8 px-0 mx-auto shadow mb-3" v-if="engagement">
+        <div class="card-header text-left">
+            <span class="font-weight-bold">{{engagement.name}}</span>
+        </div>
+        <div class="text-left mb-3 p-3">
             <h6><strong>Note:</strong> If question is for an engagement with the type of <strong>"Tax Return"</strong>, you will be asked if you would like to send an email.</h6>
             <h6><strong>Note:</strong> If question is for an engagement with the type of <strong>"Bookkeeping"</strong>, you will <strong>not</strong>  be asked about email. No email is currently provided.</h6>
         </div>
-        <div class="text-left h4">
+        <div class="text-left h4 px-3">
             <span class="font-weight-bold">Engagement Type: <span class="text-primary text-capitalize">{{ fixCasing(engagement.type) }}</span> </span>
         </div>
-        <div class="d-flex-column justify-content-center">
+        <div class="d-flex-column justify-content-center px-3 mb-3">
 
             <div class="form-group">
                 <vue-editor v-model="question.question" :editorToolbar="customToolbar"></vue-editor>

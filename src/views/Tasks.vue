@@ -12,29 +12,11 @@
 
       <div v-if="batchAlert" class="p-2 bg-danger font-weight-bold text-light">{{ batchAlert }}</div>
 
-<!-- this will appear if there are no tasks -->
-      <div v-if="noTasks & !tasksLoaded">
-         <table class="table table-hover mb-5">
-            <thead class="bg-primary text-light">
-              <tr>
-                <th scope="col">Task</th>
-                <th scope="col">Type</th>
-                <th scope="col">Client</th>
-                <th scope="col">Assigned On</th>
-                <th scope="col">Time Period</th>
-                <th scope="col">Return Type</th>
-                <th scope="col">Year</th>
-                <th scope="col">Action</th>
-                <th scope="col">Engagement</th>
-              </tr>
-            </thead>
-         </table>
-         <span class="mt-5 font-weight-bold">
-            You have no tasks...
-         </span>
-      </div>
 <!-- this is the list of the assigned user tasks -->
-    <div v-else class="text-left shadow card-body mb-3">
+    <div class="text-left shadow card-body mb-3">
+    <div class="d-flex justify-content-center">
+      <spinner v-if="tasksLoaded"></spinner>
+    </div>
      <input v-if="searchInput" class="form-control mb-3" placeholder="Filter Task By Client Name" v-model="searchTasks" type="search">
       <table class="table table-hover text-center" v-if="!tasksLoaded && taskData">
         <thead class="bg-primary text-light">
@@ -179,9 +161,6 @@
             </div>
           </form>
       </b-modal>
-
-<!-- this is the loading ring for the engagements -->
-    <spinner v-if="tasksLoaded"></spinner>
   </div>
 </template>
 

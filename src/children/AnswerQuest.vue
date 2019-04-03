@@ -1,29 +1,24 @@
 <template>
-    <div class="answer-quest card-body p-0">
-        <div class="card-body text-left px-0">
-          <div class="mb-3">
-            <h3>Question</h3>
-          </div>
+    <div class="card col-8 mx-auto mb-3 p-0 shadow">
+    <div class="card-header text-left">
+      <span class="font-weight-bold">{{ engagement.name }}</span>
+    </div>
+      <div class="card-body text-left px-3">
+          <h5>Question:</h5>
           <span v-html="question.question"></span>
+      </div>
+      <div class="text-left px-3">
+        <h5 class="mb-0">Answer:</h5>
+      </div>   
+      <form @submit.prevent="acceptAnswer" class="d-flex-column justify-content-center">
+        <div class="form-group p-3 mb-0">
+            <vue-editor v-model="answerQuestion.answer" :editorToolbar="customToolbar"></vue-editor>
         </div>
-        <div class="text-left">
-          <h3>Answer</h3>
+        <div class="d-flex justify-content-between px-3 pb-3">
+          <button class="btn btn-primary d-flex justify-content-start" @click="modalShow = true">Submit</button>
+          <router-link v-bind:to="'/engagement/' +engagement.id " class="btn btn-secondary float-right">Cancel</router-link>
         </div>
-     
-          <form @submit.prevent="acceptAnswer" class="d-flex-column justify-content-center bg-light">
-
-          <div class="form-group p-3 mb-0">
-              <vue-editor v-model="answerQuestion.answer" :editorToolbar="customToolbar"></vue-editor>
-          </div>
-
-
-          <div class="d-flex justify-content-between px-3 pb-3">
-            <button class="btn btn-primary d-flex justify-content-start" @click="modalShow = true">Submit</button>
-            <router-link v-bind:to="'/engagement/' +engagement.id " class="btn btn-secondary float-right">Cancel</router-link>
-          </div>
-
-          </form>
-     
+      </form>     
     </div>
 </template>
 

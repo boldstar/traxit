@@ -383,19 +383,19 @@ export default {
             return {
                 datasets: [
                     {
-                    label: 'Created Engagements',
+                    label: 'Created',
                     pointBackgroundColor: 'black',
+                    backgroundColor: '#0077ff2c',
                     borderColor: '#0077ff',
                     data: this.createdDates,
-                    fill: false,
                     lineTension: .2,
                     },
                     {
-                    label: 'Completed Engagements',
+                    label: 'Completed',
                     pointBackgroundColor: 'black',
-                    borderColor:  '#0022ff',
+                     backgroundColor: '#00aaff9c',
+                    borderColor:  '#00ccff',
                     data: this.completedDates,
-                    fill: false,
                     lineTension: .2
                     }
                 ]

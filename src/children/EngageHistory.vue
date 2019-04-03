@@ -1,9 +1,17 @@
 <template>
-  <div class="mt-1">
+  <div class="page-wrapper">
+  <div class="d-flex" v-if="dataReceived">
+    <router-link :to="{path: '/engagement/' + engagement.id }" class="mr-auto btn btn-link"><i class="fas fa-chevron-left mr-2"></i>Back</router-link>
+  </div>
   <div class="d-flex justify-content-between mb-5" v-if="dataReceived">
     <div class="card-body radius shadow text-left p-0" v-if="engagementHistory">
-      <h2 class="p-3"><i class="fas fa-history mr-2"></i>History</h2>    
-      <table class="table table-light table-hover text-left">
+      <div class="d-flex justify-content-between">
+        <h2 class="p-3"><i class="fas fa-history mr-2"></i>History</h2>
+        <div class="align-self-center mr-3">
+          <button type="button" class="btn btn-sm btn-primary" @click="editReceivedDate">Edit Created Date</button>    
+        </div>
+      </div>
+      <table class="table table-light table-hover text-left mb-0">
         <thead class="text-primary hover">
             <tr>
                 <th scope="col">Event</th>
@@ -34,21 +42,23 @@
       </h2>
       <div v-if="engagementHistory" class="day">
         <span class="d-flex justify-content-center">
-          {{ calculateDifference }} Days
+          {{ calculateDifference }} Day(s)
         </span>
       </div>
     </div>
 
-
-    <b-modal id="myModal" ref="myModalRef" hide-footer title="Delete Client">
+    <b-modal v-model="dateModal" hide-footer title="Edit Created Date">
       <div class="d-block text-left">
-        <h5>Are you sure you want to delete engagement?</h5>
-        <br>
-        <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
+        <span class="font-weight-bold ml-1">Created Date</span>
+        <v-date-picker
+          mode='single'
+          v-model='receivedDate'
+          :input-props='{class: "form-control h-100"}'>
+        </v-date-picker>
       </div>
       <div class="d-flex">
-        <b-btn class="mt-3" variant="danger" @click="hideModal">Cancel</b-btn>
-        <b-btn class="mt-3 ml-auto" variant="outline-success">Confirm</b-btn>
+        <b-btn class="mt-3 mr-auto" size="sm" variant="primary" @click="updateReceivedDate">Save</b-btn>
+        <b-btn class="mt-3" variant="secondary" size="sm" @click="dateModal = false">Cancel</b-btn>
       </div>
     </b-modal>
 
@@ -72,6 +82,8 @@ export default {
   data() {
     return {
       dataReceived: false,
+      receivedDate: null,
+      dateModal: false,
       engagementComplete: false
     }
   },
@@ -128,7 +140,22 @@ export default {
     hideModal () {
       this.$refs.myModalRef.hide()
     },
-   
+    editReceivedDate() {
+      const date = this.engagementHistory.filter(e => e.action == 'created')
+      this.dateModal = true
+      this.receivedDate = new Date(date[0].created_at)
+    },
+    updateReceivedDate() {
+      if(!this.receivedDate) return;
+      this.$store.dispatch('updateReceivedDate', {
+        id: this.engagement.id,
+        date:  moment(String(this.receivedDate)).format('MM/DD/YYYY')
+      })
+      .then(() => {
+        this.receivedDate = null
+        this.dateModal = false
+      })
+    }
   },
   created: function(){
     this.$store.dispatch('getEngagement', this.$route.params.id);

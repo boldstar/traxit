@@ -11,6 +11,9 @@
 
     <form class="w-100 text-left">
       <div class="form-group">
+
+        <label for="name">Name</label>
+        <input type="text" id="name" class="form-control mb-2" placeholder="Engagement Name" v-model="engagement.name">
         <div class="d-flex justify-content-between mb-2 p-2 custom-control custom-checkbox bg-white form-control" v-bind:class="{'input-error' : nothingChecked}" v-if="engagement.type == 'bookkeeping'">
           <div class="d-flex">
             <span class="mr-3 font-weight-bold h6">Monthly</span>
@@ -197,6 +200,7 @@ export default {
         this.engagement.owed = this.owed
         this.updateEngagement({
           id: this.engagement.id,
+          name: this.engagement.name,
           client_id: this.engagement.client_id,
           workflow_id: this.engagement.workflow_id,
           type: this.engagement.type,

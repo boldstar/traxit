@@ -1,23 +1,18 @@
 <template>
-  <div class="page-wrapper mt-1">
+  <div class="page-wrapper">
     <!-- this is the header section of the firm overview -->
-      <div class="card mb-3 shadow-sm">
-        <div class="d-flex justify-content-between card-body">
-          <div class="h2 align-self-center m-0">
-            <i class="fas fa-home text-primary"></i>
+      <div class="card-header bg-white shadow w-100 d-flex justify-content-between border">
+          <div class="d-flex">
+              <span class="h5 mb-0 align-self-center">Firm</span>
           </div>
-          <p class="h2 align-self-center">Firm</p>
-          <div class="align-self-center">
-            <button class="btn btn-sm btn-outline-primary" @click="refreshList"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
-          </div>
-        </div>
+          <button class="btn btn-sm btn-outline-primary" @click="refreshList"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
       </div>
 
-      <Alert v-if="alert" v-bind:message="alert" />
+      <div class="row d-flex justify-content-between card-body shadow col-12 mx-auto mb-3" >
+          <div v-if="noEngagements &&!listLoaded" class="mt-5"><welcome></welcome></div>
+          <spinner v-if="listLoaded" class="mx-auto"></spinner>
 
-      <div class="row d-flex justify-content-around mt-5" v-if="!listLoaded && Object.keys(allEngagements).length">
-
-        <div class="col-2 col-sm-3">
+        <div class="col-2 col-sm-3" v-if="!listLoaded && Object.keys(allEngagements).length">
           <div class="card shadow-sm p-2">
             <div class="input-group my-2">
               <div class="input-group-prepend">
@@ -43,7 +38,7 @@
           </div>
         </div>
 
-        <div class="col-9 col-sm-8">
+        <div class="col-10 col-sm-9" v-if="!listLoaded && Object.keys(allEngagements).length">
           <div class="card p-0 shadow-sm mb-3">
             <div class="d-flex my-3">
                 <span class="text-capitalize align-self-center h5 mb-0 font-weight-bold mx-3">
@@ -99,7 +94,7 @@
                 </div>
                 <select class="custom-select" id="client_id" v-model="checkedEngagements.assigned_to">
                   <option  selected disabled>{{ option }}</option>
-                  <option v-for="user in users" :key="user.id" :value="user.id">
+                  <option v-for="user in users" :key="user.id" :value="user.id" v-if="user.name != 'Admin'">
                     {{ user.name }}
                   </option>
                 </select>
@@ -112,11 +107,6 @@
           
         </div>      
       </div>
-
-
-  <div v-if="noEngagements &&!listLoaded" class="mt-5"><welcome></welcome></div>
-
-  <spinner v-if="listLoaded"></spinner>
     
   </div>
 </template>

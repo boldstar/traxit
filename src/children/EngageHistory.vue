@@ -147,6 +147,7 @@ export default {
     },
     updateReceivedDate() {
       if(!this.receivedDate) return;
+      console.log(moment(String(this.receivedDate)).format('MM/DD/YYYY'))
       this.$store.dispatch('updateReceivedDate', {
         id: this.engagement.id,
         date:  moment(String(this.receivedDate)).format('MM/DD/YYYY')

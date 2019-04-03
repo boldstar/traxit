@@ -3,15 +3,15 @@
     
     <Navbar />
 
-    <Toolbar class="ml-auto" v-bind:class="[!toggleSidebar ? closedSidebar : '', openSidebar]" />
+    <Toolbar class="toolbar"  />
 
     <transition name="router-animation" enter-active-class="animated slideInLeft" leave-active-class="animated slideOutLeft">
-      <Sidebar v-if="toggleSidebar" />
+      <Sidebar  />
     </transition>
 
 <!-- this section is controling the main content section -->
-    <div class="d-flex ml-auto page-wrapper" v-bind:class="[!toggleSidebar ? closedSidebar : '', openSidebar]">
-      <main role="main" class="col-lg-12 col-md-8 ml-sm-auto px-3">   
+    <div class="d-flex main-wrapper page-wrapper">
+      <main role="main" class="flex-fill px-3 main">   
         <!-- this is where the pages are being rendered -->
         <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
          <slot />
@@ -72,6 +72,19 @@ export default {
   transition: margin-left .5s;
 }
 
+.toolbar {
+  margin-left: 215px;
+  margin-right: 0;
+}
+
+.main-wrapper {
+  margin-left: 215px;
+  margin-right: 0;
+}
+
+.main {
+  padding-top: 110px;
+}
 
 
 </style>

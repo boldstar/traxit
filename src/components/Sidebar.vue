@@ -63,7 +63,7 @@ export default {
         z-index: 100; /* Behind the navbar */
         padding: 52px 0 0; /* Height of navbar */
         box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-        width: 215px;
+        width: 215px!important;
     }
 
     .sidebar-sticky {

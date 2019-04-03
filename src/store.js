@@ -605,6 +605,10 @@ export default new Vuex.Store({
     updateENote(state, note) {
       const index = state.enotes.findIndex(item => item.id == note.id)
       state.enotes.splice(index, 1, note)
+    },
+    updateReceivedDate(state, history) {
+      const index = state.history.findIndex(item => item.id == history.id);
+      state.history.splice(index, 1, history);
     }
   },
   actions: {
@@ -1001,6 +1005,19 @@ export default new Vuex.Store({
         console.log(error)
       })
     },
+    updateReceivedDate(context, history) {
+      axios.patch('/updatereceiveddate', {
+        id: history.id,
+        date: history.date
+      })
+      .then(response => {
+        context.commit('updateReceivedDate', response.data.history)
+        context.commit('successAlert', response.data.message)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
     getClientEngagements({commit}, id) {
       axios.get('/engagements/'+id)
       .then(response => {
@@ -1050,6 +1067,7 @@ export default new Vuex.Store({
       context.commit('startProcessing')
 
       axios.patch('/engagements/' + engagement.id, {
+        name: engagement.name,
         client_id: engagement.client_id,
         workflow_id: engagement.workflow_id,
         type: engagement.type,
@@ -1317,6 +1335,20 @@ export default new Vuex.Store({
       })
       .catch(error => {
           console.log(error)
+          context.commit('errorMsgAlert', error.response.data.message)
+      })           
+    },
+    editAnswer(context, question) {
+      axios.patch('/editquestionsanswer/' + question.id, {
+        answer: question.answer,
+        answered: question.answered,
+      })
+      .then(response => {
+          console.log(response.data)
+          context.commit('updateAnswer', response.data)
+      })
+      .catch(error => {
+          console.log(error.response.data)
           context.commit('errorMsgAlert', error.response.data.message)
       })           
     },

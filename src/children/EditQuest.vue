@@ -1,6 +1,12 @@
 <template>
-    <div class="container card-body bg-light">
-        <form @submit.prevent="editThisQuestion" class="d-flex-column justify-content-center">
+    <div class="col-8 card mx-auto px-0 mb-3 shadow">
+        <div class="card-header text-left">
+          <span class="font-weight-bold">{{engagement.name}}</span>
+        </div>
+        <div class="text-left p-3">
+          <h5>Edit Question:</h5>
+        </div>
+        <form @submit.prevent="editThisQuestion" class="d-flex-column justify-content-center px-3 mb-3">
 
             <div class="form-group">
                 <vue-editor v-model="question.question" :editorToolbar="customToolbar"></vue-editor>

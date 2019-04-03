@@ -9,7 +9,7 @@
 
       <!-- this is the header section of the engagement details -->
       <div class="flex-row justify-content-between d-flex mt-0 card-body shadow-sm py-2 px-3">
-        <span class="h5 align-self-center m-0 text-left">Engagement | <strong class="text-primary"><router-link :to="'/contact/' +engagement.client.id + '/account'">{{ engagement.client.last_name}}, {{ engagement.client.first_name}} <span v-if="engagement.client.has_spouse"> & {{ engagement.client.spouse_first_name}}</span></router-link></strong></span>
+        <span class="h5 align-self-center m-0 text-left">Engagement | <strong class="text-primary"><router-link :to="'/contact/' +engagement.client.id + '/account'">{{engagement.name}}</router-link></strong></span>
 
         <div class="d-flex">
         <div v-if="engagement.type == 'taxreturn' && engagement.balance != null" class="mr-3 d-flex">
@@ -30,6 +30,7 @@
               <span v-if="!engagement.archive">Archive</span>
               <span v-else>Unarchive</span>
             </span></button> 
+            <button type="button" class="dropdown-item"><i class="far fa-envelope mr-2"></i>Mail</button>
             <div class="dropdown-divider"></div>
             <b-btn class="dropdown-item text-danger" @click="requestEngagementDelete()" v-if="$can('delete', engagement)"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
           </div>
@@ -127,18 +128,23 @@
           <div v-if="engagementNotes.length <= 0" class="card-body shadow-sm border">
             <span class="font-weight-bold">There are currrently no notes</span>
           </div>
-            <div class="card-body text-left p-3 border" v-for="(note, index) in engagementNotes" :key="index">
-              <div class="note">
+            <div class="card-body py-0 text-left border" v-for="(note, index) in engagementNotes" :key="index" v-if="engagementNotes.length > 0">
+              <div class="note p-1">
                 <div v-html="note.note"></div>
-                <span v-if="processing" class="note-btn">Deleting...</span>
-                <div class="text-right">
-                  <button type="button" class="edit-btn" @click="editNote(note)">Edit</button>  
-                  <span v-if="deleteNote && note.id == selectedNote" class="note-span">Are you sure?</span>
-                  <button type="button" class="note-btn">
-                    <span v-if="!deleteNote" @click="confirmDelete(note.id)">Delete</span>
-                    <span v-if="deleteNote && note.id == selectedNote" @click="deleteENote(note.id)">Yes</span>
-                  </button>
-                  <button class="note-btn ml-2" v-if="deleteNote && note.id == selectedNote" @click="deleteNote = false">Cancel</button>
+                <div class="d-flex justify-content-between">
+                  <div class="d-flex">
+                    <span class="note-date mr-1" v-if="note.username != null">Created By: {{ note.username }} | </span>
+                    <span class="note-date">{{ note.created_at | formatDate }}</span>
+                  </div>
+                  <div class="d-flex">     
+                    <button type="button" class="edit-btn" @click="editNote(note)">Edit</button>  
+                    <span v-if="deleteNote && note.id == selectedNote" class="note-span">Are you sure?</span>
+                    <button type="button" class="note-btn">
+                      <span v-if="!deleteNote" @click="confirmDelete(note.id)">Delete</span>
+                      <span v-if="deleteNote && note.id == selectedNote" @click="deleteENote(note.id)">Yes</span>
+                    </button>
+                    <button class="note-btn ml-2" v-if="deleteNote && note.id == selectedNote" @click="deleteNote = false">Cancel</button>
+                  </div>
                 </div>  
               </div>
             </div>
@@ -177,7 +183,7 @@
                   <b-btn v-if="$can('delete', engagement)" class="outline-secondary" size="sm" @click="requestDelete(engagement, question.id)"><i class="fas fa-trash"></i></b-btn>
                 </div>
               </div>
-              <div class="card-body pt-2 pb-0 d-flex justify-content-between">
+              <div class="card-body border-bottom pt-2 pb-0 d-flex justify-content-between">
                 <div class="h5 mr-5 d-flex flex-column text-left">
                   <span class="mb-2 h6 font-weight-bold">Question:</span>
                   <span class="align-self-center h6 mb-0 question" v-html="question.question"></span>
@@ -186,11 +192,18 @@
                   <router-link class="btn btn-sm btn-primary" v-if="question.answered == 0" :to="{ path: '/engagement/' +engagement.id+ '/answer-question/' +question.id }"><i class="fas fa-comment-dots"></i></router-link>
                 </div>
               </div>
-              <div v-if="question.answered == 1">
-                <div class="card-footer bg-white pb-0 d-flex flex-column text-left h5 mb-0">
+              <div v-if="question.answered == 1" class="card-body pt-1 pb-0 d-flex justify-content-between">
+                <div class="pb-0 d-flex flex-column text-left h5 mb-0">
                   <span class="mb-2 h6 font-weight-bold">Answer:</span>
                   <span class="h6" v-html="question.answer"></span>
                 </div>
+                <div class="ml-5 d-flex align-self-center">
+                  <router-link class="btn btn-sm btn-primary font-weight-bold" :to="{ path: '/engagement/' +engagement.id+ '/edit-answer-question/' +question.id }">Edit</router-link>
+                </div>
+              </div>
+              <div class="card-footer text-right p-2">
+                <span class="align-self-center font-weight-bold question-date mr-1" v-if="question.username != null">Created By: {{ question.username }} | </span>
+                <span class="align-self-center font-weight-bold question-date mr-3">{{ question.created_at | formatDate }}</span>
               </div>
 
                 <!-- this is the modal for deleting a question -->
@@ -439,9 +452,23 @@ export default {
   }
 
   .note {
+    padding-bottom: 5px;
+
      &:hover {
        background-color: rgba(0, 0, 0, 0.110);
        padding: 5px;
      }
+  }
+
+  .note-date {
+    font-size: .8rem;
+  }
+
+  .question-date {
+    font-size: .8rem;
+  }
+
+  button {
+    cursor: pointer!important;
   }
 </style>

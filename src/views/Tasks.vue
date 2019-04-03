@@ -1,48 +1,22 @@
 <template>
   <div class="page-wrapper mt-1">
 <!-- this is the user tasks header -->
-      <div class="card mb-3 shadow-sm">
-        <div class="d-flex justify-content-between card-body">
-          <div class="h2 align-self-center m-0">
-            <i class="fas fa-tasks text-primary"></i> 
-          </div>
-          <p class="h2 align-self-center">Tasks <span>
-             | {{ tasks.length }}
-            </span>
-          </p>
+      <div class="card-header bg-white shadow w-100 d-flex justify-content-between border">
+          <span class="mb-0 align-self-center h5">Tasks | <span class="text-primary">{{ tasks.length }}</span></span>
           <div class="align-self-center">
             <button class="btn btn-sm btn-outline-dark mr-2 font-weight-bold" @click="showBatchColumn"><i class="fas fa-tasks mr-2"></i>Batch</button>
             <button class="btn btn-sm btn-outline-secondary mr-2 font-weight-bold" @click="searchInputMethod"><i class="fas fa-search mr-2"></i>Filter</button>
             <button class="btn btn-sm btn-outline-primary font-weight-bold" @click="refreshTask"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
           </div>
-        </div>
       </div>
 
       <div v-if="batchAlert" class="p-2 bg-danger font-weight-bold text-light">{{ batchAlert }}</div>
 
-<!-- this will appear if there are no tasks -->
-      <div v-if="noTasks & !tasksLoaded">
-         <table class="table table-hover mb-5">
-            <thead class="bg-primary text-light">
-              <tr>
-                <th scope="col">Task</th>
-                <th scope="col">Type</th>
-                <th scope="col">Client</th>
-                <th scope="col">Assigned On</th>
-                <th scope="col">Time Period</th>
-                <th scope="col">Return Type</th>
-                <th scope="col">Year</th>
-                <th scope="col">Action</th>
-                <th scope="col">Engagement</th>
-              </tr>
-            </thead>
-         </table>
-         <span class="mt-5 font-weight-bold">
-            You have no tasks...
-         </span>
-      </div>
 <!-- this is the list of the assigned user tasks -->
-    <div v-else class="text-left">
+    <div class="text-left shadow card-body mb-3">
+    <div class="d-flex justify-content-center">
+      <spinner v-if="tasksLoaded"></spinner>
+    </div>
      <input v-if="searchInput" class="form-control mb-3" placeholder="Filter Task By Client Name" v-model="searchTasks" type="search">
       <table class="table table-hover text-center" v-if="!tasksLoaded && taskData">
         <thead class="bg-primary text-light">
@@ -187,9 +161,6 @@
             </div>
           </form>
       </b-modal>
-
-<!-- this is the loading ring for the engagements -->
-    <spinner v-if="tasksLoaded"></spinner>
   </div>
 </template>
 

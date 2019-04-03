@@ -10,7 +10,7 @@ export default {
 			options: {
 				scales: {
 					yAxes: [{
-						stacked: true,
+						
 					}],
 					xAxes: [{
 						type: 'time',
@@ -20,7 +20,7 @@ export default {
 					duration: 750,
 				},
 				legend: {
-					display: false
+					display: true
 				},
 				tooltips: {
 					enabled: true,

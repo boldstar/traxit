@@ -980,7 +980,6 @@ export default new Vuex.Store({
     getEngagementsHistory(context) {
       axios.get('/engagements-history')
       .then(response => {
-        console.log(response.data)
         context.commit('engagementsHistory', response.data)
       })
       .catch(error => {
@@ -1345,7 +1344,6 @@ export default new Vuex.Store({
         answered: question.answered,
       })
       .then(response => {
-          console.log(response.data)
           context.commit('updateAnswer', response.data)
       })
       .catch(error => {
@@ -1824,7 +1822,6 @@ export default new Vuex.Store({
         note: note.note
       })
       .then(response => {
-        console.log(response.data)
         context.commit('stopProcessing')
         context.commit('editNoteModal')
         context.commit('updateENote', response.data.note)

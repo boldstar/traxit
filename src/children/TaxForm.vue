@@ -74,7 +74,7 @@
           <div class="input-group-prepend">
             <label class="input-group-text text-primary" for="option">Find Business</label>
           </div>
-          <select :class="{ 'input-error': errors.has('Business') }" class="form-control" id="client_id" v-model="engagement.name" v-validate="{ is_not: option }" name="Business">
+          <select :class="{ 'input-error': errors.has('Business'), 'input-error': noBusiness }" class="form-control" id="client_id" v-model="engagement.name" v-validate="{ is_not: option }" name="Business">
             <option disabled>{{ option }}</option>
             <option v-for="(business, index) in clientBusinesses" :key="index">
               {{business.business_name}} {{business.business_type}}
@@ -82,6 +82,7 @@
           </select>
         </div>
         <span class="form-error" v-show="errors.has('Business')">{{ errors.first('Business') }}</span>
+        <span class="form-error" v-show="noBusiness">Please choose a business, if no business is available you must add the business first</span>
 
         <div class="input-group my-3">
           <div class="input-group-prepend">
@@ -161,6 +162,7 @@ export default {
   data() {
     return {
       client: '',
+      noBusiness: false,
       engagement: {
         year: '',
         difficulty: null,
@@ -216,7 +218,10 @@ export default {
           });
       },
     addNewEngagement() {
-      if(!this.engagement.return_type || !this.engagement.year ) return;
+      if(this.engagement.name == this.option && this.engagement.category == 'Business' ) {
+        this.noBusiness = true
+        return;
+      }
       this.addEngagement({
         id: this.idForEngagement,
         category: this.engagement.category,

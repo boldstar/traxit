@@ -10,7 +10,7 @@
             </div>
             <button class="btn btn-sm btn-outline-primary" @click="refresh"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
         </div>
-        <div class="d-flex justify-content-center w-100 shadow mb-3 pt-3 border">
+        <div class="d-flex justify-content-center w-100 shadow mb-3 pt-3 border body">
 
             <spinner v-if="loading && !noData"></spinner>
             <welcome v-if="noData && !loading" class="mb-5"></welcome>    
@@ -493,6 +493,11 @@ export default {
 .dashboard {
     margin-top: 50px;
 }
+
+.body {
+    height: 100%;
+    min-height: calc(100vh - 190px);
+  }
 
 .doughnut {
     width: 30%;

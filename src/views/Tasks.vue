@@ -13,7 +13,7 @@
       <div v-if="batchAlert" class="p-2 bg-danger font-weight-bold text-light">{{ batchAlert }}</div>
 
 <!-- this is the list of the assigned user tasks -->
-    <div class="text-left shadow card-body mb-3">
+    <div class="text-left shadow card-body mb-3 tasks">
     <div class="d-flex justify-content-center">
       <spinner v-if="tasksLoaded"></spinner>
     </div>
@@ -444,5 +444,10 @@ export default {
 
   .highlight-row {
     background-color: rgba(0, 0, 0, 0.150);
+  }
+
+  .tasks {
+    height: 100%;
+    min-height: calc(100vh - 190px);
   }
 </style>

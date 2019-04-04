@@ -46,6 +46,21 @@ export default new Router({
       path: '/administrator',
       name: 'administrator',
       component: () => import(/* webpackChunkName: "logout" */ './views/Administrator.vue'),
+      beforeEnter: (to, from, next) => {
+        if (to.matched.some(record => record.meta.requiresAuth)) { 
+          var token = localStorage.getItem('access_token')
+          if (!token || token == null || token == undefined ) {
+            next({
+              path: '/login',
+            })
+          } else if(localStorage.getItem('role') != 'Admin') {
+            console.log(from.path)
+            next(from.path)
+          } else {
+            next()
+          }
+        }
+      },
       meta: {
         requiresAuth: true,
         layout: "admin",

@@ -726,6 +726,7 @@ export default new Vuex.Store({
             
             localStorage.removeItem('access_token')
             localStorage.removeItem('expires_on')
+            localStorage.removeItem('role')
             context.commit('destroyToken')
             context.commit('destroySession')
             router.push('/login')
@@ -734,6 +735,7 @@ export default new Vuex.Store({
           .catch(error => {
             localStorage.removeItem('access_token')
             localStorage.removeItem('expires_on')
+            localStorage.removeItem('role')
             context.commit('destroyToken')
             router.push('/login')
             reject(error)
@@ -750,15 +752,18 @@ export default new Vuex.Store({
               fqdn: localStorage.getItem('fqdn_api_url')
           })
           .then(response => {
+            console.log(response.data)
             commit('clearAlert')
             commit('clearAccountDetails')
             const token = response.data.rules.access_token
             const fqdn = response.data.fqdn
+            const role = response.data.role[0][0].name
             if(token != null || token != undefined && fqdn != null || fqdn != undefined) {
               localStorage.removeItem('fqdn_api_url')
               const date = new Date(moment().add(1, 'day').toDate());
-              localStorage.setItem('fqdn_api_url', response.data.fqdn)
+              localStorage.setItem('fqdn_api_url', fqdn)
               localStorage.setItem('expires_on', date);
+              localStorage.setItem('role', role)
               axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
               axios.defaults.baseURL = 'http://' + response.data.fqdn + '/api'
               setTimeout(() => {

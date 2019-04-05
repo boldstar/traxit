@@ -56,9 +56,7 @@ Vue.filter('formatDate', function(created_at) {
 router.beforeEach((to, from, next) => {
 
 
-  if (to.matched.some(record => record.meta.requiresAuth)) {     
-    // this route requires auth, check if logged in
-    // if not, redirect to login page.
+  if (to.matched.some(record => record.meta.requiresAuth)) {
     var token = store.getters.loggedIn;
     if (!token || token == null || token == undefined ) {
       next({
@@ -68,8 +66,6 @@ router.beforeEach((to, from, next) => {
       next()
     }
   }else if (to.matched.some(record => record.meta.requiresVisitor)) {
-    // this route requires auth, check if logged in
-    // if yes, redirect to home page.
     if (token || token != null || token != undefined) {
       next({
         path: '/',

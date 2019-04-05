@@ -145,9 +145,9 @@ export default new Router({
             ]
           },
           {
-            path: 'users',
-            name: 'users',
-            component: () => import('@/children/Users.vue'),
+            path: 'team',
+            name: 'team',
+            component: () => import('@/children/Team.vue'),
             meta: {
               requiresAuth: true,
               layout: "admin",

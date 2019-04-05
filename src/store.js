@@ -317,6 +317,10 @@ export default new Vuex.Store({
       const index = state.users.findIndex(item => item.id == user.id);
       state.users.splice(index, 1, user);
     },
+    deleteUser(state, id) {
+      const index = state.users.findIndex(user => user.id == id)
+      state.users.splice(index, 1)
+    },
     retrieveUsers(state, users) {
       state.users = users
     },
@@ -664,6 +668,17 @@ export default new Vuex.Store({
         .catch(error => {
           console.log(error.response.data)
         })
+    },
+    deleteUser(context, user) {
+      axios.delete('/users/'+ user.id)
+      .then(response => {
+        context.commit('successAlert', response.data)
+        context.commit('deleteUser', user.id)
+      })
+      .catch(error => {
+        context.commit('successAlert', error.response.data)
+        console.log(error.response.data)
+      })
     },
     requestReset(context, email) {
       axios.post('/password/create', {

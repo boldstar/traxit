@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-
 Vue.use(Router)
-
 
 
 export default new Router({
@@ -209,6 +207,20 @@ export default new Router({
       path: '/',
       name: 'dashboard',
       component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue'),
+      beforeEnter: (to, from, next) => {
+        if (to.matched.some(record => record.meta.requiresAuth)) { 
+          var token = localStorage.getItem('access_token')
+          if (!token || token == null || token == undefined ) {
+            next({
+              path: '/login',
+            })
+          } else if(localStorage.getItem('role') == 'Outsource') {
+            next({path: '/tasks'})
+          } else {
+            next()
+          }
+        }
+      },
       meta: {
         requiresAuth: true,
         layout: "default",
@@ -222,6 +234,20 @@ export default new Router({
       path: '/firm',
       name: 'firm',
       component: () => import(/* webpackChunkName: "firm" */ './views/Firm.vue'),
+      beforeEnter: (to, from, next) => {
+        if (to.matched.some(record => record.meta.requiresAuth)) { 
+          var token = localStorage.getItem('access_token')
+          if (!token || token == null || token == undefined ) {
+            next({
+              path: '/login',
+            })
+          } else if(localStorage.getItem('role') == 'Outsource') {
+            next({path: '/tasks'})
+          } else {
+            next()
+          }
+        }
+      },
       meta: {
         requiresAuth: true,
         layout: "default",
@@ -235,6 +261,20 @@ export default new Router({
       path: '/contacts',
       name: 'contacts',
       component: () => import(/* webpackChunkName: "about" */ './views/Contacts.vue'),
+      beforeEnter: (to, from, next) => {
+        if (to.matched.some(record => record.meta.requiresAuth)) { 
+          var token = localStorage.getItem('access_token')
+          if (!token || token == null || token == undefined ) {
+            next({
+              path: '/login',
+            })
+          } else if(localStorage.getItem('role') == 'Outsource') {
+            next({path: '/tasks'})
+          } else {
+            next()
+          }
+        }
+      },
       meta: {
         requiresAuth: true,
         layout: "default",
@@ -424,6 +464,20 @@ export default new Router({
       path: '/add',
       name: 'add',
       component: () => import(/* webpackChunkName: "add" */ './views/Add.vue'),
+      beforeEnter: (to, from, next) => {
+        if (to.matched.some(record => record.meta.requiresAuth)) { 
+          var token = localStorage.getItem('access_token')
+          if (!token || token == null || token == undefined ) {
+            next({
+              path: '/login',
+            })
+          } else if(localStorage.getItem('role') == 'Outsource') {
+            next({path: '/tasks'})
+          } else {
+            next()
+          }
+        }
+      },
       meta: {
         requiresAuth: true,
         layout: "default",
@@ -519,6 +573,20 @@ export default new Router({
     path: '/engagements',
     name: 'engagements',
     component: () => import(/* webpackChunkName: "engagements" */ './views/Engagements.vue'),
+    beforeEnter: (to, from, next) => {
+      if (to.matched.some(record => record.meta.requiresAuth)) { 
+        var token = localStorage.getItem('access_token')
+        if (!token || token == null || token == undefined ) {
+          next({
+            path: '/login',
+          })
+        } else if(localStorage.getItem('role') == 'Outsource') {
+          next({path: '/tasks'})
+        } else {
+          next()
+        }
+      }
+    },
     meta: {
         requiresAuth: true,
         layout: "default",

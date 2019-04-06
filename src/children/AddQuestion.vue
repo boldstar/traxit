@@ -19,6 +19,7 @@
 
             <div class="d-flex justify-content-between" v-if="engagement">
               <button class="btn btn-primary d-flex justify-content-start" @click="addNewQuestion" v-if="engagement.type === 'bookkeeping'">Create</button>
+              <button class="btn btn-primary d-flex justify-content-start" @click="addNewQuestion" v-if="role == 'Outsource'">Create</button>
               <button class="btn btn-primary d-flex justify-content-start" @click="submitRequest" v-else-if="engagement.client.email || engagement.client.spouse_email">Create</button>
               <button class="btn btn-primary d-flex justify-content-start" @click="addNewQuestion" v-else>Contact Has No Email, Add Question Only</button>
               <router-link v-bind:to="'/engagement/' +engagement.id " class="btn btn-secondary float-right">Cancel</router-link>
@@ -111,6 +112,7 @@ export default {
     },
     data() {
         return {
+            role: localStorage.getItem('role'),
             question: {
                 question: '',
                 email: false,

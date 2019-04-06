@@ -83,7 +83,8 @@ export default new Vuex.Store({
     editNoteModal: false,
     createdEngagements: [],
     completedEngagements: [],
-    noteToEdit: ''
+    noteToEdit: '',
+    role: localStorage.getItem('role')
   },
   getters: {
     chartDataLength(state) {
@@ -767,7 +768,6 @@ export default new Vuex.Store({
               fqdn: localStorage.getItem('fqdn_api_url')
           })
           .then(response => {
-            console.log(response.data)
             commit('clearAlert')
             commit('clearAccountDetails')
             const token = response.data.rules.access_token
@@ -1241,7 +1241,7 @@ export default new Vuex.Store({
         context.commit('addDependent', response.data)
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.response.data)
         context.commit('errorMsgAlert', error.response.data.message)
       })
     },

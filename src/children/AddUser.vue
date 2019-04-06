@@ -48,7 +48,7 @@ export default {
             email: '',
             password: '',
             role: null,
-            roles: ['Admin', 'Manager', 'User'],
+            roles: ['Admin', 'Manager', 'User', 'Outsource'],
             option: 'Choose Role...',
             invalidEmail: false,
         }

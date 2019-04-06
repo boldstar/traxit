@@ -8,7 +8,7 @@
           <button class="btn btn-sm btn-outline-primary" @click="refreshList"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
       </div>
 
-      <div class="row d-flex justify-content-between card-body shadow col-12 mx-auto mb-3" >
+      <div class="row d-flex justify-content-between card-body shadow col-12 mx-auto mb-3 firm" >
           <div v-if="noEngagements &&!listLoaded" class="mt-5"><welcome></welcome></div>
           <spinner v-if="listLoaded" class="mx-auto"></spinner>
 
@@ -274,5 +274,8 @@ export default {
     color: #0077ff;
   }
 
- 
+  .firm {
+    height: 100%;
+    min-height: calc(100vh - 190px);
+  }
 </style>

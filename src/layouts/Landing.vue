@@ -1,8 +1,5 @@
 <template>
   <div id="app">
-
-    <Navbar />
-
     <div class="landing">
 
         <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">

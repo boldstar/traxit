@@ -5,7 +5,7 @@
             <div class="col-2 p-0 sidebar">
                 <ul class="admin-nav text-right h5 d-flex flex-column p-0 m-0">
                     <router-link class="py-3 text-muted pr-4 link" to="/administrator/account" :class="{ 'is-selected': $route.name === 'app-account' }">Account<i class="fas fa-book-open ml-2"></i></router-link>
-                    <router-link class="py-3 text-muted pr-4 link" to="/administrator/users" :class="{ 'is-selected': $route.name === 'users' }">Team<i class="fas fa-users ml-2"></i></router-link>
+                    <router-link class="py-3 text-muted pr-4 link" to="/administrator/team" :class="{ 'is-selected': $route.name === 'team' }">Team<i class="fas fa-users ml-2"></i></router-link>
                     <router-link class="py-3 text-muted pr-4 link" to="/administrator/workflows" :class="{ 'is-selected': $route.name === 'workflows' }">Workflows<i class="fas fa-route ml-2"></i></router-link>
                     <router-link class="py-3 text-muted pr-4 link" to="/administrator/reports" :class="{ 'is-selected': $route.name === 'reports' }">Reports<i class="fas fa-database ml-2"></i></router-link>
                     <router-link class="py-3 text-muted pr-4 link" to="/administrator/templates" :class="{ 'is-selected': $route.name === 'templates' }">Templates<i class="far fa-envelope ml-2"></i></router-link>

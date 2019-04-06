@@ -7,7 +7,8 @@
             <form @submit.prevent="addNewDependent" class="d-flex-column justify-content-center">
 
                 <div class="form-group">
-                    <input type="text" class="form-control mb-3" v-model="dependent.first_name" placeholder="First Name">
+                    <input type="text" class="form-control" v-model="dependent.first_name" placeholder="First Name" :class="{'border-danger': dependentName, 'mb-3': !dependentName}" @change="dependentName = false">
+                    <span v-if="dependentName" class="text-danger">Please Provide First Name</span>
                     <input type="text" class="form-control mb-3" v-model="dependent.middle_name" placeholder="Middle Initial">
                     <input type="text" class="form-control mb-3" v-model="dependent.last_name" placeholder="Last Name">
                     <input type="text" class="form-control mb-3" v-model="dependent.dob" placeholder="Date Of Birth">
@@ -31,6 +32,7 @@ export default {
     name: 'AddDependent',
     data() {
         return {
+            dependentName: false,
             dependent: {
                 first_name: '',
                 middle_name: '',
@@ -50,8 +52,10 @@ export default {
     ...mapActions(['addDependent']),
     
     addNewDependent() {
-      if(!this.dependent.first_name || !this.dependent.last_name || !this.dependent.dob ) return;
-      
+      if(!this.dependent.first_name){
+          this.dependentName = true
+          return
+      }
       this.addDependent({
         id: this.idForDependent,
         client_id: this.client.id,

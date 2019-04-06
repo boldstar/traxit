@@ -2,7 +2,7 @@
     <div class="mt-3">
         <div class="d-flex justify-content-between">
             <span class="h3 m-0">Add Team Member</span>
-            <router-link :to="'users'" class="btn btn-primary">Back</router-link>
+            <router-link :to="'team'" class="btn btn-primary">Back</router-link>
         </div>
         <hr>
         <div class="container card-body bg-light col-6">
@@ -48,7 +48,7 @@ export default {
             email: '',
             password: '',
             role: null,
-            roles: ['Admin', 'Manager', 'User'],
+            roles: ['Admin', 'Manager', 'User', 'Outsource'],
             option: 'Choose Role...',
             invalidEmail: false,
         }
@@ -73,7 +73,7 @@ export default {
         password: this.password,
         role: this.role
       }).then(() => {
-          this.$router.push({path: '/administrator/users'});
+          this.$router.push({path: '/administrator/team'});
       })
     },
     validateEmail() {

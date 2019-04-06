@@ -82,7 +82,8 @@ export default new Vuex.Store({
     editNoteModal: false,
     createdEngagements: [],
     completedEngagements: [],
-    noteToEdit: ''
+    noteToEdit: '',
+    role: localStorage.getItem('role')
   },
   getters: {
     chartDataLength(state) {
@@ -315,6 +316,10 @@ export default new Vuex.Store({
     updateUser(state, user) {
       const index = state.users.findIndex(item => item.id == user.id);
       state.users.splice(index, 1, user);
+    },
+    deleteUser(state, id) {
+      const index = state.users.findIndex(user => user.id == id)
+      state.users.splice(index, 1)
     },
     retrieveUsers(state, users) {
       state.users = users
@@ -664,6 +669,17 @@ export default new Vuex.Store({
           console.log(error.response.data)
         })
     },
+    deleteUser(context, user) {
+      axios.delete('/users/'+ user.id)
+      .then(response => {
+        context.commit('successAlert', response.data)
+        context.commit('deleteUser', user.id)
+      })
+      .catch(error => {
+        context.commit('successAlert', error.response.data)
+        console.log(error.response.data)
+      })
+    },
     requestReset(context, email) {
       axios.post('/password/create', {
         email: email
@@ -725,6 +741,7 @@ export default new Vuex.Store({
             
             localStorage.removeItem('access_token')
             localStorage.removeItem('expires_on')
+            localStorage.removeItem('role')
             context.commit('destroyToken')
             context.commit('destroySession')
             router.push('/login')
@@ -733,6 +750,7 @@ export default new Vuex.Store({
           .catch(error => {
             localStorage.removeItem('access_token')
             localStorage.removeItem('expires_on')
+            localStorage.removeItem('role')
             context.commit('destroyToken')
             router.push('/login')
             reject(error)
@@ -753,11 +771,13 @@ export default new Vuex.Store({
             commit('clearAccountDetails')
             const token = response.data.rules.access_token
             const fqdn = response.data.fqdn
+            const role = response.data.role[0][0].name
             if(token != null || token != undefined && fqdn != null || fqdn != undefined) {
               localStorage.removeItem('fqdn_api_url')
               const date = new Date(moment().add(1, 'day').toDate());
-              localStorage.setItem('fqdn_api_url', response.data.fqdn)
+              localStorage.setItem('fqdn_api_url', fqdn)
               localStorage.setItem('expires_on', date);
+              localStorage.setItem('role', role)
               axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
               axios.defaults.baseURL = 'https://' + response.data.fqdn + '/api'
               setTimeout(() => {
@@ -979,7 +999,6 @@ export default new Vuex.Store({
     getEngagementsHistory(context) {
       axios.get('/engagements-history')
       .then(response => {
-        console.log(response.data)
         context.commit('engagementsHistory', response.data)
       })
       .catch(error => {
@@ -1221,7 +1240,7 @@ export default new Vuex.Store({
         context.commit('addDependent', response.data)
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.response.data)
         context.commit('errorMsgAlert', error.response.data.message)
       })
     },
@@ -1344,7 +1363,6 @@ export default new Vuex.Store({
         answered: question.answered,
       })
       .then(response => {
-          console.log(response.data)
           context.commit('updateAnswer', response.data)
       })
       .catch(error => {
@@ -1823,7 +1841,6 @@ export default new Vuex.Store({
         note: note.note
       })
       .then(response => {
-        console.log(response.data)
         context.commit('stopProcessing')
         context.commit('editNoteModal')
         context.commit('updateENote', response.data.note)

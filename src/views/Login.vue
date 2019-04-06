@@ -11,8 +11,8 @@
 
         <div class="d-flex justify-content-center" v-if="!building">
             <div class="card shadow p-0 col-lg-8">
-                <div class="card-header bg-light text-primary border-primary d-flex justify-content-between">
-                    <span class="font-weight-bold align-self-center">Company</span>
+                <div class="card-header bg-primary text-light border-primary d-flex justify-content-between py-2">
+                    <span class="font-weight-bold align-self-center logo"><i class="far fa-compass mr-1"></i>TRAXIT</span>
                     <h6 class="mt-2" v-if="accountDetails">{{ accountDetails.business_name}}</h6>
                     <h6 class="mt-2" v-else>Login</h6>
                 </div>
@@ -117,6 +117,7 @@ export default {
 </script>
 
 <style scoped>
+
     .forgot {
         font-size: 12px;
     }

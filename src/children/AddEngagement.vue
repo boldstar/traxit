@@ -74,7 +74,7 @@
               </select>
             </div>
 
-            <div class="input-group my-3" v-if="bookChecked">
+            <div class="input-group my-3" v-if="bookChecked || taxChecked && engagement.category == 'Business'">
               <div class="input-group-prepend">
                 <label class="input-group-text text-primary" for="option">Find Business</label>
               </div>

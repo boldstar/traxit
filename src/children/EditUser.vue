@@ -57,7 +57,7 @@ export default {
     name: 'EditUser',
     data() {
         return {
-            roles: ['Admin', 'Manager', 'User'],
+            roles: ['Admin', 'Manager', 'User', 'Outsource'],
             option: 'Choose Role...',
             deleteModal: false
         }

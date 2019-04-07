@@ -92,11 +92,11 @@
 
         <div v-if="engagement.type == 'taxreturn'">
         <label for="fee">Preparation Fee</label>
-        <currency-input id="fee" :placeholder="'Enter a amount'"  v-model="engagement.fee" mask-type="currency" class="mb-2"></currency-input>
+        <currency-input id="fee" :placeholder="'Enter amount'"  v-model="engagement.fee" mask-type="currency" class="mb-2"></currency-input>
 
         <label for="balance">Balance</label>
         <div class="input-group mb-3" >
-        <currency-input id="balance" :placeholder="'Enter a amount'"  v-model="engagement.balance" mask-type="currency" :class="{'border-danger': balance}"></currency-input>
+        <currency-input id="balance" :placeholder="'Enter amount'"  v-model="engagement.balance" mask-type="currency" :class="{'border-danger': balance}"></currency-input>
         <div class="input-group-append" @change="balance = false" v-if="engagement.balance != null" >
           <div class="input-group-text" :class="{'choose-owed' : chooseOwed}">
             <label class="mb-0 mr-1" for="owed">Owed:</label>

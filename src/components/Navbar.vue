@@ -4,6 +4,9 @@
         <!-- bread crumbs to go here -->
         
         <ul class="navbar-nav mr-3 d-flex flex-row">
+            <button class="bg-light sidebar-btn" data-toggle="tooltip" data-placement="bottom" title="Toggle Drawer" @click="showLinks">
+                <i class="fas fa-bars"></i>
+            </button>
             <li v-if="loggedIn" class="mr-3 search">
                 <div class="input-group input-group-sm" @keyup.enter="searchDatabase">
                     <div class="input-group-prepend">
@@ -76,6 +79,9 @@ export default {
         },
         showDropdown() {
             this.dropdown = !this.dropdown
+        },
+        showLinks() {
+            this.$store.commit('mobileLinks')
         }
     },
     created() {
@@ -151,14 +157,43 @@ export default {
         font-weight: 600 !important;
     }
 
-    @media screen and (max-width: 767px) {
-        .search {
-            display: none;
+    .sidebar-btn {
+        display: none;
+        border: 1px solid rgba(128, 128, 128, 0.322);
+        border-radius: 3px;
+        margin-right: 10px;
+        background: transparent!important;
+        text-decoration: none;
+        color: #ffffff;
+        font-size: 1.45rem;
+        text-align: center;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &:focus {
+            outline: none!important;
+            background: transparent!important;
         }
     }
 
     .dropdown-active {
         display: block!important;
     }
+
+    @media screen and (max-width: 950px) {
+        .sidebar-btn {
+            display: block!important;
+        }
+    }
+
+    @media screen and (max-width: 767px) {
+        .search {
+            display: none;
+        }
+    }
+
+    
 
 </style>

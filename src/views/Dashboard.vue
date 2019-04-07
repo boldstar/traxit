@@ -540,6 +540,11 @@ export default {
 }
 
 @media screen and (max-width: 767px) {
+    .dashboard {
+        box-shadow: none!important;
+        border: none!important;
+    }
+
     .doughnuts {
         display: flex!important;
         flex-direction: column!important;

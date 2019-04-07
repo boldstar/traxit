@@ -97,11 +97,15 @@ export default {
   }
 
   .toolbar {
-    margin-left: 0;
+    display: none;
   }
 
   .main-wrapper {
     margin-left: 0;
+  }
+
+  .main {
+    padding-top: 70px;
   }
 }
 

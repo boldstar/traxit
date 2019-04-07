@@ -5,6 +5,9 @@
           <div class="d-flex">
               <span class="h5 mb-0 align-self-center">Firm</span>
           </div>
+          <div class="flex-fill mx-3 search-input-nav">
+            <input class="form-control" placeholder="Filter By Last Name..." v-model="searchEngagement">
+          </div>  
           <button class="btn btn-sm btn-outline-primary" @click="refreshList"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
       </div>
 
@@ -12,7 +15,7 @@
           <div v-if="noEngagements &&!listLoaded" class="mt-5"><welcome></welcome></div>
           <spinner v-if="listLoaded" class="mx-auto"></spinner>
 
-        <div class="col-2 col-sm-3" v-if="!listLoaded && Object.keys(allEngagements).length">
+        <div class="col-2 col-sm-3 list" v-if="!listLoaded && Object.keys(allEngagements).length">
           <div class="card shadow-sm p-2">
             <div class="input-group my-2">
               <div class="input-group-prepend">
@@ -38,8 +41,8 @@
           </div>
         </div>
 
-        <div class="col-10 col-sm-9" v-if="!listLoaded && Object.keys(allEngagements).length">
-          <div class="card p-0 shadow-sm mb-3">
+        <div class="col-10 col-sm-9 table-body" v-if="!listLoaded && Object.keys(allEngagements).length">
+          <div class="card p-0 shadow-sm mb-3 search-input-body">
             <div class="d-flex my-3">
                 <span class="text-capitalize align-self-center h5 mb-0 font-weight-bold mx-3">
                   {{ engagementFilterKey }}
@@ -48,30 +51,32 @@
                   <input class="form-control" placeholder="Filter By Last Name..." v-model="searchEngagement">
                 </div>             
             </div>
-            </div>
+          </div>
 
-          <table class="table border table-hover">
-            <thead class="text-primary text-left">
-              <tr>
-                <th scope="col">Batch</th>
-                <th scope="col" @click="sort('name')">Client</th>
-                <th scope="col" @click="sort('created_at')">Created On</th>
-                <th scope="col">Status</th>
-                <th scope="col">Assigned To</th>
-                <th scope="col">Year</th>
-              </tr>
-            </thead>
-            <tbody class="text-left">
-              <tr v-for="(engagement, index) in filteredEngagements" :key="index" v-if="engagement.workflow_id === selectedWorkflowID" >
-                <th scope="row" class="custom-control custom-checkbox"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements.engagements" class="custom-control-input" :id="`${engagement.id}`"><label class="custom-control-label pb-3 ml-4" :for="`${engagement.id}`"></label></th>
-                <th @click="viewDetails(engagement.id)">{{ engagement.name}}</th>
-                <td @click="viewDetails(engagement.id)">{{ engagement.created_at | formatDate }}</td>
-                <td @click="viewDetails(engagement.id)">{{ engagement.status }}</td>
-                <td @click="viewDetails(engagement.id)">{{ engagement.assigned_to }}</td>
-                <td @click="viewDetails(engagement.id)">{{ engagement.year }}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="table border table-hover">
+              <thead class="text-primary text-left">
+                <tr>
+                  <th scope="col">Batch</th>
+                  <th scope="col" @click="sort('name')">Client</th>
+                  <th scope="col" @click="sort('created_at')" class="hide-row">Created On</th>
+                  <th scope="col" class="hide-row">Status</th>
+                  <th scope="col">Assigned To</th>
+                  <th scope="col" class="hide-row">Year</th>
+                </tr>
+              </thead>
+              <tbody class="text-left">
+                <tr v-for="(engagement, index) in filteredEngagements" :key="index" v-if="engagement.workflow_id === selectedWorkflowID" >
+                  <th scope="row" class="custom-control custom-checkbox"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements.engagements" class="custom-control-input" :id="`${engagement.id}`"><label class="custom-control-label pb-3 ml-4" :for="`${engagement.id}`"></label></th>
+                  <th @click="viewDetails(engagement.id)">{{ engagement.name}}</th>
+                  <td @click="viewDetails(engagement.id)" class="hide-row">{{ engagement.created_at | formatDate }}</td>
+                  <td @click="viewDetails(engagement.id)" class="hide-row">{{ engagement.status }}</td>
+                  <td @click="viewDetails(engagement.id)">{{ engagement.assigned_to }}</td>
+                  <td @click="viewDetails(engagement.id)" class="hide-row">{{ engagement.year }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
             <form @submit.prevent="updateChecked" class="d-flex mb-5" v-if="$can('delete', admin)">
               
@@ -277,5 +282,72 @@ export default {
   .firm {
     height: 100%;
     min-height: calc(100vh - 190px);
+  }
+
+  .search-input-nav {
+    display: none;
+  }
+
+  @media screen and (max-width: 1300px) {
+    .input-group-prepend {
+      display: none!important;
+    }
+
+    .list {
+      font-size: .9rem!important;
+    }
+
+    .table {
+      font-size: .9rem!important;
+    }
+  }
+
+
+  @media screen and (max-width: 950px) {
+    .firm {
+      padding: 20px 0!important;
+    }
+
+    .search-input-nav {
+      display: block;
+    }
+
+    .search-input-body {
+      display: none!important;
+    }
+
+    .table {
+      font-size: .75rem!important;
+    }
+
+    .list {
+      font-size: .75rem!important;
+    }
+  }
+
+  @media screen and (max-width: 800px) {
+    .firm {
+      flex-direction: column!important;
+      box-shadow: none!important;
+    }
+
+    .list {
+      width: 100%!important;
+      max-width: 100%!important;
+      margin-bottom: 20px!important;
+    }
+
+    .table-responsive {
+      width: 100%!important;
+      max-width: 100%!important;
+    }
+    .table-body {
+      width: 100%!important;
+      max-width: 100%!important;
+    }
+
+    .hide-row {
+      display: none!important;
+    }
   }
 </style>

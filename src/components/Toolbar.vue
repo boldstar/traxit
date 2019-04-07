@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar fixed-top bg-light flex-md-nowrap shadow-sm justify-content-between">
+    <nav class="navbar fixed-top bg-light flex-md-nowrap shadow-sm justify-content-between toolbar">
         <div class="d-flex">
             <div class="align-self-center left-sidebar-button">
                 <button class="bg-light" @click="handleClick" data-toggle="tooltip" data-placement="bottom" title="Toggle Sidebar">
@@ -91,8 +91,11 @@ button {
 }
 
 @media screen and (max-width: 767px) {
+    .toolbar {
+        height: 50px!important;
+    }
     .breadcrumb {
-        margin-top: 0!important;
+        margin-top: 5px!important;
     }
 
     .left-sidebar-button {
@@ -101,6 +104,15 @@ button {
 
     .right-sidebar-button {
         align-self: flex-start!important;
+    }
+
+    button {
+        border: 1px solid rgba(128, 128, 128, 0.322);
+        border-radius: 3px;
+        text-decoration: none;
+        color: #a1a1a1;
+        font-size: 1.2rem;
+        text-align: center;
     }
 }
 

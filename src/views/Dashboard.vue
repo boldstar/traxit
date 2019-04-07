@@ -535,23 +535,23 @@ export default {
 
 @media screen and (max-width: 767px) {
     .doughnuts {
-        display: flex;
+        display: flex!important;
         flex-direction: column!important;
-        align-items: center;
-        margin: 0 auto;
+        align-items: center!important;
+        margin: 0 auto!important;
     }
 
     .doughnut {
-        width: 100%;
+        width: 100%!important;
         margin-left: 0!important;
         margin-right: 0!important;
-        margin: 10px auto;
+        margin: 10px auto!important;
     }
 }
 
 @media screen and (max-width: 400px) {
     .doughnut {
-        width: 90%;
+        width: 90%!important;
     }
 
     .completed {

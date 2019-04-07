@@ -7,7 +7,7 @@
                 </button>
             </div>
             <div>
-                <breadcrumb class="mt-3 ml-3 p-2 breadcrumb" :route="route"></breadcrumb>
+                <breadcrumb class="breadcrumb" :route="route"></breadcrumb>
             </div>
         </div>
         <div v-if="grace">
@@ -93,9 +93,6 @@ button {
 @media screen and (max-width: 767px) {
     .toolbar {
         height: 50px!important;
-    }
-    .breadcrumb {
-        margin-top: 5px!important;
     }
 
     .left-sidebar-button {

@@ -73,7 +73,7 @@ export default {
 
   @media screen and (max-width: 767px) {
     .breadcrumb {
-      margin-top: 5px!important;
+      margin-top: 10px!important;
     }
   }
 </style>

@@ -50,86 +50,94 @@ export default {
 
 <style lang="scss" scoped>
 
-    .sidebar {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 100; /* Behind the navbar */
-        padding: 52px 0 0; /* Height of navbar */
-        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-        width: 215px!important;
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100; /* Behind the navbar */
+    padding: 52px 0 0; /* Height of navbar */
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    width: 215px!important;
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 52px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+
+    i {
+        margin-right: 10px;
+        font-size: 16px;
     }
 
+    .title {
+        font-size: 16px;
+    }
+}
+
+@supports ((position: -webkit-sticky) or (position: sticky)) {
     .sidebar-sticky {
-        position: relative;
-        top: 0;
-        height: calc(100vh - 52px);
-        padding-top: .5rem;
-        overflow-x: hidden;
-        overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+        position: -webkit-sticky;
+        position: sticky;
+    }
+}
 
-        i {
-            margin-right: 10px;
+
+
+.sidebar .nav-link {
+    font-size: 19px;
+    font-weight: 600;
+    color: rgb(0, 0, 0);
+    list-style: none;
+    letter-spacing: .05em;
+    transition-duration: .3s;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    transition: .5s;
+
+    i {
+        font-size: 22px;
+    }
+
+    &:hover {
+        background:rgb(223, 231, 253);
+    }
+}
+
+
+
+.is-active {
+    background: rgb(223, 231, 253);
+
+    i {
+        color: #0077ff;
+    }
+
+}
+
+.nav {
+    margin-top: 32px!important;
+}
+
+@media screen and (max-width: 450px) {
+        .sidebar .nav-link {
             font-size: 16px;
-        }
+            padding-top: 15px;
+            padding-bottom: 15px;
 
-        .title {
-            font-size: 16px;
-        }
-    }
+            i {
+                font-size: 18px;
+            }
 
-    @supports ((position: -webkit-sticky) or (position: sticky)) {
-        .sidebar-sticky {
-            position: -webkit-sticky;
-            position: sticky;
+            &:hover {
+                background:rgb(223, 231, 253);
         }
     }
-
-
-
-    .sidebar .nav-link {
-        font-size: 19px;
-        font-weight: 600;
-        color: rgb(0, 0, 0);
-        list-style: none;
-        letter-spacing: .05em;
-        transition-duration: .3s;
-        padding-top: 20px;
-        padding-bottom: 20px;
-        transition: .5s;
-
-        i {
-            font-size: 22px;
-        }
-
-        &:hover {
-            background:rgb(223, 231, 253);
-        }
-    }
-
-    
-
-    .is-active {
-        background: rgb(223, 231, 253);
-
-        i {
-            color: #0077ff;
-        }
-
-    }
-
-
-    .sidebar-heading {
-        font-size: 1.0rem;
-        text-transform: uppercase;
-        font-weight: bold;
-        letter-spacing: .2em;
-    }
-
-    .nav {
-        margin-top: 32px!important;
-    }
+}
 
 </style>
 

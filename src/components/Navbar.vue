@@ -22,8 +22,8 @@
                 </div>
             </li>
             <li v-if="loggedIn" class="dropdown align-self-center"> 
-                <i class="user fas fa-user-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dLabel"></i>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel">
+                <i class="user fas fa-user-circle" id="dLabel" @click="showDropdown"></i>
+                <div class="dropdown-menu dropdown-menu-right" v-if="dropdown" :class="{'dropdown-active': dropdown}">
                     <router-link class="dropdown-item" to="/profile">Profile</router-link>
                     <div v-if="$can('delete', admin)">
                         <router-link class="dropdown-item" to="/administrator/account">Admin</router-link>
@@ -46,7 +46,8 @@ export default {
         isActive: false,
         search: '',
         category: '',
-        option: 'All'
+        option: 'All',
+        dropdown: false,
         }
     },
     computed: {
@@ -72,6 +73,9 @@ export default {
             } else {
                 return;
             }
+        },
+        showDropdown() {
+            this.dropdown = !this.dropdown
         }
     },
     created() {
@@ -151,6 +155,10 @@ export default {
         .search {
             display: none;
         }
+    }
+
+    .dropdown-active {
+        display: block!important;
     }
 
 </style>

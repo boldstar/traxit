@@ -539,12 +539,12 @@ export default {
         flex-direction: column!important;
         align-items: center!important;
         margin: 0 auto!important;
-        max-width: 100vw!important;
+        max-width: 100%!important;
     }
 
     .doughnut {
         width: 100%!important;
-        max-width: 100vw!important;
+        max-width: 100%!important;
         margin-left: 0!important;
         margin-right: 0!important;
         margin: 10px auto!important;
@@ -554,7 +554,7 @@ export default {
 @media screen and (max-width: 400px) {
     .doughnut {
         width: 90%!important;
-        max-width: 100vw!important;
+        max-width: 100%!important;
     }
 
     .completed {

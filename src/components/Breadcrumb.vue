@@ -34,6 +34,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .breadcrumb {
+    padding: 10px;
+    margin-top: 15px;
+    margin-left: 10px;
+  }
 
   ul {
     list-style-type: none;
@@ -64,5 +69,11 @@ export default {
     cursor: pointer;
     font-size: 1em;
     font-weight: normal;
+  }
+
+  @media screen and (max-width: 767px) {
+    .breadcrumb {
+      margin-top: 5px!important;
+    }
   }
 </style>

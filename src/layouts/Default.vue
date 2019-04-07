@@ -5,8 +5,10 @@
 
     <Toolbar class="toolbar"  />
 
+    <MobileLinks v-if="mobileLinks" />
+
     <transition name="router-animation" enter-active-class="animated slideInLeft" leave-active-class="animated slideOutLeft">
-      <Sidebar  />
+      <Sidebar class="sidebar-collapse" />
     </transition>
 
 <!-- this section is controling the main content section -->
@@ -28,6 +30,7 @@ import Navbar from '@/components/Navbar.vue'
 import Toolbar from '@/components/Toolbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import NotifyModal from '@/components/NotifyModal.vue'
+import MobileLinks from '@/components/MobileLinks.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -35,7 +38,8 @@ export default {
     Navbar,
     Toolbar,
     Sidebar,
-    NotifyModal
+    NotifyModal,
+    MobileLinks
   },
   data () {
     return {
@@ -50,7 +54,7 @@ export default {
     toggleSidebar() {
       return this.$store.getters.sidebarOpen
     },
-    ...mapGetters(['notify'])
+    ...mapGetters(['notify', 'mobileLinks'])
   },
   created() {
     if(localStorage.getItem('access_token') != null) {
@@ -86,5 +90,19 @@ export default {
   padding-top: 110px;
 }
 
+
+@media screen and (max-width: 950px) {
+  .sidebar-collapse {
+    display: none;
+  }
+
+  .toolbar {
+    margin-left: 0;
+  }
+
+  .main-wrapper {
+    margin-left: 0;
+  }
+}
 
 </style>

@@ -4,7 +4,7 @@
         <!-- bread crumbs to go here -->
         
         <ul class="navbar-nav mr-3 d-flex flex-row">
-            <li v-if="loggedIn" class="mr-3">
+            <li v-if="loggedIn" class="mr-3 search">
                 <div class="input-group input-group-sm" @keyup.enter="searchDatabase">
                     <div class="input-group-prepend">
                         <select v-model="category" class="btn text-primary font-weight-bold">
@@ -147,5 +147,10 @@ export default {
         font-weight: 600 !important;
     }
 
+    @media screen and (max-width: 767px) {
+        .search {
+            display: none;
+        }
+    }
 
 </style>

@@ -8,14 +8,14 @@
                     <option value="2018">2018</option>
                 </select>
             </div>
-            <button class="btn btn-sm btn-outline-primary" @click="refresh"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
+            <button class="btn btn-sm btn-outline-primary refresh" @click="refresh"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
         </div>
-        <div class="d-flex justify-content-center w-100 shadow mb-3 pt-3 border body">
+        <div class="d-flex justify-content-center w-100 shadow mb-3 pt-3 border body dashboard">
 
-            <spinner v-if="loading && !noData"></spinner>
+            <spinner v-if="loading && !noData" class="mx-auto"></spinner>
             <welcome v-if="noData && !loading" class="mb-5"></welcome>    
 
-            <div class="d-flex flex-column col-4" v-if="!loading && !noData">
+            <div class="d-flex flex-column col-4 profile-card" v-if="!loading && !noData">
                 <div class="card h-100 mb-3">
                     <div class="card-header p-2 text-left">
                         <span class="h5 mb-0 font-weight-bold align-self-center">{{accountDetails.business_name}}</span>
@@ -50,8 +50,8 @@
                 </div>
             </div>
             
-            <div class="d-flex flex-column col-8" v-if="!loading && !noData">
-                <div class="d-flex justify-content-between">
+            <div class="d-flex flex-column col-8 doughnut-charts" v-if="!loading && !noData">
+                <div class="d-flex justify-content-between doughnuts">
                     <div class="doughnut card p-0">
                         <div class="h5 card-header mb-0 p-2">
                             <i class="fas fa-home mr-2 text-primary"></i>
@@ -89,7 +89,7 @@
                     </div>
                 </div>
 
-                <div class="d-flex flex-column align-items-center my-3">
+                <div class="d-flex flex-column align-items-center my-3 completed">
                     <div class="card w-100">
                         <div class="d-flex justify-content-start card-header p-2">
                             <div class="h5 mb-0 ml-3">
@@ -490,10 +490,6 @@ export default {
 
 <style lang="scss" scoped>
 
-.dashboard {
-    margin-top: 50px;
-}
-
 .body {
     height: 100%;
     min-height: calc(100vh - 190px);
@@ -521,5 +517,51 @@ export default {
     color: #0044ff;
     border: 1px solid #0044ff;
 }
+
+@media screen and (max-width: 1300px) {
+    .dashboard {
+        display: flex;
+        flex-direction: column!important;
+    }
+
+    .profile-card {
+        max-width: 100%!important;
+    }
+
+    .doughnut-charts {
+        max-width: 100%!important;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .doughnuts {
+        display: flex;
+        flex-direction: column!important;
+        align-items: center;
+        margin: 0 auto;
+    }
+
+    .doughnut {
+        width: 100%;
+        margin-left: 0!important;
+        margin-right: 0!important;
+        margin: 10px auto;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .doughnut {
+        width: 90%;
+    }
+
+    .completed {
+        display: none!important;
+    }
+
+    .refresh {
+        display: none!important;
+    }
+}
+
 </style>
 

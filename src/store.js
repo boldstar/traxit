@@ -84,7 +84,8 @@ export default new Vuex.Store({
     createdEngagements: [],
     completedEngagements: [],
     noteToEdit: '',
-    role: localStorage.getItem('role')
+    role: localStorage.getItem('role'),
+    links: false
   },
   getters: {
     chartDataLength(state) {
@@ -92,6 +93,9 @@ export default new Vuex.Store({
     },
     sidebarOpen(state) {
       return state.sidebarOpen;
+    },
+    mobileLinks(state) {
+      return state.links
     },
     user(state) {
       return state.user
@@ -259,6 +263,9 @@ export default new Vuex.Store({
     },
     toggleSidebar(state) {
       state.sidebarOpen = !state.sidebarOpen
+    },
+    mobileLinks(state) {
+      state.links = !state.links
     },
     accountDetails(state, account) {
       state.account = account[0]

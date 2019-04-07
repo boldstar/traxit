@@ -1,19 +1,19 @@
 <template>
     <nav class="navbar fixed-top bg-light flex-md-nowrap shadow-sm justify-content-between">
         <div class="d-flex">
-            <div class="align-self-center">
+            <div class="align-self-center left-sidebar-button">
                 <button class="bg-light" @click="handleClick" data-toggle="tooltip" data-placement="bottom" title="Toggle Sidebar">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
             <div>
-                <breadcrumb class="mt-3 ml-3 p-2" :route="route"></breadcrumb>
+                <breadcrumb class="mt-3 ml-3 p-2 breadcrumb" :route="route"></breadcrumb>
             </div>
         </div>
         <div v-if="grace">
             <span class="font-weight-bold" v-if="computedGrace.cancel_at_period_end">Account Will Expire On: <span class="text-danger">{{computedGrace.cancel_at}}</span></span>  
         </div>
-        <button class="bg-light" data-toggle="tooltip" data-placement="bottom" title="Toggle Drawer">
+        <button class="bg-light right-sidebar-button" data-toggle="tooltip" data-placement="bottom" title="Toggle Drawer" @click="showLinks">
             <i class="fas fa-bars"></i>
         </button>
     </nav>
@@ -44,6 +44,9 @@ export default {
         handleClick () {
             this.$store.dispatch('toggleSidebar')
         },
+        showLinks() {
+            this.$store.commit('mobileLinks')
+        }
     }
 }
 </script>
@@ -66,6 +69,38 @@ button {
 
     &:hover {
         cursor: pointer;
+    }
+}
+
+.right-sidebar-button {
+    display: none!important;
+}
+
+@media screen and (max-width: 950px) {
+    .right-sidebar-button {
+        display: block!important;
+    }
+
+    .left-sidebar-button {
+        display: none!important;
+    }
+
+    .breadcrumb {
+        margin-left: 0!important;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .breadcrumb {
+        margin-top: 0!important;
+    }
+
+    .left-sidebar-button {
+        align-self: flex-start!important;
+    }
+
+    .right-sidebar-button {
+        align-self: flex-start!important;
     }
 }
 

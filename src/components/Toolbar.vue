@@ -13,9 +13,6 @@
         <div v-if="grace">
             <span class="font-weight-bold" v-if="computedGrace.cancel_at_period_end">Account Will Expire On: <span class="text-danger">{{computedGrace.cancel_at}}</span></span>  
         </div>
-        <button class="bg-light right-sidebar-button" data-toggle="tooltip" data-placement="bottom" title="Toggle Drawer" @click="showLinks">
-            <i class="fas fa-bars"></i>
-        </button>
     </nav>
 </template>
 
@@ -44,9 +41,6 @@ export default {
         handleClick () {
             this.$store.dispatch('toggleSidebar')
         },
-        showLinks() {
-            this.$store.commit('mobileLinks')
-        }
     }
 }
 </script>
@@ -72,14 +66,7 @@ button {
     }
 }
 
-.right-sidebar-button {
-    display: none!important;
-}
-
 @media screen and (max-width: 950px) {
-    .right-sidebar-button {
-        display: block!important;
-    }
 
     .left-sidebar-button {
         display: none!important;
@@ -97,19 +84,6 @@ button {
 
     .left-sidebar-button {
         align-self: flex-start!important;
-    }
-
-    .right-sidebar-button {
-        align-self: flex-start!important;
-    }
-
-    button {
-        border: 1px solid rgba(128, 128, 128, 0.322);
-        border-radius: 3px;
-        text-decoration: none;
-        color: #a1a1a1;
-        font-size: 1.2rem;
-        text-align: center;
     }
 }
 

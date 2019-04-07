@@ -70,10 +70,4 @@ export default {
     font-size: 1em;
     font-weight: normal;
   }
-
-  @media screen and (max-width: 767px) {
-    .breadcrumb {
-      margin-top: 10px!important;
-    }
-  }
 </style>

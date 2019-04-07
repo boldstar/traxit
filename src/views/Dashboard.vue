@@ -89,7 +89,7 @@
                     </div>
                 </div>
 
-                <div class="d-flex flex-column align-items-center my-3 completed">
+                <div class="my-3 completed">
                     <div class="card w-100">
                         <div class="d-flex justify-content-start card-header p-2">
                             <div class="h5 mb-0 ml-3">
@@ -516,6 +516,12 @@ export default {
     background-color: #0044ff3d;
     color: #0044ff;
     border: 1px solid #0044ff;
+}
+
+.completed {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 @media screen and (max-width: 1300px) {

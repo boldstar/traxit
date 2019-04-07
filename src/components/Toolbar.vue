@@ -92,7 +92,7 @@ button {
 
 @media screen and (max-width: 767px) {
     .toolbar {
-        height: 50px!important;
+        height: 40px!important;
     }
 
     .left-sidebar-button {

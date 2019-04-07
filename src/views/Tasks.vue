@@ -3,10 +3,19 @@
 <!-- this is the user tasks header -->
       <div class="card-header bg-white shadow w-100 d-flex justify-content-between border">
           <span class="mb-0 align-self-center h5">Tasks | <span class="text-primary">{{ tasks.length }}</span></span>
-          <div class="align-self-center">
-            <button class="btn btn-sm btn-outline-dark mr-2 font-weight-bold" @click="showBatchColumn"><i class="fas fa-tasks mr-2"></i>Batch</button>
+          <div class="align-self-center d-flex">
+            <div class="batch-btn">
+
+            <button class="btn btn-sm btn-outline-dark mr-2 font-weight-bold batch-btn" @click="showBatchColumn"><i class="fas fa-tasks mr-2"></i>Batch</button>
+            </div>
+            <div>
+
             <button class="btn btn-sm btn-outline-secondary mr-2 font-weight-bold" @click="searchInputMethod"><i class="fas fa-search mr-2"></i>Filter</button>
+            </div>
+            <div>
+
             <button class="btn btn-sm btn-outline-primary font-weight-bold" @click="refreshTask"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
+            </div>
           </div>
       </div>
 
@@ -24,14 +33,14 @@
             <th scope="col" v-if="batchUpdateColumn">Batch</th>
             <th scope="col" v-if="batchUpdateColumn" @click="sort('workflow')">Workflow</th>
             <th scope="col">Task</th>
-            <th scope="col">Type</th>
+            <th scope="col" class="mobile-hide-row">Type</th>
             <th scope="col" @click="sort('name')">Client</th>
-            <th scope="col">Assigned On</th>
-            <th scope="col">Time Period</th>
-            <th scope="col">Return Type</th>
-            <th scope="col">Year</th>
+            <th scope="col" class="mobile-hide-row">Assigned On</th>
+            <th scope="col" class="hide-row">Time Period</th>
+            <th scope="col" class="hide-row">Return Type</th>
+            <th scope="col" class="hide-row">Year</th>
             <th scope="col">Action</th>
-            <th scope="col">Engagement</th>
+            <th scope="col" class="hide-row">Engagement</th>
           </tr>
         </thead>
         <tbody class="table-bordered">
@@ -39,19 +48,19 @@
             <th v-if="batchUpdateColumn" class="task-border" data-toggle="tooltip" data-placement="left" title="Click To Batch Update" @click="checkTask(task.id, task.engagements[0].workflow_id)" :class="{'checkedtasks': checkedTasks.includes(task.id)}"><i v-if="checkedTasks.includes(task.id)" class="fas fa-check"></i></th>
             <th v-if="batchUpdateColumn"  @click="viewDetails(task.engagements[0].id)">{{ workflowName(task.engagements[0].workflow_id) }}</th>
             <th  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].status }}</th>
-            <th  @click="viewDetails(task.engagements[0].id)" class="text-capitalize" v-if="task.engagements[0].type == 'taxreturn'">{{fixCasing(task.engagements[0].type)}}</th>
-            <th  @click="viewDetails(task.engagements[0].id)" class="text-capitalize" v-else>{{task.engagements[0].type}}</th>
+            <th  @click="viewDetails(task.engagements[0].id)" class="text-capitalize mobile-hide-row" v-if="task.engagements[0].type == 'taxreturn'">{{fixCasing(task.engagements[0].type)}}</th>
+            <th  @click="viewDetails(task.engagements[0].id)" class="text-capitalize mobile-hide-row" v-else>{{task.engagements[0].type}}</th>
             <td  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].name }}</td>
-            <td  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].updated_at | formatDate }}</td>
-            <td  @click="viewDetails(task.engagements[0].id)" v-if="task.engagements[0].title != null">{{ task.engagements[0].title }}</td>
-            <td  @click="viewDetails(task.engagements[0].id)" v-else>None</td>
-            <td  @click="viewDetails(task.engagements[0].id)" v-if="task.engagements[0].type == 'taxreturn'">{{ task.engagements[0].return_type }}</td>
-            <td  @click="viewDetails(task.engagements[0].id)" v-else>None</td>
-            <td  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].year }}</td>
+            <td  @click="viewDetails(task.engagements[0].id)" class="mobile-hide-row">{{ task.engagements[0].updated_at | formatDate }}</td>
+            <td  @click="viewDetails(task.engagements[0].id)" v-if="task.engagements[0].title != null" class="hide-row">{{ task.engagements[0].title }}</td>
+            <td  @click="viewDetails(task.engagements[0].id)" v-else class="hide-row">None</td>
+            <td  @click="viewDetails(task.engagements[0].id)" v-if="task.engagements[0].type == 'taxreturn'" class="hide-row">{{ task.engagements[0].return_type }}</td>
+            <td  @click="viewDetails(task.engagements[0].id)" v-else class="hide-row">None</td>
+            <td  @click="viewDetails(task.engagements[0].id)" class="hide-row">{{ task.engagements[0].year }}</td>
             <td class="px-0">
-                <b-btn :disabled="batchUpdate" variant="primary" class="mr-2" size="sm" @click="requestUpdate(task.id, task.engagements[0].workflow_id)" data-toggle="tooltip" data-placement="top" title="Update Engagement Task"><i class="fas fa-pen-square mr-2"></i>Update</b-btn>
+                <b-btn :disabled="batchUpdate" variant="primary" class="mr-2" size="sm" @click="requestUpdate(task.id, task.engagements[0].workflow_id)" data-toggle="tooltip" data-placement="top" title="Update Engagement Task"><i class="fas fa-pen-square mr-2"></i><span class="update-text">Update</span></b-btn>
             </td>
-            <td class="px-0">
+            <td class="px-0 hide-row">
                 <router-link class="btn btn-sm btn-secondary mr-2" :to="'/engagement/' +task.engagements[0].id " data-toggle="tooltip" data-placement="top" title="View Engagement"><i class="far fa-eye"></i></router-link>
                 <router-link class="btn btn-sm btn-primary" :to="'/engagement/' +task.engagements[0].id + '/add-question' " data-toggle="tooltip" data-placement="top" title="Add Question"><i class="far fa-question-circle"></i></router-link>
             </td>
@@ -449,5 +458,76 @@ export default {
   .tasks {
     height: 100%;
     min-height: calc(100vh - 190px);
+  }
+
+  @media screen and (max-width: 1300px) {
+    .hide-row {
+      display: none!important;
+    }
+
+    .batch-btn {
+      display: none!important;
+    }
+  }
+
+  @media screen and (max-width: 1000px) {
+    .table {
+      font-size: .8rem!important;
+    }
+    
+    .btn-primary {
+      padding: 1px 5px!important;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    i {
+      display: none!important;
+    }
+
+    .mobile-hide-row {
+      display: none!important;
+    }
+
+    .tasks {
+      box-shadow: none!important;
+      padding: 20px 0!important;
+    }
+  }
+
+  @media screen and (max-width: 400px) {
+    .table {
+      font-size: .75rem!important;
+    }
+
+    .btn-primary {
+      font-size: .75rem;
+    }
+
+    th {
+      padding: 5px!important;
+    }
+    td {
+      padding: 5px!important;
+    }
+
+    i {
+      display: block!important;
+      margin: 5px auto!important;
+    }
+
+    .update-text {
+      display: none;
+    }
+
+    .btn-outline-secondary {
+      display: flex;
+      font-size: .8rem!important;
+    }
+
+    .btn-outline-primary {
+      display: flex;
+      font-size: .8rem!important;
+    }
   }
 </style>

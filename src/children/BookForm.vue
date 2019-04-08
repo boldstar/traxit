@@ -146,7 +146,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  name: 'BookkeepingForm',
+  name: 'BookForm',
   data() {
     return {
       monthRange: false,

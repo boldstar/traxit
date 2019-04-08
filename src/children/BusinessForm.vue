@@ -1,5 +1,5 @@
 <template>
-    <div class="col-6 mb-3 ">
+    <div class="business-form mb-3">
         <div class="justify-content-between d-flex mb-1 border shadow p-3">
             <router-link to="/add" class="btn btn-sm btn-outline-secondary"><i class="fas fa-arrow-circle-left mr-2"></i>Back</router-link>
             <div class="d-flex">
@@ -119,4 +119,18 @@ export default {
 
 }
 </script>
+
+<style scoped>
+    .business-form {
+        width: 70%;
+    }
+
+    @media screen and (max-width: 950px) {
+        .business-form {
+            width: 100%!important;
+        }
+    }
+
+</style>
+
 

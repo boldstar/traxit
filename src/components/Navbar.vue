@@ -4,26 +4,24 @@
         <!-- bread crumbs to go here -->
         
         <ul class="navbar-nav mr-3 d-flex flex-row">
+            <!-- only shows up at certain screen size. see media queries for "sidebar-btn" -->
             <button class="bg-light sidebar-btn" data-toggle="tooltip" data-placement="bottom" title="Toggle Drawer" @click="showLinks">
                 <i class="fas fa-bars"></i>
             </button>
-            <li v-if="loggedIn" class="mr-3 search">
-                <div class="input-group input-group-sm" @keyup.enter="searchDatabase">
-                    <div class="input-group-prepend">
-                        <select v-model="category" class="btn text-primary font-weight-bold">
-                            <option disabled>{{option}}</option>
-                            <option value="name">Name</option>
-                            <option value="taxpayer">Taxpayer</option>
-                            <option value="spouse">Spouse</option>
-                            <option value="number">Phone #</option>
-                        </select>
-                    </div>
-                    <input type="text" placeholder="Enter Keyword.." class="form-control search-input" v-model="search">
-                    <div class="input-group-append">
-                        <button class="btn btn-light text-primary search-btn" @click="searchDatabase"><i class="fas fa-search"></i></button>
-                    </div>
+            <div v-if="loggedIn" class="search-group" @keyup.enter="searchDatabase" :class="{'move-right': hideInput}">
+                <button class="icon-btn" type="button" @click="toggleSearch"></button>
+                <input type="text" class="search-input" v-model="search" :class="{'collapsed-search': hideInput}" placeholder="e.g.(John Doe, Jane Doe)">
+                <i class="fa fa-search search-icon" @click="toggleSearch"></i>
+                <div class="search-dropdown" :class="{'hide-dropdown': hideInput}">
+                    <select v-model="category" class="search-dropdown-options">
+                        <option disabled>{{option}}</option>
+                        <option value="name">Name</option>
+                        <option value="taxpayer">Taxpayer</option>
+                        <option value="spouse">Spouse</option>
+                        <option value="number">Phone #</option>
+                    </select>
                 </div>
-            </li>
+            </div>
             <li v-if="loggedIn" class="dropdown align-self-center"> 
                 <i class="user fas fa-user-circle" id="dLabel" @click="showDropdown"></i>
                 <div class="dropdown-menu dropdown-menu-right" v-if="dropdown" :class="{'dropdown-active': dropdown}">
@@ -51,6 +49,7 @@ export default {
         category: '',
         option: 'All',
         dropdown: false,
+        hideInput: true,
         }
     },
     computed: {
@@ -72,6 +71,7 @@ export default {
                     this.$router.push({path: '/search', query: {keyword: this.search }})
                     this.search = ''
                     this.category = this.option
+                    this.hideInput = true
                 })
             } else {
                 return;
@@ -82,6 +82,11 @@ export default {
         },
         showLinks() {
             this.$store.commit('mobileLinks')
+        },
+        toggleSearch() {
+            this.hideInput = !this.hideInput
+            this.category = this.option
+            this.search = ''
         }
     },
     created() {
@@ -182,14 +187,99 @@ export default {
         display: block!important;
     }
 
+    .search-group {
+        position: relative;
+        display: block;
+        margin-right: 50px;
+    }
+
+    .search-dropdown {
+        position: absolute;
+        top: 0;
+        left: 250px;
+    }
+
+    .search-dropdown-options {
+        border: none;
+        background: white;
+        border-radius: 0 5px 5px 0;
+        height: 30px;
+        color: #0077ff;
+        cursor: pointer;
+    }
+
+    .search-icon {
+        position: absolute;
+        top: 6px;
+        left: 8px;
+        color: #0077ff;
+        cursor: pointer;
+    }
+
+    .search-input {
+        border: none;
+        height: 30px;
+        border-radius: 25px 0 0 25px;
+        width: 300px;
+        padding-left: 35px;
+        transition: width .5s;
+    }
+
+    .icon-btn {
+        position: absolute;
+        height: 30px;
+        width: 30px;
+        top: 0;
+        left: 0;
+        border-radius: 50%;
+        border: none;
+        background-color: white;
+        cursor: pointer;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .collapsed-search {
+        width: 0;
+        visibility: hidden;
+    }
+
+    .move-right {
+        margin-right: 5px;
+    }
+
+    .hide-dropdown {
+        left: 0;
+        display: none;
+    }
+
     @media screen and (max-width: 950px) {
         .sidebar-btn {
             display: block!important;
+        }
+
+        .search-group {
+            margin-top: 3px;
         }
     }
 
     @media screen and (max-width: 767px) {
         .search {
+            display: none;
+        }
+        
+        .search-group {
+            margin-right: 5px;
+        }
+
+        .search-input {
+            max-width: 150px!important;
+            border-radius: 25px;
+        }
+
+        .search-dropdown {
             display: none;
         }
     }

@@ -299,49 +299,49 @@ export default {
       border: 1px solid red;
   }
 
-@media screen and (max-width: 950px) {
-  .book-form {
-    width:100%!important;
-    max-width: 75%!important;
-    flex: 0 0 75%!important;
-  }
-}
+// @media screen and (max-width: 950px) {
+//   .book-form {
+//     width:100%!important;
+//     max-width: 75%!important;
+//     flex: 0 0 75%!important;
+//   }
+// }
 
-@media screen and (max-width: 767px) {
-  .book-form {
-    flex: 0 0 100%!important;
-    max-width: 100%!important;
-    padding: 0!important;
-  }
+// @media screen and (max-width: 767px) {
+//   .book-form {
+//     flex: 0 0 100%!important;
+//     max-width: 100%!important;
+//     padding: 0!important;
+//   }
 
-  .form-title {
-    font-size: .8rem!important;
-  }
+//   .form-title {
+//     font-size: .8rem!important;
+//   }
 
-  .form-control {
-    font-size: .75rem!important;
-  }
+//   .form-control {
+//     font-size: .75rem!important;
+//   }
 
-  label {
-    font-size: .75rem!important;
-    width: 9em;
-  }
-}
+//   label {
+//     font-size: .75rem!important;
+//     width: 9em;
+//   }
+// }
 
-@media screen and (max-width: 570px) {
-  .custom-control {
-    max-width: 100%;
-  }
+// @media screen and (max-width: 570px) {
+//   .custom-control {
+//     max-width: 100%;
+//   }
 
-  .custom-control-label {
-    margin-left: 0!important;
-    width: 5px!important;
-  }
+//   .custom-control-label {
+//     margin-left: 0!important;
+//     width: 5px!important;
+//   }
 
-  .span-4-checkbox {
-    font-size: .75rem!important;
-    margin-right:30px!important;
-    margin-top: 5px!important;
-  }
-}
+//   .span-4-checkbox {
+//     font-size: .75rem!important;
+//     margin-right:30px!important;
+//     margin-top: 5px!important;
+//   }
+// }
 </style>

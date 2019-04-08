@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex justify-content-center">
-      <div class="answer-quest card p-0 col-8 shadow mb-3">
+      <div class="answer-quest card p-0 col-8 shadow mb-3 edit-answer-form">
         <div class="card-header text-left">
           <span class="font-weight-bold">{{engagement.name}}</span>
         </div>
@@ -74,4 +74,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+@media screen and (max-width: 1300px) {
+  .edit-answer-form {
+    width: 100%!important;
+    flex: 0 0 100%!important;
+    max-width: 100%!important;
+  }
+}
+</style>
+
 

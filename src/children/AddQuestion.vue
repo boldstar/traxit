@@ -1,5 +1,5 @@
 <template>
-    <div class="card col-8 px-0 mx-auto shadow mb-3" v-if="engagement">
+    <div class="card col-8 px-0 mx-auto shadow mb-3 add-question-form" v-if="engagement">
         <div class="card-header text-left">
             <span class="font-weight-bold">{{engagement.name}}</span>
         </div>
@@ -228,6 +228,14 @@ export default {
         border-radius: 5px;
         padding: 5px;
         margin-bottom: 5px;
+    }
+
+    @media screen and (max-width: 1300px) {
+        .add-question-form {
+            width: 100%!important;
+            flex: 0 0 100%!important;
+            max-width: 100%!important;
+        }
     }
 </style>
 

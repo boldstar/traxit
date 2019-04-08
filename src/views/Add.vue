@@ -7,11 +7,11 @@
       <div class="d-flex flex-row justify-content-around mt-5 col-sm-12 col-md-10 col-lg-10 flex-sm-wrap card-content" v-if="$route.name == 'add'">
         <!-- contact card -->
         <div class="col-sm-6 col-md-4">
-          <div class="card-style card-body bg-light border shadow-sm p-5">
+          <div class="card-style card-body bg-light border shadow-sm">
             <div class="h3 mb-4 font-weight-bold">
-              <span>Contact</span>
+              <span class="span-title">Contact</span>
             </div>
-            <i class="text-primary fas fa-user-circle fa-7x mb-4 mt-3"></i>
+            <i class="text-primary fas fa-user-circle fa-7x mb-4 mt-3 icon"></i>
             <div class="mt-3">
               <router-link to="add/contact" class="btn btn-style">Create</router-link>
             </div>
@@ -19,11 +19,11 @@
         </div>
         <!-- business card -->
         <div class="col-sm-6 col-md-4">
-          <div class="card-style card-body bg-light border shadow-sm p-5">
+          <div class="card-style card-body bg-light border shadow-sm">
             <div class="h3 mb-4 font-weight-bold">
-              <span>Business</span>
+              <span class="span-title">Business</span>
             </div>
-            <i class="text-primary far fa-building fa-7x mb-4 mt-3"></i>
+            <i class="text-primary far fa-building fa-7x mb-4 mt-3 icon"></i>
             <div class="mt-3">
               <router-link to="add/business" class="btn btn-style">Add</router-link>
             </div>
@@ -31,11 +31,11 @@
         </div>
         <!-- engagement card -->
         <div class="col-sm-6 col-md-4 mt-sm-3 mt-md-0">
-          <div class="card-style card-body bg-light border shadow-sm p-5">
+          <div class="card-style card-body bg-light border shadow-sm">
             <div class="h3 mb-4 font-weight-bold">
-              <span>Engagement</span>
+              <span class="span-title">Engagement</span>
             </div>
-            <i class="text-primary far fa-folder-open fa-7x mb-4 mt-3"></i>
+            <i class="text-primary far fa-folder-open fa-7x mb-4 mt-3 icon"></i>
             <div class="mt-3">
               <button type="button" class="btn btn-style" @click="engagementsCard = true">Start</button>
             </div>
@@ -54,7 +54,7 @@
       </div>
       <div class="card-body d-flex flex-wrap">
         <!-- tax return engagement form -->
-        <div class="col-sm-6 col-md-6">
+        <div class="col-sm-6 col-md-6 card-option">
           <div class="card-style card-body bg-light border shadow-sm p-5">
             <div class="h3 mb-4 font-weight-bold">
               <span>Tax Return</span>
@@ -65,7 +65,7 @@
           </div>
         </div>
         <!-- bookkeeping engagement form -->
-        <div class="col-sm-6 col-md-6">
+        <div class="col-sm-6 col-md-6 card-option">
           <div class="card-style card-body bg-light border shadow-sm p-5">
             <div class="h3 mb-4 font-weight-bold">
               <span>Bookkeeping</span>
@@ -76,7 +76,7 @@
           </div>
         </div>
         <!-- custom engagement form -->
-        <div class="col-sm-6 col-md-6 mx-auto mt-4">
+        <div class="col-sm-6 col-md-6 mx-auto mt-4 card-option">
           <div class="card-style card-body bg-light border shadow-sm p-5">
             <div class="h3 mb-4 font-weight-bold">
               <span>Custom</span>
@@ -135,7 +135,23 @@ export default {
   &:hover {
     background: #0077ff86;
   }
-} 
+}
+
+@media screen and (max-width: 1300px) {
+  .icon {
+    font-size: 3.75rem!important;
+  }
+
+  .btn-style {
+    padding: 5px 15px;
+    letter-spacing: 0;
+    border-radius: 5px;
+  }
+
+  .span-title {
+    font-size: 1.25rem!important;
+  }
+}
 
 
 @media screen and (max-width: 650px) {
@@ -144,12 +160,16 @@ export default {
     margin-top: 0!important;
   }
 
+  .card-option {
+    margin-top: 10px!important;
+  }
+
   i {
     display: none!important;
   }
 
   .card-style {
-    margin-bottom: 20px;
+    margin-bottom: 20px!important;
   }
 
   .span-title {

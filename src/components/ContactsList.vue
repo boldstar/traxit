@@ -3,10 +3,10 @@
 
     <!-- this is the row of buttons above the clients list -->
     <div class="d-flex mb-3">
-        <div class="w-25">
+        <div class="w-25 search-div">
             <input class="form-control" placeholder="Filter By Last Name" v-model="searchClient" type="search">
         </div>
-        <div class="mr-auto d-flex">
+        <div class="mr-auto d-flex mobile-hide-row">
             <div class="mx-2">      
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -34,7 +34,7 @@
             </div>
         </div>  
 
-    <div class="d-flex">
+    <div class="d-flex mobile-hide-row">
         <div class="input-group d-flex" v-if="uploadInput">
             <div class="mr-2">
                 <button class="btn btn-outline-secondary" @click="uploadInput = false">Cancel</button>
@@ -65,22 +65,22 @@
         <thead class="text-primary hover">
             <tr>
                 <th scope="col">Client</th>
-                <th scope="col" @click="sort('category')">Category</th>
-                <th scope="col">Taxpayer Email</th>
-                <th scope="col">Taxpayer Phone</th>
-                <th scope="col">Spouse Email</th>
-                <th scope="col">Spouse Phone</th>
+                <th scope="col" @click="sort('category')" class="hide-row">Category</th>
+                <th scope="col" class="hide-row">Taxpayer Email</th>
+                <th scope="col" class="mobile-hide-table-row">Taxpayer Phone</th>
+                <th scope="col" class="hide-row">Spouse Email</th>
+                <th scope="col" class="mobile-hide-table-row">Spouse Phone</th>
                 <th scope="col" class="text-center">Details</th>
             </tr>
         </thead> 
         <tbody class="client-info table-bordered"  v-if="!tableLoaded">
             <tr v-for="(client, index) in sortedClients"  :key="index" @click="viewDetails(client.id)">
                 <td class="text-capitalize">{{ client.last_name }}, {{client.first_name}} <span v-if="client.has_spouse == true">&</span> <span v-if="client.last_name != client.spouse_last_name && client.has_spouse == true && client.spouse_last_name != null"> {{client.spouse_last_name}},</span> {{ client.spouse_first_name }}</td>
-                <td class="text-capitalize">{{ client.category }}</td>
-                <td>{{ client.email }}</td>
-                <td>{{ client.cell_phone }}</td>
-                <td>{{ client.spouse_email }}</td>
-                <td>{{ client.spouse_cell_phone }}</td>
+                <td class="text-capitalize hide-row">{{ client.category }}</td>
+                <td class="hide-row">{{ client.email }}</td>
+                <td class="mobile-hide-table-row">{{ client.cell_phone }}</td>
+                <td class="hide-row">{{ client.spouse_email }}</td>
+                <td class="mobile-hide-table-row">{{ client.spouse_cell_phone }}</td>
                 <td class="text-center"><router-link v-bind:to="'/contact/'+ client.id + '/account'"><i class="far fa-eye"></i></router-link></td>
             </tr>
         </tbody>
@@ -104,7 +104,7 @@
                 <button class="page-link" @click="nextPage">Next</button>           
             </li>
         </ul>
-        <div class="pl-3">
+        <div class="pl-3 mobile-hide-row">
             <div class="input-group">
                 <div class="input-group-prepend">
                     <label class="input-group-text" for="option">Per Page:</label>
@@ -114,7 +114,7 @@
                 </select>
             </div>
         </div>
-        <div class="ml-auto align-self-center">
+        <div class="ml-auto align-self-center mobile-hide-row">
             <label for="count" class="font-weight-bold">Viewing: </label>
             <span id="count">
                 {{ sortedClients.length }} of {{ clients.length }}
@@ -247,6 +247,35 @@ tr {
     cursor: pointer;
 }
 
+@media screen and (max-width: 1300px) {
+    .table {
+        font-size: .8rem!important;
+    }
+
+    .hide-row {
+        display: none!important;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .table {
+        font-size: .75rem!important;
+    }
+
+    .mobile-hide-row {
+        display: none!important;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .search-div {
+        width: 100%!important;
+    }
+
+    .mobile-hide-table-row {
+        display: none!important;
+    }
+}
 </style>
 
 

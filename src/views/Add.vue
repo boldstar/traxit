@@ -6,7 +6,7 @@
     <div class="d-flex justify-content-center" v-if="!engagementsCard">
       <div class="d-flex flex-row justify-content-around mt-5 col-sm-12 col-md-10 col-lg-10 flex-sm-wrap card-content" v-if="$route.name == 'add'">
         <!-- contact card -->
-        <div class="col-sm-6 col-md-4 card-option">
+        <div class="col-sm-6 col-md-4">
           <div class="card-style card-body bg-light border shadow-sm">
             <div class="h3 mb-4 font-weight-bold">
               <span class="span-title">Contact</span>
@@ -18,7 +18,7 @@
           </div>
         </div>
         <!-- business card -->
-        <div class="col-sm-6 col-md-4 card-option">
+        <div class="col-sm-6 col-md-4">
           <div class="card-style card-body bg-light border shadow-sm">
             <div class="h3 mb-4 font-weight-bold">
               <span class="span-title">Business</span>
@@ -30,7 +30,7 @@
           </div>
         </div>
         <!-- engagement card -->
-        <div class="col-sm-6 col-md-4 mt-sm-3 mt-md-0 card-option">
+        <div class="col-sm-6 col-md-4 mt-sm-3 mt-md-0">
           <div class="card-style card-body bg-light border shadow-sm">
             <div class="h3 mb-4 font-weight-bold">
               <span class="span-title">Engagement</span>
@@ -54,7 +54,7 @@
       </div>
       <div class="card-body d-flex flex-wrap">
         <!-- tax return engagement form -->
-        <div class="col-sm-6 col-md-6">
+        <div class="col-sm-6 col-md-6 card-option">
           <div class="card-style card-body bg-light border shadow-sm p-5">
             <div class="h3 mb-4 font-weight-bold">
               <span>Tax Return</span>
@@ -65,7 +65,7 @@
           </div>
         </div>
         <!-- bookkeeping engagement form -->
-        <div class="col-sm-6 col-md-6">
+        <div class="col-sm-6 col-md-6 card-option">
           <div class="card-style card-body bg-light border shadow-sm p-5">
             <div class="h3 mb-4 font-weight-bold">
               <span>Bookkeeping</span>
@@ -76,7 +76,7 @@
           </div>
         </div>
         <!-- custom engagement form -->
-        <div class="col-sm-6 col-md-6 mx-auto mt-4">
+        <div class="col-sm-6 col-md-6 mx-auto mt-4 card-option">
           <div class="card-style card-body bg-light border shadow-sm p-5">
             <div class="h3 mb-4 font-weight-bold">
               <span>Custom</span>
@@ -160,12 +160,16 @@ export default {
     margin-top: 0!important;
   }
 
+  .card-option {
+    margin-top: 10px!important;
+  }
+
   i {
     display: none!important;
   }
 
   .card-style {
-    margin-bottom: 20px;
+    margin-bottom: 20px!important;
   }
 
   .span-title {

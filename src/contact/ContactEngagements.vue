@@ -22,30 +22,30 @@
                 <thead class="text-primary border">
                     <tr>
                     <th  scope="col">Name</th>
-                    <th  scope="col">Category</th>
-                    <th  scope="col">Type</th>
-                    <th  scope="col">Return Type</th>
-                    <th  scope="col">Time Period</th>
+                    <th  scope="col" class="hide-row">Category</th>
+                    <th  scope="col" class="hide-row">Type</th>
+                    <th  scope="col" class="hide-row">Return Type</th>
+                    <th  scope="col" class="hide-row">Time Period</th>
                     <th  scope="col">Year</th>
-                    <th scope="col">Assigned To</th>
+                    <th scope="col" class="mobile-hide-row">Assigned To</th>
                     <th  scope="col">Status</th>
-                    <th  scope="col">Created Date</th>
+                    <th  scope="col" class="mobile-hide-row">Created Date</th>
                     <th  scope="col">Details</th>
                     </tr>
                 </thead>
                 <tbody class="table-bordered">
                     <tr v-for="(engagement, index) in clientEngagements" :key="index" @click="viewDetails(engagement.id)">
                     <th class="text-capitalize">{{ engagement.name }}</th>
-                    <th class="text-capitalize">{{ engagement.category}}</th>
-                    <th class="text-capitalize" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</th>
-                    <th class="text-capitalize" v-else>{{ engagement.type }}</th>
-                    <th >{{ checkType(engagement.type, engagement.return_type) }}</th>
-                    <th v-if="engagement.type == 'bookkeeping'">{{ engagement.title }}</th>
-                    <th v-else>None</th>
+                    <th class="text-capitalize hide-row">{{ engagement.category}}</th>
+                    <th class="text-capitalize hide-row" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</th>
+                    <th class="text-capitalize hide-row" v-else>{{ engagement.type }}</th>
+                    <th class="hide-row">{{ checkType(engagement.type, engagement.return_type) }}</th>
+                    <th v-if="engagement.type == 'bookkeeping'" class="hide-row">{{ engagement.title }}</th>
+                    <th v-else class="hide-row">None</th>
                     <th>{{ engagement.year }}</th>
-                    <th>{{ engagement.assigned_to}}</th>
+                    <th class="mobile-hide-row">{{ engagement.assigned_to}}</th>
                     <th>{{ engagement.status }}</th>
-                    <th>{{ engagement.created_at | formatDate }}</th>
+                    <th class="mobile-hide-row">{{ engagement.created_at | formatDate }}</th>
                     <th><router-link v-bind:to="'/engagement/' + engagement.id " class="btn btn-primary btn-sm ml-auto"><i class="far fa-eye mr-2"></i>View</router-link></th>
                     </tr>
                 </tbody>
@@ -139,96 +139,22 @@ export default {
         overflow-y: scroll;
     }
 
-     //this is the css for the loading spinner
-    .lds-dual-ring {
-        display: inline-block;
-        width: 64px;
-        height: 64px;
-        margin-top: 100px;
-        margin-bottom: 100px;
-    }
+   @media screen and (max-width: 1300px) {
+       .hide-row {
+           display: none!important;
+       }
+   }
 
-    .lds-dual-ring:after {
-        content: " ";
-        display: block;
-        width: 46px;
-        height: 46px;
-        margin: 1px;
-        border-radius: 50%;
-        border: 5px solid #0077ff;
-        border-color: #0077ff transparent #0077ff transparent;
-        animation: lds-dual-ring 1.2s linear infinite;
-    }
-        @keyframes lds-dual-ring {
-        0% {
-            transform: rotate(0deg);
-        }
-        100% {
-            transform: rotate(360deg);
-        }
-    }
+   @media screen and (max-width: 1180px) {
+       .table {
+           font-size: .8rem!important;
+       }
+   }
 
-    .lds-ellipsis-container {
-        position: absolute;
-        right: 50%;
-        padding-right: 20px;
-    }
-
-    .lds-ellipsis {
-        display: inline-block;
-        position: relative;
-        width: 64px;
-        height: 11px;
-    }
-
-    .lds-ellipsis div {
-        position: absolute;
-        width: 11px;
-        height: 11px;
-        border-radius: 50%;
-        background: #fff;
-        animation-timing-function: cubic-bezier(0, 1, 1, 0);
-    }
-
-    .lds-ellipsis div:nth-child(1) {
-        left: 6px;
-        animation: lds-ellipsis1 0.6s infinite;
-    }
-    .lds-ellipsis div:nth-child(2) {
-        left: 6px;
-        animation: lds-ellipsis2 0.6s infinite;
-    }
-    .lds-ellipsis div:nth-child(3) {
-        left: 26px;
-        animation: lds-ellipsis2 0.6s infinite;
-    }
-    .lds-ellipsis div:nth-child(4) {
-        left: 45px;
-        animation: lds-ellipsis3 0.6s infinite;
-    }
-    @keyframes lds-ellipsis1 {
-        0% {
-            transform: scale(0);
-        }
-        100% {
-            transform: scale(1);
-        }
-        }
-        @keyframes lds-ellipsis3 {
-        0% {
-            transform: scale(1);
-        }
-        100% {
-            transform: scale(0);
-        }
-        }
-        @keyframes lds-ellipsis2 {
-        0% {
-            transform: translate(0, 0);
-        }
-        100% {
-            transform: translate(19px, 0);
-        }
+   @media screen and (max-width: 767px) {
+       .mobile-hide-row {
+           display: none!important;
+       }
     }
 
 </style>

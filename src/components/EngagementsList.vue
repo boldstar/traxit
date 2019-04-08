@@ -6,7 +6,7 @@
                 <button type="button" class="btn btn-outline-primary" @click="showSearchInput">
                     <i class="fas fa-search"></i>
                 </button>
-                <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-secondary font-weight-bold dropdown-toggle dropdown-toggle-split">
+                <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-secondary font-weight-bold dropdown-toggle dropdown-toggle-split mobile-hide-row">
                     Filter Options
                 </button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
@@ -143,7 +143,7 @@
 
             <div class="btn-group ml-auto">
                 <button class="btn btn-outline-primary" @click="clearFilters" data-toggle="tooltip" data-placement="top" title="Clear Filters"><i class="fas fa-filter"></i></button>
-                <button class="btn btn-outline-secondary" @click="downloadEngagements" data-toggle="tooltip" data-placement="top" title="Download Engagements"><i class="far fa-file-excel"></i></button>
+                <button class="btn btn-outline-secondary" @click="downloadEngagements" data-toggle="tooltip" data-placement="top" title="Download Engagements"><i class="far fa-file-excel mobile-hide-row"></i></button>
                 <router-link to="/add" class="btn btn-primary pt-2" data-toggle="tooltip" data-placement="top" title="Add New Engagement"><i class="far fa-plus-square"></i></router-link>
             </div>
 
@@ -155,26 +155,26 @@
                 <thead class="text-primary hover">
                     <tr>
                         <th scope="col">Client</th>
-                        <th scope="col" @click="sort('category')">Category</th>
-                        <th scope="col">Engagement Type</th>
-                        <th scope="col" @click="sort('return_type')">Return Type</th>
-                        <th scope="col" @click="sort('year')">Year</th>
+                        <th scope="col" @click="sort('category')" class="hide-row">Category</th>
+                        <th scope="col" class="hide-row">Engagement Type</th>
+                        <th scope="col" @click="sort('return_type')" class="hide-row">Return Type</th>
+                        <th scope="col" @click="sort('year')" class="mobile-hide-row">Year</th>
                         <th scope="col" @click="sort('assigned_to')">Assigned To</th>
-                        <th scope="col" @click="sort('status')">Status</th>
+                        <th scope="col" @click="sort('status')" class="mobile-hide-row">Status</th>
                         <th scope="col" class="text-center">Details</th>
                     </tr>
                 </thead> 
                 <tbody class="client-info table-bordered" v-if="!tableLoaded">
                     <tr v-for="(engagement, index) in sortedEngagements"  :key="index" @click="viewDetails(engagement.id)">
                         <td class="text-capitalize">{{ engagement.name }}</td>
-                        <td class="text-capitalize">{{ engagement.category }}</td>
-                        <td class="text-capitalize" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</td>
-                        <td class="text-capitalize" v-else>{{ engagement.type }}</td>
-                        <td v-if="engagement.return_type != null">{{ engagement.return_type }}</td>
-                        <td v-else>None</td>
-                        <td>{{ engagement.year }}</td>
+                        <td class="text-capitalize hide-row">{{ engagement.category }}</td>
+                        <td class="text-capitalize hide-row" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</td>
+                        <td class="text-capitalize hide-row" v-else>{{ engagement.type }}</td>
+                        <td v-if="engagement.return_type != null" class="hide-row">{{ engagement.return_type }}</td>
+                        <td v-else class="hide-row">None</td>
+                        <td class="mobile-hide-row">{{ engagement.year }}</td>
                         <td>{{ engagement.assigned_to }}</td>
-                        <td>{{ engagement.status }}</td>
+                        <td class="mobile-hide-row">{{ engagement.status }}</td>
                         <td class="text-center"><router-link v-bind:to="'/engagement/' + engagement.id"><i class="far fa-eye"></i></router-link></td>
                     </tr>
                 </tbody>
@@ -196,7 +196,7 @@
                 <button class="page-link" @click="nextPage">Next</button>           
             </li>
         </ul>
-        <div class="pl-3">
+        <div class="pl-3 mobile-hide-row">
             <div class="input-group">
                 <div class="input-group-prepend">
                     <label class="input-group-text" for="option">Per Page:</label>
@@ -206,7 +206,7 @@
                 </select>
             </div>
         </div>
-        <div class="ml-auto align-self-center">
+        <div class="ml-auto align-self-center mobile-hide-row">
             <label for="count" class="font-weight-bold">Viewing: </label>
             <span id="count">
                 {{ sortedEngagements.length }} of {{ engagements.length }}
@@ -425,6 +425,27 @@ export default {
 
 tr {
     cursor: pointer;
+}
+
+
+@media screen and (max-width: 1300px) {
+    .table {
+        font-size: .8rem!important;
+    }
+
+    .hide-row {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .table {
+        font-size: .75rem!important;
+    }
+
+    .mobile-hide-row {
+        display: none!important;
+    }
 }
 
 </style>

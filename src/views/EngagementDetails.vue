@@ -9,10 +9,10 @@
 
       <!-- this is the header section of the engagement details -->
       <div class="flex-row justify-content-between d-flex mt-0 card-body shadow-sm py-2 px-3">
-        <span class="h5 align-self-center m-0 text-left">Engagement | <strong class="text-primary"><router-link :to="'/contact/' +engagement.client.id + '/account'">{{engagement.name}}</router-link></strong></span>
+        <span class="h5 align-self-center m-0 text-left engagement-name">Engagement | <strong class="text-primary"><router-link :to="'/contact/' +engagement.client.id + '/account'">{{engagement.name}}</router-link></strong></span>
 
         <div class="d-flex">
-        <div v-if="engagement.type == 'taxreturn' && engagement.balance != null" class="mr-3 d-flex">
+        <div v-if="engagement.type == 'taxreturn' && engagement.balance != null" class="mr-3 d-flex engagement-balance">
           <span class="h5 align-self-center mb-0">
               {{ modifyAmount(engagement.balance) }}
           </span>
@@ -51,7 +51,7 @@
         </b-modal>
 
       <div class="row px-3 my-3">
-        <div class="col-md-4">
+        <div class="col-4 engagement-details">
           <div class="card px-0 mb-3 shadow-sm align-self-start">
             <div class="card-header d-flex justify-content-between">
               <div class="text-primary font-weight-bold">
@@ -117,7 +117,7 @@
           </div>
 
 
-          <div class="card px-0 shadow-sm align-self-start">
+          <div class="card px-0 shadow-sm align-self-start note-div">
             <div class="card-header d-flex justify-content-between">
               <div class="font-weight-bold">
                 <span class="align-self-center">Notes | <span class="text-primary">{{engagementNotes.length}}</span></span>
@@ -125,10 +125,10 @@
               <button class="btn btn-primary btn-sm" @click="addNoteModal"><i class="far fa-plus-square"></i></button>
             </div>
           </div>
-          <div v-if="engagementNotes.length <= 0" class="card-body shadow-sm border">
+          <div v-if="engagementNotes.length <= 0" class="card-body shadow-sm border note-div">
             <span class="font-weight-bold">There are currrently no notes</span>
           </div>
-            <div class="card-body py-0 text-left border" v-for="(note, index) in engagementNotes" :key="index" v-if="engagementNotes.length > 0">
+            <div class="card-body py-0 text-left border note-div" v-for="(note, index) in engagementNotes" :key="index" v-if="engagementNotes.length > 0">
               <div class="note p-1">
                 <div v-html="note.note"></div>
                 <div class="d-flex justify-content-between">
@@ -151,9 +151,9 @@
         </div>
 
       <!-- this is the section where the qustions will go -->
-      <div class="ml-3 d-flex flex-column align-items-center flex-fill card shadow-sm align-self-start">
+      <div class="ml-3 d-flex flex-column align-items-center flex-fill card shadow-sm align-self-start questions">
 
-      <div class="d-flex justify-content-between card-header py-2 mb-2 w-100">
+      <div class="d-flex justify-content-between card-header py-2 mb-2 w-100 questions-header">
           <div class="align-self-center">
             <span class="font-weight-bold">
               Questions |
@@ -470,5 +470,51 @@ export default {
 
   button {
     cursor: pointer!important;
+  }
+
+  @media screen and (max-width: 1320px) {
+
+    .engagement-details {
+      width: 100%!important;
+      flex: 0 0 100%!important;
+      max-width: 100%!important;
+    }
+
+    .note-div {
+      width: 100%!important;
+    }
+
+    .questions {
+      margin:  15px!important;
+    }
+  }
+
+  @media screen and (max-width: 1260px) {
+    .questions {
+      border: none!important;
+      box-shadow: none!important;
+    }
+
+    .questions-header {
+      border: 1px solid rgb(223, 221, 221);
+      margin-bottom: 0!important;
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    .engagement-name {
+      font-size: .8rem!important;
+    }
+    .engagement-balance {
+      display: none;
+    }
+
+    .engagement-details {
+      padding: 0!important;
+    }
+
+    .questions {
+      margin: 15px 0!important;
+    }
   }
 </style>

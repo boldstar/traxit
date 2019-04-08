@@ -364,5 +364,33 @@ export default {
       border: 1px solid red;
   }
 
+  @media screen and (max-width: 1500px) {
+    .custom-control {
+      width: 100%!important;
+    }
+    .custom-control-label {
+      max-width: 5px!important;
+    }
+
+    .add-engagement {
+      width: 80%!important;
+      flex: 0 0 80%!important;
+      max-width: 80%!important;
+    }
+  }
+
+  @media screen and (max-width: 1100px) {
+    .add-engagement {
+      width: 100%!important;
+      flex: 0 0 100%!important;
+      max-width: 100%!important;
+      padding: 0!important;
+    }
+
+    .custom-control {
+      padding-left: 0!important;
+    }
+  }
+
 </style>
 

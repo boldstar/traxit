@@ -1,9 +1,9 @@
 <template>
   <div class="page-wrapper d-flex justify-content-center align-items-center col-12">
-    <div class="d-flex flex-column align-items-center col-md-6 shadow mb-5">
+    <div class="d-flex flex-column align-items-center col-md-6 shadow mb-5 edit-engagement-form">
     <div class="justify-content-between d-flex my-3 w-100">
       <router-link v-bind:to="'/engagement/' + engagement.id" class="btn btn-outline-secondary"><i class="fas fa-arrow-circle-left mr-2"></i>Cancel</router-link>
-       <div class="h4">
+       <div class="h4 form-title">
         <span class="mr-3"><i class="fas fa-user-edit"></i> </span>
         {{ engagement.name }}
       </div>
@@ -311,4 +311,19 @@ export default {
     color: red;
     margin-left: 5px;
   }
+
+  @media screen and (max-width: 1300px) {
+  .edit-engagement-form {
+    width: 100%!important;
+    flex: 0 0 100%!important;
+    max-width: 100%!important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .form-title {
+    font-size: .9rem!important;
+    align-self: center!important;
+  }
+}
 </style>

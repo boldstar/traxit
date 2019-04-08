@@ -3,10 +3,10 @@
        <div class="card mb-3" v-for="business in businesses" :key="business.id">
            <div class="card-header d-flex justify-content-between h3">
             <div class="d-flex">
-                <i class="far fa-building mr-2 align-self-center"></i>
-                <span class="text-primary">Business</span>
+                <i class="far fa-building mr-2 align-self-center card-title"></i>
+                <span class="text-primary card-title">Business</span>
             </div>
-            <span class="text-capitalize">{{business.business_name}}</span>
+            <span class="text-capitalize card-title">{{business.business_name}}</span>
            </div>
            <div class="card-body">
             <div class="d-flex flex-column">
@@ -91,5 +91,14 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+ @media screen and (max-width: 1180px) {
+       .card-title {
+           font-size: 1.0rem!important;
+       }
+    }
+</style>
+
 
 

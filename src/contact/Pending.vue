@@ -46,7 +46,7 @@
             <b-modal ref="modal" hide-footer title="Answer Question" size="lg">
                     <form>
                     <div>
-                    <vue-editor v-model="question.answer"></vue-editor>
+                    <vue-editor v-model="question.answer" :editorToolbar="customToolbar"></vue-editor>
                     </div>
                     <div class="text-left">
                         <span class="font-weight-bold mr-2">Answered: </span>
@@ -80,7 +80,11 @@ data() {
         question: {
             answer: '',
             answered: true,
-        }
+        },
+        customToolbar: [
+            ['bold', 'italic', 'underline'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }]
+          ]
     }
 },
 components:{

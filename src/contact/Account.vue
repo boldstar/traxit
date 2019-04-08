@@ -1,16 +1,16 @@
 <template>
-    <div class="col-12">
+    <div class="col-12 account">
         <!-- this is the details of the account -->
-    <div class="row" v-if="$route.name == 'account'">
-        <div class="col-6">
+    <div class="row account-details" v-if="$route.name == 'account'">
+        <div class="col-6 contact-content">
             <div class="mb-3">
                 <div class="card shadow-sm">
                     <div class="card-header text-left d-flex justify-content-between py-0">
                         <div class="d-flex h4 mt-2 align-items-center">
-                            <i class="fas fa-user-circle mr-2 fa-2x"></i>
-                            <strong class="card-title text-primary mt-2">Taxpayer </strong>
+                            <i class="fas fa-user-circle mr-2 fa-2x card-title"></i>
+                            <strong class="card-title text-primary mt-2 card-title">Taxpayer </strong>
                         </div>
-                            <span class="card-title text-capitalize h4 mt-2 align-self-center">{{ client.first_name }} {{client.middle_initial}} {{client.last_name}}</span>
+                            <span class="card-title text-capitalize h4 mt-2 align-self-center card-title">{{ client.first_name }} {{client.middle_initial}} {{client.last_name}}</span>
                     </div>
                     <ul class="card-body px-5 h6 text-left">
                         <li class=" justify-content-between d-flex mb-2">
@@ -34,10 +34,10 @@
                 <div class="card">
                     <div class="card-header text-left d-flex justify-content-between py-0">
                         <div class="d-flex h4 mt-2 align-items-center">
-                            <i class="fas fa-user-circle mr-2 fa-2x"></i>
-                            <strong class="card-title text-primary mt-2">Spouse </strong>
+                            <i class="fas fa-user-circle mr-2 fa-2x card-title"></i>
+                            <strong class="card-title text-primary mt-2 card-title">Spouse </strong>
                         </div>
-                            <span class="card-title text-capitalize h4 mt-2 align-self-center">{{ client.spouse_first_name }} {{client.spouse_middle_initial}} {{client.spouse_last_name}}</span>
+                            <span class="card-title text-capitalize h4 mt-2 align-self-center card-title">{{ client.spouse_first_name }} {{client.spouse_middle_initial}} {{client.spouse_last_name}}</span>
                     </div>
                     <ul class="card-body px-5 h6 text-left">
                         <li class="justify-content-between d-flex mb-2">
@@ -54,7 +54,7 @@
 
               <div class="card mb-3" v-for="dependent in client.dependents" :key="dependent.id" v-if="$route.name == 'account'">
                 <div class="card-header text-left text-primary font-weight-bold d-flex justify-content-between">
-                    <span>
+                    <span class="card-title">
                         Dependent
                     </span>
                     <div>
@@ -99,9 +99,9 @@
              
         </div>
        
-        <div v-if="client" class="col-6"> 
+        <div v-if="client" class="col-6 contact-content"> 
             <div class="mb-3 card">
-                <div class="card-header text-left text-primary font-weight-bold">
+                <div class="card-header text-left text-primary font-weight-bold card-title">
                         Details
                 </div>
                 <ul class="list-group">
@@ -183,5 +183,45 @@ export default {
 </script>
 
 <style lang="scss">
+@media screen and (max-width: 1180px) {
+    .account {
+        font-size: 1.0rem!important;
+    }
 
+    .card-title {
+        font-size: 1.0rem!important;
+    }
+
+    .account-details {
+        flex-direction: column!important;
+        width: 100%!important;
+        margin-left: auto!important;
+    }
+
+    .contact-content {
+        width: 100%!important;
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .account-details {
+        margin: 0 auto!important;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    span {
+        font-size: .8rem!important;
+    }
+
+    .contact-content {
+        padding: 0!important;
+    }
+
+    .card-body {
+        padding: 10px!important;
+    }
+}
 </style>

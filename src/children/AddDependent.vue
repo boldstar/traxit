@@ -1,9 +1,9 @@
 <template>
     <div class="d-flex flex-column align-items-center mt-3">
-        <div class="card-body col-6 bg-light border-primary mb-2">
+        <div class="card-body col-6 bg-light border-primary mb-2 dependent-form">
         <h4 class="text-left text-primary m-0"><i class="far fa-address-book mr-2"></i>New Dependent</h4>
         </div>
-        <div class="col-6 card-body bg-light">
+        <div class="col-6 card-body bg-light dependent-form">
             <form @submit.prevent="addNewDependent" class="d-flex-column justify-content-center">
 
                 <div class="form-group">
@@ -76,7 +76,15 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
+
+@media screen and (max-width: 600px) {
+    .dependent-form {
+        width: 100%!important;
+        flex: 0 0 100%!important;
+        max-width: 100%!important;
+    }
+}
 
 </style>
 

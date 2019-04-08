@@ -3,7 +3,7 @@
   <div class="d-flex" v-if="dataReceived">
     <router-link :to="{path: '/engagement/' + engagement.id }" class="mr-auto btn btn-link"><i class="fas fa-chevron-left mr-2"></i>Back</router-link>
   </div>
-  <div class="d-flex justify-content-between mb-5" v-if="dataReceived">
+  <div class="d-flex justify-content-between mb-5 history-body" v-if="dataReceived">
     <div class="card-body radius shadow text-left p-0" v-if="engagementHistory">
       <div class="d-flex justify-content-between">
         <h2 class="p-3"><i class="fas fa-history mr-2"></i>History</h2>
@@ -35,7 +35,7 @@
         </span>
       </div>
     </div>
-    <div class="card-body radius shadow ml-3 text-left align-self-start">
+    <div class="card-body timespan shadow ml-3 text-left align-self-start">
       <h2><i class="far fa-clock mr-2"></i>
         <span v-if="engagementComplete">Completed In</span>
         <span v-else>Timelapse</span>
@@ -174,7 +174,7 @@ export default {
 
 <style lang="scss" scoped>
 
- .radius {
+ .timespan{
    border-radius: 8px !important;
  }
 
@@ -182,6 +182,22 @@ export default {
   font-size: 4rem;
   padding: 10px;
   color: #0077ff;
+}
+
+@media screen and (max-width: 1100px) {
+  .history-body {
+    flex-direction: column-reverse!important;
+  }
+  .timespan {
+    width: 100%!important;
+    margin: 10px 0!important;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .table {
+    font-size: .8rem!important;
+  }
 }
 
 </style>

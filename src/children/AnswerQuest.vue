@@ -1,5 +1,5 @@
 <template>
-    <div class="card col-8 mx-auto mb-3 p-0 shadow">
+    <div class="card col-8 mx-auto mb-3 p-0 shadow answer-question-form">
     <div class="card-header text-left">
       <span class="font-weight-bold">{{ engagement.name }}</span>
     </div>
@@ -65,4 +65,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+@media screen and (max-width: 1300px) {
+  .answer-question-form {
+    width: 100%!important;
+    flex: 0 0 100%!important;
+    max-width: 100%!important;
+  }
+}
+</style>
+
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrapper mb-3 col-8">
+  <div class="page-wrapper mb-3 contact-form">
 
     <div class="server-error" v-if="serverError">{{ serverError }}</div>
 
@@ -30,28 +30,28 @@
         
 
         <h5 class="text-left mb-3">Taxpayer:</h5>
-        <div class="d-flex mb-3 ">
-          <div class="col-5 px-0">
-            <input type="text" :class="{ 'input-error': errors.has('First Name') }" class="form-control" placeholder="First Name" v-model="client.first_name" v-validate="'required'" name="First Name">
+        <div class="d-flex mb-3 flex-mobile">
+          <div class="col-5 px-0 form-div">
+            <input type="text" :class="{ 'input-error': errors.has('First Name') }" class="form-control input-margin" placeholder="First Name" v-model="client.first_name" v-validate="'required'" name="First Name">
             <span class="form-error" v-show="errors.has('First Name')">{{ errors.first('First Name') }}</span>
           </div>
-          <div class="mx-2">
-            <input type="text" class="form-control" placeholder="Middle Initial" v-model="client.middle_initial" name="Middle Initial">
+          <div class="mx-2 initial-input">
+            <input type="text" class="form-control input-margin" placeholder="Middle Initial" v-model="client.middle_initial" name="Middle Initial">
           </div>
-          <div class="col-5 px-0">
+          <div class="col-5 px-0 form-div">
             <input type="text" :class="{ 'input-error': errors.has('Last Name') }" class="form-control" placeholder="Last Name" v-model="client.last_name" v-validate="'required'" name="Last Name">
             <span class="form-error" v-show="errors.has('Last Name')">{{ errors.first('Last Name') }}</span>
           </div>
         </div>      
  
-        <div class="d-flex mb-3">
-          <input type="text" class="form-control mr-2" placeholder="Occupation" v-model="client.occupation" name="Occupation">
+        <div class="d-flex mb-3 flex-mobile">
+          <input type="text" class="form-control mr-2 input-margin" placeholder="Occupation" v-model="client.occupation" name="Occupation">
           <date-input v-model="client.dob" :placeholder="'Date Of Birth'" mask-type="date" :name="'Date Format'"></date-input>
         </div>
 
-        <div class="d-flex mb-3">
-          <input type="email" class="form-control" placeholder="email@example.com" v-model="client.email" name="Email" :class="{'border-danger':taxpayerEmailInvalid}" @change="taxpayerEmailInvalid = false">
-          <number-input :placeholder="'Cell Phone'" v-model="client.cell_phone" mask-type="number" class="mx-2"></number-input>
+        <div class="d-flex mb-3 flex-mobile">
+          <input type="email" class="form-control input-margin" placeholder="email@example.com" v-model="client.email" name="Email" :class="{'border-danger':taxpayerEmailInvalid}" @change="taxpayerEmailInvalid = false">
+          <number-input :placeholder="'Cell Phone'" v-model="client.cell_phone" mask-type="number" class="mx-2 input-margin"></number-input>
           <number-input :placeholder="'Work Phone'" v-model="client.work_phone" mask-type="number"></number-input>
         </div>
         <label for="email" class="text-danger font-weight-bold" v-if="taxpayerEmailInvalid">Please Remove Or Provide A Valid Email</label>
@@ -67,29 +67,29 @@
 
         <h5 class="text-left mb-3" v-if="client.has_spouse == true">Spouse:</h5>
         <small v-if="clear_spouse_field" class="text-danger">Please clear spouse input fields if client does not have spouse</small>
-        <div class="d-flex mb-3" v-if="client.has_spouse == true">
-          <input type="text" class="form-control col-5" placeholder="First Name" v-model="client.spouse_first_name" name="Spouse First Name">
-          <input type="text" class="form-control mx-2" placeholder="Middle Initial" v-model="client.spouse_middle_initial" name="Spouse Middle Inital">
-          <input type="text" class="form-control col-5" placeholder="Last Name" v-model="client.spouse_last_name" name="Spouse Last Name">
+        <div class="d-flex mb-3 flex-mobile" v-if="client.has_spouse == true">
+          <input type="text" class="form-control col-5 form-div input-margin" placeholder="First Name" v-model="client.spouse_first_name" name="Spouse First Name">
+          <input type="text" class="form-control mx-2 input-margin" placeholder="Middle Initial" v-model="client.spouse_middle_initial" name="Spouse Middle Inital">
+          <input type="text" class="form-control col-5 form-div" placeholder="Last Name" v-model="client.spouse_last_name" name="Spouse Last Name">
         </div>
 
-        <div class="d-flex mb-3" v-if="client.has_spouse == true">
-          <input type="text" class="form-control mr-2" placeholder="Occupation" v-model="client.spouse_occupation" name="Spouse Occupation">
+        <div class="d-flex mb-3 flex-mobile" v-if="client.has_spouse == true">
+          <input type="text" class="form-control mr-2 input-margin" placeholder="Occupation" v-model="client.spouse_occupation" name="Spouse Occupation">
           <date-input v-model="client.spouse_dob" :placeholder="'Date Of Birth'" mask-type="date" :name="'Spouse Date Format'"></date-input>
         </div>
 
-        <div class="d-flex mb-3" v-if="client.has_spouse == true">
-          <input type="email" id="spouse_email" class="form-control" placeholder="email@example.com" v-model="client.spouse_email" name="Spouse Email" :class="{'border-danger': spouseEmailInvalid}" @change="spouseEmailInvalid = false">
-          <number-input :placeholder="'Cell Phone'"  v-model="client.spouse_cell_phone" mask-type="number" class="mx-2"></number-input>
+        <div class="d-flex mb-3 flex-mobile" v-if="client.has_spouse == true">
+          <input type="email" id="spouse_email" class="form-control input-margin" placeholder="email@example.com" v-model="client.spouse_email" name="Spouse Email" :class="{'border-danger': spouseEmailInvalid}" @change="spouseEmailInvalid = false">
+          <number-input :placeholder="'Cell Phone'"  v-model="client.spouse_cell_phone" mask-type="number" class="mx-2 input-margin"></number-input>
           <number-input :placeholder="'Work Phone'"  v-model="client.spouse_work_phone" mask-type="number"></number-input>
         </div>
         <label for="spouse_email" class="text-danger font-weight-bold" v-if="spouseEmailInvalid">Please Remove Or Provide A Valid Email</label>
 
         <h5 class="text-left mb-3">Address:</h5>
-        <div class="d-flex mb-4">
-          <input type="text" class="form-control" placeholder="Street Address" v-model="client.street_address" name="Street Address">
-          <input type="text" class="form-control ml-2 mr-1" placeholder="City" v-model="client.city" name="City">
-          <input type="text" class="form-control ml-1 mr-2" placeholder="State" v-model="client.state" name="State">
+        <div class="d-flex mb-4 flex-mobile">
+          <input type="text" class="form-control input-margin" placeholder="Street Address" v-model="client.street_address" name="Street Address">
+          <input type="text" class="form-control ml-2 mr-1 input-margin" placeholder="City" v-model="client.city" name="City">
+          <input type="text" class="form-control ml-1 mr-2 input-margin" placeholder="State" v-model="client.state" name="State">
           <input type="text" class="form-control" placeholder="Postal Code" v-model="client.postal_code" name="Postal Code">
         </div>
 
@@ -252,8 +252,48 @@ export default {
 }
 </script>
 
-<style>
- .input-error {
-        border: 1px solid red;
-    }
+<style scoped>
+.input-error {
+      border: 1px solid red;
+  }
+
+.contact-form {
+  width: 70%;
+}
+
+@media screen and (max-width: 800px) {
+  .contact-form {
+    width: 100%!important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .flex-mobile {
+    flex-direction: column!important;
+  }
+
+  .form-control {
+    width: 100%!important;
+    margin: 0!important;
+  }
+
+  .form-div{
+    width: 100%!important;
+    flex: 0 0 100%!important;
+    max-width: 100%!important;
+  }
+
+  .initial-input {
+    margin: 0!important;
+  }
+
+  .input-group {
+    display: flex!important;
+    flex-wrap: nowrap;
+  }
+
+  .input-margin {
+    margin-bottom: 5px!important;
+  }
+}
 </style>

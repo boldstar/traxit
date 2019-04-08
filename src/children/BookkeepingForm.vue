@@ -1,5 +1,5 @@
 <template>
-  <div class="container col-6 mb-3">
+  <div class="container col-6 mb-3 book-form">
     <div class="justify-content-between d-flex mb-1 border shadow p-3">
       <router-link to="/add" class="btn btn-sm btn-outline-secondary"><i class="fas fa-arrow-circle-left mr-2"></i>Back</router-link>
       <div class="d-flex"> 
@@ -8,24 +8,24 @@
       </div>
     </div>
     <div class="card-body bg-light border mb-2">
-      <h4 class="text-left text-primary m-0"><i class="far fa-folder-open mr-2"></i>New Bookkeeping Engagement</h4>
+      <h4 class="text-left text-primary m-0 form-title"><i class="far fa-folder-open mr-2"></i>New Bookkeeping Engagement</h4>
     </div>
     <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center bg-light px-3 pt-3 border pb-0">
       <div class="form-group">
 
         <div class="d-flex justify-content-between mb-3 p-2 custom-control custom-checkbox bg-white form-control" v-bind:class="{'input-error' : nothingChecked}">
           <div class="d-flex">
-            <span class="mr-3 font-weight-bold h6">Monthly</span>
+            <span class="mr-3 font-weight-bold h6 span-4-checkbox">Monthly</span>
             <input type="checkbox" v-model="monthChecked" class="custom-control-input ml-3" id="customCheck1" @change="selectedMonthRange">
             <label class="custom-control-label ml-3" for="customCheck1"></label>
           </div>
           <div class="d-flex">
-            <span class="mr-3 font-weight-bold h6">Quarterly</span>
+            <span class="mr-3 font-weight-bold h6 span-4-checkbox">Quarterly</span>
             <input type="checkbox" v-model="quarterChecked" class="custom-control-input ml-3" id="customCheck2" @change="selectedQuarterRange">
             <label class="custom-control-label ml-3" for="customCheck2"></label>
           </div>
           <div class="d-flex">
-            <span class="mr-3 font-weight-bold h6">Annual</span>
+            <span class="mr-3 font-weight-bold h6 span-4-checkbox">Annual</span>
             <input type="checkbox" v-model="annualChecked" class="custom-control-input ml-3" id="customCheck3" @change="selectedAnnualRange">
             <label class="custom-control-label ml-3" for="customCheck3"></label>
           </div>
@@ -299,4 +299,49 @@ export default {
       border: 1px solid red;
   }
 
+@media screen and (max-width: 950px) {
+  .book-form {
+    width:100%!important;
+    max-width: 75%!important;
+    flex: 0 0 75%!important;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .book-form {
+    flex: 0 0 100%!important;
+    max-width: 100%!important;
+    padding: 0!important;
+  }
+
+  .form-title {
+    font-size: .8rem!important;
+  }
+
+  .form-control {
+    font-size: .75rem!important;
+  }
+
+  label {
+    font-size: .75rem!important;
+    width: 9em;
+  }
+}
+
+@media screen and (max-width: 570px) {
+  .custom-control {
+    max-width: 100%;
+  }
+
+  .custom-control-label {
+    margin-left: 0!important;
+    width: 5px!important;
+  }
+
+  .span-4-checkbox {
+    font-size: .75rem!important;
+    margin-right:30px!important;
+    margin-top: 5px!important;
+  }
+}
 </style>

@@ -55,9 +55,9 @@
       <div class="card-body d-flex flex-wrap">
         <!-- tax return engagement form -->
         <div class="col-sm-6 col-md-6 card-option">
-          <div class="card-style card-body bg-light border shadow-sm p-5">
+          <div class="card-style card-body bg-light border shadow-sm">
             <div class="h3 mb-4 font-weight-bold">
-              <span>Tax Return</span>
+              <span class="span-title">Tax Return</span>
             </div>
             <div class="mt-3">
               <router-link to="add/engagement/taxform" class="btn btn-style">Next</router-link>
@@ -66,9 +66,9 @@
         </div>
         <!-- bookkeeping engagement form -->
         <div class="col-sm-6 col-md-6 card-option">
-          <div class="card-style card-body bg-light border shadow-sm p-5">
+          <div class="card-style card-body bg-light border shadow-sm">
             <div class="h3 mb-4 font-weight-bold">
-              <span>Bookkeeping</span>
+              <span class="span-title">Bookkeeping</span>
             </div>
             <div class="mt-3">
               <router-link to="add/engagement/bookkeepingform" class="btn btn-style">Next</router-link>
@@ -77,9 +77,9 @@
         </div>
         <!-- custom engagement form -->
         <div class="col-sm-6 col-md-6 mx-auto mt-4 card-option">
-          <div class="card-style card-body bg-light border shadow-sm p-5">
+          <div class="card-style card-body bg-light border shadow-sm">
             <div class="h3 mb-4 font-weight-bold">
-              <span>Custom</span>
+              <span class="span-title">Custom</span>
             </div>
             <div class="mt-3">
               <router-link to="add/engagement/customform" class="btn btn-style">Next</router-link>

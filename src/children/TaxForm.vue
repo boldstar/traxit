@@ -1,5 +1,5 @@
 <template>
-  <div class="container col-6 mb-3">
+  <div class="container col-6 mb-3 tax-form">
     <div class="justify-content-between d-flex mb-1 border shadow p-3">
       <router-link to="/add" class="btn btn-sm btn-outline-secondary"><i class="fas fa-arrow-circle-left mr-2"></i>Back</router-link>
       <div class="d-flex"> 
@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="card-body bg-light border mb-2">
-      <h4 class="text-left text-primary m-0"><i class="far fa-folder-open mr-2"></i>New Tax Engagement</h4>
+      <h4 class="text-left text-primary m-0 form-title"><i class="far fa-folder-open mr-2"></i>New Tax Engagement</h4>
     </div>
     <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center bg-light px-3 pt-3 border pb-0">
       <div class="form-group">
@@ -268,5 +268,34 @@ export default {
   .input-error {
       border: 1px solid red;
   }
+
+@media screen and (max-width: 950px) {
+  .tax-form {
+    width:100%!important;
+    max-width: 75%!important;
+    flex: 0 0 75%!important;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .tax-form {
+    flex: 0 0 100%!important;
+    max-width: 100%!important;
+    padding: 0!important;
+  }
+
+  .form-title {
+    font-size: .8rem!important;
+  }
+
+  .form-control {
+    font-size: .75rem!important;
+  }
+
+  label {
+    font-size: .75rem!important;
+    width: 9em;
+  }
+}
 
 </style>

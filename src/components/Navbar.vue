@@ -164,7 +164,7 @@ export default {
 
     .sidebar-btn {
         display: none;
-        border: 1px solid rgba(128, 128, 128, 0.322);
+        border: none;
         border-radius: 3px;
         margin-right: 10px;
         background: transparent!important;
@@ -191,6 +191,7 @@ export default {
         position: relative;
         display: block;
         margin-right: 50px;
+        align-self: center;
     }
 
     .search-dropdown {
@@ -258,10 +259,6 @@ export default {
     @media screen and (max-width: 950px) {
         .sidebar-btn {
             display: block!important;
-        }
-
-        .search-group {
-            margin-top: 3px;
         }
     }
 

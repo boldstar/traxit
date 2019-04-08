@@ -166,12 +166,13 @@ export default {
         display: none;
         border: none;
         border-radius: 3px;
-        margin-right: 10px;
+        margin-right: 5px;
         background: transparent!important;
         text-decoration: none;
         color: #ffffff;
         font-size: 1.45rem;
         text-align: center;
+        outline: none;
 
         &:hover {
             cursor: pointer;

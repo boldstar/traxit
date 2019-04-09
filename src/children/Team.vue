@@ -2,7 +2,7 @@
   <div class="mt-3">
     <div v-if="$route.name == 'team'">
       <div class="d-flex justify-content-between">
-        <span class="h3 m-0">Team Members</span>
+        <span class="h3 m-0 team-title">Team Members</span>
         <router-link :to="'add-user'" class="btn btn-primary font-weight-bold">Add Team Member</router-link>
       </div>
       <hr>
@@ -12,18 +12,18 @@
         <thead class="text-primary hover">
             <tr>
                 <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Role</th>
-                <th scope="col" class="text-center px-0">Password</th>
+                <th scope="col" class="hide-row">Email</th>
+                <th scope="col" class="hide-row">Role</th>
+                <th scope="col" class="text-center px-0 hide-row">Password</th>
                 <th scope="col" class="text-center">Edit</th>
             </tr>
         </thead> 
         <tbody class="client-info table-bordered">
             <tr v-for="(user, index) in computedUsers"  :key="index" v-if="users.length > 0 && user.user != 'Admin'">
                 <td class="text-capitalize">{{ user.user }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.role.name }}</td>
-                <td class="text-center"><button type="button" class="btn btn-sm btn-outline-primary" @click="selectedEmail(user.email)">Reset</button></td>
+                <td class="hide-row">{{ user.email }}</td>
+                <td class="hide-row">{{ user.role.name }}</td>
+                <td class="text-center hide-row"><button type="button" class="btn btn-sm btn-outline-primary" @click="selectedEmail(user.email)">Reset</button></td>
                 <td class="text-center"><router-link :to="{path: '/administrator/team/edit-user/' + user.id}" class="btn btn-sm btn-secondary">Edit</router-link></td>
             </tr>
         </tbody>
@@ -86,5 +86,30 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+
+@media screen and (max-width: 840px) {
+  .table {
+    font-size: .8rem!important;
+  }
+
+  .hide-row {
+    display: none!important;
+  }
+
+  .team-title {
+    font-size: 1rem!important;
+    align-self: center;
+  }
+}
+
+@media screen and (max-width: 325px) {
+  .btn-primary {
+    display: none!important;
+  }
+}
+</style>
+
 
 

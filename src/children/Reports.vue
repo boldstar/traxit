@@ -1,7 +1,7 @@
 <template>
   <div class="mt-3">
     <div class="d-flex justify-content-between">
-      <div class="h3">
+      <div class="h3 report-title">
         <span class="m-0">Reports Center</span>
       </div>
     </div>
@@ -12,15 +12,15 @@
     <Alert v-if="successAlert && $route.name === 'workflows'" v-bind:message="successAlert" />
 
     <div class="d-flex flex-wrap justify-content-center" v-if="$route.name == 'reports'">
-      <div class="d-flex justify-content-around col-12 mt-5">
-        <div class="card-body shadow col-3 d-flex flex-column">
+      <div class="d-flex justify-content-around col-12 mt-5 report-cards">
+        <div class="card-body shadow d-flex flex-column report-card">
           <span class="h3 mb-0 py-3 bg-light">Excel</span>
           <i class="far fa-file-excel fa-5x my-4"></i>
           <div>
             <button type="button" class="btn btn-primary font-weight-bold" @click="showModal('EXCEL')">Start</button>
           </div>
         </div>
-        <div class="card-body shadow col-3 d-flex flex-column">
+        <div class="card-body shadow d-flex flex-column report-card">
           <span class="h3 mb-0 py-3 bg-light">PDF</span>
           <i class="far fa-file-pdf fa-5x my-4"></i>
           <div>
@@ -265,6 +265,35 @@ export default {
 .image {
   width: 95%;
   max-height: 75vh;
+}
+
+.report-card {
+  width: 100%;
+  max-width: 300px;
+  border-radius: 10px;
+}
+
+@media screen and (max-width: 950px) {
+  .report-card {
+    max-width: 210px!important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .report-cards {
+    flex-direction: column!important;
+    align-items: center!important;
+  }
+
+  .report-card {
+    max-width: 90%!important;
+    margin-bottom: 15px;
+  }
+
+  .report-title {
+    font-size: 1rem!important;
+    align-self: center;
+  }
 }
 
 </style>

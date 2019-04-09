@@ -1,13 +1,13 @@
 <template>
   <div class="mt-3">
     <div class="d-flex justify-content-between">
-      <h3 class="m-0">Templates</h3>
+      <h3 class="m-0 template-header">Templates</h3>
     </div>
     <hr>
     <Alert v-if="successAlert" :message="successAlert.message" />
-    <div class="d-flex justify-content-between">
-      <div class="col-md-2">
-        <div class="card text-left">
+    <div class="d-flex justify-content-between template-content">
+      <div class="template-side-content">
+        <div class="card text-left subject-card">
           <div class="card-header d-flex justify-content-between font-weight-bold text-primary">
               <span>Subject</span>
               <i class="far fa-edit align-self-center"></i>
@@ -16,7 +16,7 @@
             <div class="card-body py-2"><strong>{{ template.title}}</strong></div>
           </div>
         </div>
-          <div class="card mt-3  text-left">
+          <div class="card mt-3  text-left legend-card">
             <div class="card-header d-flex justify-content-between font-weight-bold text-primary">
               <span>Legend</span>
               <i class="fas fa-code align-self-center"></i>
@@ -39,12 +39,12 @@
         <div v-if="templates" class="card">
           <div class="card-header d-flex justify-content-between">
             <div class="pt-1">
-              <strong class="align-self-center">{{ selectedTemplate[0].title}}: <span class="text-primary">Template</span></strong>
+              <strong class="align-self-center template-card-header">{{ selectedTemplate[0].title}}: <span class="text-primary">Template</span></strong>
             </div>
             <div v-if="noEmail">
               <span class="text-danger font-weight-bold">Please Add Account Email Before Sending Test</span>
             </div>
-            <div class="d-flex">
+            <div class="d-flex send-test-btn">
               <button :disabled="processing" type="button" class="btn btn-sm btn-primary font-weight-bold" v-if="!verify">
                 <span v-if="processing">Sending Test...</span>
                 <span v-if="!processing && !verify" @click="verifySend()">Send Test</span>
@@ -135,4 +135,57 @@ export default {
   ul {
     list-style: none;
   }
+
+  .template-side-content {
+    min-width: 200px;
+    margin-right: 10px;
+  }
+
+  @media screen and (max-width: 1200px) {
+    .template-content {
+      flex-direction: column!important;
+      align-items: center!important;
+    }
+
+    .template-side-content {
+      display: flex;
+      flex-direction: row!important;
+      justify-content: space-around;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .legend-card {
+      margin-top: 0!important;
+    }
+  }
+
+  @media screen and (max-width: 425px) {
+    .template-side-content {
+      justify-content: center!important;
+      margin-left: 8px!important;
+    }
+
+    .legend-card {
+      display: none!important;
+    }
+
+    .subject-card {
+      width: 100%;
+    }
+
+    .template-header {
+      font-size: 1rem!important;
+    }
+
+    .template-card-header {
+      font-size: .8rem!important;
+    }
+
+    .send-test-btn {
+      display: none!important;
+    }
+  }
+
+
 </style>

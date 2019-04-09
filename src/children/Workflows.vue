@@ -1,7 +1,7 @@
 <template>
   <div class="mt-3">
     <div class="d-flex justify-content-between">
-      <div class="h3">
+      <div class="h3 workflow-title align-self-center">
         <span class="m-0">Workflows | </span>
         <span class="m-0 text-primary">{{ allWorkflows.length }}</span>
       </div>
@@ -20,7 +20,7 @@
       </span>
     </div>
 
-    <div class="d-flex flex-wrap justify-content-around" v-if="$route.name == 'workflows'">
+    <div class="d-flex flex-wrap justify-content-around workflow-content" v-if="$route.name == 'workflows'">
       <div class="workflow-card d-flex flex-column align-self-start border p-0 mb-3 shadow" v-for="workflow in allWorkflows" :key="workflow.id">
          <div class="card-header d-flex justify-content-between">
            <span class="align-self-center font-weight-bold"><i class="fas fa-route mr-2 text-primary"></i>{{ workflow.workflow }}</span>
@@ -31,14 +31,14 @@
           <table class="table table-hover mb-0">
             <thead>
               <tr class="text-left">
-                <th scope="col" class="font-weight-bold">Order</th>
+                <th scope="col" class="font-weight-bold hide-row">Order</th>
                 <th scope="col" class="font-weight-bold">Status</th>
                 <th scope="col" class="font-weight-bold text-center"><i class="far fa-envelope text-primary"></i></th>
               </tr>
             </thead>
             <draggable :list="workflow.statuses" class="text-left" :element="'tbody'" v-model="workflow.statuses" @start="drag=true" @end="drag=false" @change="updateStatusOrder(workflow.id, workflow.statuses)" ref="table" :options="{animation: 200, handle: '.draggable'}" :sortable="true">
               <tr v-for="(status, index) in workflow.statuses" :key="index"  :class="{'highlight-status': checkValue(status.id)}" class="draggable">
-                <th scope="row" class="status-th"><div class="status-order"></div> {{ appendZero(index + 1) }}</th>
+                <th scope="row" class="status-th hide-row"><div class="status-order"></div> {{ appendZero(index + 1) }}</th>
                 <td>{{ status.status }}</td>
                 <td class="text-center" :class="{'notify': status.notify_client}" @click="showMessage(status)"><i  data-toggle="tooltip" data-placement="right" title="Add Custom Message" class="fas fa-check text-primary" v-if="status.notify_client"></i></td>
               </tr>
@@ -324,6 +324,22 @@ table tr:last-child .status-order:after {
 
 .fa-check {
   cursor: pointer!important;
+}
+
+
+@media screen and (max-width: 525px) {
+  .table {
+    width: 300px;
+    font-size: .8rem!important;
+  }
+
+  .hide-row {
+    display: none!important;
+  }
+
+  .workflow-title {
+    font-size: 1rem!important;
+  }
 }
 
 </style>

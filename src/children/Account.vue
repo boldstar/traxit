@@ -1,7 +1,7 @@
 <template>
   <div class="mt-3">
     <div class="d-flex justify-content-between">
-      <h3 class="m-0">Account Details</h3>
+      <h3 class="m-0 account-header">Account Details</h3>
       <div class="d-flex">
         <div>
           <button type="button" class="btn btn-secondary mr-3" @click="addLogo = true" v-if="!addLogo" :disabled="processing">
@@ -34,31 +34,31 @@
         <li>
           <div class="d-flex">
           <span class="p-3 background width">Business Name</span>
-          <span class="ml-5 align-self-center">{{ accountDetails.business_name }}</span>
+          <span class="ml-5 align-self-center span-data">{{ accountDetails.business_name }}</span>
           </div>
         </li>
         <li>
           <div class="d-flex">
           <span class="p-3 background width">Address</span>
-          <span class="ml-5 align-self-center" v-if="accountDetails.address">{{ accountDetails.address }}, {{ accountDetails.city }}, {{ accountDetails.state }} {{ accountDetails.postal_code }}</span>
+          <span class="ml-5 align-self-center span-data" v-if="accountDetails.address">{{ accountDetails.address }}, {{ accountDetails.city }}, {{ accountDetails.state }} {{ accountDetails.postal_code }}</span>
           </div>
         </li>
         <li>
           <div class="d-flex">
           <span class="p-3 background width">Account Email</span>
-          <span class="ml-5 align-self-center">{{ accountDetails.email }}</span>
+          <span class="ml-5 align-self-center span-data">{{ accountDetails.email }}</span>
           </div>
         </li>
         <li>
           <div class="d-flex">
           <span class="p-3 background width">Phone Number</span>
-          <span class="ml-5 align-self-center">{{ accountDetails.phone_number }}</span>
+          <span class="ml-5 align-self-center span-data">{{ accountDetails.phone_number }}</span>
           </div>
         </li>
         <li>
           <div class="d-flex">
           <span class="p-3 background width">Fax Number</span>
-          <span class="ml-5 align-self-center">{{ accountDetails.fax_number }}</span>
+          <span class="ml-5 align-self-center span-data">{{ accountDetails.fax_number }}</span>
           </div>
         </li>
         <li>
@@ -153,4 +153,47 @@ ul {
   }
 }
 
+@media screen and (max-width: 950px) {
+  .width {
+    font-size: 1rem!important;
+    width: 150px!important;
+  }
+  .span-data {
+    font-size: 1rem!important;
+  }
+
+  .account-header {
+    font-size: 1rem!important;
+    align-self: center;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .btn {
+    display: none!important;
+  }
+
+  .width {
+    padding: 5px!important;
+  }
+
+  .span-data {
+    margin-left: 5px!important;
+  }
+
+  img {
+    margin-left: 5px!important;
+  }
+
+}
+
+@media screen and (max-width: 425px) {
+  .width {
+    display: none!important;
+  }
+
+  .span-data {
+    margin-bottom: 15px;
+  }
+}
 </style>

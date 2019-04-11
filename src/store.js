@@ -906,11 +906,11 @@ export default new Vuex.Store({
       axios.get('/clients/'+id)
       .then(response => {
         const client = response.data
-        if(taxpayer_dob != null || taxpayer_dob != '') {
+        if(client.dob != null || client.dob != '') {
           const taxpayer_dob = moment(String(client.dob)).format('MM/DD/YYYY')
           client.dob = taxpayer_dob
         }
-        if(spouse_dob != null || spouse_dob != '') {
+        if(client.spouse_dob != null || client.spouse_dob != '') {
           const spouse_dob = moment(String(client.spouse_dob)).format('MM/DD/YYYY')
           client.spouse_dob = spouse_dob
         }

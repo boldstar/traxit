@@ -113,7 +113,9 @@ export default {
 
     updateThisClient() {
         if(this.client.dob == 'Invalid date') {
-          this.client.dob == null
+          this.client.dob = null
+        } else if (this.client.spouse_dob == 'Invalid date') {
+          this.client.spouse_dob = null
         }
         if(this.client.has_spouse == false) {
           this.client.spouse_first_name = null

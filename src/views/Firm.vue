@@ -35,6 +35,7 @@
                     <span class="badge badge-primary align-self-center">{{ status.count }}</span>
                   </li>
                 </ul>
+                <!-- only shows on mobile views -->
                 <button class="toggle-workflow-btn" type="btn" @click="showWorkflowList">
                   <span v-if="!showList" class="text-primary">Show List</span>
                   <span v-if="showList" class="text-primary">Hide List</span>
@@ -54,7 +55,7 @@
                 </div>             
             </div>
           </div>
-
+          <!-- only shows on mobile views -->
           <div class="status-header">
             <span>{{engagementFilterKey}}</span>
           </div>

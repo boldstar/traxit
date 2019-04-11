@@ -1,11 +1,11 @@
 <template>
     <div class="mt-3">
         <div class="d-flex justify-content-between">
-            <span class="h3 m-0">Add Team Member</span>
-            <router-link :to="'/administrator/team'" class="btn btn-primary">Back</router-link>
+            <span class="h3 m-0 add-user-title">Add Team Member</span>
+            <router-link :to="'/administrator/team'" class="btn btn-primary back-btn">Back</router-link>
         </div>
         <hr>
-        <div class="card shadow col-6 mx-auto mt-5">
+        <div class="card shadow col-6 mx-auto mt-5 add-user-card">
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <h5 class="mb-0">Edit Team Member</h5>
@@ -116,6 +116,23 @@ export default {
 <style>
 .input-error {
       border: 1px solid red;
+  }
+
+  @media screen and (max-width: 767px) {
+      .add-user-title {
+          font-size: 1rem!important;
+          align-self: center!important;
+      }
+
+      .add-user-card {
+          width: 100%!important;
+          flex: 0 0 100%!important;
+          max-width: 100%!important;
+      }
+
+      .back-btn {
+          display: none!important;
+      }
   }
 
 </style>

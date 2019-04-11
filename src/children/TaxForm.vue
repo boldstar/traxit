@@ -44,7 +44,7 @@
         <span class="form-error" v-show="errors.has('Category')">{{ errors.first('Category') }}</span>
 
        
-        <div class="input-group my-3" v-if="engagement.category == 'Personal'">
+        <div class="input-group my-3">
           <div class="input-group-prepend">
             <label class="input-group-text text-primary" for="option">Find Contact</label>
           </div>
@@ -56,19 +56,6 @@
           </select>
         </div>
         <span class="form-error" v-show="errors.has('Contact')">{{ errors.first('Contact') }}</span>
-
-        <div class="input-group my-3" v-if="engagement.category == 'Business'">
-          <div class="input-group-prepend">
-            <label class="input-group-text text-primary" for="option">Find Contact</label>
-          </div>
-          <select :class="{ 'input-error': errors.has('Business Contact') }" class="form-control" id="client_id" v-model.number="engagement.client_id" v-validate="{ is_not: option }" name="Business Contact">
-            <option disabled>{{ option }}</option>
-            <option v-for="client in sortClients" :key="client.id" :value="client.id">
-              {{ client.last_name }}, {{client.first_name}} <span v-if="client.has_spouse == 1"> & </span>{{client.spouse_first_name }}
-            </option>
-          </select>
-        </div>
-        <span class="form-error" v-show="errors.has('Business Contact')">{{ errors.first('Business Contact') }}</span>
 
         <div class="input-group my-3" v-if="engagement.category == 'Business'">
           <div class="input-group-prepend">

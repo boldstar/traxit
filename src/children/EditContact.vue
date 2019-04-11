@@ -112,6 +112,9 @@ export default {
     ...mapActions(['updateClient']),
 
     updateThisClient() {
+        if(this.client.dob == 'Invalid date') {
+          this.client.dob == null
+        }
         if(this.client.has_spouse == false) {
           this.client.spouse_first_name = null
           this.client.spouse_middle_initial = null

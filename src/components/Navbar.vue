@@ -5,7 +5,7 @@
         
         <ul class="navbar-nav mr-3 d-flex flex-row">
             <!-- only shows up at certain screen size. see media queries for "sidebar-btn" -->
-            <button class="bg-light sidebar-btn" data-toggle="tooltip" data-placement="bottom" title="Toggle Drawer" @click="showLinks">
+            <button v-if="$route.meta.layout != 'admin'" class="bg-light sidebar-btn" data-toggle="tooltip" data-placement="bottom" title="Toggle Drawer" @click="showLinks">
                 <i class="fas fa-bars"></i>
             </button>
             <div v-if="loggedIn" class="search-group" @keyup.enter="searchDatabase" :class="{'move-right': hideInput}">

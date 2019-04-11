@@ -1,7 +1,7 @@
 <template>
     <div id="search">
         <div v-if="searchResults != '' && !processing">
-            <div class="d-flex justify-content-between card-body p-2 shadow">
+            <div class="d-flex justify-content-between card-body p-2 shadow search-header">
                 <div class="d-flex">
                     <h4 class="mb-0 mr-2">Search Term: </h4>
                     <span class="align-self-center h4 mb-0">{{keyword}}</span>
@@ -27,22 +27,22 @@
                         <thead class="text-primary">
                             <tr>
                                 <th scope="col">Taxpayer</th>
-                                <th scope="col">Phone</th>
-                                <th scope="col">Email</th>
+                                <th scope="col" class="mobile-hide-row">Phone</th>
+                                <th scope="col" class="hide-row">Email</th>
                                 <th scope="col">Spouse</th>
-                                <th scope="col">Phone</th>
-                                <th scope="col">Email</th>
+                                <th scope="col" class="mobile-hide-row">Phone</th>
+                                <th scope="col" class="hide-row">Email</th>
                                 <th scope="col">Details</th>
                             </tr>
                         </thead>
                         <tbody class="table-bordered">
                             <tr>
                                 <th>{{result.first_name}} {{result.last_name}}</th>
-                                <td>{{result.cell_phone}}</td>
-                                <td>{{result.email}}</td>
+                                <td class="mobile-hide-row">{{result.cell_phone}}</td>
+                                <td class="hide-row">{{result.email}}</td>
                                 <td>{{result.spouse_first_name}}<span v-if="spouse_last_name != null" class="ml-2">{{result.spouse_last_name}}</span><span class="ml-2" v-else>{{result.last_name}}</span></td>
-                                <td>{{result.spouse_cell_phone}}</td>
-                                <td>{{result.spouse_email}}</td>
+                                <td class="mobile-hide-row">{{result.spouse_cell_phone}}</td>
+                                <td class="hide-row">{{result.spouse_email}}</td>
                                 <td>  <router-link :to="{ path: '/contact/' + result.id + '/account'}" class="btn btn-sm btn-primary">View</router-link></td>
                             </tr>
                         </tbody>
@@ -61,11 +61,11 @@
                         <thead class="text-primary">
                             <tr>
                                 <th scope="col">Name</th>
-                                <th scope="col">Type</th>
-                                <th scope="col">Return Type</th>
-                                <th scope="col">Time Period</th>
-                                <th scope="col">Year</th>
-                                <th scope="col">Assigned To</th>
+                                <th scope="col" class="mobile-hide-row">Type</th>
+                                <th scope="col" class="mobile-hide-row">Return Type</th>
+                                <th scope="col" class="hide-row">Time Period</th>
+                                <th scope="col" class="hide-row">Year</th>
+                                <th scope="col" class="mobile-hide-row">Assigned To</th>
                                 <th scope="col">Status</th>
                                 <th>Engagement</th>
                             </tr>
@@ -73,14 +73,14 @@
                         <tbody class="table-bordered">
                             <tr v-for="(engagement, index) in result.engagements" :key="index" >
                                     <th>{{engagement.name}}</th>
-                                <td class="text-capitalize" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</td>
-                                <td class="text-capitalize" v-else>{{ engagement.type }}</td>
-                                <td v-if="engagement.return_type != null">{{ engagement.return_type }}</td>
-                                <td v-else>None</td>
-                                <td v-if="engagement.type == 'bookkeeping'">{{engagement.title}}</td>
-                                <td v-else>None</td>
-                                <td>{{engagement.year}}</td>
-                                <td>{{engagement.assigned_to}}</td>
+                                <td class="text-capitalize mobile-hide-row" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</td>
+                                <td class="text-capitalize mobile-hide-row" v-else>{{ engagement.type }}</td>
+                                <td v-if="engagement.return_type != null" class="mobile-hide-row">{{ engagement.return_type }}</td>
+                                <td v-else class="mobile-hide-row">None</td>
+                                <td v-if="engagement.type == 'bookkeeping'" class="hide-row">{{engagement.title}}</td>
+                                <td v-else class="hide-row">None</td>
+                                <td class="hide-row">{{engagement.year}}</td>
+                                <td class="mobile-hide-row">{{engagement.assigned_to}}</td>
                                 <td>{{engagement.status}}</td>
                                 <td><router-link :to="{ path: '/engagement/' + engagement.id}" class="btn btn-sm btn-primary align-self-center">View</router-link></td>
                             </tr>
@@ -151,6 +151,28 @@ export default {
 .search-engine {
     background-size: cover;
     height: 80vh;
+}
+
+@media screen and (max-width: 1500px) {
+    .hide-row {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1120px) {
+    .mobile-hide-row {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .table {
+        font-size: .8rem!important;
+    }
+
+    .search-header {
+        display: none!important;
+    }
 }
 
 </style>

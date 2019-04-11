@@ -688,13 +688,16 @@ export default new Vuex.Store({
       })
     },
     requestReset(context, email) {
+      context.commit('startProcessing')
       axios.post('/password/create', {
         email: email
       })
       .then(response => {
+        context.commit('stopProcessing')
         context.commit('passwordAlert', response.data)
       })
       .catch(error => {
+        context.commit('stopProcessing')
         console.log(error.response.data)
       })
     },
@@ -902,10 +905,14 @@ export default new Vuex.Store({
       axios.get('/clients/'+id)
       .then(response => {
         const client = response.data
-        const taxpayer_dob = moment(String(client.dob)).format('MM/DD/YYYY')
-        const spouse_dob = moment(String(client.spouse_dob)).format('MM/DD/YYYY')
-        client.dob = taxpayer_dob
-        client.spouse_dob = spouse_dob
+        if(client.dob != null && client.dob != '') {
+          const taxpayer_dob = moment(String(client.dob)).format('MM/DD/YYYY')
+          client.dob = taxpayer_dob
+        }
+        if(client.spouse_dob != null && client.spouse_dob != '') {
+          const spouse_dob = moment(String(client.spouse_dob)).format('MM/DD/YYYY')
+          client.spouse_dob = spouse_dob
+        }
         commit('editDetails', client)
       })
       .catch(error => {
@@ -1080,6 +1087,7 @@ export default new Vuex.Store({
         done: false
       })
       .then(response => {
+        console.log(response.data)
         context.commit('addClientEngagement', response.data.engagement)
         context.commit('successAlert', response.data.message)
       })
@@ -1567,7 +1575,7 @@ export default new Vuex.Store({
         link.click();
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.response.data)
       })
     },
     uploadContacts(context, file) {

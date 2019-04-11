@@ -1,13 +1,13 @@
 <template>
     <div class="mt-3">
         <div class="d-flex justify-content-between">
-            <span class="h3 m-0">Add Team Member</span>
+            <span class="h3 m-0 user-title align-self-center">Add Team Member</span>
             <router-link :to="'team'" class="btn btn-primary">Back</router-link>
         </div>
         <hr>
-        <div class="container card-body bg-light col-6">
+        <div class="container card-body bg-light col-6 user-form">
             <div class="text-left">
-                <h3>User Form</h3>
+                <h3 class="user-title">User Form</h3>
             </div>
             <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center">
                 <div class="d-block text-left">
@@ -100,6 +100,20 @@ export default {
 <style>
 .input-error {
       border: 1px solid red;
+  }
+
+  @media screen and (max-width: 767px) {
+      .user-form {
+          width: 100%!important;
+          flex: 0 0 100%!important;
+          max-width: 100%!important;
+      }
+  }
+
+  @media screen and (max-width: 500px) {
+      .user-title {
+          font-size: 1rem!important;
+      }
   }
 
 </style>

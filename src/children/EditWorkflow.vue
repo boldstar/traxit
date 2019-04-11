@@ -2,9 +2,9 @@
     <div id="edit-workflow">
      <Alert v-if="errorAlert" v-bind:message="errorAlert" />
      <Alert v-if="successAlert" v-bind:message="successAlert" />
-    <div class="container card p-0 col-6 mb-5"  v-if="!workflowLoaded">
+    <div class="container card p-0 col-6 mb-5 workflow"  v-if="!workflowLoaded">
         <div>
-            <form @submit.prevent="editThisWorkflow" class="d-flex-column justify-content-center">
+            <form @submit.prevent="editThisWorkflow" class="d-flex-column justify-content-center workflow-card">
 
                 <div class="form-group card-body bg-light">
                     <input class="form-control" type="text" v-model="workflow.workflow">
@@ -222,5 +222,19 @@ export default {
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
     }
+
+    @media screen and (max-width: 767px) {
+      .workflow {
+          width: 100%!important;
+          flex: 0 0 100%!important;
+          max-width: 100%!important;
+      }
+
+      .workflow-card {
+          width: 100%!important;
+          flex: 0 0 100%!important;
+          max-width: 100%!important;
+      }
+  }
 </style>
 

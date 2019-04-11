@@ -29,14 +29,17 @@
             </div>
             <hr class="mt-2 mb-0">
             <div class="card-body p-0 d-flex flex-column">
-          
-                <ul class="p-0 text-left" v-for="workflows in countEngagementsByStatus" :key="workflows.workflow_id" v-if="workflows.workflow_id === selectedWorkflowID">
-                  <li class="m-0 px-3 d-flex justify-content-between" v-for="(status, index) in workflows.statuses" :key="index" :value="status.status"  @click="changeEngagementKey(status.status)" :class="{ active: engagementFilterKey === status.status }">
+                <ul class="p-0 text-left workflow-list" :class="{'show-workflow-list': showList}" v-for="workflows in countEngagementsByStatus" :key="workflows.workflow_id" v-if="workflows.workflow_id === selectedWorkflowID">
+                  <li class="m-0 px-3 d-flex justify-content-between workflow-item" v-for="(status, index) in workflows.statuses" :key="index" :value="status.status"  @click="changeEngagementKey(status.status)" :class="{ active: engagementFilterKey === status.status, 'show-workflow-item': showList }">
                     <span class="text-muted">{{ capitalize(status.status) }}</span>
                     <span class="badge badge-primary align-self-center">{{ status.count }}</span>
                   </li>
                 </ul>
-    
+                <!-- only shows on mobile views -->
+                <button class="toggle-workflow-btn" type="btn" @click="showWorkflowList">
+                  <span v-if="!showList" class="text-primary">Show List</span>
+                  <span v-if="showList" class="text-primary">Hide List</span>
+                </button>
             </div>
           </div>
         </div>
@@ -51,6 +54,10 @@
                   <input class="form-control" placeholder="Filter By Last Name..." v-model="searchEngagement">
                 </div>             
             </div>
+          </div>
+          <!-- only shows on mobile views -->
+          <div class="status-header">
+            <span>{{engagementFilterKey}}</span>
           </div>
 
           <div class="table-responsive">
@@ -145,6 +152,7 @@ export default {
       option: 'Choose...',
       currentSort: 'created_at',
       currentSortDir: 'asc',
+      showList: false
     }
   },
   computed: {
@@ -191,7 +199,8 @@ export default {
       }) 
     },
     changeEngagementKey (key) {
-    	this.engagementFilterKey = key
+      this.engagementFilterKey = key
+      this.showList = false
     },
     capitalize(string) {
     	return string.charAt(0).toUpperCase() + string.slice(1)
@@ -228,6 +237,9 @@ export default {
     }
         this.currentSort = s;
     },
+    showWorkflowList() {
+      this.showList = !this.showList
+    }
   },
   created() {
     this.listLoaded = true;
@@ -288,6 +300,15 @@ export default {
     display: none;
   }
 
+  .toggle-workflow-btn {
+    display: none;
+  }
+
+  .status-header {
+    display: none;
+  }
+
+
   @media screen and (max-width: 1300px) {
     .input-group-prepend {
       display: none!important;
@@ -335,6 +356,46 @@ export default {
       width: 100%!important;
       max-width: 100%!important;
       margin-bottom: 20px!important;
+    }
+
+    .workflow-list {
+      height: 0%!important;
+      transition: height 2s;
+    }
+
+    .workflow-item {
+      display: none!important;
+    }
+
+    .show-workflow-list {
+      height: 100%!important;
+      transition: height 2s;
+    }
+
+    .show-workflow-item {
+      display: flex!important;
+    }
+
+    .status-header {
+      display: block!important;
+      background-color: rgb(247, 247, 247);
+      border-radius: 5px 5px 0 0;
+      padding: 10px 0;
+      border: .5px solid lightgrey;
+      color: #0077ff;
+    }
+
+    .toggle-workflow-btn {
+      background: transparent;
+      border: .5px solid black;
+      border-radius: 0 0 5px 5px;
+      padding: 5px 0;
+      display: flex;
+      flex-direction: column;
+      outline: none;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
     }
 
     .table-responsive {

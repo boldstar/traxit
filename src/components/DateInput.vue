@@ -64,7 +64,7 @@ export default {
                 return this.mask(this.value)
                 }
             },
-            set: function(modifiedValue) {        
+            set: function(modifiedValue) {     
                 this.$emit('input', this.unmask(modifiedValue))
             }
         }

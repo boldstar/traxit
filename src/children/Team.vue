@@ -8,6 +8,7 @@
       <hr>
       <Alert v-if="passwordAlert" v-bind:message="passwordAlert.message" />
       <Alert v-if="successAlert" v-bind:message="successAlert" />
+      <Alert v-if="processing" v-bind:message="'Sending Email To The Requested User...'" />
       <table class="mt-4 table border table-light table-hover text-left">
         <thead class="text-primary hover">
             <tr>
@@ -63,7 +64,7 @@ export default {
     'b-modal': bModalDirective
   },
   computed: {
-    ...mapGetters(['users', 'passwordAlert', 'successAlert']),
+    ...mapGetters(['users', 'passwordAlert', 'successAlert', 'processing']),
      computedUsers() {
        if(this.users.length > 0 ) {
           const index = 0

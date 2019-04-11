@@ -1,9 +1,9 @@
 <template>
     <div class="d-flex flex-column align-items-center mt-3">
         <div class="card-body col-6 bg-light border-primary mb-2">
-        <h4 class="text-left text-primary m-0"><i class="far fa-address-book mr-2"></i>Add Account Details</h4>
+        <h4 class="text-left text-primary m-0 account-header"><i class="far fa-address-book mr-2"></i>Add Account Details</h4>
         </div>
-        <div class="col-6 card-body bg-light">
+        <div class="col-6 card-body bg-light account-form">
             <form @submit.prevent="addThisAccount" class="d-flex-column justify-content-center">
               <input type="text" class="form-control mb-3" placeholder="Business Name" v-model="accountDetails.business_name">
               <input type="text" class="form-control mb-3" placeholder="Address" v-model="accountDetails.address">
@@ -69,4 +69,20 @@ export default {
 
 }
 </script>
+
+<style scoped>
+@media screen and (max-width: 767px) {
+  .account-form {
+    width: 100%!important;
+    flex: 0 0 100%!important;
+    max-width: 100%!important;
+  }
+
+  .account-header {
+    font-size: 1rem!important;
+  }
+}
+
+</style>
+
 

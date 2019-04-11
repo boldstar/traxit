@@ -2,8 +2,9 @@
   <div class="d-flex justify-content-center col-md-8 col-sm-12">
   <div class="reset col-lg-4 col-md-6 col-sm-12" v-if="resetToken" >
     
-      <div class="bg-light text-primary p-3 font-weight-bold" v-if="resetSuccess">
+      <div class="bg-light text-primary p-3 font-weight-bold d-flex flex-column align-items-center" v-if="resetSuccess">
           <span>Please Proceed To Login, Password Reset Was Succesful</span>
+          <a href="/login" class="btn btn-block btn-primary btn-sm">Login</a>
       </div>
 
       <div class="bg-light p-3 text-danger font-weight-bold" v-if="resetError">
@@ -12,7 +13,7 @@
           </span>
       </div>
     
-      <div class="shadow card border">
+      <div class="shadow card border" v-if="!resetSuccess">
         <div class="card-header border  header text-left">
           <span class="font-weight-bold h3 text-primary">Reset Password</span>
         </div>
@@ -28,7 +29,7 @@
           <div class="form-group mb-3 text-left">
               <input type="password" name="confirmpassword" class="form-control" placeholder="Confirm Password" v-model="confirmpassword">
           </div>
-          <button type="submit" class="btn btn-block btn-primary my-4 d-flex justify-content-center" :disabled="loading">
+          <button type="submit" class="btn btn-block btn-primary my-4 d-flex justify-content-center" :disabled="loading || password != confirmpassword">
               <div v-if="loading">
                 <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
               </div>
@@ -76,3 +77,62 @@ export default {
   }
 }
 </script>
+
+<style>
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width:60px;
+  height: 20px;
+    }
+    .lds-ellipsis div {
+    position: absolute;
+    top: 8px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #fff;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+    }
+    .lds-ellipsis div:nth-child(1) {
+    left: 6px;
+    animation: lds-ellipsis1 0.6s infinite;
+    }
+    .lds-ellipsis div:nth-child(2) {
+    left: 6px;
+    animation: lds-ellipsis2 0.6s infinite;
+    }
+    .lds-ellipsis div:nth-child(3) {
+    left: 26px;
+    animation: lds-ellipsis2 0.6s infinite;
+    }
+    .lds-ellipsis div:nth-child(4) {
+    left: 45px;
+    animation: lds-ellipsis3 0.6s infinite;
+    }
+    @keyframes lds-ellipsis1 {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+    }
+    @keyframes lds-ellipsis3 {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0);
+    }
+    }
+    @keyframes lds-ellipsis2 {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(19px, 0);
+    }
+    }
+</style>
+

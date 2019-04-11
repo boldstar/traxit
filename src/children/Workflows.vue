@@ -225,12 +225,12 @@ export default {
       if(this.statusesNotUpdated) {
         const check = this.statusesNotUpdated.includes(id)
         if(check) {
-          this.engagementsExist = true
           return true;
         } else {
-          this.engagementsExist = false
+          return false;
         }
       }
+      return false
     },
     showMessage(status) {
       if(status.notify_client) {

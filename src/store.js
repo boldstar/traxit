@@ -689,13 +689,16 @@ export default new Vuex.Store({
       })
     },
     requestReset(context, email) {
+      context.commit('startProcessing')
       axios.post('/password/create', {
         email: email
       })
       .then(response => {
+        context.commit('stopProcessing')
         context.commit('passwordAlert', response.data)
       })
       .catch(error => {
+        context.commit('stopProcessing')
         console.log(error.response.data)
       })
     },
@@ -1081,6 +1084,7 @@ export default new Vuex.Store({
         done: false
       })
       .then(response => {
+        console.log(response.data)
         context.commit('addClientEngagement', response.data.engagement)
         context.commit('successAlert', response.data.message)
       })
@@ -1568,7 +1572,7 @@ export default new Vuex.Store({
         link.click();
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.response.data)
       })
     },
     uploadContacts(context, file) {

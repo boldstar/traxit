@@ -10,7 +10,7 @@
             </button>
             <div v-if="loggedIn" class="search-group" @keyup.enter="searchDatabase" :class="{'move-right': hideInput}">
                 <button class="icon-btn" type="button" @click="toggleSearch"></button>
-                <input type="text" class="search-input" v-model="search" :class="{'collapsed-search': hideInput}" placeholder="e.g.(John Doe, Jane Doe)">
+                <input type="text" class="search-input" v-model="search" :class="{'collapsed-search': hideInput}" placeholder="Enter keyword" ref="search">
                 <i class="fa fa-search search-icon" @click="toggleSearch"></i>
                 <div class="search-dropdown" :class="{'hide-dropdown': hideInput}">
                     <select v-model="category" class="search-dropdown-options">
@@ -87,6 +87,9 @@ export default {
             this.hideInput = !this.hideInput
             this.category = this.option
             this.search = ''
+            setTimeout(() => {
+                this.$refs.search.focus()
+            }, 1000)
         }
     },
     created() {
@@ -222,9 +225,14 @@ export default {
         border: none;
         height: 30px;
         border-radius: 25px 0 0 25px;
+        background-color: white;
         width: 300px;
         padding-left: 35px;
         transition: width .5s;
+        
+        &::placeholder {
+            color: #a9a9a9;
+        }
     }
 
     .icon-btn {

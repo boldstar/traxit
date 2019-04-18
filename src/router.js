@@ -52,7 +52,6 @@ export default new Router({
               path: '/login',
             })
           } else if(localStorage.getItem('role') != 'Admin') {
-            console.log(from.path)
             next(from.path)
           } else {
             next()

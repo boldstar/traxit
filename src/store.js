@@ -1655,20 +1655,23 @@ export default new Vuex.Store({
       })
     },
     requestReport(context, data) {
+      context.commit('startProcessing')
       axios.post('/reports', {
-          type: data.type,
-          fromValue: data.fromValue,
-          toValue:  data.toValue,
-          filters: data.filters,
-          return_type: data.return_type,
-          workflow: data.workflow,
-          status: data.status
+        year: data.year,
+        type: data.type,
+        fromValue: data.fromValue,
+        toValue: data.toValue,
+        workflow_id: data.workflow_id,
+        status: data.status,
+        action: data.action,
+          return_type: data.return_type
         },
         {
           responseType: 'blob'
         }
       )
       .then(response => {
+        context.commit('stopProcessing')
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
         link.href = url;
@@ -1677,6 +1680,7 @@ export default new Vuex.Store({
         link.click();
       })
       .catch(error => {
+        context.commit('stopProcessing')
         console.log(error.response.data)
       })
     },

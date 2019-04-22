@@ -1,6 +1,6 @@
 <template>
     <nav class="navbar navbar-dark fixed-top bg-primary flex-md-nowrap p-0 shadow-sm">
-        <a class="navbar-brand ml-3 text-left" href="/"><i class="far fa-compass mr-1"></i>TRAXIT</a>
+        <a class="navbar-brand ml-3 text-left" href="/"><img src="../assets/traxit_logo_white_official.png" class="logo"/></a>
         <!-- bread crumbs to go here -->
         
         <ul class="navbar-nav mr-3 d-flex flex-row">
@@ -101,6 +101,10 @@ export default {
 <style lang="scss" scoped>
     .navbar-nav .dropdown-menu {
         position: absolute;
+    }
+
+    .logo {
+        height: 22px;
     }
 
     .navbar-brand {

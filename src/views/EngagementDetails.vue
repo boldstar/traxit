@@ -80,7 +80,7 @@
                   <span class="font-weight-bold">Name</span>
                   <span>{{ engagement.name}}</span>
                 </li>
-                <li class="d-flex justify-content-between p-2">
+                <li class="d-flex justify-content-between p-2" v-if="engagement.type != 'bookkeeping'">
                   <span class="font-weight-bold">Fee</span>
                   <span>{{ amount(engagement.fee) }}</span>
                 </li>
@@ -363,11 +363,13 @@ export default {
       }
     },
     modifyAmount(fee) {
-      if(this.engagement.owed) {
-        return 'Tax Owed: $' + fee
+      const amount =  JSON.parse(this.engagement.balance)
+      if(amount < 0) {
+        return 'Tax Owed: $' + (-amount)
       } else {
-        return 'Tax Refunded: $' + fee
+        return 'Tax Refunded: $' + amount
       }
+      return;
     },
     addNoteModal() {
       this.$store.commit('showNoteModal', this.engagement.id)

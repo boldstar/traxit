@@ -85,7 +85,8 @@ export default new Vuex.Store({
     completedEngagements: [],
     noteToEdit: '',
     role: localStorage.getItem('role'),
-    links: false
+    links: false,
+    averagedays: ''
   },
   getters: {
     chartDataLength(state) {
@@ -255,6 +256,9 @@ export default new Vuex.Store({
     },
     noteToEdit(state) {
       return state.noteToEdit
+    },
+    averageDays(state) {
+      return state.averagedays
     }
   },
   mutations: {
@@ -622,6 +626,9 @@ export default new Vuex.Store({
     updateReceivedDate(state, history) {
       const index = state.history.findIndex(item => item.id == history.id);
       state.history.splice(index, 1, history);
+    },
+    averageDays(state, data) {
+      state.averagedays = data
     }
   },
   actions: {
@@ -1875,6 +1882,16 @@ export default new Vuex.Store({
       axios.get('/show-e-note/' + id)
       .then(response => {
         context.commit('engagementNoteToEdit', response.data)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    },
+    averageEngagementDays(context) {
+      axios.get('/engagementaverage')
+      .then(response => {
+        console.log(response.data)
+        context.commit('averageDays', response.data)
       })
       .catch(error => {
         console.log(error.response.data)

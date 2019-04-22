@@ -97,7 +97,7 @@
                                 <span class="font-weight-bold">Completed </span>
                             </div>
                             <div class="h5 mb-0 ml-3">
-                                <span class="font-weight-bold">Average | <span class="text-primary">{{ average }} days</span></span>
+                                <span v-if="average" class="font-weight-bold">Average | <span class="text-primary">{{ average }} days</span></span>
                             </div>
                         </div>
                         <div class="card-body">
@@ -480,8 +480,8 @@ export default {
                 return acc
             }, [])
 
-            const average = reduced.map(d => moment(d.com).diff(moment(d.cre), 'days')
-            )
+            const average = reduced.map(d => moment(d.com).diff(moment(d.cre), 'days'))
+
             return average.reduce((a,b) => a + b, 0) / average.length
         },
     },

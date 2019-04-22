@@ -91,10 +91,13 @@
 
                 <div class="my-3 completed">
                     <div class="card w-100">
-                        <div class="d-flex justify-content-start card-header p-2">
+                        <div class="d-flex justify-content-between card-header p-2">
                             <div class="h5 mb-0 ml-3">
                                 <i class="fas fa-folder mr-2 text-primary"></i>
                                 <span class="font-weight-bold">Completed </span>
+                            </div>
+                            <div class="h5 mb-0 ml-3">
+                                <span class="font-weight-bold">Average | <span class="text-primary">{{ average }} days</span></span>
                             </div>
                         </div>
                         <div class="card-body">
@@ -159,7 +162,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['allWorkflows', 'tasks', 'allEngagements', 'accountDetails', 'completedEngagements', 'createdEngagements']),
+        ...mapGetters(['allWorkflows', 'tasks', 'allEngagements', 'accountDetails', 'completedEngagements', 'createdEngagements', 'averageDays']),
         logo() {
             return `data:image/png;base64, ${this.accountDetails.logo}`
         },
@@ -317,6 +320,23 @@ export default {
             const filtereddates = this.mapCreatedDates(formateddates)
             return filtereddates
         },
+        average() {
+            const created = this.averageDays.created
+            const completed = this.averageDays.completed
+            const cre_formatted = created.reduce((acc, data) => {
+                acc.push({date: moment(data.created_at).format('MM/DD/YYYY'), e_id: data.engagement_id})
+
+                return acc
+            }, [])
+            const com_formatted = completed.reduce((acc, data) => {
+                acc.push({date: moment(data.created_at).format('MM/DD/YYYY'), e_id: data.engagement_id})
+
+                return acc
+            }, [])
+
+            const days =  this.compareArrays(cre_formatted, com_formatted)
+            return Math.round(days)
+        },
         firmsetsfull() {
             return {
                 labels: this.mapWorkflows,
@@ -448,7 +468,22 @@ export default {
             }
 
             return a;
-        }
+        },
+        compareArrays(cre, com) {
+            const final = cre.map(c => ({
+                created: c.date,
+                completed: com.filter(co => co.e_id == c.e_id).map(co => co.date)
+            }))
+
+            const reduced = final.reduce((acc, date) => {
+                acc.push({cre: date.created, com: date.completed[0]})
+                return acc
+            }, [])
+
+            const average = reduced.map(d => moment(d.com).diff(moment(d.cre), 'days')
+            )
+            return average.reduce((a,b) => a + b, 0) / average.length
+        },
     },
     created() {
         this.$store.dispatch('retrieveWorkflows')
@@ -456,6 +491,7 @@ export default {
         this.$store.dispatch('retrieveTasks')
         this.$store.dispatch('getAccountDetails')
         this.$store.dispatch('getEngagementsHistory')
+        this.$store.dispatch('averageEngagementDays')
         this.loading = true
         this.selected = true
         var self = this

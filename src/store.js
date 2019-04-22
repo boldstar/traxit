@@ -1890,7 +1890,6 @@ export default new Vuex.Store({
     averageEngagementDays(context) {
       axios.get('/engagementaverage')
       .then(response => {
-        console.log(response.data)
         context.commit('averageDays', response.data)
       })
       .catch(error => {

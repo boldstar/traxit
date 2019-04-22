@@ -14,7 +14,9 @@
 
         <label for="name">Name</label>
         <input type="text" id="name" class="form-control mb-2" placeholder="Engagement Name" v-model="engagement.name">
-        <div class="d-flex justify-content-between mb-2 p-2 custom-control custom-checkbox bg-white form-control" v-bind:class="{'input-error' : nothingChecked}" v-if="engagement.type == 'bookkeeping'">
+
+        <label for="timespan" v-if="engagement.type == 'bookkeeping'">Timespan</label>
+        <div class="d-flex justify-content-between mb-2 p-2 custom-control custom-checkbox bg-white form-control" id="timespan" v-bind:class="{'input-error' : nothingChecked}" v-if="engagement.type == 'bookkeeping'">
           <div class="d-flex">
             <span class="mr-3 font-weight-bold h6">Monthly</span>
             <input type="checkbox" v-model="monthChecked" class="custom-control-input ml-3" id="customCheck1" @change="selectedMonthRange">
@@ -97,15 +99,6 @@
         <label for="balance">Balance</label>
         <div class="input-group mb-3" >
         <currency-input id="balance" :placeholder="'Enter amount'"  v-model="engagement.balance" mask-type="currency" :class="{'border-danger': balance}"></currency-input>
-        <div class="input-group-append" @change="balance = false" v-if="engagement.balance != null" >
-          <div class="input-group-text" :class="{'choose-owed' : chooseOwed}">
-            <label class="mb-0 mr-1" for="owed">Owed:</label>
-            <input class="mr-2" type="radio" id="owed" v-model="owed" :value="JSON.parse(true)" @change="chooseOwed = false">
-            <label class="mb-0 mr-1" for="refund">Refunded:</label>
-            <input type="radio" id="refund" v-model="owed" :value="JSON.parse(false)" @change="chooseOwed = false">
-            <button type="button" @click="clearBalance" class="clear-owed">Clear Balance</button>
-          </div>
-        </div>
         </div>
         </div>
         <small class="text-danger" v-if="balance">Balance must have an amount if "Owed" or "Refunded" is marked</small>
@@ -175,19 +168,6 @@ export default {
 
     editThisEngagement(id) {
         if(!this.engagement.year ) return;
-        if(this.owed != null) {
-          if(this.engagement.balance == null || this.engagement.balance == '') {
-            this.balance = true
-            return
-          }
-        }
-        if(this.owed == null) {
-          if(this.engagement.balance != null) {
-            this.chooseOwed = true
-            return
-          }
-          this.owed = false
-        }
         if(this.annualChecked === true) {
           this.engagement.title = 'Annual'
         }
@@ -197,7 +177,6 @@ export default {
             return;
           }
         }
-        this.engagement.owed = this.owed
         this.updateEngagement({
           id: this.engagement.id,
           name: this.engagement.name,
@@ -213,7 +192,7 @@ export default {
           difficulty: this.engagement.difficulty,
           fee: this.engagement.fee,
           balance: this.engagement.balance,
-          owed: this.owed,
+          owed: this.engagement.owed,
           done: this.engagement.done
         })  
     },
@@ -275,17 +254,6 @@ export default {
     }
     if(this.engagement.description == 'Annual') {
       this.annualChecked = true
-    }
-    if(this.engagement.balance == null || this.engagement.balance == '') {
-      this.owed = null
-    }
-    if(this.engagement.balance != null ) {
-      if(this.engagement.owed) {
-        this.owed = true
-      }
-      if(!this.engagement.owed) {
-        this.owed = false
-      }
     }
   }
   

@@ -1,25 +1,15 @@
 import axios from 'axios'
 import moment from 'moment';
 import router from '../../router'
-import { abilityPlugin, ability as appAbility } from '../ability'
-import storage from '../storage'
-export const ability = appAbility
-
 
 if(localStorage.getItem('fqdn_api_url')!= null) {
     axios.defaults.baseURL = 'http://' + localStorage.getItem('fqdn_api_url') + '/api'
 }else {
 axios.defaults.baseURL = 'http://traxit.test/api'
 }
+axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access_token')
 
 export default {
-    plugins: [
-        storage({
-            storedKeys: ['rules', 'token'],
-            destroyOn: ['destroySession']
-        }),
-            abilityPlugin
-    ],
     state: {
         rules: '',
         token: localStorage.getItem('access_token') || null,

@@ -13,6 +13,6 @@ export const abilityPlugin = (store) => {
             ability.update([{ actions: '', subject: '' }])
             break
         }
-      })
-      return rules
-  }
+    })
+    return rules
+}

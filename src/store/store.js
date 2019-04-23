@@ -5,6 +5,10 @@ import moment from 'moment'
 import router from '../router'
 import auth from './modules/auth'
 
+import { abilityPlugin, ability as appAbility } from './ability'
+import storage from './storage'
+export const ability = appAbility
+
 Vue.use(Vuex)
 if(localStorage.getItem('fqdn_api_url')!= null) {
   axios.defaults.baseURL = 'http://' + localStorage.getItem('fqdn_api_url') + '/api'
@@ -15,6 +19,13 @@ axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getIte
 
 
 export default new Vuex.Store({
+  plugins: [
+    storage({
+        storedKeys: ['rules', 'token'],
+        destroyOn: ['destroySession']
+    }),
+        abilityPlugin
+  ],
   modules: {
     auth
   },
@@ -624,7 +635,6 @@ export default new Vuex.Store({
       })
     },
     retrieveUserToUpdate(context, id) {
-
       axios.get('/userToUpdate/' + id)
       .then(response => {
         context.commit('userDetails', response.data)
@@ -1796,7 +1806,6 @@ export default new Vuex.Store({
       })
     },
     averageEngagementDays(context) {
-      console.log(axios.defaults.headers)
       axios.get('/engagementaverage')
       .then(response => {
         context.commit('averageDays', response.data)

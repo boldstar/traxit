@@ -366,9 +366,9 @@ export default {
       if(fee == '' || fee == null) return;
       const amount =  JSON.parse(fee)
       if(amount < 0) {
-        return 'Tax Owed: $' + (-amount)
+        return 'Tax Refunded: $' + (-amount)
       } else {
-        return 'Tax Refunded: $' + amount
+        return 'Tax Owed: $' + amount
       }
       return;
     },

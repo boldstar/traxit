@@ -96,7 +96,7 @@
         <label for="fee">Preparation Fee</label>
         <currency-input id="fee" :placeholder="'Enter amount'"  v-model="engagement.fee" mask-type="currency" class="mb-2"></currency-input>
 
-        <label for="balance">Balance</label>
+        <label for="balance">Balance | (Refund < 0 || Owed > 0)</label>
         <div class="input-group mb-3" >
         <input id="balance"  v-model="engagement.balance" :class="{'border-danger': balance}" class="form-control" placeholder="Enter Amount" type="text" />
         </div>

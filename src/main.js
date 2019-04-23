@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
-import store from './store';
+import store from './store/store';
 import VeeValidate from 'vee-validate';
 import moment from 'moment';
 import VueCharts from 'vue-chartjs';
@@ -14,7 +14,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import { Button } from 'bootstrap-vue/es/components';
 import { abilitiesPlugin } from '@casl/vue';
-import { ability } from './ability';
+import { ability } from './store/ability';
 global.jQuery = jQuery;
 global.Popper = Popper;
 

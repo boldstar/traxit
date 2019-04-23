@@ -1,12 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import moment from 'moment';
-import { abilityPlugin, ability as appAbility } from './ability'
-import storage from './storage'
-import router from './router'
+import moment from 'moment'
+import router from '../router'
+import auth from './modules/auth'
 
-export const ability = appAbility
 Vue.use(Vuex)
 if(localStorage.getItem('fqdn_api_url')!= null) {
   axios.defaults.baseURL = 'http://' + localStorage.getItem('fqdn_api_url') + '/api'
@@ -17,15 +15,10 @@ axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getIte
 
 
 export default new Vuex.Store({
-  plugins: [
-    storage({
-      storedKeys: ['rules', 'token'],
-      destroyOn: ['destroySession']
-    }),
-    abilityPlugin
-  ],
+  modules: {
+    auth
+  },
   state: {
-    rules: '',
     client: [],
     clients: [],
     engagements: [],
@@ -54,7 +47,6 @@ export default new Vuex.Store({
     account: '',
     processing: false,
     loading: false,
-    token: localStorage.getItem('access_token') || null,
     sidebarOpen: true,
     alert: '',
     successAlert: '',
@@ -100,9 +92,6 @@ export default new Vuex.Store({
     },
     user(state) {
       return state.user
-    },
-    loggedIn(state) {
-      return state.token != null || undefined;
     },
     resetToken(state) {
       return state.resetToken
@@ -294,13 +283,6 @@ export default new Vuex.Store({
     },
     stopProcessing(state) {
       state.processing = false
-    },
-    createSession(state, session) {
-      state.rules = session[0]
-      state.token = session.access_token
-    },
-    destroySession(state) {
-      state.rules = ''
     },
     retrieveTasks(state, tasks) {
       state.tasks = tasks
@@ -494,10 +476,6 @@ export default new Vuex.Store({
         'note': note.note,           
       })
     },
-    destroyToken(state) {
-      state.token = null
-      state.expiresIn = null
-    },
     retrieveWorkflows(state, workflows) {
       state.workflows = workflows
     },
@@ -636,7 +614,6 @@ export default new Vuex.Store({
       commit('toggleSidebar')
     },
     retrieveUser(context) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
       axios.get('/userProfile')
       .then(response => {
@@ -647,7 +624,6 @@ export default new Vuex.Store({
       })
     },
     retrieveUserToUpdate(context, id) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
       axios.get('/userToUpdate/' + id)
       .then(response => {
@@ -749,72 +725,7 @@ export default new Vuex.Store({
         context.commit('resetError', error.response.data)
       })
     },
-    destroyToken(context) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-
-      if (context.getters.loggedIn) {
-        return new Promise((resolve, reject) => {
-          axios.post('/logout')
-          .then(response => {
-            
-            localStorage.removeItem('access_token')
-            localStorage.removeItem('expires_on')
-            localStorage.removeItem('role')
-            context.commit('destroyToken')
-            context.commit('destroySession')
-            router.push('/login')
-            resolve(response)
-          })
-          .catch(error => {
-            localStorage.removeItem('access_token')
-            localStorage.removeItem('expires_on')
-            localStorage.removeItem('role')
-            context.commit('destroyToken')
-            router.push('/login')
-            reject(error)
-          })
-        })
-      }
-    },
-    retrieveToken({ commit }, credentials) {
-
-      return new Promise((resolve, reject) => {
-          axios.post('/login', {
-              username: credentials.username,
-              password: credentials.password,
-              fqdn: localStorage.getItem('fqdn_api_url')
-          })
-          .then(response => {
-            commit('clearAlert')
-            commit('clearAccountDetails')
-            const token = response.data.rules.access_token
-            const fqdn = response.data.fqdn
-            const role = response.data.role[0][0].name
-            if(token != null || token != undefined && fqdn != null || fqdn != undefined) {
-              localStorage.removeItem('fqdn_api_url')
-              const date = new Date(moment().add(1, 'day').toDate());
-              localStorage.setItem('fqdn_api_url', fqdn)
-              localStorage.setItem('expires_on', date);
-              localStorage.setItem('role', role)
-              axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-              axios.defaults.baseURL = 'http://' + response.data.fqdn + '/api'
-              setTimeout(() => {
-                commit('createSession', response.data.rules);
-                localStorage.setItem('access_token', token);
-                router.push('/')
-              }, 2000)
-              }
-              resolve(response)
-          })
-          .catch(error => {
-              console.log(error.response.data)
-              commit('errorAlert', error.response.data)
-              reject(error)
-          })
-      })
-    },
     retrieveTasks(context) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
       axios.get('/tasks')
       .then(response => {
@@ -1078,7 +989,7 @@ export default new Vuex.Store({
       })
     },
     addEngagement(context, engagement) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
       axios.post(('/engagements'), {
         category: engagement.category,
         client_id: engagement.client_id,
@@ -1105,7 +1016,7 @@ export default new Vuex.Store({
       })
     },
     updateEngagement(context, engagement) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
       context.commit('startProcessing')
 
       axios.patch('/engagements/' + engagement.id, {
@@ -1138,7 +1049,7 @@ export default new Vuex.Store({
       })           
     },
     updateCheckedEngagements(context, checkedEngagements) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
 
       axios.patch('/engagementsarray', {
         engagements: checkedEngagements.engagements,
@@ -1170,7 +1081,6 @@ export default new Vuex.Store({
       })
     },
     deleteEngagement(context, id) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
       axios.delete('/engagements/' + id)
       .then(() => {
@@ -1305,7 +1215,6 @@ export default new Vuex.Store({
       if(question.email_sent) {
         context.commit('startProcessing')
       }
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
       axios.post(('/questions'), {
         engagement_id: question.engagement_id,
@@ -1328,7 +1237,6 @@ export default new Vuex.Store({
     },
     sendEmail(context, id) {
       context.commit('startProcessing')
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
       axios.post(('/questionsEmail'), {
         id: id
@@ -1888,6 +1796,7 @@ export default new Vuex.Store({
       })
     },
     averageEngagementDays(context) {
+      console.log(axios.defaults.headers)
       axios.get('/engagementaverage')
       .then(response => {
         context.commit('averageDays', response.data)

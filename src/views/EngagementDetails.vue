@@ -363,7 +363,7 @@ export default {
       }
     },
     modifyAmount(fee) {
-      const amount =  JSON.parse(this.engagement.balance)
+      const amount =  JSON.parse(fee)
       if(amount < 0) {
         return 'Tax Owed: $' + (-amount)
       } else {

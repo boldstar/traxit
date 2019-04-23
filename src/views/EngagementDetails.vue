@@ -363,6 +363,7 @@ export default {
       }
     },
     modifyAmount(fee) {
+      if(fee == '' || fee == null) return;
       const amount =  JSON.parse(fee)
       if(amount < 0) {
         return 'Tax Owed: $' + (-amount)

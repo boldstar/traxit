@@ -98,7 +98,7 @@
 
         <label for="balance">Balance</label>
         <div class="input-group mb-3" >
-        <currency-input id="balance" :placeholder="'Enter amount'"  v-model="engagement.balance" mask-type="currency" :class="{'border-danger': balance}"></currency-input>
+        <input id="balance"  v-model="engagement.balance" :class="{'border-danger': balance}" class="form-control" placeholder="Enter Amount" type="text" />
         </div>
         </div>
         <small class="text-danger" v-if="balance">Balance must have an amount if "Owed" or "Refunded" is marked</small>

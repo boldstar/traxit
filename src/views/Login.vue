@@ -12,7 +12,7 @@
         <div class="d-flex justify-content-center" v-if="!building">
             <div class="card shadow p-0 col-lg-8">
                 <div class="card-header bg-primary text-light border-primary d-flex justify-content-between py-2">
-                    <span class="font-weight-bold align-self-center logo"><i class="far fa-compass mr-1"></i>TRAXIT</span>
+                    <span class="font-weight-bold align-self-center logo"><img src="../assets/traxit_logo_white_official.png" class="logo"/></span>
                     <h6 class="mt-2" v-if="accountDetails">{{ accountDetails.business_name}}</h6>
                     <h6 class="mt-2" v-else>Login</h6>
                 </div>
@@ -118,15 +118,19 @@ export default {
 
 <style scoped>
 
+    .logo {
+        height: 22px;
+    }
+
     .forgot {
         font-size: 12px;
     }
 
     .lds-ellipsis {
-  display: inline-block;
-  position: relative;
-  width:60px;
-  height: 20px;
+        display: inline-block;
+        position: relative;
+        width:60px;
+        height: 20px;
     }
     .lds-ellipsis div {
     position: absolute;

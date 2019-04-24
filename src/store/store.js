@@ -172,9 +172,6 @@ export default new Vuex.Store({
     statusModal(state) {
       state.statusmodal = !state.statusmodal
     },
-    engagementWorkflow(state, workflow) {
-      state.workflow = workflow
-    },
     averageDays(state, data) {
       state.averagedays = data
     }

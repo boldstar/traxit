@@ -436,5 +436,22 @@ export default {
                 context.commit('errorMsgAlert', error.response.data.message)
             })           
         },
+        uploadContacts(context, file) {
+            context.commit('startProcessing')
+            let formData = new FormData();
+            formData.append('file', file)
+            axios.post('/importclients', formData, { headers: {
+              'Content-Type': 'multipart/form-data'
+            }})
+            .then(response => {
+              context.commit('successAlert', response.data )
+              context.commit('stopProcessing')
+            })
+            .catch(error => {
+              console.log(error)
+              context.commit('stopProcessing')
+              context.commit('errorMsgAlert', error.response.data.message)
+            })
+        },
     }
 }

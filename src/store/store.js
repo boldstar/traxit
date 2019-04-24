@@ -8,6 +8,8 @@ import engagements from './modules/engagements'
 import contact from './modules/contact'
 import tasks from './modules/tasks'
 import workflows from './modules/workflows'
+import users from './modules/users'
+import passwords from './modules/passwords'
 
 import { abilityPlugin, ability as appAbility } from './ability'
 import storage from './storage'
@@ -35,11 +37,11 @@ export default new Vuex.Store({
     engagements,
     contact,
     tasks,
-    workflows
+    workflows,
+    users,
+    passwords
   },
   state: {
-    users: [],
-    user: '',
     result: '',
     resetToken: '',
     returntypes: '',
@@ -50,9 +52,6 @@ export default new Vuex.Store({
     alert: '',
     successAlert: '',
     errorAlert: '',
-    resetError:'',
-    resetSuccess: '',
-    passwordAlert: '',
     chartData: '',
     subscribe: null,
     invoices: '',
@@ -81,17 +80,11 @@ export default new Vuex.Store({
     mobileLinks(state) {
       return state.links
     },
-    user(state) {
-      return state.user
-    },
     resetToken(state) {
       return state.resetToken
     },
     processing(state) {
       return state.processing
-    },
-    users(state) {
-      return state.users;
     },
     returnTypes(state) {
       return state.returntypes
@@ -107,15 +100,6 @@ export default new Vuex.Store({
     },
     errorMsgAlert(state) {
       return state.errorAlert
-    },
-    resetSuccess(state) {
-      return state.resetSuccess
-    },
-    resetError(state) {
-      return state.resetError
-    },
-    passwordAlert(state) {
-      return state.passwordAlert
     },
     loading(state) {
       return state.loading
@@ -207,20 +191,6 @@ export default new Vuex.Store({
     notifyClientMessage(state, status) {
       state.status = status
     },
-    addUser(state, user) {
-      state.users.push(user)
-    },
-    updateUser(state, user) {
-      const index = state.users.findIndex(item => item.id == user.id);
-      state.users.splice(index, 1, user);
-    },
-    deleteUser(state, id) {
-      const index = state.users.findIndex(user => user.id == id)
-      state.users.splice(index, 1)
-    },
-    retrieveUsers(state, users) {
-      state.users = users
-    },
     searchDatabase(state, keyword) {
       state.result = keyword;
     },
@@ -240,27 +210,11 @@ export default new Vuex.Store({
       state.successAlert = ''
       state.errorAlert = ''
     },
-    userDetails(state, user) {
-      state.user = user[0]
-    },
     notifyEmailSent(state, alert) {
       state.emailAlert = alert
     },
-    resetSuccess(state, alert) {
-      state.resetSuccess = alert
-    },
-    resetError(state, error) {
-      state.resetError = error
-    },
-    passwordAlert(state, alert) {
-      state.passwordAlert = alert
-      state.loading = false
-    },
     loading(state) {
       state.loading = !state.loading
-    },
-    clearResetToken(state) {
-      state.resetToken = ''
     },
     subscribeView(state, data) {
       state.subscribe = data
@@ -303,117 +257,6 @@ export default new Vuex.Store({
     toggleSidebar({commit}) {
       commit('toggleSidebar')
     },
-    retrieveUser(context) {
-
-      axios.get('/userProfile')
-      .then(response => {
-        context.commit('userDetails', response.data)
-      })
-      .catch(error => {
-        console.log(error.response.data)
-      })
-    },
-    retrieveUserToUpdate(context, id) {
-      axios.get('/userToUpdate/' + id)
-      .then(response => {
-        context.commit('userDetails', response.data)
-      })
-      .catch(error => {
-        console.log(error.response.data)
-      })
-    },
-    updateUser(context, data) {
-      axios.patch('/users/' +data.id, {
-        name: data.name,
-        email: data.email,
-        role: data.role
-      })
-      .then(response => {
-        context.commit('updateUser', response.data)
-      })
-      .catch(error => {
-        console.log(error.response.data)
-      })
-    },
-    addUser(context, data) {
-        axios.post('/register', {
-          name: data.name,
-          email: data.email,
-          password: data.password,
-          role: data.role
-        })
-        .then(response => {
-          context.commit('addUser', response.data)
-        })
-        .catch(error => {
-          console.log(error.response.data)
-        })
-    },
-    deleteUser(context, user) {
-      axios.delete('/users/'+ user.id)
-      .then(response => {
-        context.commit('successAlert', response.data)
-        context.commit('deleteUser', user.id)
-      })
-      .catch(error => {
-        context.commit('successAlert', error.response.data)
-        console.log(error.response.data)
-      })
-    },
-    requestReset(context, email) {
-      context.commit('startProcessing')
-      axios.post('/password/create', {
-        email: email
-      })
-      .then(response => {
-        context.commit('stopProcessing')
-        context.commit('passwordAlert', response.data)
-      })
-      .catch(error => {
-        context.commit('stopProcessing')
-        console.log(error.response.data)
-      })
-    },
-    forgotReset(context, email) {
-      context.commit('loading')
-      axios.post('/password/create', {
-        email: email.email
-      })
-      .then(response => {
-        context.commit('passwordAlert', response.data)
-      })
-      .catch(error => {
-        console.log(error.response.data)
-        context.commit('passwordAlert', error.response.data)
-      })
-    },
-    retrieveResetToken(context, token) {
-      axios.get('/password/find/' + token)
-      .then(response => {
-        context.commit('resetToken', response.data)
-      })
-      .catch(error => {
-        console.log(error.response.data)
-      })
-    },
-    updatePassword(context, data) {
-      context.commit('clearAlert')
-      context.commit('loading')
-      axios.post('/password/reset', {
-        email: data.email,
-        password: data.password,
-        password_confirmation: data.password_confirmation,
-        token: data.token
-      })
-      .then(response => {
-        context.commit('resetSuccess', response.data)
-        context.commit('loading')
-      })
-      .catch(error => {
-        context.commit('loading')
-        context.commit('resetError', error.response.data)
-      })
-    },
     notifyClient(context, task) {
       context.commit('startProcessing')
       axios.post('/notify-client', {
@@ -428,15 +271,6 @@ export default new Vuex.Store({
       .catch(error => {
         context.commit('stopProcessing')
         console.log(error.response.data)
-      })
-    },
-    retrieveUsers(context) {
-      axios.get('/users')
-      .then(response => {
-        context.commit('retrieveUsers', response.data)
-      })
-      .catch(error => {
-        console.log(error)
       })
     },
     sendEmail(context, id) {
@@ -495,23 +329,6 @@ export default new Vuex.Store({
       })
       .catch(error => {
         console.log(error.response.data)
-      })
-    },
-    uploadContacts(context, file) {
-      context.commit('startProcessing')
-      let formData = new FormData();
-      formData.append('file', file)
-      axios.post('/importclients', formData, { headers: {
-        'Content-Type': 'multipart/form-data'
-      }})
-      .then(response => {
-        context.commit('successAlert', response.data )
-        context.commit('stopProcessing')
-      })
-      .catch(error => {
-        console.log(error)
-        context.commit('stopProcessing')
-        context.commit('errorMsgAlert', error.response.data.message)
       })
     },
     getReturnTypes(context) {

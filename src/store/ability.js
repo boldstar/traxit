@@ -4,7 +4,6 @@ export const ability = new Ability();
 
 export const abilityPlugin = (store) => {
     ability.update(store.state.rules)
-    
     const rules = store.subscribe((mutation) => {
         switch (mutation.type) {
             case 'createSession':
@@ -14,6 +13,6 @@ export const abilityPlugin = (store) => {
             ability.update([{ actions: '', subject: '' }])
             break
         }
-      })
-      return rules
-  };
+    })
+    return rules
+}

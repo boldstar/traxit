@@ -7,6 +7,7 @@ export default {
         resetError:'',
         resetSuccess: '',
         passwordAlert: '',
+        resetToken: '',
     },
     getters: {
         resetSuccess(state) {
@@ -17,6 +18,9 @@ export default {
         },
         passwordAlert(state) {
             return state.passwordAlert
+        },
+        resetToken(state) {
+            return state.resetToken
         },
     },
     mutations: {
@@ -32,6 +36,9 @@ export default {
         },
         clearResetToken(state) {
             state.resetToken = ''
+        },
+        resetToken(state, token) {
+            state.resetToken = token
         },
     },
     actions: {

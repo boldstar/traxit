@@ -10,6 +10,10 @@ import tasks from './modules/tasks'
 import workflows from './modules/workflows'
 import users from './modules/users'
 import passwords from './modules/passwords'
+import subscription from './modules/subscription'
+import account from './modules/account'
+import emails from './modules/emails'
+import search from './modules/search'
 
 import { abilityPlugin, ability as appAbility } from './ability'
 import storage from './storage'
@@ -39,13 +43,14 @@ export default new Vuex.Store({
     tasks,
     workflows,
     users,
-    passwords
+    passwords,
+    subscription,
+    account,
+    emails,
+    search
   },
   state: {
-    result: '',
-    resetToken: '',
     returntypes: '',
-    account: '',
     processing: false,
     loading: false,
     sidebarOpen: true,
@@ -53,17 +58,9 @@ export default new Vuex.Store({
     successAlert: '',
     errorAlert: '',
     chartData: '',
-    subscribe: null,
-    invoices: '',
-    plan: '',
-    plans: '',
-    subscription: '',
-    grace: null,
-    stripekey: null,
     notify: false,
     tasknotify: '',
     statusesnotupdated: '',
-    templates: '',
     statusmodal: false,
     status: '',
     role: localStorage.getItem('role'),
@@ -80,17 +77,11 @@ export default new Vuex.Store({
     mobileLinks(state) {
       return state.links
     },
-    resetToken(state) {
-      return state.resetToken
-    },
     processing(state) {
       return state.processing
     },
     returnTypes(state) {
       return state.returntypes
-    },
-    searchResults(state) {
-      return state.result
     },
     errorAlert(state) {
       return state.resetError
@@ -104,29 +95,8 @@ export default new Vuex.Store({
     loading(state) {
       return state.loading
     },
-    accountDetails(state) {
-      return state.account
-    },
     subscribeView(state) {
       return state.subscribe
-    },
-    invoices(state) {
-      return state.invoices
-    },
-    plan(state) {
-      return state.plan
-    },
-    plans(state) {
-      return state.plans
-    },
-    subscription(state) {
-      return state.subscription
-    },
-    grace(state) {
-      return state.grace
-    },
-    stripekey(state) {
-      return state.stripekey
     },
     notify(state) {
       return state.notify
@@ -136,9 +106,6 @@ export default new Vuex.Store({
     },
     statusesNotUpdated(state) {
       return state.statusesnotupdated
-    },
-    templates(state) {
-      return state.templates
     },
     statusModal(state) {
       return state.statusmodal
@@ -160,15 +127,6 @@ export default new Vuex.Store({
     mobileLinks(state) {
       state.links = !state.links
     },
-    accountDetails(state, account) {
-      state.account = account[0]
-    },
-    addAccountDetails(state, account) {
-      state.account = account
-    },
-    updateAccountDetails(state, account) {
-      state.account = account
-    },
     returnTypes(state, returns) {
       state.returntypes = returns
     },
@@ -177,9 +135,6 @@ export default new Vuex.Store({
     },
     archivingEngagement(state) {
       state.archiving = !state.archiving
-    },
-    resetToken(state, token) {
-      state.resetToken = token
     },
     stopProcessing(state) {
       state.processing = false
@@ -190,9 +145,6 @@ export default new Vuex.Store({
     },
     notifyClientMessage(state, status) {
       state.status = status
-    },
-    searchDatabase(state, keyword) {
-      state.result = keyword;
     },
     errorAlert(state, alert) {
       state.errorAlert = alert
@@ -219,29 +171,8 @@ export default new Vuex.Store({
     subscribeView(state, data) {
       state.subscribe = data
     },
-    subscriptionInvoices(state, data) {
-      state.invoices = data
-    },
-    subscriptionPlan(state, data) {
-      state.plan = data
-    },
-    subscriptionPlans(state, data) {
-      state.plans = data
-    },
-    subscriptionSub(state, data) {
-      state.subscription = data
-    },
-    gracePeriod(state, data) {
-      state.grace = data
-    },
-    stripeKey(state, data) {
-      state.stripekey = data
-    },
     clearAccountDetails(state) {
       state.account = ''
-    },
-    emailTemplates(state, templates) {
-      state.templates = templates
     },
     statusModal(state) {
       state.statusmodal = !state.statusmodal
@@ -290,19 +221,6 @@ export default new Vuex.Store({
         context.commit('stopProcessing')
       })
     },
-    searchDatabase(context, data) {
-      context.commit('startProcessing')
-      axios.post('/search', {
-        keyword: data.keyword,
-        category: data.category
-      }).then(response => {
-        context.commit('searchDatabase', response.data)
-        context.commit('stopProcessing')
-      }).catch(error => {
-        context.commit('stopProcessing')
-        console.log(error)
-      })
-    },
     downloadEngagements(context) {
       axios.get('/downloadengagements', {responseType: 'blob'})
       .then(response => {
@@ -340,55 +258,6 @@ export default new Vuex.Store({
         console.log(error)
       })
     },
-    getAccountDetails(context) {
-      axios.get('/account')
-      .then(response => {
-        if(typeof(response.data) === 'object') {
-          context.commit('accountDetails', response.data)
-        } else {
-          context.commit('subscribeView', response.data)
-        }
-      })
-      .catch(error => {
-        console.log(error.response.data)
-      })
-    },
-    addAccountDetails(context, account) {
-      axios.post('/account', {
-        business_name: account.business_name,
-        email: account.email,
-        phone_number: account.phone_number,
-        fax_number: account.fax_number,
-        address: account.address,
-        city: account.city,
-        state: account.state,
-        postal_code: account.postal_code,
-      })
-      .then(response => {
-        context.commit('addAccountDetails', response.data)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    },
-    updateAccountDetails(context, account) {
-      axios.patch('/account/' +account.id, {
-        business_name: account.business_name,
-        email: account.email,
-        phone_number: account.phone_number,
-        fax_number: account.fax_number,
-        address: account.address,
-        city: account.city,
-        state: account.state,
-        postal_code: account.postal_code,
-      })
-      .then(response => {
-        context.commit('updateAccountDetails', response.data)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    },
     requestReport(context, data) {
       context.commit('startProcessing')
       axios.post('/reports', {
@@ -416,139 +285,6 @@ export default new Vuex.Store({
       })
       .catch(error => {
         context.commit('stopProcessing')
-        console.log(error.response.data)
-      })
-    },
-    uploadLogo(context, file) {
-      context.commit('startProcessing')
-      let formData = new FormData();
-      formData.append('file', file)
-      axios.post('/uploadLogo', formData, { headers: {
-        'Content-Type': 'multipart/form-data'
-      }})
-      .then(res => {
-        context.commit('stopProcessing')
-        context.commit('addAccountDetails', res.data)
-      })
-      .catch(err => {
-        context.commit('stopProcessing')
-        console.log(err.response.data)
-      })
-    },
-    getInvoices(context) {
-      axios.get('/subscription')
-      .then(response => {
-        context.commit('subscriptionInvoices', response.data)
-      })
-      .catch(error => {
-        console.log(error.response.data)
-      })
-    },
-    getPlans(context) {
-      axios.get('/plans')
-      .then(response => {
-        context.commit('subscriptionPlan', response.data.plan);
-        context.commit('subscriptionPlans', response.data.plans);
-        context.commit('subscriptionSub', response.data.subscription);
-      })
-      .catch(error => {
-        console.log(error.response.data)
-      })
-    },
-    swapPlan(context, plan) {
-      context.commit('startProcessing')
-      axios.post('/upgrade-subscription', {
-        product: plan.product
-      })
-      .then(response => {
-        context.commit('stopProcessing')
-        router.push('/administrator/subscription')
-        context.commit('successAlert', response.data.message)
-      })
-      .catch(error => {
-        context.commit('stopProcessing')
-        console.log(error.response.data)
-      })
-    },
-    cancelSubscription(context) {
-      axios.post('/cancel-subscription')
-      .then(response => {
-        context.commit('subscribeView', response.data)
-      })
-      .catch(error => {
-        console.log(error.response.data)
-      })
-    },
-    resumeSubscription(context) {
-      context.commit('startProcessing')
-      axios.post('/resume-subscription')
-      .then(response=> {
-        context.commit('stopProcessing')
-        context.commit('successAlert', response.data.message)
-        context.commit('subscriptionSub', response.data.subscription)
-      })
-      .catch(error => {
-        context.commit('stopProcessing')
-        console.log(error.response.data)
-      })
-    },
-    checkGracePeriod(context) {
-      axios.get('/grace')
-      .then(response => {
-        if(response.data != false) {
-          context.commit('gracePeriod', response.data)
-        }
-      })
-      .catch(error => {
-        console.log(error.response.data)
-      })
-    },
-    updateCard(context, card) {
-      context.commit('startProcessing')
-      axios.post('/update-card', {
-        name: card.name_on_card,
-        stripeToken: card.stripeToken
-      })
-      .then(response => {
-        context.commit('stopProcessing')
-        router.push('/administrator/subscription')
-        context.commit('successAlert', response.data.message)
-      })
-      .catch(error => {
-        context.commit('stopProcessing')
-        console.log(error.response.data)
-      })
-    },
-    getStripeKey(context) {
-      axios.get('/stripe-key')
-      .then(response => {
-        context.commit('stripeKey', response.data)
-      })
-      .catch(error => {
-        console.log(error.response.data)
-      })
-    },
-    getTemplates(context) {
-      axios.get('/templates')
-      .then(response => {
-        context.commit('emailTemplates', response.data)
-      })
-      .catch(error => {
-        console.log(error.response.data)
-      })
-    },
-    sendTestMail(context, id) {
-      context.commit('startProcessing')
-      axios.post('/send-test-mail', {
-        id: id
-      })
-      .then(response => {
-        context.commit('stopProcessing')
-        context.commit('successAlert', response.data)
-      })
-      .catch(error => {
-        context.commit('stopProcessing')
-        context.commit('successAlert', error.response.data)
         console.log(error.response.data)
       })
     },

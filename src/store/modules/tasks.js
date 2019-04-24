@@ -39,36 +39,42 @@ export default {
             })
         },
         updateTask(context, task) {
+            context.commit('startProcessing')
             axios.patch('/tasks/' + task.id, {
-              user_id: task.user_id,
-              status: task.status,
-              done: task.done
+                user_id: task.user_id,
+                status: task.status,
+                done: task.done
             })
             .then(response => {
-              if(response.data.notify) {
+                if(response.data.notify) {
                 context.commit('notifyClientModal', response.data.task)
                 context.commit('notifyClientMessage', response.data.status)
-              }
+                context.commit('stopProcessing')
+            }
                 context.commit('updateTask', response.data.task)
                 context.commit('successAlert', response.data.message)
+                context.commit('stopProcessing')
             })
             .catch(error => {
                 console.log(error.response.data)
             })           
         },
         batchUpdateTasks(context, tasks) {
+            context.commit('startProcessing')
             axios.patch('/batchUpdateTasks', {
-              tasksToUpdate: tasks.tasksToUpdate,
-              user_id: tasks.user_id,
-              status: tasks.status
+                tasksToUpdate: tasks.tasksToUpdate,
+                user_id: tasks.user_id,
+                status: tasks.status
             })
             .then(response => {
-              context.commit('successAlert', response.data.message)
-              context.commit('batchUpdateTasks', response.data.tasks)
+                context.commit('successAlert', response.data.message)
+                context.commit('batchUpdateTasks', response.data.tasks)
+                context.commit('stopProcessing')
             })
             .catch(err => {
-              console.log(err)
-              context.commit('errorMsgAlert', err.response.data.message)
+                console.log(err)
+                context.commit('errorMsgAlert', err.response.data.message)
+                context.commit('stopProcessing')
             })
         },
     }

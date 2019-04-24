@@ -63,7 +63,7 @@
             </div>
             <div class="card-body">
                 <div class="mt-2">
-                  <div class="progress">
+                  <div class="progress" v-if="workflow != ''">
                     <div class="progress-bar progress-bar-striped" :class="{'progress-bar-animated': currentWidth < 100}" role="progressbar" :aria-valuenow="`${currentWidth}`" aria-valuemin="0" aria-valuemax="100" :style='`width:${ currentWidth }%;`'></div>
                   </div>
                 </div>

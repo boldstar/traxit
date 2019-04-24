@@ -6,6 +6,7 @@ import router from '../router'
 import auth from './modules/auth'
 import engagements from './modules/engagements'
 import contact from './modules/contact'
+import tasks from './modules/tasks'
 
 import { abilityPlugin, ability as appAbility } from './ability'
 import storage from './storage'
@@ -31,12 +32,11 @@ export default new Vuex.Store({
   modules: {
     auth,
     engagements,
-    contact
+    contact,
+    tasks
   },
   state: {
     users: [],
-    tasks: [],
-    task: [],
     workflows: [],
     workflow: [],
     user: '',
@@ -92,9 +92,6 @@ export default new Vuex.Store({
     },
     users(state) {
       return state.users;
-    },
-    tasks(state) {
-      return state.tasks;
     },
     returnTypes(state) {
       return state.returntypes
@@ -208,19 +205,6 @@ export default new Vuex.Store({
     },
     stopProcessing(state) {
       state.processing = false
-    },
-    retrieveTasks(state, tasks) {
-      state.tasks = tasks
-    },
-    updateTask(state, task) {
-      const index = state.tasks.findIndex(item => item.id == task.id);
-      state.tasks.splice(index, 1);
-    },
-    batchUpdateTasks(state, checkedTasks) {
-      checkedTasks.forEach((id) => {
-        const index = state.tasks.findIndex(e => e.id === id);
-        state.tasks.splice(index, 1)
-      })
     },
     notifyClientModal(state, task) {
       state.notify = !state.notify
@@ -466,34 +450,6 @@ export default new Vuex.Store({
         context.commit('resetError', error.response.data)
       })
     },
-    retrieveTasks(context) {
-
-      axios.get('/tasks')
-      .then(response => {
-        context.commit('retrieveTasks', response.data)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    },
-    updateTask(context, task) {
-      axios.patch('/tasks/' + task.id, {
-        user_id: task.user_id,
-        status: task.status,
-        done: task.done
-      })
-      .then(response => {
-        if(response.data.notify) {
-          context.commit('notifyClientModal', response.data.task)
-          context.commit('notifyClientMessage', response.data.status)
-        }
-          context.commit('updateTask', response.data.task)
-          context.commit('successAlert', response.data.message)
-      })
-      .catch(error => {
-          console.log(error.response.data)
-      })           
-    },
     notifyClient(context, task) {
       context.commit('startProcessing')
       axios.post('/notify-client', {
@@ -508,21 +464,6 @@ export default new Vuex.Store({
       .catch(error => {
         context.commit('stopProcessing')
         console.log(error.response.data)
-      })
-    },
-    batchUpdateTasks(context, tasks) {
-      axios.patch('/batchUpdateTasks', {
-        tasksToUpdate: tasks.tasksToUpdate,
-        user_id: tasks.user_id,
-        status: tasks.status
-      })
-      .then(response => {
-        context.commit('successAlert', response.data.message)
-        context.commit('batchUpdateTasks', response.data.tasks)
-      })
-      .catch(err => {
-        console.log(err)
-        context.commit('errorMsgAlert', err.response.data.message)
       })
     },
     retrieveUsers(context) {

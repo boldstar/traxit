@@ -8,6 +8,7 @@ import engagements from './modules/engagements'
 import contact from './modules/contact'
 import tasks from './modules/tasks'
 import workflows from './modules/workflows'
+import users from './modules/users'
 
 import { abilityPlugin, ability as appAbility } from './ability'
 import storage from './storage'
@@ -35,11 +36,10 @@ export default new Vuex.Store({
     engagements,
     contact,
     tasks,
-    workflows
+    workflows,
+    users
   },
   state: {
-    users: [],
-    user: '',
     result: '',
     resetToken: '',
     returntypes: '',
@@ -81,17 +81,11 @@ export default new Vuex.Store({
     mobileLinks(state) {
       return state.links
     },
-    user(state) {
-      return state.user
-    },
     resetToken(state) {
       return state.resetToken
     },
     processing(state) {
       return state.processing
-    },
-    users(state) {
-      return state.users;
     },
     returnTypes(state) {
       return state.returntypes
@@ -207,20 +201,6 @@ export default new Vuex.Store({
     notifyClientMessage(state, status) {
       state.status = status
     },
-    addUser(state, user) {
-      state.users.push(user)
-    },
-    updateUser(state, user) {
-      const index = state.users.findIndex(item => item.id == user.id);
-      state.users.splice(index, 1, user);
-    },
-    deleteUser(state, id) {
-      const index = state.users.findIndex(user => user.id == id)
-      state.users.splice(index, 1)
-    },
-    retrieveUsers(state, users) {
-      state.users = users
-    },
     searchDatabase(state, keyword) {
       state.result = keyword;
     },
@@ -239,9 +219,6 @@ export default new Vuex.Store({
       state.resetSuccess = ''
       state.successAlert = ''
       state.errorAlert = ''
-    },
-    userDetails(state, user) {
-      state.user = user[0]
     },
     notifyEmailSent(state, alert) {
       state.emailAlert = alert
@@ -302,63 +279,6 @@ export default new Vuex.Store({
   actions: {
     toggleSidebar({commit}) {
       commit('toggleSidebar')
-    },
-    retrieveUser(context) {
-
-      axios.get('/userProfile')
-      .then(response => {
-        context.commit('userDetails', response.data)
-      })
-      .catch(error => {
-        console.log(error.response.data)
-      })
-    },
-    retrieveUserToUpdate(context, id) {
-      axios.get('/userToUpdate/' + id)
-      .then(response => {
-        context.commit('userDetails', response.data)
-      })
-      .catch(error => {
-        console.log(error.response.data)
-      })
-    },
-    updateUser(context, data) {
-      axios.patch('/users/' +data.id, {
-        name: data.name,
-        email: data.email,
-        role: data.role
-      })
-      .then(response => {
-        context.commit('updateUser', response.data)
-      })
-      .catch(error => {
-        console.log(error.response.data)
-      })
-    },
-    addUser(context, data) {
-        axios.post('/register', {
-          name: data.name,
-          email: data.email,
-          password: data.password,
-          role: data.role
-        })
-        .then(response => {
-          context.commit('addUser', response.data)
-        })
-        .catch(error => {
-          console.log(error.response.data)
-        })
-    },
-    deleteUser(context, user) {
-      axios.delete('/users/'+ user.id)
-      .then(response => {
-        context.commit('successAlert', response.data)
-        context.commit('deleteUser', user.id)
-      })
-      .catch(error => {
-        context.commit('successAlert', error.response.data)
-        console.log(error.response.data)
-      })
     },
     requestReset(context, email) {
       context.commit('startProcessing')
@@ -428,15 +348,6 @@ export default new Vuex.Store({
       .catch(error => {
         context.commit('stopProcessing')
         console.log(error.response.data)
-      })
-    },
-    retrieveUsers(context) {
-      axios.get('/users')
-      .then(response => {
-        context.commit('retrieveUsers', response.data)
-      })
-      .catch(error => {
-        console.log(error)
       })
     },
     sendEmail(context, id) {

@@ -9,12 +9,15 @@ export default (options) => (store) => {
       if (options.destroyOn && options.destroyOn.indexOf(mutation.type) !== -1) {
         return localStorage.removeItem('state')
       }
+
+      if(localStorage.getItem('rules') == null) {
+        const newState = options.storedKeys.reduce((map, key) => {
+          map[key] = state.auth[key]
+          return map
+        }, {})
+        localStorage.state = JSON.stringify(newState)
+      } 
       
-      const newState = options.storedKeys.reduce((map, key) => {
-        map[key] = state.auth[key]
-        return map
-      }, {})
-  
-      localStorage.state = JSON.stringify(newState)
+      return
     })
   }

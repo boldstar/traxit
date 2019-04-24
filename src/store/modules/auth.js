@@ -57,6 +57,7 @@ export default {
                   localStorage.removeItem('access_token')
                   localStorage.removeItem('expires_on')
                   localStorage.removeItem('role')
+                  localStorage.removeItem('rules')
                   context.commit('destroyToken')
                   context.commit('destroySession')
                   router.push('/login')
@@ -66,6 +67,7 @@ export default {
                   localStorage.removeItem('access_token')
                   localStorage.removeItem('expires_on')
                   localStorage.removeItem('role')
+                  localStorage.removeItem('rules')
                   context.commit('destroyToken')
                   router.push('/login')
                   reject(error)
@@ -97,6 +99,7 @@ export default {
                     axios.defaults.baseURL = 'http://' + response.data.fqdn + '/api'
                     setTimeout(() => {
                       commit('createSession', response.data.rules);
+                      localStorage.setItem('rules', JSON.stringify(response.data.rules[0]))
                       localStorage.setItem('access_token', token);
                       router.push('/')
                     }, 2000)

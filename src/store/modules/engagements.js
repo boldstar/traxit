@@ -299,17 +299,21 @@ export default {
             })           
         },
         updateCheckedEngagements(context, checkedEngagements) {
+            context.commit('startProcessing')
             axios.patch('/engagementsarray', {
                 engagements: checkedEngagements.engagements,
                 assigned_to: checkedEngagements.assigned_to,
                 status: checkedEngagements.status
             })
             .then(response => {
-                context.commit('updateCheckedEngagements', response.data)
+                context.commit('updateCheckedEngagements', response.data.engagements)
+                context.commit('successAlert', response.data.message)
+                context.commit('stopProcessing')
             })
             .catch(error => {
                 console.log(error)
                 context.commit('errorMsgAlert', error.response.data.message)
+                context.commit('stopProcessing')
             })           
         },
         archiveEngagement(context, id) {

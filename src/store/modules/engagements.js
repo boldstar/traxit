@@ -22,6 +22,7 @@ export default {
         completedEngagements: [],
         editNoteModal: false,
         returntypes: '',
+        engagement_workflow: ''
     },
     getters: {
         allEngagements(state) {
@@ -69,6 +70,9 @@ export default {
         returnTypes(state) {
             return state.returntypes
         },
+        engagementWorkflow(state) {
+            return state.engagement_workflow
+        }
     },
     mutations: {
         //this is for all engagements
@@ -164,6 +168,9 @@ export default {
         },
         returnTypes(state, returns) {
             state.returntypes = returns
+        },
+        engagementWorkflow(state, workflow) {
+            state.engagement_workflow = workflow
         },
     },
     actions: {

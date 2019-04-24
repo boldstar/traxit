@@ -63,7 +63,7 @@
             </div>
             <div class="card-body">
                 <div class="mt-2">
-                  <div class="progress" v-if="workflow != ''">
+                  <div class="progress" v-if="engagementWorkflow != ''">
                     <div class="progress-bar progress-bar-striped" :class="{'progress-bar-animated': currentWidth < 100}" role="progressbar" :aria-valuenow="`${currentWidth}`" aria-valuemin="0" aria-valuemax="100" :style='`width:${ currentWidth }%;`'></div>
                   </div>
                 </div>
@@ -286,15 +286,15 @@ export default {
     'b-modal': bModalDirective
   },
   computed: {
-    ...mapGetters(['engagement','question', 'successAlert', 'processing', 'errorMsgAlert', 'workflow','archiving', 'engagementNotes', 'noteModal', 'editNoteModal']),
+    ...mapGetters(['engagement','question', 'successAlert', 'processing', 'errorMsgAlert', 'engagementWorkflow','archiving', 'engagementNotes', 'noteModal', 'editNoteModal']),
     percentage() {
-      const statuses = this.workflow.statuses
+      const statuses = this.engagementWorkflow.statuses
       const percentage = this.calcPercent(statuses.length)
       return percentage
     },
     currentWidth() {
       const status = this.engagement.status
-      const statuses = this.workflow.statuses
+      const statuses = this.engagementWorkflow.statuses
       const index = statuses.findIndex(s => s.status == status)
 
       return (index + 1) * this.percentage

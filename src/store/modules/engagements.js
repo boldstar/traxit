@@ -21,6 +21,7 @@ export default {
         createdEngagements: [],
         completedEngagements: [],
         editNoteModal: false,
+        returntypes: '',
     },
     getters: {
         allEngagements(state) {
@@ -64,6 +65,9 @@ export default {
         },
         createdEngagements(state) {
             return state.createdEngagements
+        },
+        returnTypes(state) {
+            return state.returntypes
         },
     },
     mutations: {
@@ -157,6 +161,9 @@ export default {
         },
         archivingEngagement(state) {
             state.archiving = !state.archiving
+        },
+        returnTypes(state, returns) {
+            state.returntypes = returns
         },
     },
     actions: {
@@ -331,8 +338,8 @@ export default {
             .catch(error => {
               console.log(error)
             })
-          },
-          addQuestion(context, question) {
+        },
+        addQuestion(context, question) {
             if(question.email_sent) {
               context.commit('startProcessing')
             }
@@ -355,8 +362,8 @@ export default {
               context.commit('errorMsgAlert', error.response.data.message)
               context.commit('stopProcessing')
             })
-          },
-          deleteQuestion(context, id) {
+        },
+        deleteQuestion(context, id) {
             axios.delete('/questions/' + id)
             .then(() => {
                 context.commit('deleteQuestion', id)
@@ -364,8 +371,8 @@ export default {
             .catch(error => {
                 console.log(error)
             })                
-          },
-          updateQuestion(context, question) {
+        },
+        updateQuestion(context, question) {
             axios.patch('/questions/' + question.id, {
               engagement_id: question.engagement_id,
               question: question.question,
@@ -378,8 +385,8 @@ export default {
                 console.log(error)
                 context.commit('errorMsgAlert', error.response.data.message)
             })           
-          },
-          updateAnswer(context, question) {
+        },
+        updateAnswer(context, question) {
             axios.patch('/questionsanswer/' + question.id, {
               answer: question.answer,
               answered: question.answered,
@@ -391,8 +398,8 @@ export default {
                 console.log(error)
                 context.commit('errorMsgAlert', error.response.data.message)
             })           
-          },
-          editAnswer(context, question) {
+        },
+        editAnswer(context, question) {
             axios.patch('/editquestionsanswer/' + question.id, {
               answer: question.answer,
               answered: question.answered,
@@ -404,8 +411,8 @@ export default {
                 console.log(error.response.data)
                 context.commit('errorMsgAlert', error.response.data.message)
             })           
-          },
-          addEngagementNote(context, note) {
+        },
+        addEngagementNote(context, note) {
             context.commit('startProcessing')
             axios.post('/add-e-note', {
               engagement_id: note.engagement_id,
@@ -421,8 +428,8 @@ export default {
               context.commit('stopProcessing')
               console.log(error.response.data)
             })
-          },
-          getEngagementNotes(context, id) {
+        },
+        getEngagementNotes(context, id) {
             axios.get('/e-notes/' + id)
             .then(response => {
               context.commit('engagementNotes', response.data)
@@ -430,8 +437,8 @@ export default {
             .catch(error => {
               console.log(error.response.data)
             })
-          },
-          deleteEngagementNote(context, id) {
+        },
+        deleteEngagementNote(context, id) {
             axios.delete('/delete-e-note/' + id)
             .then(response => {
               context.commit('deleteENote', id)
@@ -440,8 +447,8 @@ export default {
             .catch(error => {
               console.log(error.response.data)
             })
-          },
-          editEngagementNote(context, note) {
+        },
+        editEngagementNote(context, note) {
             context.commit('startProcessing')
             axios.patch('/edit-e-note', {
               id: note.id,
@@ -458,8 +465,8 @@ export default {
               context.commit('stopProcessing')
               console.log(error.response.data)
             })
-          },
-          showEngagementNote(context, id) {
+        },
+        showEngagementNote(context, id) {
             axios.get('/show-e-note/' + id)
             .then(response => {
               context.commit('engagementNoteToEdit', response.data)
@@ -467,6 +474,15 @@ export default {
             .catch(error => {
               console.log(error.response.data)
             })
-          },
+        },
+        getReturnTypes(context) {
+            axios.get('/engagementReturnTypes')
+            .then(response => {
+              context.commit('returnTypes', response.data)
+            })
+            .catch(error => {
+              console.log(error)
+            })
+        },
     }
 }

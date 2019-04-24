@@ -14,6 +14,7 @@ import subscription from './modules/subscription'
 import account from './modules/account'
 import emails from './modules/emails'
 import search from './modules/search'
+import downloads from './modules/downloads'
 
 import { abilityPlugin, ability as appAbility } from './ability'
 import storage from './storage'
@@ -47,10 +48,10 @@ export default new Vuex.Store({
     subscription,
     account,
     emails,
-    search
+    search,
+    downloads
   },
   state: {
-    returntypes: '',
     processing: false,
     loading: false,
     sidebarOpen: true,
@@ -79,9 +80,6 @@ export default new Vuex.Store({
     },
     processing(state) {
       return state.processing
-    },
-    returnTypes(state) {
-      return state.returntypes
     },
     errorAlert(state) {
       return state.resetError
@@ -126,9 +124,6 @@ export default new Vuex.Store({
     },
     mobileLinks(state) {
       state.links = !state.links
-    },
-    returnTypes(state, returns) {
-      state.returntypes = returns
     },
     startProcessing(state) {
       state.processing = true
@@ -219,73 +214,6 @@ export default new Vuex.Store({
         console.log(error.response.data)
         context.commit('errorMsgAlert', error.response.data.message)
         context.commit('stopProcessing')
-      })
-    },
-    downloadEngagements(context) {
-      axios.get('/downloadengagements', {responseType: 'blob'})
-      .then(response => {
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'engagements.xlsx');
-        document.body.appendChild(link);
-        link.click();
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    },
-    downloadContacts(context) {
-      axios.get('/downloadclients', {responseType: 'blob'})
-      .then(response => {
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'contacts.xlsx');
-        document.body.appendChild(link);
-        link.click();
-      })
-      .catch(error => {
-        console.log(error.response.data)
-      })
-    },
-    getReturnTypes(context) {
-      axios.get('/engagementReturnTypes')
-      .then(response => {
-        context.commit('returnTypes', response.data)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    },
-    requestReport(context, data) {
-      context.commit('startProcessing')
-      axios.post('/reports', {
-        year: data.year,
-        type: data.type,
-        fromValue: data.fromValue,
-        toValue: data.toValue,
-        workflow_id: data.workflow_id,
-        status: data.status,
-        action: data.action,
-          return_type: data.return_type
-        },
-        {
-          responseType: 'blob'
-        }
-      )
-      .then(response => {
-        context.commit('stopProcessing')
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'engagements_report.xlsx');
-        document.body.appendChild(link);
-        link.click();
-      })
-      .catch(error => {
-        context.commit('stopProcessing')
-        console.log(error.response.data)
       })
     },
     averageEngagementDays(context) {

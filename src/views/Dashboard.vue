@@ -18,7 +18,7 @@
             <div class="d-flex flex-column col-4 profile-card" v-if="!loading && !noData">
                 <div class="card h-100 mb-3">
                     <div class="card-header p-2 text-left">
-                        <span class="h5 mb-0 font-weight-bold align-self-center">{{accountDetails.business_name}}</span>
+                        <span class="h5 mb-0 font-weight-bold align-self-center">{{ businessName }}</span>
                     </div>
                     <div class="card-body px-0 pb-0">
                         <img class="ml-5" v-if="accountDetails.logo" v-bind:src="logo" />
@@ -163,6 +163,9 @@ export default {
     },
     computed: {
         ...mapGetters(['allWorkflows', 'tasks', 'allEngagements', 'accountDetails', 'completedEngagements', 'createdEngagements', 'averageDays']),
+        businessName() {
+            return this.accountDetails.business_name
+        },
         logo() {
             return `data:image/png;base64, ${this.accountDetails.logo}`
         },
@@ -489,7 +492,7 @@ export default {
         this.$store.dispatch('retrieveWorkflows')
         this.$store.dispatch('retrieveEngagements')
         this.$store.dispatch('retrieveTasks')
-        this.$store.dispatch('getAccountDetails')
+        this.$store.dispatch('getAccount')
         this.$store.dispatch('getEngagementsHistory')
         this.$store.dispatch('averageEngagementDays')
         this.loading = true

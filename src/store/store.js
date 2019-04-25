@@ -166,9 +166,6 @@ export default new Vuex.Store({
     subscribeView(state, data) {
       state.subscribe = data
     },
-    clearAccountDetails(state) {
-      state.account = ''
-    },
     statusModal(state) {
       state.statusmodal = !state.statusmodal
     },

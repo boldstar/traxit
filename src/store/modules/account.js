@@ -36,6 +36,15 @@ export default {
               console.log(error.response.data)
             })
         },
+        getAccount(context) {
+          axios.get('/account')
+          .then(response => {
+              context.commit('accountDetails', response.data)
+            })
+            .catch(error => {
+              console.log(error.response.data)
+            })
+        },
         addAccountDetails(context, account) {
             axios.post('/account', {
               business_name: account.business_name,

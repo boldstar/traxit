@@ -41,9 +41,6 @@ export default {
           errorAlert(state, alert) {
             state.errorAlert = alert
           },
-          clearAccountDetails(state) {
-            state.account = ''
-          },
     },
     actions: {
         destroyToken(context) {
@@ -85,7 +82,6 @@ export default {
                 })
                 .then(response => {
                   commit('clearAlert')
-                  commit('clearAccountDetails')
                   const token = response.data.rules.access_token
                   const fqdn = response.data.fqdn
                   const role = response.data.role[0][0].name

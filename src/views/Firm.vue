@@ -11,9 +11,12 @@
           <button class="btn btn-sm btn-outline-primary" @click="refreshList"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
       </div>
 
+      <Alert v-if="successAlert" :message="successAlert" class="my-2" />
+
       <div class="row d-flex justify-content-between card-body shadow col-12 mx-auto mb-3 firm" >
-          <div v-if="noEngagements &&!listLoaded" class="mt-5"><welcome></welcome></div>
-          <spinner v-if="listLoaded" class="mx-auto"></spinner>
+        <processing-bar v-if="processing"></processing-bar>
+        <div v-if="noEngagements &&!listLoaded" class="mt-5"><welcome></welcome></div>
+        <spinner v-if="listLoaded" class="mx-auto"></spinner>
 
         <div class="col-2 col-sm-3 list" v-if="!listLoaded && Object.keys(allEngagements).length">
           <div class="card shadow-sm p-2">
@@ -113,7 +116,7 @@
               </div>
 
               <div class="d-flex align-self-center">
-                <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                <button type="submit" class="btn btn-sm btn-primary" :disabled="checkedEngagements.assigned_to == option || checkedEngagements.status == option || checkedEngagements.engagements.length === 0">Submit</button>
               </div>
             </form>
           
@@ -128,13 +131,15 @@ import { mapGetters, mapActions } from 'vuex'
 import Alert from '@/components/Alert.vue'
 import Welcome from '@/components/Welcome.vue'
 import Spinner from '@/components/Spinner.vue'
+import ProcessingBar from '@/components/ProcessingBar.vue'
 
 export default {
   name: 'FirmView',
   props: ['admin'],
   components: {
     Alert,
-    Spinner
+    Spinner,
+    ProcessingBar
   },
   data() {
     return {
@@ -156,7 +161,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['allEngagements', 'users', 'allWorkflows']),
+    ...mapGetters(['allEngagements', 'users', 'allWorkflows', 'successAlert', 'processing']),
     filteredEngagements () {
       return this.allEngagements.sort((a,b) => {
       let modifier = 1;
@@ -192,7 +197,6 @@ export default {
         assigned_to: this.checkedEngagements.assigned_to,
         status: this.checkedEngagements.status
       }).then(() => {
-        this.alert = 'Engagements Updated'
         this.checkedEngagements.engagements = [];
         this.checkedEngagements.assigned_to = this.option;
         this.checkedEngagements.status = this.option;
@@ -262,6 +266,37 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+.processing {
+  height: 5px;
+  left: 0;
+  width: 100%;
+  position: absolute;
+  background: #0077ff;
+  top: 0;
+
+  .processing-inner {
+    height: 5px;
+    position: absolute;
+    background: white;
+    width: 100px;
+    left: 0;
+    animation: run liner infinate alternate 2s;
+    -webkit-animation: run 2s linear infinite alternate;
+  }
+
+  @-webkit-keyframes run {
+    0% { left: 0;}
+    50%{ left : 100%;}
+    100%{ left: 0;}
+  }
+
+  @keyframes run {
+    0% { left: 0;}
+    50%{ left : 100%;}
+    100%{ left: 0;}
+  }
+}
 
  tr {
    cursor: pointer;

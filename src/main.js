@@ -3,7 +3,6 @@ import App from './App.vue';
 import router from './router';
 import store from './store/store';
 import VeeValidate from 'vee-validate';
-import moment from 'moment';
 import VueCharts from 'vue-chartjs';
 import jQuery from 'jquery';
 import Popper from 'popper.js';
@@ -12,6 +11,7 @@ import VCalendar from 'v-calendar';
 import 'v-calendar/lib/v-calendar.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
+import './plugins/filters.js';
 import { Button } from 'bootstrap-vue/es/components';
 import { abilitiesPlugin } from '@casl/vue';
 import { ability } from './store/store';
@@ -44,18 +44,9 @@ Vue.use(VCalendar, {
   //defaults go here
 });
 
-//this is a filter for dates
-Vue.filter('formatDate', function(created_at) {
-  if(created_at) {
-    return moment(String(created_at)).format('MM/DD/YYYY')
-  }
-});
-
 
 //this is route protection
 router.beforeEach((to, from, next) => {
-
-
   if (to.matched.some(record => record.meta.requiresAuth)) {
     var token = store.getters.loggedIn;
     if (!token || token == null || token == undefined ) {

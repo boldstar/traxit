@@ -23,6 +23,7 @@
 
 <!-- this is the list of the assigned user tasks -->
     <div class="text-left shadow card-body mb-3 tasks">
+    <processing-bar v-if="processing"></processing-bar>
     <div class="d-flex justify-content-center">
       <spinner v-if="tasksLoaded"></spinner>
     </div>
@@ -178,6 +179,7 @@ import { mapGetters, mapActions } from 'vuex'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 import Spinner from '@/components/Spinner.vue'
+import ProcessingBar from '@/components/ProcessingBar.vue'
 
 export default {
   name: 'UserTasks',
@@ -211,7 +213,8 @@ export default {
   },
    components:{
     'b-modal': bModal,
-    Spinner
+    Spinner,
+    ProcessingBar
   },
   directives: {
     'b-modal': bModalDirective
@@ -221,7 +224,8 @@ export default {
       'allWorkflows',
       'tasks',
       'users',
-      'successAlert'
+      'successAlert',
+      'processing'
     ]),
     sortedTasks:function() {
         return this.tasks.sort((a,b) => {
@@ -458,6 +462,7 @@ export default {
   .tasks {
     height: 100%;
     min-height: calc(100vh - 190px);
+    position: relative;
   }
 
   @media screen and (max-width: 1300px) {

@@ -25,7 +25,8 @@ export default {
         ...mapActions(['destroyToken']),
         destroySessionIfTokenIsExpired() {
             const expiresOn = localStorage.getItem('expires_on')
-            const expiresDate = moment(expiresOn).format('YYYYMMDDHHMMSS')
+            const formDate = new Date(expiresOn)
+            const expiresDate = moment(formDate).format('YYYYMMDDHHMMSS')
             if(expiresOn == null) return;
             const current = new Date(moment())
             const currentDate = moment(current).format('YYYYMMDDHHMMSS')

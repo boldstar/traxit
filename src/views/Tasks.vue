@@ -24,10 +24,10 @@
 <!-- this is the list of the assigned user tasks -->
     <div class="text-left shadow card-body mb-3 tasks">
     <processing-bar v-if="processing"></processing-bar>
+    <input v-if="searchInput" class="form-control mb-3" placeholder="Filter Task By Client Name" v-model="searchTasks" type="search">
     <div class="d-flex justify-content-center">
       <spinner v-if="tasksLoaded"></spinner>
     </div>
-     <input v-if="searchInput" class="form-control mb-3" placeholder="Filter Task By Client Name" v-model="searchTasks" type="search">
       <table class="table table-hover text-center" v-if="!tasksLoaded && taskData">
         <thead class="bg-primary text-light">
           <tr>

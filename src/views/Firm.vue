@@ -15,7 +15,7 @@
 
       <div class="row d-flex justify-content-between card-body shadow col-12 mx-auto mb-3 firm" >
         <processing-bar v-if="processing"></processing-bar>
-        <div v-if="noEngagements &&!listLoaded" class="mt-5"><welcome></welcome></div>
+        <welcome v-if="noEngagements &&!listLoaded" class="mx-auto align-self-center"></welcome>
         <spinner v-if="listLoaded" class="mx-auto"></spinner>
 
         <div class="col-2 col-sm-3 list" v-if="!listLoaded && Object.keys(allEngagements).length">
@@ -139,7 +139,8 @@ export default {
   components: {
     Alert,
     Spinner,
-    ProcessingBar
+    ProcessingBar,
+    Welcome
   },
   data() {
     return {

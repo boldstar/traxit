@@ -13,7 +13,7 @@
         <div class="d-flex justify-content-center w-100 shadow mb-3 pt-3 border body dashboard">
 
             <spinner v-if="loading && !noData" class="mx-auto"></spinner>
-            <welcome v-if="noData && !loading" class="mb-5"></welcome>    
+            <welcome v-if="noData && !loading" class="align-self-center"></welcome>    
 
             <div class="d-flex flex-column col-4 profile-card" v-if="!loading && !noData">
                 <div class="card h-100 mb-3">

@@ -33,6 +33,15 @@
             text-align: center!important;
         }
 
+        .bubble-img {
+            background-image: url('../../assets/taskillustration.png');
+            height: 300px;
+            width: 500px;
+            background-position: center;
+            background-size: cover;
+            margin: 0 auto;
+        }
+
         .custom-bubble-guide {
             background: rgb(248, 248, 248);
             padding: 10px;
@@ -45,6 +54,63 @@
                 margin-bottom: 5px;
             }
         }
+
+        .custom-bubble-action {
+            width: 60%;
+            margin: 0 auto!important;
+
+            .callout-btn {
+                width: 93%!important;
+                font-weight: bold;
+            }
+        }
     }
+
+}
+
+@media screen and (max-width: 950px) {
+    .hopscotch-callout {
+        left: 0!important;
+        top: 60px!important;
+        width: 100%!important;
+    }
+}
+
+@media screen and (max-width: 767px) {
+
+    .hopscotch-callout {
+        width: 100%!important;
+        .hopscotch-bubble-container {
+            margin: 0 auto!important;
+            text-align: center;
+            width: 90%!important;
+            padding: 10px 0!important;
+        }
+
+        .hopscotch-title {
+            font-size: 1.25rem!important;
+        }
+
+        .hopscotch-content {
+            .custom-bubble-content-title {
+                font-size: .8rem!important;
+            }
+
+            .bubble-img {
+                width: 300px;
+                height: 200px;
+            }
+
+            
+            .custom-bubble-guide {
+                font-size: .8rem;
+
+                li {
+                    margin-bottom: 5px;
+                }
+            }
+        }
+    }
+
 
 }

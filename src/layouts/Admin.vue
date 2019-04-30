@@ -32,6 +32,7 @@ export default {
     },
   },
   mounted() {
+    // start tour if local storage admin_tour_complete is not set
       if(!localStorage.getItem('admin_tour_complete')) {
         adminSetup.init(adminTour)
       }

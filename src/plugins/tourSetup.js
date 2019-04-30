@@ -27,6 +27,7 @@ module.exports = {
             title: 'Welcome To TRAXIT',
             content: `
                 <h5 class="custom-bubble-content-title">Your Custom Practice Management Workflow Tool</h5>
+                <div class="bubble-img"></div>
                 <div class="custom-bubble-guide">
                     <h5>Here is a quick start guide</h5>
                     <ol>
@@ -35,9 +36,21 @@ module.exports = {
                         <li>Start an engagement, and assign to a team member or yourself</li>
                     </ol>
                 </div>
+                <div class="custom-bubble-action">
+                <button class="btn btn-primary callout-btn">Continue Tour</button>
+                </div>
             `,
             showCloseButton: false,
-            showCTAButton: true
+            showCTAButton: true,
+            onShow: function() {
+                setTimeout(() => {
+                    const button = document.getElementsByClassName("callout-btn")[0]
+                    button.addEventListener('click', function() {
+                        mgr.removeAllCallouts();
+                        hopscotch.startTour(tour);
+                    })
+                }, 3000)
+            }
         });
         }, 100);
 

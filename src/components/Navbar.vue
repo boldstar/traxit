@@ -1,6 +1,6 @@
 <template>
     <nav class="navbar navbar-dark fixed-top bg-primary flex-md-nowrap p-0 shadow-sm">
-        <a class="navbar-brand ml-3 text-left" href="/"><img src="../assets/traxit_logo_white_official.png" class="logo"/></a>
+        <a class="navbar-brand ml-3 text-left" href="/" id="logo"><img src="../assets/traxit_logo_white_official.png" class="logo"/></a>
         <!-- bread crumbs to go here -->
         
         <ul class="navbar-nav mr-3 d-flex flex-row">

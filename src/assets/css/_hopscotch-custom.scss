@@ -1,0 +1,50 @@
+.hopscotch-callout {
+    height: 100%!important;
+    width: 95%!important;
+    left: 215px!important;
+    top: 92px!important;
+    border: none!important;
+    border-radius: none;
+
+    .hopscotch-bubble-container {
+        margin: 0 auto!important;
+        text-align: center;
+        width: 600px!important;
+        margin-top: 20px!important;
+        box-shadow: 0 1px 10px rgba(0,0,0,250);
+        border-radius: 5px;
+        padding: 40px 0!important;
+    }
+
+    .hopscotch-bubble-arrow-container {
+        display: none!important;
+    }
+
+    .hopscotch-title {
+        text-align: center!important;
+        font-size: 3rem!important;
+        width: 100%!important;
+    }
+
+    .hopscotch-content {
+        margin-top: 10px!important;
+
+        .custom-bubble-content-title {
+            text-align: center!important;
+        }
+
+        .custom-bubble-guide {
+            background: rgb(248, 248, 248);
+            padding: 10px;
+            border-radius: 5px;
+            width: 75%;
+            margin: 20px auto;
+            font-size: 1rem;
+
+            li {
+                margin-bottom: 5px;
+            }
+        }
+    }
+
+}

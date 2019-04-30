@@ -13,7 +13,7 @@
     <Alert v-if="processing" v-bind:message="'Downloading Your Report...'" />
 
     <div v-if="$route.name == 'reports'" class="d-flex flex-column justify-content-center align-items-center">
-      <div class="card col-5 p-0">
+      <div class="card col-5 p-0 reports-card">
         <div class="card-header bg-white shadow font-weight-bold mb-2">
           <span>Engagements Report Card</span>
         </div>
@@ -270,10 +270,11 @@ export default {
   }
 }
 
-
-@media screen and (max-width: 950px) {
-  .report-card {
-    max-width: 210px!important;
+@media screen and (max-width: 1300px) {
+  .reports-card {
+    width:100%!important;
+    max-width: 100%!important;
+    flex: 0 0 100%!important;
   }
 }
 
@@ -283,14 +284,16 @@ export default {
     align-items: center!important;
   }
 
-  .report-card {
-    max-width: 90%!important;
-    margin-bottom: 15px;
-  }
-
   .report-title {
     font-size: 1rem!important;
-    align-self: center;
+    align-self: center!important;
+    margin-bottom: 0!important;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .reports-info {
+    font-size: .6rem;
   }
 }
 

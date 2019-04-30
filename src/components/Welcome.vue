@@ -20,6 +20,13 @@ export default {
     background-size: cover;
 }
 
+@media screen and (max-width: 600px) {
+    .image {
+        width: 300px;
+        height: auto;
+    }
+}
+
 </style>
 
 

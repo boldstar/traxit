@@ -10,7 +10,7 @@
             </div>
             <button class="btn btn-sm btn-outline-primary refresh" @click="refresh"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
         </div>
-        <div class="d-flex justify-content-center w-100 shadow mb-3 pt-3 border body dashboard">
+        <div class="d-flex justify-content-center w-100 mb-3 pt-3 body dashboard">
 
             <spinner v-if="loading && !noData" class="mx-auto"></spinner>
             <welcome v-if="noData && !loading" class="align-self-center"></welcome>    
@@ -306,7 +306,8 @@ export default {
         createdDates() {
             const dates = this.createdEngagements.map(e => e.date)
             const formateddates = dates.reduce((acc, date) => {
-                acc.push(moment(date).format('MM/DD/YYYY'))
+                const momentDate = new Date(date)
+                acc.push(moment(momentDate).format('MM/DD/YYYY'))
 
                 return acc
             }, [])
@@ -316,7 +317,8 @@ export default {
         completedDates() {
             const dates = this.completedEngagements.map(e => e.date)
             const formateddates = dates.reduce((acc, date) => {
-                acc.push(moment(date).format('MM/DD/YYYY'))
+                const momentDate = new Date(date)
+                acc.push(moment(momentDate).format('MM/DD/YYYY'))
 
                 return acc
             }, [])
@@ -432,13 +434,14 @@ export default {
         },
         refresh() {
             this.loading = true
+            this.noData = false
             this.$store.dispatch('retrieveWorkflows')
             this.$store.dispatch('retrieveEngagements')
             this.$store.dispatch('retrieveTasks')
             var self = this;
             setTimeout(() => {
                 self.loading = false;
-                if(self.allEngagements == 0){
+                if(self.allEngagements.length == 0){
                     self.noData = true
                 } else {
                     self.noData = false

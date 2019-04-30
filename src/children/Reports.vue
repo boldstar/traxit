@@ -247,9 +247,8 @@ export default {
 
 <style lang="scss" scoped>
 
-.image {
-  width: 95%;
-  max-height: 75vh;
+.reports-card {
+  margin-bottom: 50px;
 }
 
 .report-card {

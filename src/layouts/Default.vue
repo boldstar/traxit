@@ -32,9 +32,6 @@ import Toolbar from '@/components/Toolbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import NotifyModal from '@/components/NotifyModal.vue'
 import MobileLinks from '@/components/MobileLinks.vue'
-import Tour from '../plugins/tourObj.js'
-import setUp from '../plugins/tourSetup.js'
-import hopscotchPlugin from '../plugins/hopscotch.js'
 
 export default {
   components: {
@@ -59,18 +56,10 @@ export default {
     },
     ...mapGetters(['notify', 'mobileLinks'])
   },
-  mounted() {
-    //if tour is not complete and user role is Admin show the tour
-    if(!localStorage.getItem('tour_complete') && localStorage.getItem('role') == 'Admin') {
-      setUp.init(Tour)
-    }
-  },
   created() {
     if(localStorage.getItem('access_token') != null) {
       this.$store.dispatch('checkGracePeriod');
     }
-    //initalize hopscotch tour by creating script
-    hopscotchPlugin.init()
   }
 }
 </script>

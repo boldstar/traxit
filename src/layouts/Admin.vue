@@ -19,8 +19,6 @@
 
 <script>
 import Navbar from '@/components/Navbar.vue'
-import adminTour from '../plugins/adminTourObj.js'
-import adminSetup from '../plugins/adminTourSetup.js'
 
 export default {
   components: {
@@ -31,15 +29,6 @@ export default {
       return this.$store.getters.loggedIn
     },
   },
-  mounted() {
-    // start tour if local storage admin_tour_complete is not set
-      if(!localStorage.getItem('admin_tour_complete')) {
-        adminSetup.init(adminTour)
-      }
-  },
-  created() {
-    hopscotch.endTour(true)
-  }
 }
 </script>
 

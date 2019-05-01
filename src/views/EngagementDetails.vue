@@ -364,7 +364,7 @@ export default {
     },
     modifyAmount(fee) {
       if(fee == '' || fee == null) return;
-      const amount =  JSON.parse(fee)
+      const amount =  parseFloat(fee.replace(/,/g, ''));
       if(amount < 0) {
         return 'Tax Refunded: $' + (-amount)
       } else {

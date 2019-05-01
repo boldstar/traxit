@@ -101,6 +101,7 @@ export default {
 <style lang="scss" scoped>
     .navbar-nav .dropdown-menu {
         position: absolute;
+        z-index: 1000;
     }
 
     .logo {

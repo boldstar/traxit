@@ -66,7 +66,7 @@ export default {
         font-size: .875rem;
         height: 100%;
         min-height: 100vh;
-        overflow: hidden;
+        overflow-x: hidden;
     }
 
     //this is the transition between router views

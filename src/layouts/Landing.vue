@@ -19,6 +19,11 @@ export default {
   components: {
     Navbar,
   },
+  created() {
+    setTimeout(() => {
+      hopscotch.endTour(true)
+    }, 1000)
+  }
 }
 </script>
 

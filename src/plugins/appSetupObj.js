@@ -9,6 +9,7 @@ const appSetup = {
             title: "Step One",
             placement: "top",
             content: `
+            <div class="contact-img"></div>
             <div class="custom-bubble-guide">
             <h5>Add Contacts</h5>
                 <ul>
@@ -28,12 +29,13 @@ const appSetup = {
             title: "Step Two",
             placement: "top",
             content: `
+            <div class="workflow-img"></div>
             <div class="custom-bubble-guide">
             <h5>Create Workflow</h5>
                 <ul>
                     <li>Locate the workflow view in the admin section. Use the "Create Workflow" button to start your first workflow.</li>
                 </ul>
-                <p>Note: This is needed for creating engagements, and is what is used to manage the step required to complete the engagement.</p>
+                <p>Note: This is needed for creating engagements, and is what is used to manage the steps required to complete the engagement.</p>
             </div>
             `,
             target: document.querySelector('#app'),
@@ -46,13 +48,16 @@ const appSetup = {
             title: "Step Three",
             placement: "top",
             content: `
+            <div class="addnew-img"></div>
             <div class="custom-bubble-guide">
             <h5>Start Engagement</h5>
                 <ul>
                     <li>Use the "Add New" view to start your first engagement. At this time you will also have the ability to assign it to yourself or a team member.</li>
+                    <li>Click "Start" on the engagement panel to begin the process of creating your first engagement!</li>
                 </ul>
                 <p>Note: This is not a requirement for getting started however it is the purpose of this tool. Please feel free to do this at anytime. Click done to continue the tour.</p>
             </div>
+            <h6 class="continue">Click "Done" to continue tour</h6>
             `,
             target: document.querySelector('#app'),
             placement: "right",
@@ -63,7 +68,9 @@ const appSetup = {
     showPrevButton: true,
     showCloseButton: false,
     onEnd: function() {
-        init.nextTour(tour.default)
+        if(window.location.pathname != '/login') {
+            init.nextTour(tour.default)
+        }
     },
 }
 

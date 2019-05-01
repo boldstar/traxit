@@ -58,13 +58,14 @@
   }
 
 .hopscotch-callout, .tour-app-setup-hopscotch {
-    height: 100%!important;
+    height: 93%!important;
     width: 95%!important;
     left: 215px!important;
-    top: 92px!important;
+    top: 50px!important;
     border: none!important;
     border-radius: none;
     z-index: 999!important;
+    
 
     .hopscotch-bubble-number{
         display: none!important;
@@ -92,6 +93,7 @@
         border-radius: 5px;
         padding: 40px 0!important;
         animation: fadeIn 1s;
+        background: white!important;
     }
 
     .hopscotch-bubble-arrow-container {
@@ -104,50 +106,94 @@
         width: 100%!important;
     }
 
-    .hopscotch-content {
-        margin-top: 10px!important;
+    .hopscotch-bubble-content {
+        margin: 0 auto!important;
 
-        .custom-bubble-content-title {
-            text-align: center!important;
-        }
+            .hopscotch-content {
+                margin-top: 10px!important;
+                text-align: center!important;
+        
+                .custom-bubble-content-title {
+                    text-align: center!important;
+                }
+        
+                .bubble-img {
+                    background-image: url('../../assets/taskillustration.png');
+                    height: 300px;
+                    width: 500px;
+                    background-position: center;
+                    background-size: cover;
+                    margin: 0 auto;
+                }
+        
+                .workflow-img {
+                    background-image: url('../../assets/workflow-img.png');
+                    height: 300px;
+                    width: 500px;
+                    background-position: center;
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                    margin: 0 auto;
+                    border-radius: 5px;
+                }
+                .contact-img {
+                    background-image: url('../../assets/contact-img.png');
+                    height: 300px;
+                    width: 500px;
+                    background-position: center;
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                    margin: 0 auto;
+                    border-radius: 5px;
+                }
+                .addnew-img {
+                    background-image: url('../../assets/add-new-img.png');
+                    height: 300px;
+                    width: 500px;
+                    background-position: center;
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                    margin: 0 auto;
+                    border-radius: 5px;
+                }
 
-        .bubble-img {
-            background-image: url('../../assets/taskillustration.png');
-            height: 300px;
-            width: 500px;
-            background-position: center;
-            background-size: cover;
-            margin: 0 auto;
-        }
-
-        .custom-bubble-guide {
-            background: rgb(248, 248, 248);
-            padding: 10px;
-            border-radius: 5px;
-            width: 75%;
-            margin: 20px auto;
-            font-size: 1rem;
-
-            h6 {
-                font-size: .8rem!important;
-                font-weight: 600;
+                .continue {
+                    margin: 0 auto!important;
+                    font-weight: bold;
+                    align-self: center;
+                }
+        
+                .custom-bubble-guide {
+                    background: rgb(248, 248, 248);
+                    padding: 10px;
+                    border-radius: 5px;
+                    width: 75%;
+                    margin: 20px auto;
+                    font-size: 1rem;
+                    text-align: left!important;
+        
+                    h6 {
+                        font-size: .8rem!important;
+                        font-weight: 600;
+                    }
+        
+                    li {
+                        margin-bottom: 5px;
+                    }
+                }
+        
+                .custom-bubble-action {
+                    width: 60%;
+                    margin: 0 auto!important;
+        
+                    .callout-btn {
+                        width: 93%!important;
+                        font-weight: bold;
+                    }
+                }
             }
-
-            li {
-                margin-bottom: 5px;
-            }
-        }
-
-        .custom-bubble-action {
-            width: 60%;
-            margin: 0 auto!important;
-
-            .callout-btn {
-                width: 93%!important;
-                font-weight: bold;
-            }
-        }
     }
+
 
 }
 

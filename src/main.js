@@ -12,7 +12,6 @@ import 'v-calendar/lib/v-calendar.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import './plugins/filters.js';
-import './assets/css/hopscotch.css';
 import { Button } from 'bootstrap-vue/es/components';
 import { abilitiesPlugin } from '@casl/vue';
 import { ability } from './store/store';

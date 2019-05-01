@@ -46,7 +46,6 @@ export default {
 
     @import url('https://fonts.googleapis.com/css?family=Ubuntu:400');
     @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css');
-    @import url('./assets/css/_hopscotch-custom.scss');
 
     #app {
         font-family: 'Ubuntu', Helvetica, Arial, sans-serif;

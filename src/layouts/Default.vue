@@ -13,7 +13,8 @@
 
 <!-- this section is controling the main content section -->
     <div class="d-flex main-wrapper page-wrapper">
-      <main role="main" class="flex-fill px-3 main">   
+      <main role="main" class="flex-fill px-3 main">
+        <Setup v-if="!setUp && role == 'Admin'" />   
         <!-- this is where the pages are being rendered -->
         <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
          <slot />
@@ -32,6 +33,7 @@ import Toolbar from '@/components/Toolbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import NotifyModal from '@/components/NotifyModal.vue'
 import MobileLinks from '@/components/MobileLinks.vue'
+import Setup from '@/components/Setup.vue'
 
 export default {
   components: {
@@ -39,12 +41,13 @@ export default {
     Toolbar,
     Sidebar,
     NotifyModal,
-    MobileLinks
+    MobileLinks,
+    Setup
   },
   data () {
     return {
       closedSidebar: ['col-lg-12', 'page-wrapper'],
-      openSidebar: ['col-lg-10', 'page-wrapper']
+      openSidebar: ['col-lg-10', 'page-wrapper'],
     }
   },
   computed: {
@@ -54,7 +57,7 @@ export default {
     toggleSidebar() {
       return this.$store.getters.sidebarOpen
     },
-    ...mapGetters(['notify', 'mobileLinks'])
+    ...mapGetters(['notify', 'mobileLinks', 'setUp', 'role']),
   },
   created() {
     if(localStorage.getItem('access_token') != null) {

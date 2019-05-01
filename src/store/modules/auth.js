@@ -13,11 +13,15 @@ export default {
     state: {
         rules: '',
         token: localStorage.getItem('access_token') || null,
+        role: localStorage.getItem('role')
     },
     getters: {
         loggedIn(state) {
             return state.token != null || undefined;
           },
+          role(state) {
+            return state.role
+          }
     },
     mutations: {
         createSession(state, session) {

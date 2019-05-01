@@ -16,12 +16,14 @@
             <welcome v-if="noData && !loading" class="align-self-center"></welcome>    
 
             <div class="d-flex flex-column col-4 profile-card" v-if="!loading && !noData">
-                <div class="card h-100 mb-3">
+                <div class="card h-100 mb-3" >
                     <div class="card-header p-2 text-left">
-                        <span class="h5 mb-0 font-weight-bold align-self-center">{{ businessName }}</span>
+                        <span class="h5 mb-0 font-weight-bold align-self-center" v-if="accountDetails && accountDetails.length > 1">{{ businessName }}</span>
+                        <span class="h5 mb-0 font-weight-bold align-self-center" v-else>Add Bussiness Name</span>
                     </div>
                     <div class="card-body px-0 pb-0">
-                        <img class="ml-5" v-if="accountDetails.logo" v-bind:src="logo" />
+                        <img class="ml-5" v-if="accountDetails && accountDetails.length > 1" v-bind:src="logo" />
+                        <button type="button" class="btn btn-primary font-weight-bold" v-else>Add Logo</button>
                         <hr>
                         <ul class="px-5">
                             <li class="d-flex justify-content-between h5"> 
@@ -131,7 +133,7 @@ export default {
     data () {
         return {
             barHeight: 250,
-            workflowKey: 1,
+            workflowKey: null,
             chartData: false,
             taskData: false,
             loading: false,
@@ -182,36 +184,42 @@ export default {
             return this.allEngagements.filter(engagement => engagement.type == 'custom').length
         },
         mapStatuses() {
-        const selectedWorkflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
+        if(this.allWorkflows && this.allWorkflows.length >= 1) {
+                this.workflowKey = this.allWorkflows[0].id
+                const selectedWorkflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
 
-        const res = selectedWorkflow.map(({statuses}) => ({
-            statuses: statuses.reduce((acc, cur) => {
-                acc.push(cur.status)
+                const res = selectedWorkflow.map(({statuses}) => ({
+                    statuses: statuses.reduce((acc, cur) => {
+                        acc.push(cur.status)
 
-                return acc;
-            }, []) 
-        }))
-        return res
+                        return acc;
+                    }, []) 
+                }))
+                return res
+             }
         },
         mapWorkflows() {
             return this.allWorkflows.map(workflow => workflow.workflow)
         },
         countEngagementsByStatus () {
-        const selectedWorkflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
-
-        const res = selectedWorkflow.map(({statuses, id}) => ({
-            workflow_id: id,
-            statuses: statuses.reduce((acc, cur) => {
-
-            const count = this.allEngagements.filter(({workflow_id, status, done}) => workflow_id === id && status === cur.status && done == false).length;
-
-            acc.push(count);
-
-            return acc;
-        
-            }, [])
-        }))
-        return res
+        if(this.allWorkflows && this.allWorkflows.length >= 1) {
+            this.workflowKey = this.allWorkflows[0].id
+            const selectedWorkflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
+    
+            const res = selectedWorkflow.map(({statuses, id}) => ({
+                workflow_id: id,
+                statuses: statuses.reduce((acc, cur) => {
+    
+                const count = this.allEngagements.filter(({workflow_id, status, done}) => workflow_id === id && status === cur.status && done == false).length;
+    
+                acc.push(count);
+    
+                return acc;
+            
+                }, [])
+            }))
+            return res
+            }
         },
         countEngagementsBySelectedWorkflow() {
             const workflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)

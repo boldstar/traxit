@@ -15,6 +15,7 @@ import account from './modules/account'
 import emails from './modules/emails'
 import search from './modules/search'
 import downloads from './modules/downloads'
+import setup from './modules/setup'
 
 import { abilityPlugin, ability as appAbility } from './ability'
 import storage from './storage'
@@ -49,7 +50,8 @@ export default new Vuex.Store({
     account,
     emails,
     search,
-    downloads
+    downloads,
+    setup
   },
   state: {
     processing: false,

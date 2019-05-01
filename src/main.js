@@ -12,6 +12,7 @@ import 'v-calendar/lib/v-calendar.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import './plugins/filters.js';
+import setUp from  './plugins/setup.js';
 import { Button } from 'bootstrap-vue/es/components';
 import { abilitiesPlugin } from '@casl/vue';
 import { ability } from './store/store';
@@ -31,6 +32,8 @@ Vue.component('landing-layout', Landing);
 Vue.component('admin-layout', Admin);
 Vue.component('reset-layout', ResetPassword);
 Vue.component('breadcrumb', Breadcrumb);
+
+Vue.prototype.$setUp = setUp
 
 //this is registering third party packages
 Vue.config.productionTip = false;

@@ -260,6 +260,7 @@ export default {
               self.noEngagements = true
         } else {
             self.noEngagements = false
+            self.selectedWorkflowID = self.allWorkflows[0].id
         }
       }, 3000);
     }

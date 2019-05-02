@@ -8,7 +8,8 @@ export default {
         workflowmodal: false,
         message: '',
         setupDone: localStorage.getItem('setup-done'),
-        tours: null
+        tours: null,
+        accountState: false
     },
     getters: {
         isComplete(state) {
@@ -28,6 +29,9 @@ export default {
         },
         setupTour(state) {
             return state.tours
+        },
+        accountSuccess(state) {
+            return state.accountState
         }
     },
     mutations: {
@@ -54,6 +58,9 @@ export default {
         },
         clearTour(state) {
             state.tours = null
+        },
+        accountSuccess(state) {
+            state.accountState = !state.accountState
         }
     },
     actions: {
@@ -109,5 +116,22 @@ export default {
                 context.commit('successMessage', error.response.data)
             })           
         },
+        setupAccountDetails(context, account) {
+            context.commit('setupState')
+            axios.post('/accountsetup', {
+                business_name: account.business_name,
+                email: account.email,
+                phone: account.phone
+            })
+            .then(response => {
+                context.commit('setupState')
+                context.commit('accountSuccess', response.data.message)
+            })
+            .catch(error => {
+                context.commit('setupState')
+                console.log(error.response.data)
+                context.commit('accountSuccess', response.data.message)
+            })
+        }
     }
 }

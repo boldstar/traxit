@@ -9,28 +9,36 @@ const setUp =
         slogan: 'Let us help you get started!'
     },
     {   
-        id: 'contact',
+        id: 'account',
         step: 2,
         title: "Step One",
+        class: 'account-img',
+        header: 'Account Details',
+        slogan: ''
+    },
+    {   
+        id: 'contact',
+        step: 3,
+        title: "Step two",
         class: 'contact-img',
         header: 'Add Contacts',
         slogan: ''
     },
     {
         id: 'workflow',
-        step: 3,
-        title: "Step Two",
+        step: 4,
+        title: "Step Three",
         class: 'workflow-img',
         header: 'Create Workflow',
         slogan: ''
     },
     {
         id: 'complete',
-        step: 4,
+        step: 5,
         title: "Thanks",
         class: 'welcome-img',
         header: 'Your All Set',
-        slogan: ''
+        slogan: 'Lets get to work!'
     },
 ]
 

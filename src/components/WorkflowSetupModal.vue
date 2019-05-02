@@ -1,5 +1,5 @@
 <template>
-      <b-modal v-model="modal"  hide-footer title="Create Workflow">
+      <b-modal v-model="modal" centered hide-footer title="Create Workflow">
         <div class="d-block text-center my-3" v-if="setupState && !successMessage">
           <div class="parent-bar">
           <div class="child-bar" v-bind:style="{ width: progress + '%'}">

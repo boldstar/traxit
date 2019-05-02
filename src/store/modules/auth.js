@@ -54,13 +54,13 @@ export default {
               return new Promise((resolve, reject) => {
                 axios.post('/logout')
                 .then(response => {
-                  
                   localStorage.removeItem('access_token')
                   localStorage.removeItem('expires_on')
                   localStorage.removeItem('role')
                   localStorage.removeItem('rules')
                   context.commit('destroyToken')
                   context.commit('destroySession')
+                  context.commit('clearTour')
                   router.push('/login')
                   resolve(response)
                 })

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     
     <Navbar />
 
@@ -14,7 +14,13 @@
 <!-- this section is controling the main content section -->
     <div class="d-flex main-wrapper page-wrapper">
       <main role="main" class="flex-fill px-3 main">
-        <Setup v-if="setupTour && !setupTour.setup_tour && role == 'Admin'" />   
+
+        <!-- this is if they have not done a setup tour -->
+         <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
+        <Setup v-if="$can('delete', admin) && setupTour && !setupTour.setup_tour" :key="role"/>
+        </transition>
+
+
         <!-- this is where the pages are being rendered -->
         <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
          <slot />
@@ -36,6 +42,7 @@ import MobileLinks from '@/components/MobileLinks.vue'
 import Setup from '@/components/Setup.vue'
 
 export default {
+  props: ['admin'],
   components: {
     Navbar,
     Toolbar,
@@ -61,6 +68,7 @@ export default {
   },
   created() {
     if(localStorage.getItem('access_token') != null) {
+      this.$store.dispatch('getTours')
       this.$store.dispatch('checkGracePeriod');
     }
   }

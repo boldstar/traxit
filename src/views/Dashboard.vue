@@ -18,11 +18,11 @@
             <div class="d-flex flex-column col-4 profile-card" v-if="!loading && !noData">
                 <div class="card h-100 mb-3" >
                     <div class="card-header p-2 text-left">
-                        <span class="h5 mb-0 font-weight-bold align-self-center" v-if="accountDetails && accountDetails.length > 1">{{ businessName }}</span>
+                        <span class="h5 mb-0 font-weight-bold align-self-center" v-if="accountDetails && accountDetails.business_name">{{ businessName }}</span>
                         <router-link :disabled="role != 'Admin'" to="/administrator/account" class="btn btn-secondary btn-sm font-weight-bold align-self-center" v-else>Add Bussiness Name</router-link>
                     </div>
                     <div class="card-body px-0 pb-0">
-                        <img class="ml-5" v-if="accountDetails && accountDetails.length > 1" v-bind:src="logo" />
+                        <img class="ml-5" v-if="accountDetails && accountDetails.logo && logo" v-bind:src="logo" />
                         <router-link :disabled="role != 'Admin'" to="/administrator/account" class="btn btn-primary font-weight-bold my-5" v-else>Add Logo</router-link>
                         <hr>
                         <ul class="px-5">

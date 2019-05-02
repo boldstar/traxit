@@ -26,9 +26,6 @@ export default {
         workflowModalState(state) {
             return state.workflowmodal
         },
-        setUp(state) {
-            return state.setupDone
-        },
         setupTour(state) {
             return state.tours
         }
@@ -54,13 +51,15 @@ export default {
         },
         setTours(state, tours) {
             state.tours = tours[0]
+        },
+        clearTour(state) {
+            state.tours = null
         }
     },
     actions: {
         getTours(context) {
             axios.get('/tours')
             .then(response => {
-                console.log(response.data)
                 context.commit('setTours', response.data)
             })
             .catch(error => {
@@ -70,7 +69,6 @@ export default {
         completeSetup(context) {
             axios.post('/complete-setup-tour')
             .then(response => {
-                console.log(response.data)
                 context.commit('setTours', response.data)
                 document.location.reload(true)
             })
@@ -103,7 +101,6 @@ export default {
             })
             .then(response => {
                 context.commit('setupState')
-                console.log(response.data)
                 context.commit('successMessage', response.data.message)
             })
             .catch(error => {

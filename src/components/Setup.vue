@@ -1,5 +1,5 @@
 <template>
-    <div class="setup">
+    <div class="setup" v-if="role == 'Admin'">
         <div class="step-slide">
             <carousel ref="carousel" :per-page="1" :mouse-drag="false" :loop="false" :navigationEnabled="true" :paginationEnabled="true" class="steps-carousel"  :navigationNextLabel='`<i class="fas fa-arrow-alt-circle-right fa-3x text-primary"></i>`' :navigationPrevLabel='`<i class="fas fa-arrow-alt-circle-left fa-3x text-primary"></i>`' :paginationActiveColor="'#0077ff'" :paginationColor="'black'">
                 <slide v-for="step in $setUp" :key="step.step" class="step" ref="slide">
@@ -31,7 +31,7 @@ export default {
         WorkflowSetupModal
     },
     computed: {
-      ...mapGetters(['modalState', 'workflowModalState'])  
+      ...mapGetters(['modalState', 'workflowModalState', 'setupTour', 'role'])  
     },
     methods: {
         startGuide() {
@@ -50,7 +50,7 @@ export default {
             const index = this.$refs.slide[0].$parent.currentPage
             this.$refs.carousel.goToPage(index + 1)
         }
-    }
+    },
 }
 </script>
 
@@ -59,7 +59,7 @@ export default {
 
     .setup {
         font-family: 'Source Sans Pro', sans-serif!important;
-        z-index: 10000;
+        z-index: 999;
         position: absolute;
         top: 53px;
         left: 0;

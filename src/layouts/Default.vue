@@ -14,7 +14,7 @@
 <!-- this section is controling the main content section -->
     <div class="d-flex main-wrapper page-wrapper">
       <main role="main" class="flex-fill px-3 main">
-        <Setup v-if="!setUp && role == 'Admin'" />   
+        <Setup v-if="setupTour && !setupTour.setup_tour && role == 'Admin'" />   
         <!-- this is where the pages are being rendered -->
         <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
          <slot />
@@ -57,7 +57,7 @@ export default {
     toggleSidebar() {
       return this.$store.getters.sidebarOpen
     },
-    ...mapGetters(['notify', 'mobileLinks', 'setUp', 'role']),
+    ...mapGetters(['notify', 'mobileLinks', 'setupTour', 'role']),
   },
   created() {
     if(localStorage.getItem('access_token') != null) {

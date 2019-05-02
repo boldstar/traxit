@@ -39,6 +39,9 @@ export default {
         //checks if session is expired
         this.destroySessionIfTokenIsExpired()
     },
+    created() {
+        this.$store.dispatch('getTours')
+    }
 }
 </script>
 

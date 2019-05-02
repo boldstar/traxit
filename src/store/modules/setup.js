@@ -7,7 +7,8 @@ export default {
         modal: false,
         workflowmodal: false,
         message: '',
-        setupDone: localStorage.getItem('setup-done')
+        setupDone: localStorage.getItem('setup-done'),
+        tours: null
     },
     getters: {
         isComplete(state) {
@@ -27,6 +28,9 @@ export default {
         },
         setUp(state) {
             return state.setupDone
+        },
+        setupTour(state) {
+            return state.tours
         }
     },
     mutations: {
@@ -47,9 +51,33 @@ export default {
         },
         setupWorkflowModal(state) {
             state.workflowmodal = !state.workflowmodal
+        },
+        setTours(state, tours) {
+            state.tours = tours[0]
         }
     },
     actions: {
+        getTours(context) {
+            axios.get('/tours')
+            .then(response => {
+                console.log(response.data)
+                context.commit('setTours', response.data)
+            })
+            .catch(error => {
+                console.log(error.response.data)
+            })
+        },
+        completeSetup(context) {
+            axios.post('/complete-setup-tour')
+            .then(response => {
+                console.log(response.data)
+                context.commit('setTours', response.data)
+                document.location.reload(true)
+            })
+            .catch(error => {
+                console.log(error.response.data)
+            })
+        },
         uploadContactsOnSetup(context, file) {
             context.commit('setupState')
             let formData = new FormData();

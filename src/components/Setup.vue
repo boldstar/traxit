@@ -9,7 +9,7 @@
                     <button type="button" @click="startGuide" v-if="step.id == 'intro'" class="btn btn-primary step-btn">Start Guide</button>
                     <button type="button" @click="uploadContacts" v-if="step.id == 'contact'" class="btn btn-primary">Upload Contacts</button>
                     <button type="button" @click="createWorkflow" v-if="step.id == 'workflow'" class="btn btn-primary">Create Workflow</button>
-                    <a @click="startTraxit" href="/" v-if="step.id == 'complete'" class="btn btn-primary">Start TRAXIT</a>
+                    <button type="button" @click="startTraxit" v-if="step.id == 'complete'" class="btn btn-primary">Start TRAXIT</button>
                     <button class="btn btn-link" v-if="step.id != 'intro' && step.id != 'complete'" @click="nextStep">Skip For Now</button>
                 </slide>
             </carousel>
@@ -44,7 +44,7 @@ export default {
             this.$store.commit('setupWorkflowModal')
         },
         startTraxit() {
-            localStorage.setItem('setup-done', true)
+            this.$store.dispatch('completeSetup')
         },
         nextStep() {
             const index = this.$refs.slide[0].$parent.currentPage

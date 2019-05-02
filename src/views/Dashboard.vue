@@ -19,11 +19,11 @@
                 <div class="card h-100 mb-3" >
                     <div class="card-header p-2 text-left">
                         <span class="h5 mb-0 font-weight-bold align-self-center" v-if="accountDetails && accountDetails.length > 1">{{ businessName }}</span>
-                        <span class="h5 mb-0 font-weight-bold align-self-center" v-else>Add Bussiness Name</span>
+                        <router-link :disabled="role != 'Admin'" to="/administrator/account" class="btn btn-secondary btn-sm font-weight-bold align-self-center" v-else>Add Bussiness Name</router-link>
                     </div>
                     <div class="card-body px-0 pb-0">
                         <img class="ml-5" v-if="accountDetails && accountDetails.length > 1" v-bind:src="logo" />
-                        <button type="button" class="btn btn-primary font-weight-bold" v-else>Add Logo</button>
+                        <router-link :disabled="role != 'Admin'" to="/administrator/account" class="btn btn-primary font-weight-bold my-5" v-else>Add Logo</router-link>
                         <hr>
                         <ul class="px-5">
                             <li class="d-flex justify-content-between h5"> 
@@ -164,7 +164,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['allWorkflows', 'tasks', 'allEngagements', 'accountDetails', 'completedEngagements', 'createdEngagements', 'averageDays']),
+        ...mapGetters(['allWorkflows', 'tasks', 'allEngagements', 'accountDetails', 'completedEngagements', 'createdEngagements', 'averageDays', 'role']),
         businessName() {
             return this.accountDetails.business_name
         },

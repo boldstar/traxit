@@ -12,6 +12,7 @@ import 'v-calendar/lib/v-calendar.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import './plugins/filters.js';
+import plugins from './plugins/plugins.js';
 import setUp from  './plugins/setup.js';
 import { Button } from 'bootstrap-vue/es/components';
 import { abilitiesPlugin } from '@casl/vue';
@@ -37,6 +38,7 @@ Vue.prototype.$setUp = setUp
 
 //this is registering third party packages
 Vue.config.productionTip = false;
+Vue.use(plugins);
 Vue.use(Button);
 Vue.use(VeeValidate);
 Vue.use(VueCharts);
@@ -46,7 +48,6 @@ Vue.use(VCalendar, {
   firstDayOfWeek: 2,  // 2 = Monday
   //defaults go here
 });
-
 
 //this is route protection
 router.beforeEach((to, from, next) => {

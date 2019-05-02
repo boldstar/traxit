@@ -1,28 +1,17 @@
+import { routeGuard } from '../../plugins/guards.js'
+
 export default [
 {
     // this is the path for adding a contact or engagement globally
     path: '/add',
     name: 'add',
     component: () => import(/* webpackChunkName: "add" */ '../../views/Add.vue'),
-    beforeEnter: (to, from, next) => {
-        if (to.matched.some(record => record.meta.requiresAuth)) { 
-        var token = localStorage.getItem('access_token')
-        if (!token || token == null || token == undefined ) {
-            next({
-            path: '/login',
-            })
-        } else if(localStorage.getItem('role') == 'Outsource') {
-            next({path: '/tasks'})
-        } else {
-            next()
-        }
-        }
-    },
+    beforeEnter: routeGuard,
     meta: {
         requiresAuth: true,
         layout: "default",
         breadCrumb: [
-        { name: 'Add New' }
+            { name: 'Add New' }
         ]
     },
     children: [

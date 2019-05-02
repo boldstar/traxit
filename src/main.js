@@ -17,6 +17,7 @@ import setUp from  './plugins/setup.js';
 import { Button } from 'bootstrap-vue/es/components';
 import { abilitiesPlugin } from '@casl/vue';
 import { ability } from './store/store';
+import {beforeEachCustom} from './plugins/guards.js'
 global.jQuery = jQuery;
 global.Popper = Popper;
 
@@ -50,30 +51,7 @@ Vue.use(VCalendar, {
 });
 
 //this is route protection
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    var token = store.getters.loggedIn;
-    if (!token || token == null || token == undefined ) {
-      next({
-        path: '/login',
-      })
-    } else {
-      next()
-    }
-  }else if (to.matched.some(record => record.meta.requiresVisitor)) {
-    if (token || token != null || token != undefined) {
-      next({
-        path: '/',
-      })
-    } else {
-      next()
-    }
-  } else if(to.matched.some(record => record.meta.passwordReset)) {
-    if(token || !token) {
-      next()
-    }
-  }
-});
+router.beforeEach(beforeEachCustom)
 
 
 

@@ -12,7 +12,7 @@
 <script>
 const default_layout = "default";
 import {mapActions, mapGetters} from 'vuex'
-import session from './plugins/session.js'
+import {destroyToken} from './plugins/session.js'
 
 export default {
     computed: {
@@ -24,7 +24,7 @@ export default {
     methods: {
         ...mapActions(['destroyToken']),
         destroySessionIfTokenIsExpired() {
-            if(session.destroyToken()) {
+            if(destroyToken()) {
                 this.$store.dispatch('destroyToken')
                 this.$router.push('/login')
             } else return;

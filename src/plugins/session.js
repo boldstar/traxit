@@ -1,28 +1,48 @@
 const moment  = require('moment')
-module.exports = {
-    destroyToken: () => {
-        // get current date stored in local storage
-        const expiresOn = localStorage.getItem('expires_on')
-        // create current date to compare too
-        const formDate = new Date(expiresOn)
-        const expiresDate = moment(formDate).format('YYYYMMDDHHMMSS')
-        // dont check date if expiresOn is null
-        if(expiresOn == null) return;
-        const current = new Date(moment())
-        const currentDate = moment(current).format('YYYYMMDDHHMMSS')
-        // if current date exceed expired date destroy token else don't
-        if(currentDate >= expiresDate) {
-            return true
-        } else {
-            return false
-        };
-    },
+const axios = require('axios')
 
-    destroy: () => {
-        // I will use this to remove any local storage Items
-    },
+export function destroyToken() {
+    // get current date stored in local storage
+    const expiresOn = localStorage.getItem('expires_on')
+    // create current date to compare too
+    const formDate = new Date(expiresOn)
+    const expiresDate = moment(formDate).format('YYYYMMDDHHMMSS')
+    // dont check date if expiresOn is null
+    if(expiresOn == null) return;
+    const current = new Date(moment())
+    const currentDate = moment(current).format('YYYYMMDDHHMMSS')
+    // if current date exceed expired date destroy token else don't
+    if(currentDate >= expiresDate) {
+        return true
+    } else {
+        return false
+    };
+}
 
-    start: () => {
-        // I will use this to create the app session just dont know how yet
+export function  destroySession() {
+    // I will use this to remove any local storage Items
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('expires_on')
+    localStorage.removeItem('role')
+    localStorage.removeItem('rules')
+    return
+}
+
+export function  startSession(response) {
+    // I will use this to create the app session just dont know how yet
+    const token = response.data.rules.access_token
+    const fqdn = response.data.fqdn
+    const role = response.data.role[0][0].name
+    if(token != null || token != undefined && fqdn != null || fqdn != undefined) {
+    localStorage.removeItem('fqdn_api_url')
+    const date = new Date(moment().add(1, 'day').toDate());
+    localStorage.setItem('fqdn_api_url', fqdn)
+    localStorage.setItem('expires_on', date);
+    localStorage.setItem('role', role)
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+    axios.defaults.baseURL = 'http://' + response.data.fqdn + '/api'
+    return true
+    } else {
+        return false
     }
 }

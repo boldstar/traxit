@@ -53,9 +53,6 @@ Vue.use(VCalendar, {
 //this is route protection
 router.beforeEach(beforeEachCustom)
 
-
-
-
 new Vue({
   router,
   store,

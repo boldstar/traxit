@@ -372,6 +372,10 @@ export default {
       }
       return;
     },
+    removeCommas(fee) {
+     const commaless = fee.replace(/[, ]+/g, " ").trim();
+     return commaless
+    },
     addNoteModal() {
       this.$store.commit('showNoteModal', this.engagement.id)
     },

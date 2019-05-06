@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     
     <Navbar />
 
@@ -13,7 +13,14 @@
 
 <!-- this section is controling the main content section -->
     <div class="d-flex main-wrapper page-wrapper">
-      <main role="main" class="flex-fill px-3 main">   
+      <main role="main" class="flex-fill px-3 main">
+
+        <!-- this is if they have not done a setup tour -->
+         <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
+        <Setup v-if="$can('delete', admin) && setupTour && !setupTour.setup_tour" :key="role"/>
+        </transition>
+
+
         <!-- this is where the pages are being rendered -->
         <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
          <slot />
@@ -26,25 +33,28 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Navbar from '@/components/Navbar.vue'
 import Toolbar from '@/components/Toolbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import NotifyModal from '@/components/NotifyModal.vue'
 import MobileLinks from '@/components/MobileLinks.vue'
-import { mapGetters } from 'vuex'
+import Setup from '@/components/Setup.vue'
 
 export default {
+  props: ['admin'],
   components: {
     Navbar,
     Toolbar,
     Sidebar,
     NotifyModal,
-    MobileLinks
+    MobileLinks,
+    Setup
   },
   data () {
     return {
       closedSidebar: ['col-lg-12', 'page-wrapper'],
-      openSidebar: ['col-lg-10', 'page-wrapper']
+      openSidebar: ['col-lg-10', 'page-wrapper'],
     }
   },
   computed: {
@@ -54,10 +64,11 @@ export default {
     toggleSidebar() {
       return this.$store.getters.sidebarOpen
     },
-    ...mapGetters(['notify', 'mobileLinks'])
+    ...mapGetters(['notify', 'mobileLinks', 'setupTour', 'role']),
   },
   created() {
     if(localStorage.getItem('access_token') != null) {
+      this.$store.dispatch('getTours')
       this.$store.dispatch('checkGracePeriod');
     }
   }

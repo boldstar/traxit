@@ -6,11 +6,11 @@
           <div class="align-self-center d-flex">
             <div class="batch-btn">
 
-            <button class="btn btn-sm btn-outline-dark mr-2 font-weight-bold batch-btn" @click="showBatchColumn"><i class="fas fa-tasks mr-2"></i>Batch</button>
+            <button class="btn btn-sm btn-outline-dark mr-2 font-weight-bold batch-btn" @click="showBatchColumn" v-if="!noTasks"><i class="fas fa-tasks mr-2"></i>Batch</button>
             </div>
             <div>
 
-            <button class="btn btn-sm btn-outline-secondary mr-2 font-weight-bold" @click="searchInputMethod"><i class="fas fa-search mr-2"></i>Filter</button>
+            <button class="btn btn-sm btn-outline-secondary mr-2 font-weight-bold" @click="searchInputMethod" v-if="!noTasks"><i class="fas fa-search mr-2"></i>Filter</button>
             </div>
             <div>
 
@@ -22,12 +22,12 @@
       <div v-if="batchAlert" class="p-2 bg-danger font-weight-bold text-light">{{ batchAlert }}</div>
 
 <!-- this is the list of the assigned user tasks -->
-    <div class="text-left shadow card-body mb-3 tasks">
+    <div class="text-left card-body mb-3 tasks d-flex">
+    <NoTask v-if="noTasks" />
     <processing-bar v-if="processing"></processing-bar>
-    <div class="d-flex justify-content-center">
-      <spinner v-if="tasksLoaded"></spinner>
-    </div>
-     <input v-if="searchInput" class="form-control mb-3" placeholder="Filter Task By Client Name" v-model="searchTasks" type="search">
+    <input v-if="searchInput" class="form-control mb-3" placeholder="Filter Task By Client Name" v-model="searchTasks" type="search">
+    <spinner v-if="tasksLoaded" class="mx-auto"></spinner>
+
       <table class="table table-hover text-center" v-if="!tasksLoaded && taskData">
         <thead class="bg-primary text-light">
           <tr>
@@ -180,6 +180,7 @@ import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 import Spinner from '@/components/Spinner.vue'
 import ProcessingBar from '@/components/ProcessingBar.vue'
+import NoTask from '@/components/NoTask.vue'
 
 export default {
   name: 'UserTasks',
@@ -214,7 +215,8 @@ export default {
    components:{
     'b-modal': bModal,
     Spinner,
-    ProcessingBar
+    ProcessingBar,
+    NoTask
   },
   directives: {
     'b-modal': bModalDirective
@@ -373,6 +375,7 @@ export default {
       this.tasksLoaded = true
       this.checkedTasks = []
       this.batchUpdate = false
+      this.noTasks = false
       this.$store.dispatch('retrieveTasks');
       var self = this;
       setTimeout(() => {

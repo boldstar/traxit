@@ -10,18 +10,20 @@
             </div>
             <button class="btn btn-sm btn-outline-primary refresh" @click="refresh"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
         </div>
-        <div class="d-flex justify-content-center w-100 shadow mb-3 pt-3 border body dashboard">
+        <div class="d-flex justify-content-center w-100 mb-3 pt-3 body dashboard">
 
             <spinner v-if="loading && !noData" class="mx-auto"></spinner>
-            <welcome v-if="noData && !loading" class="mb-5"></welcome>    
+            <welcome v-if="noData && !loading" class="align-self-center"></welcome>    
 
             <div class="d-flex flex-column col-4 profile-card" v-if="!loading && !noData">
-                <div class="card h-100 mb-3">
+                <div class="card h-100 mb-3" >
                     <div class="card-header p-2 text-left">
-                        <span class="h5 mb-0 font-weight-bold align-self-center">{{ businessName }}</span>
+                        <span class="h5 mb-0 font-weight-bold align-self-center" v-if="accountDetails && accountDetails.business_name">{{ businessName }}</span>
+                        <router-link :disabled="role != 'Admin'" to="/administrator/account" class="btn btn-secondary btn-sm font-weight-bold align-self-center" v-else>Add Bussiness Name</router-link>
                     </div>
                     <div class="card-body px-0 pb-0">
-                        <img class="ml-5" v-if="accountDetails.logo" v-bind:src="logo" />
+                        <img class="ml-5" v-if="accountDetails && accountDetails.logo && logo" v-bind:src="logo" />
+                        <router-link :disabled="role != 'Admin'" to="/administrator/account" class="btn btn-primary font-weight-bold my-5" v-else>Add Logo</router-link>
                         <hr>
                         <ul class="px-5">
                             <li class="d-flex justify-content-between h5"> 
@@ -131,7 +133,7 @@ export default {
     data () {
         return {
             barHeight: 250,
-            workflowKey: 1,
+            workflowKey: null,
             chartData: false,
             taskData: false,
             loading: false,
@@ -162,7 +164,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['allWorkflows', 'tasks', 'allEngagements', 'accountDetails', 'completedEngagements', 'createdEngagements', 'averageDays']),
+        ...mapGetters(['allWorkflows', 'tasks', 'allEngagements', 'accountDetails', 'completedEngagements', 'createdEngagements', 'averageDays', 'role']),
         businessName() {
             return this.accountDetails.business_name
         },
@@ -182,36 +184,42 @@ export default {
             return this.allEngagements.filter(engagement => engagement.type == 'custom').length
         },
         mapStatuses() {
-        const selectedWorkflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
+        if(this.allWorkflows && this.allWorkflows.length >= 1) {
+                this.workflowKey = this.allWorkflows[0].id
+                const selectedWorkflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
 
-        const res = selectedWorkflow.map(({statuses}) => ({
-            statuses: statuses.reduce((acc, cur) => {
-                acc.push(cur.status)
+                const res = selectedWorkflow.map(({statuses}) => ({
+                    statuses: statuses.reduce((acc, cur) => {
+                        acc.push(cur.status)
 
-                return acc;
-            }, []) 
-        }))
-        return res
+                        return acc;
+                    }, []) 
+                }))
+                return res
+             }
         },
         mapWorkflows() {
             return this.allWorkflows.map(workflow => workflow.workflow)
         },
         countEngagementsByStatus () {
-        const selectedWorkflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
-
-        const res = selectedWorkflow.map(({statuses, id}) => ({
-            workflow_id: id,
-            statuses: statuses.reduce((acc, cur) => {
-
-            const count = this.allEngagements.filter(({workflow_id, status, done}) => workflow_id === id && status === cur.status && done == false).length;
-
-            acc.push(count);
-
-            return acc;
-        
-            }, [])
-        }))
-        return res
+        if(this.allWorkflows && this.allWorkflows.length >= 1) {
+            this.workflowKey = this.allWorkflows[0].id
+            const selectedWorkflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
+    
+            const res = selectedWorkflow.map(({statuses, id}) => ({
+                workflow_id: id,
+                statuses: statuses.reduce((acc, cur) => {
+    
+                const count = this.allEngagements.filter(({workflow_id, status, done}) => workflow_id === id && status === cur.status && done == false).length;
+    
+                acc.push(count);
+    
+                return acc;
+            
+                }, [])
+            }))
+            return res
+            }
         },
         countEngagementsBySelectedWorkflow() {
             const workflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
@@ -306,7 +314,8 @@ export default {
         createdDates() {
             const dates = this.createdEngagements.map(e => e.date)
             const formateddates = dates.reduce((acc, date) => {
-                acc.push(moment(date).format('MM/DD/YYYY'))
+                const momentDate = new Date(date)
+                acc.push(moment(momentDate).format('MM/DD/YYYY'))
 
                 return acc
             }, [])
@@ -316,7 +325,8 @@ export default {
         completedDates() {
             const dates = this.completedEngagements.map(e => e.date)
             const formateddates = dates.reduce((acc, date) => {
-                acc.push(moment(date).format('MM/DD/YYYY'))
+                const momentDate = new Date(date)
+                acc.push(moment(momentDate).format('MM/DD/YYYY'))
 
                 return acc
             }, [])
@@ -432,13 +442,14 @@ export default {
         },
         refresh() {
             this.loading = true
+            this.noData = false
             this.$store.dispatch('retrieveWorkflows')
             this.$store.dispatch('retrieveEngagements')
             this.$store.dispatch('retrieveTasks')
             var self = this;
             setTimeout(() => {
                 self.loading = false;
-                if(self.allEngagements == 0){
+                if(self.allEngagements.length == 0){
                     self.noData = true
                 } else {
                     self.noData = false

@@ -49,11 +49,17 @@
             </div>
         </div>      
 
-        <div class="btn-group ml-auto" v-if="!uploadInput">
-              <button class="btn btn-outline-primary" @click="clearFilters" data-toggle="tooltip" data-placement="top" title="Clear Filters"><i class="fas fa-filter"></i></button>
-            <button class="btn btn-outline-success font-weight-bold" @click="uploadInput = true" data-toggle="tooltip" data-placement="top" title="Upload Contacts"><i class="far fa-file-excel"></i></button>
-            <button class="btn btn-outline-secondary font-weight-bold" @click="downloadContacts" data-toggle="tooltip" data-placement="top" title="Download Contacts"><i class="far fa-file-excel"></i></button>
-            <router-link to="/add" class="btn btn-primary pt-2" data-toggle="tooltip" data-placement="top" title="Add New Contact"><i class="far fa-plus-square"></i></router-link>
+         <div class="dropdown" v-if="!uploadInput">
+          <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-cog mr-2"></i>
+            Settings
+          </button>
+          <div class="dropdown-menu dropdown-menu-right mr-2 p-1 settings-dropdown" aria-labelledby="dropdownMenu2">
+            <button class="dropdown-item d-flex justify-content-between font-weight-bold px-1" @click="clearFilters" data-toggle="tooltip" data-placement="top" title="Clear Filters">Clear Filters<i class="fas fa-filter align-self-center text-primary"></i></button>
+            <button class="dropdown-item d-flex justify-content-between font-weight-bold px-1" @click="uploadInput = true" data-toggle="tooltip" data-placement="top" title="Upload Contacts">Upload Contacts<i class="far fa-file-excel text-success align-self-center"></i></button>
+            <button class="dropdown-item d-flex justify-content-between font-weight-bold px-1" @click="downloadContacts" data-toggle="tooltip" data-placement="top" title="Download Contacts">Download Contacts<i class="far fa-file-excel text-secondary align-self-center"></i></button>
+            <router-link to="/add" class="dropdown-item d-flex justify-content-between font-weight-bold px-1" data-toggle="tooltip" data-placement="top" title="Add New Contact">Add Contact<i class="far fa-plus-square text-info align-self-center"></i></router-link>
+          </div>
         </div>
     </div>
 
@@ -245,6 +251,10 @@ export default {
 
 tr {
     cursor: pointer;
+}
+
+.settings-dropdown {
+    width: 200px;
 }
 
 @media screen and (max-width: 1300px) {

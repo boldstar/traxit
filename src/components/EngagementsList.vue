@@ -143,7 +143,7 @@
 
             <div class="btn-group ml-auto">
                 <button class="btn btn-outline-primary" @click="clearFilters" data-toggle="tooltip" data-placement="top" title="Clear Filters"><i class="fas fa-filter"></i></button>
-                <button class="btn btn-outline-secondary" @click="downloadEngagements" data-toggle="tooltip" data-placement="top" title="Download Engagements"><i class="far fa-file-excel mobile-hide-row"></i></button>
+                <button class="btn btn-outline-secondary  mobile-hide-row" @click="downloadEngagements" data-toggle="tooltip" data-placement="top" title="Download Engagements"><i class="far fa-file-excel"></i></button>
                 <router-link to="/add" class="btn btn-primary pt-2" data-toggle="tooltip" data-placement="top" title="Add New Engagement"><i class="far fa-plus-square"></i></router-link>
             </div>
 
@@ -185,7 +185,7 @@
         <nav aria-label="pagination" class="d-flex" v-if="!tableLoaded">
         <ul class="pagination">
             <li class="page-item">
-                <button class="page-link" @click="prevPage">Previous</button>            
+                <button class="page-link" @click="prevPage" :disabled="currentPage <= 1">Previous</button>            
             </li>
             <li class="page-item">
                 <a class="page-link">

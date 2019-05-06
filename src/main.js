@@ -12,9 +12,12 @@ import 'v-calendar/lib/v-calendar.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import './plugins/filters.js';
+import plugins from './plugins/plugins.js';
+import setUp from  './plugins/setup.js';
 import { Button } from 'bootstrap-vue/es/components';
 import { abilitiesPlugin } from '@casl/vue';
 import { ability } from './store/store';
+import {beforeEachCustom} from './plugins/guards.js'
 global.jQuery = jQuery;
 global.Popper = Popper;
 
@@ -32,8 +35,11 @@ Vue.component('admin-layout', Admin);
 Vue.component('reset-layout', ResetPassword);
 Vue.component('breadcrumb', Breadcrumb);
 
+Vue.prototype.$setUp = setUp
+
 //this is registering third party packages
 Vue.config.productionTip = false;
+Vue.use(plugins);
 Vue.use(Button);
 Vue.use(VeeValidate);
 Vue.use(VueCharts);
@@ -44,35 +50,8 @@ Vue.use(VCalendar, {
   //defaults go here
 });
 
-
 //this is route protection
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    var token = store.getters.loggedIn;
-    if (!token || token == null || token == undefined ) {
-      next({
-        path: '/login',
-      })
-    } else {
-      next()
-    }
-  }else if (to.matched.some(record => record.meta.requiresVisitor)) {
-    if (token || token != null || token != undefined) {
-      next({
-        path: '/',
-      })
-    } else {
-      next()
-    }
-  } else if(to.matched.some(record => record.meta.passwordReset)) {
-    if(token || !token) {
-      next()
-    }
-  }
-});
-
-
-
+router.beforeEach(beforeEachCustom)
 
 new Vue({
   router,

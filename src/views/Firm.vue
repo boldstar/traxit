@@ -13,9 +13,9 @@
 
       <Alert v-if="successAlert" :message="successAlert" class="my-2" />
 
-      <div class="row d-flex justify-content-between card-body shadow col-12 mx-auto mb-3 firm" >
+      <div class="row d-flex justify-content-between card-body col-12 mx-auto mb-3 firm" >
         <processing-bar v-if="processing"></processing-bar>
-        <div v-if="noEngagements &&!listLoaded" class="mt-5"><welcome></welcome></div>
+        <NoFirm v-if="noEngagements &&!listLoaded" class="mx-auto align-self-center"/>
         <spinner v-if="listLoaded" class="mx-auto"></spinner>
 
         <div class="col-2 col-sm-3 list" v-if="!listLoaded && Object.keys(allEngagements).length">
@@ -129,9 +129,9 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Alert from '@/components/Alert.vue'
-import Welcome from '@/components/Welcome.vue'
 import Spinner from '@/components/Spinner.vue'
 import ProcessingBar from '@/components/ProcessingBar.vue'
+import NoFirm from '@/components/NoFirm.vue'
 
 export default {
   name: 'FirmView',
@@ -139,7 +139,8 @@ export default {
   components: {
     Alert,
     Spinner,
-    ProcessingBar
+    ProcessingBar,
+    NoFirm
   },
   data() {
     return {
@@ -259,6 +260,7 @@ export default {
               self.noEngagements = true
         } else {
             self.noEngagements = false
+            self.selectedWorkflowID = self.allWorkflows[0].id
         }
       }, 3000);
     }
@@ -266,38 +268,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
-.processing {
-  height: 5px;
-  left: 0;
-  width: 100%;
-  position: absolute;
-  background: #0077ff;
-  top: 0;
-
-  .processing-inner {
-    height: 5px;
-    position: absolute;
-    background: white;
-    width: 100px;
-    left: 0;
-    animation: run liner infinate alternate 2s;
-    -webkit-animation: run 2s linear infinite alternate;
-  }
-
-  @-webkit-keyframes run {
-    0% { left: 0;}
-    50%{ left : 100%;}
-    100%{ left: 0;}
-  }
-
-  @keyframes run {
-    0% { left: 0;}
-    50%{ left : 100%;}
-    100%{ left: 0;}
-  }
-}
-
  tr {
    cursor: pointer;
  }

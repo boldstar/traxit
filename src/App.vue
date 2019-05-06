@@ -12,7 +12,7 @@
 <script>
 const default_layout = "default";
 import {mapActions, mapGetters} from 'vuex'
-import moment from 'moment'
+import {destroyToken} from './plugins/session.js'
 
 export default {
     computed: {
@@ -24,13 +24,7 @@ export default {
     methods: {
         ...mapActions(['destroyToken']),
         destroySessionIfTokenIsExpired() {
-            const expiresOn = localStorage.getItem('expires_on')
-            const formDate = new Date(expiresOn)
-            const expiresDate = moment(formDate).format('YYYYMMDDHHMMSS')
-            if(expiresOn == null) return;
-            const current = new Date(moment())
-            const currentDate = moment(current).format('YYYYMMDDHHMMSS')
-            if(currentDate >= expiresDate) {
+            if(destroyToken()) {
                 this.$store.dispatch('destroyToken')
                 this.$router.push('/login')
             } else return;
@@ -42,6 +36,7 @@ export default {
         }
     },
     mounted() {
+        //checks if session is expired
         this.destroySessionIfTokenIsExpired()
     },
 }
@@ -60,29 +55,18 @@ export default {
         color: #2c3e50;
     }
 
+    *,
+    *:before,
+    *:after {
+    box-sizing: border-box;
+    }
+
     body {
         font-size: .875rem;
         height: 100%;
         min-height: 100vh;
+        overflow-x: hidden;
     }
-
-
-    /*
-    * Content
-    */
-
-    [role="main"] {
-        padding-top: 120px; /* Space for fixed navbar and toolbar / adds space below navbar */
-    }
-
-    #administrator ul.admin-nav {
-    
-
-        a {
-            text-decoration: none;
-        }
-    }
-
 
     //this is the transition between router views
     .page-wrapper {
@@ -115,6 +99,7 @@ export default {
         padding: 10px 16px;
         border-radius: 4px;
     }
+
 </style>
 
 

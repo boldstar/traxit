@@ -4,7 +4,7 @@
             <router-link to="/administrator/workflows" class="btn btn-secondary eng-btn" v-if="allWorkflows.length <= 0">Create Workflow</router-link>
             <router-link to="/add" class="btn btn-primary eng-btn">Start Engagement</router-link>
         </div>
-        <p class="welcome-details" v-if="role == 'Admin'">Create a workflow and start an engagement to view your Dashboard!</p>
+        <p class="welcome-details" v-if="role == 'Admin'">Create a workflow and start an engagement to view your Dashboard</p>
         <img src="@/assets/Welcome.png" class="image">
     </div>
 </template>

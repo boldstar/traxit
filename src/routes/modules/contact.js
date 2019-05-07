@@ -36,24 +36,13 @@ export default [
                 },
             },
             {
-            // this is the path to add dependent
-            path: 'add-dependent',
-            component: () => import('@/children/AddDependent.vue'),
-                meta: {
-                requiresAuth: true,
-                breadCrumb: [
-                    { name: 'Add Dependent' }
-                ]
-                },
-            },
-            {
             // this is the path to edit dependent
-            path: 'edit-dependent/:dependent',
-            component: () => import('@/children/EditDepend.vue'),
+            path: 'dependent/:dependent',
+            component: () => import('@/children/DependentCrud.vue'),
                 meta: {
                 requiresAuth: true,
                 breadCrumb: [
-                    { name: 'Edit Dependent' }
+                    { name: 'Dependent Form' }
                 ]
                 },
             },

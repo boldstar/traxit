@@ -6,7 +6,12 @@ export default {
     state: {
         client: [],
         clients: [],
-        dependent: [],
+        dependent: {
+            first_name: '', 
+            middle_name: '', 
+            last_name: '', 
+            dob: ''
+        },
         dependents: [],
         note: [],
         notes: [],
@@ -121,7 +126,14 @@ export default {
             state.client.businesses.splice(index, 1, business)
         },
         getDependent(state, dependent){
-            state.dependent = dependent
+            if(dependent) {
+                state.dependent = dependent
+            } else state.dependent = {
+                first_name: '', 
+                middle_name: '', 
+                last_name: '', 
+                dob: ''
+            }
         },
         addDependent(state, dependent) {
             state.client.dependents.push(dependent);
@@ -359,7 +371,23 @@ export default {
             })
         },
         addDependent(context, dependent) {
-            axios.post(('/dependents'), {
+            context.commit('startProcessing')
+            axios.post(('/dependents'), dependent)
+            .then(response => {
+                context.commit('addDependent', response.data)
+                router.push('/contact/' + dependent.client_id + '/account')
+                context.commit('stopProcessing')
+            })
+            .catch(error => {
+                console.log(error.response.data)
+                context.commit('errorMsgAlert', error.response.data.message)
+                context.commit('stopProcessing')
+            })
+        },
+        updateDependent(context, dependent) {
+            context.commit('stopProcessing')
+            context.commit('startProcessing')
+            axios.patch('/dependents/' + dependent.id, {
                 client_id: dependent.client_id,
                 first_name: dependent.first_name,
                 middle_name: dependent.middle_name,
@@ -367,12 +395,15 @@ export default {
                 dob: dependent.dob,
             })
             .then(response => {
-                context.commit('addDependent', response.data)
+                context.commit('stopProcessing')
+                context.commit('updateDependent', response.data)
+                router.push('/contact/' + dependent.client_id + '/account')
             })
             .catch(error => {
-                console.log(error.response.data)
+                console.log(error)
+                context.commit('stopProcessing')
                 context.commit('errorMsgAlert', error.response.data.message)
-            })
+            })           
         },
         deleteDependent(context, id) {
             axios.delete('/dependents/' + id)
@@ -382,22 +413,6 @@ export default {
             .catch(error => {
                 console.log(error)
             })                
-        },
-        updateDependent(context, dependent) {
-            axios.patch('/dependents/' + dependent.id, {
-                client_id: dependent.client_id,
-                first_name: dependent.first_name,
-                middle_name: dependent.middle_name,
-                last_name: dependent.last_name,
-                dob: dependent.dob,
-            })
-            .then(response => {
-                context.commit('updateDependent', response.data)
-            })
-            .catch(error => {
-                console.log(error)
-                context.commit('errorMsgAlert', error.response.data.message)
-            })           
         },
         getClientNotes({commit}, id) {
             axios.get('/clientnotes/'+id)

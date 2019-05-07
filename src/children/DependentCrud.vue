@@ -1,12 +1,12 @@
 <template>
     <div class="d-flex flex-column align-items-center mt-3">
-         <Spinner v-if="!dataSet" />
+        <Spinner v-if="!dataSet" />
          <Form
             v-if="dataSet"
             :title="formName"
-            :inputs="8"
+            :inputs="4"
             :placeholders="placeHolders" 
-            :data="business"
+            :data="dependent"
             :datakeys="dataKeys"
             :errs="errorArray" 
             :btn="'Submit'" 
@@ -22,7 +22,7 @@ import Form from '@/components/Form.vue'
 import {validate} from '../plugins/validate.js'
 import Spinner from '@/components/Spinner.vue'
 export default {
-    name: 'BusinessCrud',
+    name: 'EditDependent',
     components: {
       Form,
       Spinner
@@ -31,46 +31,39 @@ export default {
       return {
         dataSet: false,
         key: false,
-        placeHolders: ['Business Name', 'Address', 'City', 'State', 'Postal Code', 'Email', 'Phone Number', 'Fax Number'],
-        dataKeys: ['business_name', 'address', 'city', 'state', 'postal_code', 'email', 'phone_number', 'fax_number'],
-        required: ['business_name'],
+        placeHolders: ['First Name', 'Middle Name', 'Last Name', 'Date of birth'],
+        dataKeys: ['first_name', 'middle_name', 'last_name', 'dob'],
+        required: ['first_name'],
         errorArray: [],
       }
     },
     computed: {
-    ...mapGetters(
-        [
-          'client',
-          'business'
-        ]
-      ),
+      ...mapGetters(['client','dependent']),
       formName() {
-        if(this.$route.params.business == 0) {
-          return 'Add Business'
-        } return `Edit Business | ${this.business.business_name}`
+        if(this.$route.params.dependent == 0) {
+          return 'Add Dependent'
+        } return `Edit Dependent | ${this.dependent.first_name} ${this.dependent.last_name}`
       }
   },
   methods: {
-    ...mapActions(['updateBusiness', 'addBusiness']),
-    validateSubmit() {
-      const check = validate(this.business, this.required)
+    ...mapActions(['updateDependent', 'addDependent']),
+     validateSubmit() {
+      const check = validate(this.dependent, this.required)
       if(check.length >= 1) {
         this.errorArray = check
         return
       } this.submitForm()
     },
     submitForm() {
-      if(this.$route.params.business == 0) {
-        this.business.client_id = this.client.id
-        this.addBusiness(this.business) 
-      } else {
-        this.updateBusiness(this.business)
-      }
+      if(this.$route.params.dependent == 0) {
+        this.dependent.client_id = this.client.id
+        this.addDependent(this.dependent)      
+      } else this.updateDependent(this.dependent)
       this.key = !this.key
     },
   },
   created: function(){
-    this.$store.dispatch('getBusiness', this.$route.params.business);
+    this.$store.dispatch('getDependent', this.$route.params.dependent);
     setTimeout(() => {
       this.dataSet = true
     }, 2500)

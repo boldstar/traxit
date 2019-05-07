@@ -15,7 +15,7 @@
                 <option :value="option" v-for="(option, index) in select.choices" :key="index">{{option}}</option>
             </select>
         </div>
-        <button type="button" @click="submitForm" class="submit-btn">
+        <button type="button" @click="submitForm" class="submit-btn" :disabled="processing">
             <span v-if="!processing">{{ btn }}</span>
             <span v-if="processing">Processing...</span>
         </button>
@@ -25,6 +25,7 @@
 <script>
 import {mapGetters} from 'vuex'
 import {formatNumber} from '../plugins/filters.js'
+import {formatDob} from '../plugins/filters.js'
 export default {
     name: 'Form',
     props: [
@@ -75,8 +76,10 @@ export default {
            this.$emit('change')
         },
         handleInput (index, event) {
-            const input = formatNumber(event.target.value)
-            this.$set(this.model, this.datakeys[index], input);
+            var number = formatNumber(event.target.value)
+            var date = formatDob(number)
+            var final = date
+            this.$set(this.model, this.datakeys[index], final);
             return this.$emit('input', this.model)
         },
         handleSelect(index, event) {

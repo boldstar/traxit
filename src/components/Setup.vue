@@ -1,5 +1,5 @@
 <template>
-    <div class="setup" v-if="role == 'Admin'">
+    <div class="setup">
         <div class="step-slide">
             <carousel ref="carousel" :per-page="1" :mouse-drag="false" :loop="false" :navigationEnabled="true" :paginationEnabled="true" class="steps-carousel"  :navigationNextLabel='`<i class="fas fa-arrow-alt-circle-right fa-3x text-primary"></i>`' :navigationPrevLabel='`<i class="fas fa-arrow-alt-circle-left fa-3x text-primary"></i>`' :paginationActiveColor="'#0077ff'" :paginationColor="'black'">
                 <slide v-for="step in $setUp" :key="step.step" class="step" ref="slide">

@@ -98,6 +98,15 @@ export default {
         getBusiness(state, business) {
             if(business) {
                 state.business = business
+            } else state.business = {
+                business_name: '',
+                address: '',
+                city: '',
+                state: '',
+                postal_code: '',
+                email: '',
+                phone_number: '',
+                fax_number: ''
             }
         },
         addBusiness(state, business) {

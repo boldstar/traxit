@@ -125,7 +125,7 @@
     </div>
 
         <!-- this is where the edit contact child view shows up -->
-        <router-view ></router-view>
+        <router-view></router-view>
     </div>
 </template>
 

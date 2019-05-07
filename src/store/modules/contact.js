@@ -12,7 +12,16 @@ export default {
         notes: [],
         clientnotes: [],
         businesses: [],
-        business: '',
+        business: {
+            business_name: '',
+            address: '',
+            city: '',
+            state: '',
+            postal_code: '',
+            email: '',
+            phone_number: '',
+            fax_number: ''
+        },
     },
     getters: {
         allClients(state) {
@@ -87,7 +96,9 @@ export default {
             })
         },
         getBusiness(state, business) {
-            state.business = business
+            if(business) {
+                state.business = business
+            }
         },
         addBusiness(state, business) {
             state.client.businesses.push(business);
@@ -281,22 +292,17 @@ export default {
             })
         },
         addBusiness(context, business) {
-            axios.post(('/businesses'), {
-                client_id: business.client_id,
-                business_name: business.business_name,
-                address: business.address,
-                city: business.city,
-                state: business.state,
-                postal_code: business.postal_code,
-                email: business.email,
-                phone_number: business.phone_number,
-                fax_number: business.fax_number
-            })
+            context.commit('startProcessing')
+            axios.post(('/businesses'), business)
             .then(response => {
+                context.commit('stopProcessing')
+                context.commit('addBusiness', response.data.business)
                 context.commit('successAlert', response.data.message)
+                router.push('/contact/' + business.client_id + '/account')
             })
             .catch(error => {
-                console.log(error)
+                console.log(error.response.data)
+                context.commit('stopProcessing')
                 context.commit('errorMsgAlert', error.response.data.message)
             })
         },
@@ -314,6 +320,7 @@ export default {
             })
             .then(response => {
                 context.commit('updateBusiness', response.data)
+                router.push('/contact/' + business.client_id + '/account')
             })
             .catch(error => {
                 console.log(error)

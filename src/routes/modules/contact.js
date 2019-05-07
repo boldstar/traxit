@@ -59,23 +59,12 @@ export default [
             },
             {
             // this is the path to add dependent
-            path: 'add-business',
-            component: () => import('@/children/AddBusiness.vue'),
+            path: 'business/:business',
+            component: () => import('@/children/BusinessCrud.vue'),
                 meta: {
                 requiresAuth: true,
                 breadCrumb: [
-                    { name: 'Add Business' }
-                ]
-                },
-            },
-            {
-            // this is the path to add dependent
-            path: 'edit-business/:business',
-            component: () => import('@/children/EditBusiness.vue'),
-                meta: {
-                requiresAuth: true,
-                breadCrumb: [
-                    { name: 'Edit Business' }
+                    { name: 'Business Form' }
                 ]
                 },
             },

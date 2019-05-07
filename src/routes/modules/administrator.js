@@ -1,4 +1,4 @@
-import { routeGuard } from '../../plugins/guards.js'
+import { routeAdminGuard } from '../../plugins/guards.js'
 const meta = {
     requiresAuth: true,
     layout: "admin",
@@ -9,7 +9,7 @@ export default [
     path: '/administrator',
     name: 'administrator',
     component: () => import(/* webpackChunkName: "logout" */ '../../views/Administrator.vue'),
-    beforeEnter: routeGuard,
+    beforeEnter: routeAdminGuard,
     meta: meta,
     children: [
         {

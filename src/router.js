@@ -4,7 +4,7 @@ import engagements from './routes/modules/engagements'
 import addnew from './routes/modules/addnew'
 import administrator from './routes/modules/administrator'
 import contact from './routes/modules/contact'
-import { routeGuard } from './plugins/guards.js'
+import { routeOutsourceGuard } from './plugins/guards.js'
 
 Vue.use(Router)
 
@@ -47,7 +47,7 @@ const baseRoutes = [
     path: '/',
     name: 'dashboard',
     component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue'),
-    beforeEnter: routeGuard,
+    beforeEnter: routeOutsourceGuard,
     meta: {
       requiresAuth: true,
       layout: "default",
@@ -61,7 +61,7 @@ const baseRoutes = [
     path: '/firm',
     name: 'firm',
     component: () => import(/* webpackChunkName: "firm" */ './views/Firm.vue'),
-    beforeEnter: routeGuard,
+    beforeEnter: routeOutsourceGuard,
     meta: {
       requiresAuth: true,
       layout: "default",
@@ -75,7 +75,7 @@ const baseRoutes = [
     path: '/contacts',
     name: 'contacts',
     component: () => import(/* webpackChunkName: "about" */ './views/Contacts.vue'),
-    beforeEnter: routeGuard,
+    beforeEnter: routeOutsourceGuard,
     meta: {
       requiresAuth: true,
       layout: "default",
@@ -114,7 +114,7 @@ const baseRoutes = [
   path: '/engagements',
   name: 'engagements',
   component: () => import(/* webpackChunkName: "engagements" */ './views/Engagements.vue'),
-  beforeEnter: routeGuard,
+  beforeEnter: routeOutsourceGuard,
   meta: {
       requiresAuth: true,
       layout: "default",

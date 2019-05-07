@@ -1,4 +1,4 @@
-import { routeGuard } from '../../plugins/guards.js'
+import { routeOutsourceGuard } from '../../plugins/guards.js'
 
 export default [
 {
@@ -6,7 +6,7 @@ export default [
     path: '/add',
     name: 'add',
     component: () => import(/* webpackChunkName: "add" */ '../../views/Add.vue'),
-    beforeEnter: routeGuard,
+    beforeEnter: routeOutsourceGuard,
     meta: {
         requiresAuth: true,
         layout: "default",

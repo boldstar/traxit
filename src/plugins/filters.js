@@ -9,7 +9,7 @@ Vue.filter('formatDate', function(created_at) {
     }
 });
 
-// this is a function use to format phone numbers on forms
+// this is a function use to format phone numbers on the form.vue component
 export function formatNumber(value) {
   //regex removes special characters and white space so that the number can be compared
   var number = value.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s+/g,'' ).replace(/^\s/,'').replace(/\s$/,'')
@@ -21,6 +21,7 @@ export function formatNumber(value) {
   return value
 }
 
+//this function formats dates on the form.vue component
 export function formatDob(value) {
   //regex removes special characters and white space so that the number can be compared
   var number = value.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s+/g,'' ).replace(/^\s/,'').replace(/\s$/,'')

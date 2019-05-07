@@ -185,7 +185,7 @@ export default {
         },
         mapStatuses() {
         if(this.allWorkflows && this.allWorkflows.length >= 1) {
-                this.workflowKey = this.allWorkflows[0].id
+               
                 const selectedWorkflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
 
                 const res = selectedWorkflow.map(({statuses}) => ({
@@ -203,7 +203,6 @@ export default {
         },
         countEngagementsByStatus () {
         if(this.allWorkflows && this.allWorkflows.length >= 1) {
-            this.workflowKey = this.allWorkflows[0].id
             const selectedWorkflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
     
             const res = selectedWorkflow.map(({statuses, id}) => ({
@@ -533,6 +532,7 @@ export default {
                 self.noData = true
                 self.loading = false
             }
+            self.workflowKey = self.allWorkflows[0].id
         }, 3000) 
     },
 }

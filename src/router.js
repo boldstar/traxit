@@ -4,6 +4,7 @@ import engagements from './routes/modules/engagements'
 import addnew from './routes/modules/addnew'
 import administrator from './routes/modules/administrator'
 import contact from './routes/modules/contact'
+import { routeOutsourceGuard } from './plugins/guards.js'
 
 Vue.use(Router)
 
@@ -46,20 +47,7 @@ const baseRoutes = [
     path: '/',
     name: 'dashboard',
     component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue'),
-    beforeEnter: (to, from, next) => {
-      if (to.matched.some(record => record.meta.requiresAuth)) { 
-        var token = localStorage.getItem('access_token')
-        if (!token || token == null || token == undefined ) {
-          next({
-            path: '/login',
-          })
-        } else if(localStorage.getItem('role') == 'Outsource') {
-          next({path: '/tasks'})
-        } else {
-          next()
-        }
-      }
-    },
+    beforeEnter: routeOutsourceGuard,
     meta: {
       requiresAuth: true,
       layout: "default",
@@ -73,20 +61,7 @@ const baseRoutes = [
     path: '/firm',
     name: 'firm',
     component: () => import(/* webpackChunkName: "firm" */ './views/Firm.vue'),
-    beforeEnter: (to, from, next) => {
-      if (to.matched.some(record => record.meta.requiresAuth)) { 
-        var token = localStorage.getItem('access_token')
-        if (!token || token == null || token == undefined ) {
-          next({
-            path: '/login',
-          })
-        } else if(localStorage.getItem('role') == 'Outsource') {
-          next({path: '/tasks'})
-        } else {
-          next()
-        }
-      }
-    },
+    beforeEnter: routeOutsourceGuard,
     meta: {
       requiresAuth: true,
       layout: "default",
@@ -100,20 +75,7 @@ const baseRoutes = [
     path: '/contacts',
     name: 'contacts',
     component: () => import(/* webpackChunkName: "about" */ './views/Contacts.vue'),
-    beforeEnter: (to, from, next) => {
-      if (to.matched.some(record => record.meta.requiresAuth)) { 
-        var token = localStorage.getItem('access_token')
-        if (!token || token == null || token == undefined ) {
-          next({
-            path: '/login',
-          })
-        } else if(localStorage.getItem('role') == 'Outsource') {
-          next({path: '/tasks'})
-        } else {
-          next()
-        }
-      }
-    },
+    beforeEnter: routeOutsourceGuard,
     meta: {
       requiresAuth: true,
       layout: "default",
@@ -152,20 +114,7 @@ const baseRoutes = [
   path: '/engagements',
   name: 'engagements',
   component: () => import(/* webpackChunkName: "engagements" */ './views/Engagements.vue'),
-  beforeEnter: (to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) { 
-      var token = localStorage.getItem('access_token')
-      if (!token || token == null || token == undefined ) {
-        next({
-          path: '/login',
-        })
-      } else if(localStorage.getItem('role') == 'Outsource') {
-        next({path: '/tasks'})
-      } else {
-        next()
-      }
-    }
-  },
+  beforeEnter: routeOutsourceGuard,
   meta: {
       requiresAuth: true,
       layout: "default",

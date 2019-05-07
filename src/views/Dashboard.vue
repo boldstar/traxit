@@ -25,27 +25,37 @@
                         <img class="ml-5" v-if="accountDetails && accountDetails.logo && logo" v-bind:src="logo" />
                         <router-link :disabled="role != 'Admin'" to="/administrator/account" class="btn btn-primary font-weight-bold my-5" v-else>Add Logo</router-link>
                         <hr>
-                        <ul class="px-5">
-                            <li class="d-flex justify-content-between h5"> 
-                                <span class="mr-2 font-weight-bold">Active: </span>
-                                <span>{{ activeEngagements }}</span>
-                            </li>
-                            <li class="d-flex justify-content-between h5 my-3"> 
-                                <span class="mr-2 font-weight-bold">Complete: </span>
-                                <span>{{ countCompleteEngagements }}</span>
-                            </li>
-                            <li class="d-flex justify-content-between h5"> 
-                                <span class="mr-2 font-weight-bold">Tax Returns: </span>
-                                <span>{{ totalTaxReturns }}</span>
-                            </li>
-                            <li class="d-flex justify-content-between h5 my-3"> 
-                                <span class="mr-2 font-weight-bold">Bookkeeping: </span>
-                                <span>{{ totalBookkeeping }}</span>
-                            </li>
-                            <li class="d-flex justify-content-between h5"> 
-                                <span class="mr-2 font-weight-bold">Other: </span>
-                                <span>{{ totalCustom }}</span>
-                            </li>
+                        <ul class="px-2">
+                            <div class="data-card mb-3">
+                                <div class="data-card-header">
+                                    <span>Activity Totals</span>
+                                </div>
+                                <li class="d-flex justify-content-between"> 
+                                    <span class="mr-2 font-weight-bold">Active: </span>
+                                    <span>{{ activeEngagements }}</span>
+                                </li>
+                                <li class="d-flex justify-content-between mt-1"> 
+                                    <span class="mr-2 font-weight-bold">Complete: </span>
+                                    <span>{{ countCompleteEngagements }}</span>
+                                </li>
+                            </div>
+                            <div class="data-card">
+                                <div class="data-card-header">
+                                    <span>Type Totals</span>
+                                </div>
+                                <li class="d-flex justify-content-between"> 
+                                    <span class="mr-2 font-weight-bold">Tax Returns: </span>
+                                    <span>{{ totalTaxReturns }}</span>
+                                </li>
+                                <li class="d-flex justify-content-between my-1"> 
+                                    <span class="mr-2 font-weight-bold">Bookkeeping: </span>
+                                    <span>{{ totalBookkeeping }}</span>
+                                </li>
+                                <li class="d-flex justify-content-between"> 
+                                    <span class="mr-2 font-weight-bold">Other: </span>
+                                    <span>{{ totalCustom }}</span>
+                                </li>
+                            </div>
                         </ul>
                     </div>
                     <line-chart class="w-100" :height="barHeight" :chart-data="lineData"></line-chart>
@@ -185,7 +195,7 @@ export default {
         },
         mapStatuses() {
         if(this.allWorkflows && this.allWorkflows.length >= 1) {
-                this.workflowKey = this.allWorkflows[0].id
+               
                 const selectedWorkflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
 
                 const res = selectedWorkflow.map(({statuses}) => ({
@@ -203,7 +213,6 @@ export default {
         },
         countEngagementsByStatus () {
         if(this.allWorkflows && this.allWorkflows.length >= 1) {
-            this.workflowKey = this.allWorkflows[0].id
             const selectedWorkflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
     
             const res = selectedWorkflow.map(({statuses, id}) => ({
@@ -533,6 +542,7 @@ export default {
                 self.noData = true
                 self.loading = false
             }
+            self.workflowKey = self.allWorkflows[0].id
         }, 3000) 
     },
 }
@@ -572,6 +582,21 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.data-card {
+    background: #f8f8f8;
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px 0 rgba(0,0,0,.150);
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.data-card-header {
+    font-size: .8rem;
+    color: #0077ff;
+    text-align: left;
 }
 
 @media screen and (max-width: 1300px) {

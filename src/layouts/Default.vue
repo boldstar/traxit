@@ -16,14 +16,14 @@
       <main role="main" class="flex-fill px-3 main">
 
         <!-- this is if they have not done a setup tour -->
-         <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
-        <Setup v-if="$can('delete', admin) && setupTour && !setupTour.setup_tour" :key="role"/>
+        <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
+         <Setup v-if="$can('delete', admin) && setupTour"/>
         </transition>
 
 
         <!-- this is where the pages are being rendered -->
         <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
-         <slot />
+          <slot v-if="!setupTour" />
         </transition>
       </main>
     </div>
@@ -55,6 +55,7 @@ export default {
     return {
       closedSidebar: ['col-lg-12', 'page-wrapper'],
       openSidebar: ['col-lg-10', 'page-wrapper'],
+      showTour: false
     }
   },
   computed: {

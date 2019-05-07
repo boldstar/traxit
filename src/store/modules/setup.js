@@ -7,7 +7,7 @@ export default {
         modal: false,
         workflowmodal: false,
         message: '',
-        setupDone: localStorage.getItem('setup-done'),
+        setupTour: false,
         tours: null,
         accountState: false
     },
@@ -28,7 +28,7 @@ export default {
             return state.workflowmodal
         },
         setupTour(state) {
-            return state.tours
+            return state.setupTour
         },
         accountSuccess(state) {
             return state.accountState
@@ -53,8 +53,8 @@ export default {
         setupWorkflowModal(state) {
             state.workflowmodal = !state.workflowmodal
         },
-        setTours(state, tours) {
-            state.tours = tours[0]
+        setupTourState(state, tours) {
+            state.setupTour = !tours[0].setup_tour
         },
         clearTour(state) {
             state.tours = null
@@ -67,7 +67,7 @@ export default {
         getTours(context) {
             axios.get('/tours')
             .then(response => {
-                context.commit('setTours', response.data)
+                context.commit('setupTourState', response.data)
             })
             .catch(error => {
                 console.log(error.response.data)
@@ -91,7 +91,6 @@ export default {
                 'Content-Type': 'multipart/form-data'
             }})
             .then(response => {
-                console.log(response.data)
                 context.commit('setupState')
                 context.commit('successMessage', response.data.message)
             })

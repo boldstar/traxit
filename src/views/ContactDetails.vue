@@ -39,8 +39,8 @@
           </button>
           <div class="dropdown-menu dropdown-menu-right mr-0" aria-labelledby="dropdownMenu2">
             <router-link :to="'/contact/' + client.id + '/account/' + 'edit'" class="dropdown-item"><i class="fas fa-pencil-alt"></i><span class="ml-2 pl-4">Edit Contact</span></router-link>
-            <router-link :to="'/contact/' + client.id + '/account/' + 'add-business'" class="dropdown-item"><i class="far fa-building"></i><span class="ml-2 pl-4">Add Business</span></router-link>
-            <router-link :to="'/contact/' + client.id + '/account/' + 'add-dependent'" class="dropdown-item"><i class="far fa-plus-square"></i><span class="ml-2 pl-4">Add Dependent</span></router-link>
+            <router-link :to="'/contact/' + client.id + '/account/business/' + 0" class="dropdown-item"><i class="far fa-building"></i><span class="ml-2 pl-4">Add Business</span></router-link>
+            <router-link :to="'/contact/' + client.id + '/account/dependent/' + 0" class="dropdown-item"><i class="far fa-plus-square"></i><span class="ml-2 pl-4">Add Dependent</span></router-link>
             <div class="dropdown-divider"></div>
             <b-btn v-if="$can('delete', client)" class="dropdown-item text-danger" @click="showModal = !showModal"><i class="fas fa-trash"></i><span class="ml-2">Delete Account</span></b-btn>
           </div>

@@ -97,15 +97,7 @@ export default [
             name: 'templates',
             component: () => import('@/children/Templates.vue'),
             meta: meta,
-            children: [
-                {
-                path: 'edit-template/:template',
-                name: 'edit-template',
-                component: () => import('@/children/EditTemplate.vue'),
-                meta: meta
-                }
-            ]
-            },
+        },
     ]
     },
 ]

@@ -1,6 +1,7 @@
 <template>
     <div class="d-flex flex-column align-items-center mt-3">
          <Spinner v-if="!dataSet" />
+         <div v-if="errorArray.length >= 1 && errorArray.includes('email')" class="error">Email is the wrong format. Ex: email@example.com</div>
          <Form
             v-if="dataSet"
             :title="formName"
@@ -18,7 +19,8 @@
             :btn="'Submit'" 
             :key="key" 
             @submit-form="validateSubmit"
-            @select-change="selected" 
+            @select-change="selected"
+            @change="clear" 
         />
     </div>
 </template>
@@ -26,7 +28,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Form from '@/components/Form.vue'
-import {validate} from '../plugins/validate.js'
+import {validate, validateEmail} from '../plugins/validate.js'
 import Spinner from '@/components/Spinner.vue'
 export default {
     name: 'UserCrud',
@@ -49,12 +51,12 @@ export default {
     },
     computed: {
         ...mapGetters(['user']),
-      formName() {
+    formName() {
         if(this.$route.params.user == 0) {
           return 'Add User'
         } return `Edit User | ${this.user.name}`
       },
-      action() {
+    action() {
           if(this.$route.params.user == 0) {
               return 'add'
           } else return 'edit'
@@ -64,11 +66,15 @@ export default {
         ...mapActions(['updateUser', 'addUser']),
     validateSubmit() {
         const check = validate(this.user, this.required)
+        const email = validateEmail('email', this.user.email)
         if(check.length >= 1) {
             this.errorArray = check
             return
+        } else if(email.length >= 1) {
+            this.errorArray = email
+            return
         } this.submitForm()
-        },
+    },
     submitForm() {
         if(this.$route.params.user == 0) {
             this.addUser(this.user) 
@@ -76,7 +82,7 @@ export default {
             this.updateUser(this.user)
         }
         this.key = !this.key
-        },
+    },
     selected(label, select) {
             var props = Object.getOwnPropertyNames(this.user);
             for(var i = 0; i < props.length; i++) {
@@ -86,6 +92,9 @@ export default {
                 }
             } return
         },
+    clear() {
+        this.errorArray = []
+    }
     },
     created() {
         this.$store.dispatch('retrieveUserToUpdate', this.$route.params.user)
@@ -95,3 +104,19 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.error {
+    background: rgb(255, 98, 98);
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    color: white;
+    font-weight: bold;
+}
+
+</style>
+

@@ -12,6 +12,7 @@
             :btn="'Submit'" 
             :key="key" 
             @submit-form="validateSubmit"
+            @change="clear"
         />
     </div>
 </template>
@@ -68,6 +69,9 @@ export default {
       }
       this.key = !this.key
     },
+    clear() {
+        this.errorArray = []
+    }
   },
   created: function(){
     this.$store.dispatch('getBusiness', this.$route.params.business);

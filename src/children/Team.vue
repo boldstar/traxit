@@ -27,7 +27,7 @@
                 <td class="hide-row">{{ user.role.name }}</td>
                 <td class="text-center hide-row"><button type="button" class="btn btn-sm btn-outline-primary" @click="selectedEmail(user.email)">Reset</button></td>
                 <td class="text-center"><router-link :to="{path: '/administrator/team/user/' + user.id}" class="btn btn-sm btn-secondary">Edit</router-link></td>
-                <td class="text-center hide-row"><button type="button" class="btn btn-sm btn-danger" @click="requestDelete(user.id, user.user)">X</button></td>
+                <td class="text-center hide-row"><button type="button" class="btn btn-sm btn-danger font-weight-bold" @click="requestDelete(user.id, user.user)">X</button></td>
             </tr>
         </tbody>
     </table>

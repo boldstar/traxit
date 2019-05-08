@@ -12,6 +12,7 @@
             :btn="'Submit'" 
             :key="key" 
             @submit-form="validateSubmit"
+            @change="clear" 
         />
     </div>
 </template>
@@ -61,6 +62,9 @@ export default {
       } else this.updateDependent(this.dependent)
       this.key = !this.key
     },
+    clear() {
+        this.errorArray = []
+    }
   },
   created: function(){
     this.$store.dispatch('getDependent', this.$route.params.dependent);

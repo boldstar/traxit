@@ -73,18 +73,12 @@ export default [
             meta: meta,
             children: [
             {
-                path: 'edit-user/:id',
-                name: 'edit-user',
-                component: () => import('@/children/EditUser.vue'),
+                path: 'user/:user',
+                name: 'user',
+                component: () => import('@/children/UserCrud.vue'),
                 meta: meta
             }
             ]
-        },
-        {
-            path: 'add-user',
-            name: 'add-user',
-            component: () => import('@/children/AddUser.vue'),
-            meta: meta
         },
         {
             path: 'reports',

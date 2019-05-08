@@ -5,7 +5,7 @@ export function validate(model, required) {
         var prop = required.filter(key => key == props[i])
         if(prop && prop.length >= 1) {
             var value = model[props[i]]
-            if(!value) {
+            if(!value || value == 'Choose..') {
                 empty.push(prop[0])
             }
         }

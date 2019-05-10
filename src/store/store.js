@@ -95,9 +95,6 @@ export default new Vuex.Store({
     loading(state) {
       return state.loading
     },
-    subscribeView(state) {
-      return state.subscribe
-    },
     notify(state) {
       return state.notify
     },
@@ -164,9 +161,6 @@ export default new Vuex.Store({
     },
     loading(state) {
       state.loading = !state.loading
-    },
-    subscribeView(state, data) {
-      state.subscribe = data
     },
     statusModal(state) {
       state.statusmodal = !state.statusmodal

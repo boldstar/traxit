@@ -3,10 +3,14 @@ import axios from 'axios'
 export default {
     state: {
         account: '',
+        subscribe: null
     },
     getters: {
         accountDetails(state) {
             return state.account
+        },
+        subscribeView(state) {
+          return state.subscribe
         },
     },
     mutations: {
@@ -19,11 +23,15 @@ export default {
         updateAccountDetails(state, account) {
             state.account = account
         },
+        subscribeView(state, data) {
+          state.subscribe = data
+        },
     },
     actions: {
         getAccountDetails(context) {
             axios.get('/account')
             .then(response => {
+              console.log(response.data)
               if(typeof(response.data) === 'object') {
                 context.commit('accountDetails', response.data)
               } else {

@@ -14,7 +14,7 @@
           <router-link to="/administrator/subscription/update-card" class="btn btn-info font-weight-bold mr-3">Update Card</router-link>
         </div>
         <div class=" align-self-center">
-          <router-link to="/administrator/subscription/plans" class="btn btn-primary font-weight-bold">View Other Plans</router-link>
+          <router-link to="/administrator/subscription/plans" class="btn btn-primary font-weight-bold">Available Plans</router-link>
         </div>
       </div>
       <div v-else>

@@ -58,7 +58,7 @@
                             </div>
                         </ul>
                     </div>
-                    <line-chart class="w-100" :height="barHeight" :chart-data="lineData"></line-chart>
+                    <line-chart class="w-100 line-chart" :height="barHeight" :chart-data="lineData"></line-chart>
                 </div>
             </div>
             
@@ -642,7 +642,7 @@ export default {
     }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 500px) {
     .doughnut {
         width: 90%!important;
         max-width: 100%!important;
@@ -653,6 +653,10 @@ export default {
     }
 
     .refresh {
+        display: none!important;
+    }
+
+    .line-chart {
         display: none!important;
     }
 }

@@ -10,7 +10,8 @@
             :datakeys="dataKeys"
             :errs="errorArray" 
             :btn="'Submit'" 
-            :key="key" 
+            :key="key"
+            :rules="[]" 
             @submit-form="validateSubmit"
             @change="clear"
         />

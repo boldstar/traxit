@@ -17,6 +17,11 @@
           <router-link to="/administrator/subscription/plans" class="btn btn-primary font-weight-bold">View Other Plans</router-link>
         </div>
       </div>
+      <div v-else>
+        <div class=" align-self-center">
+          <router-link to="/administrator/subscription/update-card" class="btn btn-info font-weight-bold mr-3">Subscribe</router-link>
+        </div>
+      </div>
     </div>
     <hr>
     <Alert v-if="successAlert" :message="successAlert" />
@@ -89,6 +94,15 @@
         </table>
        </div>
      </div>
+
+    <div class="not-subscribed-card" v-else>
+      <span class="h5 font-weight-bold">Your trial ends on: {{ trial.date | formatDate }}</span>
+      <div class="not-subscribed-details text-left mt-3">
+        <p>To subscribe <router-link to="/administrator/subscription/update-card" class="btn btn-sm btn-info font-weight-bold">click here</router-link> or the "Subscribe" button on the right hand corner, or feel free to contact sales once the trial has ended.</p>
+        <p>We hope you are enjoying TRAXIT and will continue to use it going into the future!</p>
+      </div>
+    </div>
+
     </div>
 
       <b-modal v-model="cancelModal" ref="modal" hide-footer title="Cancel Subscription">
@@ -105,7 +119,7 @@
       </b-modal>
 
       <!-- this is for viewing the subscription plans -->
-      <router-view :plans="plans" :current="plan.id" v-if="$route.name == 'plans' || $route.name == 'update-card'"></router-view>
+      <router-view :plans="plans" :plan="plan" :current="plan.id" v-if="$route.name == 'plans' || $route.name == 'update-card'"></router-view>
   </div>
 </template>
 
@@ -136,7 +150,8 @@ export default {
           'plan',
           'plans',
           'subscription',
-          'successAlert'
+          'successAlert',
+          'trial'
         ]
       ),
       computedInvoices() {
@@ -164,6 +179,7 @@ export default {
   created: function() {
     this.$store.dispatch('getInvoices')
     this.$store.dispatch('getPlans');
+    this.$store.dispatch('getTrialDate')
   },
 }
 </script>
@@ -183,5 +199,22 @@ ul {
 }
 li {
   margin-bottom: 5px;
+}
+
+.not-subscribed-card {
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,.200);
+  max-width: 600px;
+  padding: 20px;
+  margin: 0 auto;
+  font-weight: bold;
+  margin-top: 40px;
+}
+
+.not-subscribed-details {
+  background-color: rgb(236, 236, 236);
+  border-radius: 5px;
+  padding: 30px;
 }
 </style>

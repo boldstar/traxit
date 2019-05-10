@@ -72,6 +72,7 @@ export default {
             }
         },
         crudRules(i) {
+            if(this.rules.length < 1) return true;
             const value = this.rules.filter(key => key == this.datakeys[i])
             if(value[0] == this.datakeys[i] && this.crud == 'edit') {
                 return false

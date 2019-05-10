@@ -2,7 +2,7 @@
     <div v-if="stripekey">
         <card class='stripe-card form-control pt-2'
           :class='{ complete }'
-          :stripe="{stripekey}"
+          :stripe="'pk_test_KYFZxHTonLt3CcLZGG802H7i'"
           :options='stripeOptions'
           @change='change($event)'
         />

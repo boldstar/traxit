@@ -11,6 +11,7 @@ export default {
         subscription: '',
         grace: null,
         stripekey: null,
+        trial_date: null
     },
     getters: {
         invoices(state) {
@@ -31,6 +32,9 @@ export default {
         stripekey(state) {
             return state.stripekey
         },
+        trial(state) {
+            return state.trial_date
+        }
     },
     mutations: {
         subscriptionInvoices(state, data) {
@@ -51,6 +55,9 @@ export default {
         stripeKey(state, data) {
             state.stripekey = data
         },
+        trialPeriod(state, data) {
+            state.trial_date = data
+        }
     },
     actions: {
         getInvoices(context) {
@@ -62,12 +69,30 @@ export default {
               console.log(error.response.data)
             })
         },
+        getPlansOnly(context) {
+            axios.get('/plans-only')
+            .then(response => {
+              context.commit('subscriptionPlans', response.data);
+            })
+            .catch(error => {
+              console.log(error.response.data)
+            })
+        },
         getPlans(context) {
             axios.get('/plans')
             .then(response => {
               context.commit('subscriptionPlan', response.data.plan);
               context.commit('subscriptionPlans', response.data.plans);
               context.commit('subscriptionSub', response.data.subscription);
+            })
+            .catch(error => {
+              console.log(error.response.data)
+            })
+        },
+        getTrialDate(context) {
+            axios.get('/trial-date')
+            .then(response => {
+              context.commit('trialPeriod', response.data);
             })
             .catch(error => {
               console.log(error.response.data)
@@ -88,6 +113,22 @@ export default {
               console.log(error.response.data)
             })
         },
+        startSubscription(context, card) {
+            context.commit('startProcessing')
+            axios.post('/start-subscription', {
+                stripeToken: card.stripeToken,
+                plan: card.plan
+            })
+            .then(response=> {
+              context.commit('stopProcessing')
+              context.commit('successAlert', response.data.message)
+              router.push('/administrator/subscription')
+            })
+            .catch(error => {
+              context.commit('stopProcessing')
+              console.log(error.response.data)
+            })
+        },    
         cancelSubscription(context) {
             axios.post('/cancel-subscription')
             .then(response => {

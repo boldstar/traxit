@@ -300,7 +300,7 @@ export default {
                 context.commit('successAlert', 'Client Deleted Succesfully')
             })
             .catch(error => {
-                console.log(error)
+                console.log(error.response.data)
             })                
         },
         getBusiness({commit}, id) {

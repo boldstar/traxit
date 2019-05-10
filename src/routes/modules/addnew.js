@@ -20,6 +20,7 @@ export default [
         path: 'contact',
         component: () => import('@/children/ContactForm.vue'),
             meta: {
+            layout: "default",
             requiresAuth: true,
             breadCrumb: [
                 { name: 'New Contact' }
@@ -31,6 +32,7 @@ export default [
         path: 'business',
         component: () => import('@/children/BusinessForm.vue'),
             meta: {
+            layout: "default",
             requiresAuth: true,
             breadCrumb: [
                 { name: 'New Business' }
@@ -42,6 +44,7 @@ export default [
         path: 'engagement/taxform',
         component: () => import('@/children/TaxForm.vue'),
             meta: {
+            layout: "default",
             requiresAuth: true,
             breadCrumb: [
                 { name: 'New Tax Engagement' }
@@ -53,6 +56,7 @@ export default [
         path: 'engagement/bookkeepingform',
         component: () => import('@/children/BookForm.vue'),
             meta: {
+            layout: "default",
             requiresAuth: true,
             breadCrumb: [
                 { name: 'New Bookkeeping Engagement' }
@@ -64,6 +68,7 @@ export default [
         path: 'engagement/customform',
         component: () => import('@/children/CustomForm.vue'),
             meta: {
+            layout: "default",
             requiresAuth: true,
             breadCrumb: [
                 { name: 'New Custom Engagement' }

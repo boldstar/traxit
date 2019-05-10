@@ -542,7 +542,12 @@ export default {
                 self.noData = true
                 self.loading = false
             }
-            self.workflowKey = self.allWorkflows[0].id
+
+            if(self.allWorkflows.length >= 1) {
+                self.workflowKey = self.allWorkflows[0].id
+            } else (
+                self.workflowKey = 1
+            )
         }, 3000) 
     },
 }

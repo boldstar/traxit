@@ -1,7 +1,7 @@
 <template>
     <div class="setup">
         <div class="step-slide">
-            <carousel ref="carousel" :per-page="1" :mouse-drag="false" :loop="false" :navigationEnabled="true" :paginationEnabled="true" class="steps-carousel"  :navigationNextLabel='`<i class="fas fa-arrow-alt-circle-right fa-3x text-primary"></i>`' :navigationPrevLabel='`<i class="fas fa-arrow-alt-circle-left fa-3x text-primary"></i>`' :paginationActiveColor="'#0077ff'" :paginationColor="'black'">
+            <carousel ref="carousel" :per-page="1" :mouse-drag="false" :loop="false" :navigationEnabled="true" :paginationEnabled="true" class="steps-carousel"  :navigationNextLabel='`<i class="fas fa-chevron-right text-primary fa-2x"></i>`' :navigationPrevLabel='`<i class="fas fa-chevron-left text-primary fa-2x"></i>`' :paginationActiveColor="'#0077ff'" :paginationColor="'black'">
                 <slide v-for="step in $setUp" :key="step.step" class="step" ref="slide">
                     <div :class="step.class"></div>
                     <account-setup v-if="step.id == 'account'" v-model="account" :error="formError" @change="formError = false"></account-setup>
@@ -200,4 +200,45 @@ export default {
         margin: 0 auto;
 
     }
+
+@media screen and (max-width: 800px) {
+    .steps-carousel {
+        max-width: 300px;
+    }
+
+     .step {
+        max-width: 300px;
+    }
+
+    .intro-img {
+        height: 300px;
+        width: 100%;
+         max-width: 300px;
+    }
+    .workflow-img {
+        height: 300px;
+        width: 90%;
+         max-width: 300px;
+    }
+    .contact-img {
+        height: 300px;
+        width: 90%;
+         max-width: 300px;
+    }
+    .addnew-img {
+        height: 300px;
+        width: 90%;
+         max-width: 300px;
+    }
+    .welcome-img {
+        height: 300px;
+        width: 100%;
+         max-width: 300px;
+    }
+    .account-img {
+        height: 100px;
+        width: 75%;
+         max-width: 300px;
+    }
+}
 </style>

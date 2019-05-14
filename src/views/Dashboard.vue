@@ -35,7 +35,7 @@
                                     <span>{{ activeEngagements }}</span>
                                 </li>
                                 <li class="d-flex justify-content-between mt-1"> 
-                                    <span class="mr-2 font-weight-bold">Complet: </span>
+                                    <span class="mr-2 font-weight-bold">Complete: </span>
                                     <span>{{ countCompleteEngagements }}</span>
                                 </li>
                             </div>

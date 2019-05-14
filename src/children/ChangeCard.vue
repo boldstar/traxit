@@ -1,11 +1,17 @@
 <template>
 <div>
     <div class="d-flex justify-content-between">
-        <span class="h3 m-0">Update Card</span>
+        <span class="h3 m-0" v-if="plan">Update Card</span>
+        <span class="h3 m-0" v-else>Subscribe</span>
         <router-link to="/administrator/subscription" class="btn btn-primary">Back</router-link>
     </div>
     <hr>
-    <div class="container d-flex justify-content-center mt-4">
+    <div class="container d-flex flex-column align-items-center mt-4 cred-card-form">
+        <div class="disclosure"><small>All payments are processed and stored by Stripe. <a href="https://stripe.com/privacy">Read More.</a></small></div>
+        <div v-if="!plan" class="d-flex justify-content-between bg-light subscribe-card-details">
+            <span>{{ plans.data[0].nickname }}</span> 
+            <span>{{ plans.data[0].amount }}/mth</span>
+        </div>
         <form action="/subscriptions" method="POST" id="payment-form" @submit.prevent="pay()" ref="form" class="form text-left card p-3">
 
         <div class="form-group text-left">
@@ -21,7 +27,8 @@
         <div class="spacer"></div>
 
         <button type="submit" class="btn btn-secondary font-weight-bold" :disabled="processing">
-           <span v-if="!processing">Update Card</span> 
+           <span v-if="!processing && plan">Update Card</span> 
+           <span v-if="!processing && !plan">Subscribe</span> 
            <span v-if="processing">Updating...</span> 
         </button>
     </form>
@@ -36,6 +43,7 @@
 
     export default {
         name: 'ChangeCard',
+        props: ['plan'],
         data () {
             return {
               name_on_card: '',
@@ -46,7 +54,7 @@
             CardElement
         },
         computed: {
-            ...mapGetters(['successAlert', 'processing']),
+            ...mapGetters(['successAlert', 'processing', 'plans']),
         },
         methods: {
             pay () {
@@ -55,18 +63,44 @@
               }
               createToken(options).then(result => {
                 this.stripeToken = result.token.id
-                this.$store.dispatch('updateCard', {
-                    stripeToken: this.stripeToken,
-                })
+                    if(this.plan) {
+                        this.$store.dispatch('updateCard', {
+                            stripeToken: this.stripeToken,
+                        })
+                    }  else {
+                        this.$store.dispatch('startSubscription', {
+                            stripeToken: this.stripeToken,
+                            plan: this.plans.data[0].id
+                        })
+                    }  
               })
             }
       },
+      created() {
+          this.$store.dispatch('getPlansOnly')
+      }
     }
 </script>
 
 <style scoped>
 .form {
     width: 500px;
+}
+
+.credit-card-form {
+    max-width: 500px;
+}
+
+.subscribe-card-details {
+    width: 100%;
+    max-width: 500px;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+.disclosure {
+    margin-bottom: 10px;
 }
 </style>
 

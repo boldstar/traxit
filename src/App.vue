@@ -10,7 +10,7 @@
 </template>
 
 <script>
-const default_layout = "default";
+const landing_layout = "landing";
 import {mapActions, mapGetters} from 'vuex'
 import {destroyToken} from './plugins/session.js'
 
@@ -18,7 +18,7 @@ export default {
     computed: {
         ...mapGetters(['subscribeView']),
         layout() {
-            return (this.$route.meta.layout || default_layout) + '-layout';
+            return (this.$route.meta.layout || landing_layout) + '-layout';
         },
     },
     methods: {

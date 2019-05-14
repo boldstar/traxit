@@ -19,6 +19,7 @@ export default [
         component: () => import('@/contact/Account.vue'),
             meta: {
             requiresAuth: true,
+            layout: "default",
             breadCrumb: [
                 { name: 'Account' }
             ]
@@ -30,6 +31,7 @@ export default [
             component: () => import('@/children/EditContact.vue'),
                 meta: {
                 requiresAuth: true,
+                layout: "default",
                 breadCrumb: [
                     { name: 'Edit Contact' }
                 ]
@@ -41,6 +43,7 @@ export default [
             component: () => import('@/children/DependentCrud.vue'),
                 meta: {
                 requiresAuth: true,
+                layout: "default",
                 breadCrumb: [
                     { name: 'Dependent Form' }
                 ]
@@ -52,6 +55,7 @@ export default [
             component: () => import('@/children/BusinessCrud.vue'),
                 meta: {
                 requiresAuth: true,
+                layout: "default",
                 breadCrumb: [
                     { name: 'Business Form' }
                 ]
@@ -66,6 +70,7 @@ export default [
         component: () => import('@/contact/ContactEngagements.vue'),
             meta: {
             requiresAuth: true,
+            layout: "default",
             breadCrumb: [
                 { name: 'Engagements' }
             ]
@@ -77,6 +82,7 @@ export default [
                 component: () => import('@/children/AddEngagement.vue'),
                 meta: {
                     requiresAuth: true,
+                    layout: "default",
                     breadCrumb: [
                     { name: 'Add Engagement' }
                     ]
@@ -90,6 +96,7 @@ export default [
         component: () => import('@/contact/Files.vue'),
             meta: {
             requiresAuth: true,
+            layout: "default",
             breadCrumb: [
                 { name: 'Files' }
             ]
@@ -102,6 +109,7 @@ export default [
             component: () => import('@/contact/Notes.vue'),
             meta: {
             requiresAuth: true,
+            layout: "default",
             breadCrumb: [
                 { name: 'Notes' }
                 ],
@@ -112,6 +120,7 @@ export default [
                 component: () => import('@/children/AddNote.vue'),
                     meta: {
                     requiresAuth: true,
+                    layout: "default",
                     breadCrumb: [
                         { name: 'Add Note' }
                     ]
@@ -122,6 +131,7 @@ export default [
                 component: () => import('@/children/EditNote.vue'),
                     meta: {
                     requiresAuth: true,
+                    layout: "default",
                     breadCrumb: [
                         { name: 'Edit Note' }
                     ]
@@ -135,6 +145,7 @@ export default [
         component: () => import('@/contact/Pending.vue'),
             meta: {
             requiresAuth: true,
+            layout: "default",
             breadCrumb: [
                 { name: 'Pending' }
             ]
@@ -146,6 +157,7 @@ export default [
             component: () => import('@/contact/Portal.vue'),
             meta: {
             requiresAuth: true,
+            layout: "default",
             breadCrumb: [
                 { name: 'Portal' }
             ]

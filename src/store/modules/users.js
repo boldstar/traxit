@@ -1,11 +1,15 @@
 import axios from 'axios'
-import moment from 'moment';
 import router from '../../router'
 
 export default {
     state: {
         users: [],
-        user: '',
+        user: {
+            name: '',
+            email: '',
+            password: '',
+            role: ''
+        },
     },
     getters: {
         user(state) {
@@ -31,7 +35,16 @@ export default {
             state.users = users
         },
         userDetails(state, user) {
-            state.user = user[0]
+            state.user = user
+            if(user) {
+                state.user = user
+                state.user.role = user.roles[0].name
+            } else state.user = {
+                name: '',
+                email: '',
+                password: '',
+                role: ''
+            }
         },
     },
     actions: {
@@ -56,44 +69,47 @@ export default {
         retrieveUserToUpdate(context, id) {
             axios.get('/userToUpdate/' + id)
             .then(response => {
-              context.commit('userDetails', response.data)
+              context.commit('userDetails', response.data[0])
             })
             .catch(error => {
               console.log(error.response.data)
             })
         },
         updateUser(context, data) {
+            context.commit('startProcessing')
             axios.patch('/users/' +data.id, {
-              name: data.name,
-              email: data.email,
-              role: data.role
-            })
-            .then(response => {
-              context.commit('updateUser', response.data)
-            })
-            .catch(error => {
-              console.log(error.response.data)
-            })
-        },
-        addUser(context, data) {
-              axios.post('/register', {
                 name: data.name,
                 email: data.email,
-                password: data.password,
                 role: data.role
-              })
+            })
+            .then(response => {
+                context.commit('stopProcessing')
+                context.commit('updateUser', response.data)
+                router.push('/administrator/team')
+            })
+            .catch(error => {
+                context.commit('stopProcessing')
+                console.log(error.response.data)
+            })
+        },
+        addUser(context, user) {
+              context.commit('startProcessing')
+              axios.post('/register', user)
               .then(response => {
+                context.commit('stopProcessing')
                 context.commit('addUser', response.data)
-              })
-              .catch(error => {
+                router.push('/administrator/team')
+            })
+            .catch(error => {
+                context.commit('stopProcessing')
                 console.log(error.response.data)
               })
         },
-        deleteUser(context, user) {
-            axios.delete('/users/'+ user.id)
+        deleteUser(context, id) {
+            axios.delete('/users/'+ id)
             .then(response => {
               context.commit('successAlert', response.data)
-              context.commit('deleteUser', user.id)
+              context.commit('deleteUser', id)
             })
             .catch(error => {
               context.commit('successAlert', error.response.data)

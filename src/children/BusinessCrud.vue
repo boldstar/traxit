@@ -10,8 +10,10 @@
             :datakeys="dataKeys"
             :errs="errorArray" 
             :btn="'Submit'" 
-            :key="key" 
+            :key="key"
+            :rules="[]" 
             @submit-form="validateSubmit"
+            @change="clear"
         />
     </div>
 </template>
@@ -68,6 +70,9 @@ export default {
       }
       this.key = !this.key
     },
+    clear() {
+        this.errorArray = []
+    }
   },
   created: function(){
     this.$store.dispatch('getBusiness', this.$route.params.business);

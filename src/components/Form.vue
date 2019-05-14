@@ -4,14 +4,14 @@
             <span>{{title}}</span>
             <button type="button" class="cancel-btn" @click="goBack">Cancel</button>
         </div>
-        <div v-for="(input, index) in inputFields" :key="index" class="input">
+        <div v-for="(input, index) in inputFields" :key="index" class="input" v-if="crudRules(index)">
             <label :for="input.placeholder">{{input.placeholder}}</label>
             <input type="text" :value="model[property(index)]"  :placeholder="input.placeholder" @change="handleChange" @input="handleInput(index, $event)" :class="{'input-error': errs.length >= 1 && errs.includes(property(index)[0])}">
         </div>
         <div v-for="(select, index) in selectFields" :key="select.label" class="select" v-if="selectFields.length >= 1">
             <label :for="select">{{select.label}}</label>
-            <select :name="select" :id="select" @change="handleSelect(index, $event)">
-                <option :disabled="!chosen">{{ selected }}</option>
+            <select :name="select" :id="select" @change="handleSelect(index, $event)" v-model="model[selectValue(values)]" :class="{'input-error': errs.length >= 1 && errs.includes(values[index])}">
+                <option disabled value="">{{ selected }}</option>
                 <option :value="option" v-for="(option, index) in select.choices" :key="index">{{option}}</option>
             </select>
         </div>
@@ -38,7 +38,10 @@ export default {
         'labels',
         'datakeys',
         'title',
-        'errs'
+        'errs',
+        'values',
+        'rules',
+        'crud'
     ],
     data() {
         return {
@@ -52,13 +55,28 @@ export default {
         inputFields() {
             return this.createInputs(this.inputs)
         },
-        ...mapGetters(['processing'])
+        ...mapGetters(['processing']),
     },
     methods: {
         property(i) {
             const props = Object.keys(this.model)
             return props.filter(key => key == this.datakeys[i])
             return
+        },
+        selectValue(v) {
+            const keys = Object.keys(this.model)
+            for(var i = 0; i < keys.length; i++) {
+                if(v.includes(keys[i])) {
+                    return keys[i]
+                }
+            }
+        },
+        crudRules(i) {
+            if(this.rules.length < 1) return true;
+            const value = this.rules.filter(key => key == this.datakeys[i])
+            if(value[0] == this.datakeys[i] && this.crud == 'edit') {
+                return false
+            } return true
         },
         createInputs(x) {
             const fields = []

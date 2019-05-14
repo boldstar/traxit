@@ -17,6 +17,7 @@ export default [
             component: () => import('@/children/EditEngage.vue'),
               meta: {
                 requiresAuth: true,
+                layout: "default",
                 breadCrumb: [
                   { name: 'Edit Engagement' }
               ]
@@ -27,6 +28,7 @@ export default [
             component: () => import('@/children/EngageHistory.vue'),
               meta: {
                 requiresAuth: true,
+                layout: "default",
                 breadCrumb: [
                   { name: 'Engagement History' }
               ]
@@ -37,6 +39,7 @@ export default [
             component: () => import('@/children/AddQuestion.vue'),
               meta: {
                 requiresAuth: true,
+                layout: "default",
                 breadCrumb: [
                   { name: 'Add Question' }
               ]
@@ -47,6 +50,7 @@ export default [
             component: () => import('@/children/EditQuest.vue'),
               meta: {
                 requiresAuth: true,
+                layout: "default",
                 breadCrumb: [
                   { name: 'Edit Question' }
               ]
@@ -57,6 +61,7 @@ export default [
             component: () => import('@/children/AnswerQuest.vue'),
               meta: {
                 requiresAuth: true,
+                layout: "default",
                 breadCrumb: [
                   { name: 'Answer Question' }
               ]
@@ -67,6 +72,7 @@ export default [
             component: () => import('@/children/EditAnswer.vue'),
               meta: {
                 requiresAuth: true,
+                layout: "default",
                 breadCrumb: [
                   { name: 'Edit Answer' }
               ]

@@ -3,10 +3,14 @@ import axios from 'axios'
 export default {
     state: {
         account: '',
+        subscribe: null
     },
     getters: {
         accountDetails(state) {
             return state.account
+        },
+        subscribeView(state) {
+          return state.subscribe
         },
     },
     mutations: {
@@ -18,6 +22,9 @@ export default {
         },
         updateAccountDetails(state, account) {
             state.account = account
+        },
+        subscribeView(state, data) {
+          state.subscribe = data
         },
     },
     actions: {

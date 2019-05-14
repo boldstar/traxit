@@ -65,9 +65,17 @@ export default {
     toggleSidebar() {
       return this.$store.getters.sidebarOpen
     },
-    ...mapGetters(['notify', 'mobileLinks', 'setupTour', 'role']),
+    ...mapGetters(['notify', 'mobileLinks', 'setupTour', 'role', 'subscribeView']),
+  },
+  watch: {
+    subscribeView: function(val) {
+      if(val && typeof(val) ===  'string') {
+        this.$store.dispatch('destroyToken')
+      }
+    }
   },
   created() {
+    this.$store.dispatch('getAccountDetails')
     if(localStorage.getItem('access_token') != null) {
       this.$store.dispatch('getTours')
       this.$store.dispatch('checkGracePeriod');

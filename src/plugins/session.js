@@ -54,3 +54,18 @@ export function  startSession(response) {
         return false
     }
 }
+
+export function trialPeriod(date) {
+
+     const trialDate = new Date(date)
+     const trialEndsOn = moment(trialDate).format('YYYYMMDDHHMMSS')
+
+     const current = new Date(moment())
+     const currentDate = moment(current).format('YYYYMMDDHHMMSS')
+
+     if(currentDate >= trialEndsOn) {
+         return false
+     } else {
+         return true
+     };
+}

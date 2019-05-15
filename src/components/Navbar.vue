@@ -4,6 +4,21 @@
         <!-- bread crumbs to go here -->
         
         <ul class="navbar-nav mr-3 d-flex flex-row">
+            <div v-if="loggedIn && !setupTour && onTrial" class="mobile">
+                <div class="dropdown mr-3">
+                    <div class="indicator"></div>
+                    <button class="btn btn-sm btn-light dropdown-toggle font-weight-bold" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Getting Started
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                        <router-link class="dropdown-item setup-link" to="/administrator/account">Account Details</router-link>
+                        <router-link class="dropdown-item setup-link" to="/contacts">Upload Contacts</router-link>
+                        <router-link class="dropdown-item setup-link" to="/administrator/workflows">Create Workflow</router-link>
+                        <router-link class="dropdown-item setup-link" to="/add">Start Engagement</router-link>
+                        <router-link class="dropdown-item setup-link" to="/administrator/subscription">Subscribe</router-link>
+                    </div>
+                </div>
+            </div>
             <!-- only shows up at certain screen size. see media queries for "sidebar-btn" -->
             <button v-if="$route.meta.layout != 'admin'" class="bg-light sidebar-btn" data-toggle="tooltip" data-placement="bottom" title="Toggle Drawer" @click="showLinks">
                 <i class="fas fa-bars"></i>
@@ -39,20 +54,25 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+import {trialPeriod} from '../plugins/session.js'
 export default {
     name: 'navbar',
     props: ['admin'],
     data () {
         return {
-        isActive: false,
-        search: '',
-        category: '',
-        option: 'All',
-        dropdown: false,
-        hideInput: true,
+            isActive: false,
+            search: '',
+            category: '',
+            option: 'All',
+            dropdown: false,
+            hideInput: true,
+            date: null,
+            onTrial: false
         }
     },
     computed: {
+        ...mapGetters(['setupTour', 'trial']),
         loggedIn() {
         return this.$store.getters.loggedIn
         },
@@ -90,10 +110,24 @@ export default {
             setTimeout(() => {
                 this.$refs.search.focus()
             }, 1000)
+        },
+        checkTrialDate() {
+            setTimeout(() => {
+                if(this.trial) {
+                    this.onTrial = trialPeriod(this.trial.date)
+                }   else this.onTrial = false
+            }, 3000)
         }
+    },
+    mounted() {
+        this.checkTrialDate()
     },
     created() {
         this.category = this.option
+        if(localStorage.getItem('access_token') != null) {
+            this.$store.dispatch('getTours')
+            this.$store.dispatch('getTrialDate')
+        }
     }
 }
 </script>
@@ -270,6 +304,50 @@ export default {
         display: none;
     }
 
+    .indicator {
+        z-index: 10000;
+        height: 10px;
+        width: 10px;
+        border-radius: 50%;
+        background: red;
+        position: absolute;
+        left: -2px;
+        top: -2px;
+    }
+
+    .setup-link {
+        font-weight: bold;
+
+         &:before{
+            content: "";
+            position: absolute;
+            height: 15px;
+            width: 15px;
+            left: 5px;
+            margin-top: 5px;
+            background-color: #0077ff;
+            border-radius: 50%;
+        }
+
+        &:after {
+            content: "";
+            position: absolute;
+            left: 10px;
+            z-index: -2;
+            height: 40px;
+            border: 3px solid black;
+        }
+
+        &:first-child:after {
+           height: 20px;
+           top: 30px; 
+        }
+        
+        &:last-child:after {
+           border-color: transparent; 
+        }
+    }
+
     @media screen and (max-width: 950px) {
         .sidebar-btn {
             display: block!important;
@@ -291,7 +369,11 @@ export default {
         }
 
         .search-dropdown {
-            display: none;
+            display: none!important;
+        }
+
+        .mobile {
+            display: none!important;
         }
     }
 

@@ -3,8 +3,6 @@
       <Alert v-if="alert" v-bind:message="alert" />
       <Alert v-if="successAlert" v-bind:message="successAlert" />
 
-      <!-- the clients data is imported from client info file -->
-      <processing v-if="processing"></processing>
       <div class="page-wrapper mt-1"> 
           <contacts-list :clients="allClients"></contacts-list>
       </div>
@@ -16,7 +14,6 @@
 import { mapGetters } from 'vuex'
 import ContactsList from '@/components/ContactsList'
 import Alert from '@/components/Alert'
-import Processing from '@/components/Processing'
 
 
 export default {
@@ -24,7 +21,6 @@ name: 'Contacts',
   components: {
     ContactsList,
     Alert,
-    Processing,
   },
   data() {
     return {
@@ -32,7 +28,7 @@ name: 'Contacts',
     }
   },
   computed: {
-    ...mapGetters(['allClients', 'processing', 'successAlert']),
+    ...mapGetters(['allClients', 'successAlert']),
   },
   created: function() {
     if(this.$route.query.alert) {

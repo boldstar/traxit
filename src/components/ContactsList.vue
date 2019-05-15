@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="contact-table">
 
     <!-- this is the row of buttons above the clients list -->
     <div class="d-flex mb-3">
@@ -35,26 +35,12 @@
         </div>  
 
     <div class="d-flex mobile-hide-row">
-        <div class="input-group d-flex" v-if="uploadInput">
-            <div class="mr-2">
-                <button class="btn btn-outline-secondary" @click="uploadInput = false">Cancel</button>
-            </div>
-            <div class="custom-file">
-                <label class="custom-file-label" for="inputGroupFile04" v-if="!hasFile">Choose file</label>
-                <label class="custom-file-label" for="inputGroupFile04" v-if="hasFile">{{ fileLabel }}</label>
-                <input type="file" class="custom-file-input px-2" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" v-on:change="selectedFile($event)">
-            </div>
-            <div class="input-group-append">
-                <button class="btn btn-primary" id="inputGroupFileAddon04" @click="uploadContacts">Submit</button>
-            </div>
-        </div>      
-
-         <div class="dropdown" v-if="!uploadInput">
-          <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+         <div class="dropdown">
+          <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-cog mr-2"></i>
             Settings
           </button>
-          <div class="dropdown-menu dropdown-menu-right mr-2 p-1 settings-dropdown" aria-labelledby="dropdownMenu2">
+          <div class="dropdown-menu dropdown-menu-left mr-2 p-1 settings-dropdown" aria-labelledby="dropdownMenu3">
             <button class="dropdown-item d-flex justify-content-between font-weight-bold px-1" @click="clearFilters" data-toggle="tooltip" data-placement="top" title="Clear Filters">Clear Filters<i class="fas fa-filter align-self-center text-primary"></i></button>
             <button class="dropdown-item d-flex justify-content-between font-weight-bold px-1" @click="uploadInput = true" data-toggle="tooltip" data-placement="top" title="Upload Contacts">Upload Contacts<i class="far fa-file-excel text-success align-self-center"></i></button>
             <button class="dropdown-item d-flex justify-content-between font-weight-bold px-1" @click="downloadContacts" data-toggle="tooltip" data-placement="top" title="Download Contacts">Download Contacts<i class="far fa-file-excel text-secondary align-self-center"></i></button>
@@ -67,7 +53,7 @@
 
         
     <!-- this is the table for the list of clients -->
-    <table class="table border table-light table-hover text-left">
+    <table class="table border table-light table-hover">
         <thead class="text-primary hover">
             <tr>
                 <th scope="col">Client</th>
@@ -128,12 +114,14 @@
         </div>  
     </nav>
 
+
+    <contact-setup-modal v-if="uploadInput" @close-modal="closeUpload"></contact-setup-modal>
     </div>
 </template>
 
 <script>
 import Spinner from '@/components/Spinner.vue'
-
+import ContactSetupModal from '@/components/ContactSetupModal.vue'
 export default {
     name: 'client-info',
     props: {
@@ -143,7 +131,8 @@ export default {
         }
     },
     components: {
-        Spinner
+        Spinner,
+        ContactSetupModal
     },
     data() {
         return {
@@ -160,7 +149,7 @@ export default {
             currentPage: 1,
             pageSize: null,
             options: ['10', '25', '50', '100'],
-            type: 'All'
+            type: 'All',
         }
     },
     computed: {
@@ -209,14 +198,6 @@ export default {
         downloadContacts() {
             this.$store.dispatch('downloadContacts')
         },
-        selectedFile(event) {
-            this.file = event.target.files[0]
-            this.fileLabel = event.target.files[0].name
-            this.hasFile = true
-        },
-        uploadContacts() {
-            this.$store.dispatch('uploadContacts', this.file)
-        },
         viewDetails(id) {
             this.$router.push({path: '/contact/'+ id + '/account'})
         },
@@ -225,6 +206,9 @@ export default {
             this.filterType = 'All'
             this.filterActive = 'All'
         },
+        closeUpload() {
+            this.uploadInput = false
+        }
     },
     created() {
         this.$store.dispatch('retrieveClients');
@@ -256,6 +240,11 @@ tr {
 .settings-dropdown {
     width: 200px;
 }
+
+.contact-table {
+    min-height: calc(100vh - 150px);
+}
+
 
 @media screen and (max-width: 1300px) {
     .table {

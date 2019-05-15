@@ -46,6 +46,10 @@
                     </div>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item logout" @click="logout">Logout<i class="ml-5 fas fa-sign-out-alt"></i></a>
+                    <div v-if="$can('delete', admin) && onTrial" class="dropdown-item text-center bg-light p-1 border mt-3">
+                        <span class="font-weight-bold text-danger">Trial Ends: <p class="text-dark mb-0">{{ trial.date | formatDate }}</p></span>
+                        <router-link  to="/administrator/subscription" class="font-weight-bold">Subscribe Now</router-link>
+                    </div>
                 </div>
             </li>
         </ul>

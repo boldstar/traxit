@@ -22,7 +22,7 @@
       <div v-if="batchAlert" class="p-2 bg-danger font-weight-bold text-light">{{ batchAlert }}</div>
 
 <!-- this is the list of the assigned user tasks -->
-    <div class="text-left card-body mb-3 tasks d-flex">
+    <div class="text-left card-body mb-3 tasks d-flex flex-column">
     <NoTask v-if="noTasks" />
     <processing-bar v-if="processing"></processing-bar>
     <input v-if="searchInput" class="form-control mb-3" placeholder="Filter Task By Client Name" v-model="searchTasks" type="search">

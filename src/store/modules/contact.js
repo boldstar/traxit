@@ -475,7 +475,8 @@ export default {
               'Content-Type': 'multipart/form-data'
             }})
             .then(response => {
-              context.commit('successAlert', response.data )
+              context.commit('successMessage', response.data.message )
+              context.commit('retrieveClients', response.data.clients)
               context.commit('stopProcessing')
             })
             .catch(error => {

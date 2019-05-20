@@ -349,10 +349,13 @@ export default {
         }) 
       }
       if(this.taskToUpdate && this.completed === true) {
+          const t = this.tasks.filter(task => task.id == this.taskToUpdate)
           if(!this.task.user_id) return;
           this.updateTask({
             id: this.taskToUpdate,
-            done: this.task.done
+            done: this.task.done,
+            user_id: t[0].user_id,
+            status: 'Complete'
           }).then(() => {
           this.alert = 'Tasks updated'
           this.$refs.modal.hide()

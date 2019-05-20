@@ -10,7 +10,7 @@
         </div>
         <div class="input-group d-flex" v-if="!successMessage">
             <div class="custom-file">
-                <label class="custom-file-label" for="inputGroupFile04" v-if="!hasFile">Choose fil</label>
+                <label class="custom-file-label" for="inputGroupFile04" v-if="!hasFile">Choose file</label>
                 <label class="custom-file-label" for="inputGroupFile04" v-if="hasFile">{{ fileLabel }}</label>
                 <input type="file" class="custom-file-input px-2" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" v-on:change="selectedFile($event)">
             </div>

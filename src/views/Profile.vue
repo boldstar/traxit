@@ -37,7 +37,6 @@ export default {
   },
   created(){
     this.$store.dispatch('retrieveUser')
-    this.$store.dispatch('retrieveTasks')
   }
 }
 </script>

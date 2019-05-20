@@ -4,6 +4,7 @@ import router from '../../router'
 export default {
     state: {
         users: [],
+        userProfile: '',
         user: {
             name: '',
             email: '',
@@ -46,12 +47,15 @@ export default {
                 role: ''
             }
         },
+        userProfile(state, user) {
+            state.user = user[0]
+        }
     },
     actions: {
         retrieveUser(context) {
             axios.get('/userProfile')
             .then(response => {
-              context.commit('userDetails', response.data)
+              context.commit('userProfile', response.data)
             })
             .catch(error => {
               console.log(error.response.data)

@@ -29,7 +29,6 @@ export default {
     },
     actions: {
         retrieveTasks(context) {
-
             axios.get('/tasks')
             .then(response => {
               context.commit('retrieveTasks', response.data)

@@ -6,9 +6,7 @@
         :key="idx"
         @click="routeTo(idx)"
         :class="{'linked': !!breadcrumb.link}">
-
-        {{ breadcrumb.name }}
-
+          {{ breadcrumb.name }}
       </li>
     </ul>
   </div>
@@ -29,7 +27,7 @@ export default {
       if (this.breadcrumbList[pRouteTo].link) this.$router.push(this.breadcrumbList[pRouteTo].link)
     },
     updateList () { this.breadcrumbList = this.$route.meta.breadCrumb }
-  }
+  },
 }
 </script>
 

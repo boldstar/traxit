@@ -18,11 +18,6 @@
                 </div> 
             </div>
         </div>
-<<<<<<< HEAD
-        <p class="welcome-details" v-if="role == 'Admin'">Create a workflow and start an engagement to view your Dashboard</p>
-        <img src="@/assets/Welcome.png" class="image">
-=======
->>>>>>> developer
     </div>
 </template>
 

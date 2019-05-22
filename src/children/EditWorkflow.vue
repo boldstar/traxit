@@ -9,6 +9,7 @@
                 <div class="form-group card-body bg-light">
                     <input class="form-control" type="text" v-model="workflow.workflow">
                 </div>
+                <p v-if="error" class="text-danger">Please remove empty status inputs highlighted in red</p>
                 <div class="mx-2 mb-3">
                     <div v-for="oldStatus in workflow.statuses" :key="oldStatus.id" class="d-flex mt-3">
                         <input class="form-control" type="text" v-model="oldStatus.status">
@@ -19,7 +20,7 @@
                         <button type="button" class="btn btn-outline-danger btn-sm ml-3 font-weight-bold" @click="requestDelete(oldStatus.id)">X</button>
                     </div>
                     <div v-for="(status, index) in workflowData.newStatuses" :key="index" class="d-flex mt-3">
-                        <input class="form-control" type="text" placeholder="Add Status" v-model="status.value">
+                        <input class="form-control" type="text" placeholder="Add Status" v-model="status.value" :class="{'input-error': error && status.value == ''}" @change="error = false">
                          <label class="check-container">
                             <input type="checkbox" v-model="status.notify_client">
                             <span class="checkmark"></span>
@@ -74,6 +75,7 @@ export default {
         return {
             modalShow: false,
             statusToDelete: null,
+            error: false,
             workflowData: {
                 newStatuses: []
             },
@@ -94,6 +96,13 @@ export default {
     methods: {
         ...mapActions(['editWorkflow']),
         editThisWorkflow() {
+            for(var i = 0; i < this.workflowData.newStatuses.length; i++) {
+                var status = this.workflowData.newStatuses[i]
+                if(!status.value) {
+                    this.error = true
+                    return
+                }
+            }
             this.editWorkflow({
             id: this.workflow.id,
             workflow: this.workflow.workflow,
@@ -221,6 +230,10 @@ export default {
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
+    }
+
+    .input-error {
+        border: 1px solid red;
     }
 
     @media screen and (max-width: 767px) {

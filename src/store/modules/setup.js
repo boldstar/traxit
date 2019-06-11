@@ -76,7 +76,6 @@ export default {
         completeSetup(context) {
             axios.post('/complete-setup-tour')
             .then(response => {
-                context.commit('setTours', response.data)
                 document.location.reload(true)
             })
             .catch(error => {

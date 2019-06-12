@@ -20,8 +20,8 @@
             </carousel>
         </div>
 
-        <contact-setup-modal v-if="modalState"></contact-setup-modal>
-        <workflow-setup-modal v-if="workflowModalState"></workflow-setup-modal>
+        <contact-setup-modal v-if="modalState" @upload-done="moveToWorkflowStep"></contact-setup-modal>
+        <workflow-setup-modal v-if="workflowModalState" @upload-done="moveToStartTraxit"></workflow-setup-modal>
     </div>
 </template>
 
@@ -68,6 +68,10 @@ export default {
                 business_name: this.account.business_name,
                 email: this.account.email,
                 phone: this.account.phone
+            }).then(() => {
+                setTimeout(() => {
+                    this.$refs.carousel.goToPage(2);
+                }, 1600)
             })
         },
         uploadContacts() {
@@ -82,6 +86,12 @@ export default {
         nextStep() {
             const index = this.$refs.slide[0].$parent.currentPage
             this.$refs.carousel.goToPage(index + 1)
+        },
+        moveToWorkflowStep() {
+            this.$refs.carousel.goToPage(3)
+        },
+        moveToStartTraxit() {
+            this.$refs.carousel.goToPage(4)
         }
     },
 }

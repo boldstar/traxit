@@ -1,6 +1,5 @@
 <template>
     <div>
-        <!-- <div class="welcome" v-if="!showWelcome"></div> -->
         <div class="welcome">
             <p class="welcome-details">Complete below steps to view your Dashboard!</p>
             <div class="welcome-btns">

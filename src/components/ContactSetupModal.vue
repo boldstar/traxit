@@ -65,6 +65,7 @@ export default {
             this.fileLabel = null
             this.hasFile = false
             this.$store.commit('clearSetupMessage')
+            this.$emit('upload-done')
         },
         selectedFile(event) {
             this.file = event.target.files[0]

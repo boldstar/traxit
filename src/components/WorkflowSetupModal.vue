@@ -77,6 +77,7 @@ export default {
         closeModal() {
             this.$store.commit('setupWorkflowModal')
             this.$store.commit('clearSetupMessage')
+            this.$emit('upload-done')
         },
         createWorkflow() {
             this.startProgress()

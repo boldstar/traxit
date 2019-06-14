@@ -263,6 +263,7 @@ export default {
       if(this.bookChecked) {
         this.engagement.type = 'bookkeeping'
         this.engagement.category = 'Business'
+        this.engagement.difficulty = 0
       }
       if(this.taxChecked) {
         this.engagement.type = 'taxreturn'

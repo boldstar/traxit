@@ -1,20 +1,28 @@
 <template>
     <div>
-        <!-- <div class="welcome" v-if="!showWelcome"></div> -->
         <div class="welcome">
             <p class="welcome-details">Complete below steps to view your Dashboard!</p>
             <div class="welcome-btns">
                 <div class="step">
                     <div class="step-icon">1</div>
-                    <router-link to="/contacts" class="btn btn-info eng-btn">Upload Contacts</router-link>
+                    <router-link to="/contacts" class="btn btn-info eng-btn" :class="{'step-complete': allClients.length > 0}">
+                        Upload Contacts
+                        <i class="fas fa-check" v-if="allClients.length > 0"></i>
+                    </router-link>
                 </div>
                 <div class="step">
                     <div class="step-icon">2</div>
-                    <router-link to="/administrator/workflows" class="btn btn-secondary eng-btn">Create Workflow</router-link>
+                    <router-link to="/administrator/workflows" class="btn btn-secondary eng-btn" :class="{'step-complete': allWorkflows.length > 0}">
+                        Create Workflow
+                        <i class="fas fa-check" v-if="allWorkflows.length > 0"></i>
+                    </router-link>
                 </div>
                 <div class="step">
                     <div class="step-icon">3</div>
-                    <router-link to="/add" class="btn btn-primary eng-btn">Start Engagement</router-link>
+                    <router-link to="/add" class="btn btn-primary eng-btn" :class="{'step-complete': allEngagements.length > 0}">
+                        Start Engagement
+                        <i class="fas fa-check" v-if="allEngagements.length > 0"></i>
+                    </router-link>
                 </div> 
             </div>
         </div>
@@ -106,6 +114,13 @@ export default {
     font-weight: bold!important;
     flex: 1;
     margin-left: 50px;
+    position: relative;
+
+    .fa-check {
+        position: absolute;
+        right: 10px;
+        top: 8px;
+    }
 }
 
 .welcome-details {
@@ -113,6 +128,11 @@ export default {
     padding: 10px;
     border-radius: 3px;
     font-weight: bold;
+}
+
+
+.step-complete {
+    text-decoration: line-through;
 }
 
 @media screen and (max-width: 600px) {

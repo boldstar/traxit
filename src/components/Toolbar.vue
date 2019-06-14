@@ -1,11 +1,11 @@
 <template>
     <nav class="navbar fixed-top bg-light flex-md-nowrap shadow-sm justify-content-between toolbar">
         <div class="d-flex">
-            <div class="align-self-center left-sidebar-button">
+            <!-- <div class="align-self-center left-sidebar-button">
                 <button class="bg-light" @click="handleClick" data-toggle="tooltip" data-placement="bottom" title="Toggle Sidebar">
                     <i class="fas fa-bars"></i>
                 </button>
-            </div>
+            </div> -->
             <div>
                 <breadcrumb class="breadcrumb" :route="route"></breadcrumb>
             </div>

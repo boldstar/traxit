@@ -1,6 +1,9 @@
 <template>
   <div class="breadcrumb">
     <ul class="d-flex m-0 p-0">
+      <!-- <li>
+        {{ formatPath($route.path) }}
+      </li> -->
       <li
         v-for="(breadcrumb, idx) in breadcrumbList"
         :key="idx"
@@ -26,8 +29,12 @@ export default {
     routeTo (pRouteTo) {
       if (this.breadcrumbList[pRouteTo].link) this.$router.push(this.breadcrumbList[pRouteTo].link)
     },
-    updateList () { this.breadcrumbList = this.$route.meta.breadCrumb }
-  },
+    updateList () { this.breadcrumbList = this.$route.meta.breadCrumb },
+    formatPath(path) {
+      const newPath = path.replace(/\//g, " > ")
+      return newPath
+    }
+  }
 }
 </script>
 

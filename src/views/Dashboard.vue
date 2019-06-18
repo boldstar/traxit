@@ -101,7 +101,7 @@
                     </div>
                 </div>
 
-                <div class="my-3 completed">
+                <div class="my-3 mt-auto completed">
                     <div class="card w-100">
                         <div class="d-flex justify-content-between card-header p-2">
                             <div class="h5 mb-0 ml-3">

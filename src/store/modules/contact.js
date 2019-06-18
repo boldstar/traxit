@@ -317,9 +317,7 @@ export default {
             axios.post(('/businesses'), business)
             .then(response => {
                 context.commit('stopProcessing')
-                context.commit('addBusiness', response.data.business)
                 context.commit('successAlert', response.data.message)
-                router.push('/contact/' + business.client_id + '/account')
             })
             .catch(error => {
                 console.log(error.response.data)

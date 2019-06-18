@@ -23,10 +23,10 @@
 
 <!-- this is the list of the assigned user tasks -->
     <div class="text-left card-body mb-3 tasks d-flex flex-column">
-    <NoTask v-if="noTasks" />
     <processing-bar v-if="processing"></processing-bar>
     <input v-if="searchInput" class="form-control mb-3" placeholder="Filter Task By Client Name" v-model="searchTasks" type="search">
     <spinner v-if="tasksLoaded" class="mx-auto"></spinner>
+    
 
       <table class="table table-hover text-center" v-if="!tasksLoaded && taskData">
         <thead class="bg-primary text-light">
@@ -68,6 +68,8 @@
           </tr>
         </tbody>
       </table>
+
+      <NoTask v-if="noTasks" />
 
       <div class="d-flex mb-4" v-if="batchUpdate">
         <button v-if="batchUpdate" class="btn btn-primary font-weight-bold mr-3" @click="requestBatchUpdate">Batch Update</button>

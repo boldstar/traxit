@@ -45,75 +45,41 @@
     </div>
 
 
-    <!-- if engagement is selected this section will show -->
-    <div class="d-flex flex-column justify-content-center align-items-center mt-5 card-content" v-if="engagementsCard && $route.name == 'add'">
-      <div class="d-flex card p-0 col-sm-12 col-md-10 col-lg-8 flex-sm-wrap shadow m-3 engagement-body" v-if="$route.name == 'add'">
-      <div class="card-header d-flex justify-content-between">
-        <span class="font-weight-bold h3 text-primary align-self-center m-0 span-title">Choose Engagement Type</span>
-        <button type="button" @click="engagementsCard=false" class="btn btn-outline-secondary btn-sm font-weight-bold">Back</button>
-      </div>
-      <div class="card-body d-flex flex-wrap">
-        <!-- tax return engagement form -->
-        <div class="col-sm-6 col-md-6 card-option">
-          <div class="card-style card-body bg-light border shadow-sm">
-            <div class="h3 mb-4 font-weight-bold">
-              <span class="span-title">Tax Return</span>
-            </div>
-            <div class="mt-3">
-              <router-link to="add/engagement/taxform" class="btn btn-style">Next</router-link>
-            </div>
-          </div>
-        </div>
-        <!-- bookkeeping engagement form -->
-        <div class="col-sm-6 col-md-6 card-option">
-          <div class="card-style card-body bg-light border shadow-sm">
-            <div class="h3 mb-4 font-weight-bold">
-              <span class="span-title">Bookkeeping</span>
-            </div>
-            <div class="mt-3">
-              <router-link to="add/engagement/bookkeepingform" class="btn btn-style">Next</router-link>
-            </div>
-          </div>
-        </div>
-        <!-- custom engagement form -->
-        <div class="col-sm-6 col-md-6 mx-auto mt-4 card-option">
-          <div class="card-style card-body bg-light border shadow-sm">
-            <div class="h3 mb-4 font-weight-bold">
-              <span class="span-title">Custom</span>
-            </div>
-            <div class="mt-3">
-              <router-link to="add/engagement/customform" class="btn btn-style">Next</router-link>
-            </div>
-          </div>
-        </div>
-      </div>
-      </div>
-    </div>
+    <EngagementTypes @go-back="engagementsCard=false" v-if="engagementsCard" @show-form="startEngagement" />
 
 
     <div class="d-flex justify-content-center">
-      <router-view></router-view>
+      <router-view :workflow="type"></router-view>
     </div>
   </div>
 </template>
 
 <script>
 import Alert from '@/components/Alert.vue'
+import EngagementTypes from '@/components/EngagementType.vue'
 import {mapGetters} from 'vuex'
 export default {
   name: 'add',
   data() {
     return {
       alert: '',
-      engagementsCard: false
+      engagementsCard: false,
+      type: null
     }
   },
   components: {
-    Alert
+    Alert,
+    EngagementTypes
   },
   computed: {
     ...mapGetters(['successAlert'])
   },
+  methods: {
+    startEngagement(workflow) {
+      this.engagementsCard = false
+      this.type = workflow
+    }
+  }
 }
 </script>
 

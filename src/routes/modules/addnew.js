@@ -41,6 +41,18 @@ export default [
         },
         {
         // this is the children route for adding a new engagement
+        path: 'engagement/form',
+        component: () => import('@/children/StartEngagementForm.vue'),
+            meta: {
+            layout: "default",
+            requiresAuth: true,
+            breadCrumb: [
+                { name: 'New Engagement' }
+            ]
+        },
+        },
+        {
+        // this is the children route for adding a new engagement
         path: 'engagement/taxform',
         component: () => import('@/children/TaxForm.vue'),
             meta: {

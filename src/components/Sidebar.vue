@@ -11,7 +11,7 @@
             <li class="nav-item w-100" id="tasks" v-bind:class="{ 'is-active': isActive }">
                 <router-link class="nav-link border-right text-left pl-4" to="/tasks"><span><i class="fas fa-list-ul"></i></span>Tasks</router-link>  
             </li>
-            <li class="nav-item w-100" id="engagements" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive }">                                  
+            <li class="nav-item w-100" id="engagements" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive }">
                 <router-link class="nav-link border-right text-left pl-4" to="/engagements"><span><i class="far fa-folder-open"></i></span>Engagements</router-link>  
             </li>
             <li class="nav-item w-100" id="contacts" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive }">                                  

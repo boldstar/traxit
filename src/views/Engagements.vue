@@ -5,7 +5,7 @@
   
         <div class="page-wrapper mt-1">
 
-            <engagements-list :engagements="allEngagements"></engagements-list>
+            <engagements-list :engagements="engagements"></engagements-list>
         </div>
     </div>
 
@@ -24,13 +24,19 @@ export default {
     },
     data() {
         return {
-            alert: ''
+            alert: '',
+            key: 'All',
         }
     },
     computed: {
     ...mapGetters(['allEngagements']),
+    engagements() {
+        return this.allEngagements.filter(engagement => {
+                if(this.key === 'All'){ return engagement } else{ return engagement.status === this.key} 
+            })
+        }   
     },
-    created: function() {
+    created() {
     if(this.$route.query.alert) {
         this.alert  = this.$route.query.alert;
     }

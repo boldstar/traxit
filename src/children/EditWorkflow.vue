@@ -13,6 +13,10 @@
                 <div class="mx-2 mb-3">
                     <div v-for="oldStatus in workflow.statuses" :key="oldStatus.id" class="d-flex mt-3">
                         <input class="form-control" type="text" v-model="oldStatus.status">
+                        <select name="" id="" class="form-control state-select" v-model="oldStatus.state">
+                            <option disabled value="">{{option}}</option>
+                            <option :value="state" v-for="(state, index) in states" :key="index">{{state}}</option>
+                        </select>
                         <label class="check-container">
                             <input type="checkbox" v-model="oldStatus.notify_client">
                             <span class="checkmark"></span>
@@ -21,6 +25,10 @@
                     </div>
                     <div v-for="(status, index) in workflowData.newStatuses" :key="index" class="d-flex mt-3">
                         <input class="form-control" type="text" placeholder="Add Status" v-model="status.value" :class="{'input-error': error && status.value == ''}" @change="error = false">
+                         <select name="" id="" class="form-control state-select" v-model="status.state">
+                             <option disabled value="">{{option}}</option>
+                            <option :value="state" v-for="(state, index) in states" :key="index">{{state}}</option>
+                        </select>
                          <label class="check-container">
                             <input type="checkbox" v-model="status.notify_client">
                             <span class="checkmark"></span>
@@ -79,7 +87,9 @@ export default {
             workflowData: {
                 newStatuses: []
             },
-            workflowLoaded: false
+            workflowLoaded: false,
+            states: ['Staging', 'Active', 'Pending', 'Complete'],
+            option: 'Choose State..'
         }
     },
     components:{
@@ -124,7 +134,7 @@ export default {
             this.modalShow = true
         },
         addField() {
-            this.workflowData.newStatuses.push({ value: '', notify_client: false, order: this.workflowData.newStatuses.length });
+            this.workflowData.newStatuses.push({ value: '', state: null, notify_client: false, order: this.workflowData.newStatuses.length });
         },
         deleteField(index) {
             this.workflowData.newStatuses.splice(index, 1);
@@ -234,6 +244,11 @@ export default {
 
     .input-error {
         border: 1px solid red;
+    }
+
+    .state-select {
+        width: 200px;
+        margin-left: 10px;
     }
 
     @media screen and (max-width: 767px) {

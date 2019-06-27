@@ -21,7 +21,7 @@
     </div>
 
     <div class="d-flex flex-wrap justify-content-around workflow-content" v-if="$route.name == 'workflows'">
-      <div class="workflow-card d-flex flex-column align-self-start border p-0 mb-3 shadow" v-for="workflow in allWorkflows" :key="workflow.id">
+      <div class="workflow-card d-flex flex-column align-self-start border p-0 mb-3 shadow m-2" v-for="workflow in allWorkflows" :key="workflow.id">
          <div class="card-header d-flex justify-content-between">
            <span class="align-self-center font-weight-bold"><i class="fas fa-route mr-2 text-primary"></i>{{ workflow.workflow }}</span>
            <div>
@@ -33,6 +33,7 @@
               <tr class="text-left">
                 <th scope="col" class="font-weight-bold hide-row">Order</th>
                 <th scope="col" class="font-weight-bold">Status</th>
+                <th scope="col" class="font-weight-bold hide-row">State</th>
                 <th scope="col" class="font-weight-bold text-center"><i class="far fa-envelope text-primary"></i></th>
               </tr>
             </thead>
@@ -40,6 +41,7 @@
               <tr v-for="(status, index) in workflow.statuses" :key="index"  :class="{'highlight-status': checkValue(status.id)}" class="draggable">
                 <th scope="row" class="status-th hide-row"><div class="status-order"></div> {{ appendZero(index + 1) }}</th>
                 <td>{{ status.status }}</td>
+                <td class="hide-row font-weight-bold">{{ status.state }}</td>
                 <td class="text-center" :class="{'notify': status.notify_client}" @click="showMessage(status)"><i  data-toggle="tooltip" data-placement="right" title="Add Custom Message" class="fas fa-check text-primary" v-if="status.notify_client"></i></td>
               </tr>
             </draggable>

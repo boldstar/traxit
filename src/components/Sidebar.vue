@@ -172,10 +172,10 @@ export default {
     .sublist {
         list-style: none;
         text-align: right;
-        background: rgb(243, 243, 243);
+        background: #fff;
         padding: 10px;
         font-weight: bold;
-        border-bottom: 1px solid gray;
+        border-right: 1px solid rgb(231, 231, 231);
         transition: all .5s;
 
         li {
@@ -191,6 +191,19 @@ export default {
 
     .sublist-link {
         color: #0077ff;
+
+        &:after {
+            content: " ";
+            position: absolute;
+            height: 0;
+            width: 0;
+            border-bottom: 8px solid transparent;
+            border-top: 8px solid transparent;
+            border-right: 8px solid rgb(231, 231, 231);
+            margin-top: 5px;
+            left: 207px;
+            transition: 1s;
+        }
     }
 
 </style>

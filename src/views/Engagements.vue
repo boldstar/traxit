@@ -5,7 +5,7 @@
   
         <div class="page-wrapper mt-1">
 
-            <engagements-list :engagements="engagements" :key="engagementFilter"></engagements-list>
+            <engagements-list :engagements="engagements"></engagements-list>
         </div>
     </div>
 
@@ -34,8 +34,11 @@ export default {
                 if(this.engagementFilter === 'All'){ 
                     return engagement
                 } else { 
+                    //filter workflow that matches engagement
                     const workflow = this.allWorkflows.filter(flow => flow.id === engagement.workflow_id)[0].statuses
+                    //find status state that matches engagement filter
                     const statuses = workflow.filter(st => st.state == this.engagementFilter)
+                    //for each status return engagement where status equals engagement status
                     if(statuses && statuses.length >= 1) {
                         for(var i = 0; i < statuses.length; i++)
                         if(statuses[i].status == engagement.status) {

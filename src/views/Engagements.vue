@@ -25,14 +25,17 @@ export default {
     data() {
         return {
             alert: '',
-            key: 'All',
         }
     },
     computed: {
-    ...mapGetters(['allEngagements']),
+    ...mapGetters(['allEngagements', 'engagementFilter']),
     engagements() {
         return this.allEngagements.filter(engagement => {
-                if(this.key === 'All'){ return engagement } else{ return engagement.status === this.key} 
+                if(this.engagementFilter === 'All'){ 
+                    return engagement
+                } else { 
+                    return engagement.status === this.engagementFilter
+                } 
             })
         }   
     },
@@ -49,10 +52,3 @@ export default {
 
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-
-
-
-</style>

@@ -12,7 +12,21 @@
                 <router-link class="nav-link border-right text-left pl-4" to="/tasks"><span><i class="fas fa-list-ul"></i></span>Tasks</router-link>  
             </li>
             <li class="nav-item w-100" id="engagements" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive }">
-                <router-link class="nav-link border-right text-left pl-4" to="/engagements"><span><i class="far fa-folder-open"></i></span>Engagements</router-link>  
+                <router-link class="nav-link border-right text-left pl-4" to="/engagements" @click.native="filterEngagements('All')"><span><i class="far fa-folder-open"></i></span>Engagements</router-link> 
+                <ul v-if="$route.path == '/engagements'" class="sublist" :class="{'show-sublist': $route.path == '/engagements'}">
+                    <li @click="filterEngagements('Staging')" :class="{'sublist-link' : engagementFilter == 'Staging'}">
+                        Staging
+                    </li>
+                    <li @click="filterEngagements('Active')" :class="{'sublist-link' : engagementFilter == 'Active'}">
+                        Active
+                    </li>
+                    <li @click="filterEngagements('Pending')" :class="{'sublist-link' : engagementFilter == 'Pending'}">
+                        Pending
+                    </li>
+                    <li @click="filterEngagements('Complete')" :class="{'sublist-link' : engagementFilter == 'Complete'}">
+                        Complete
+                    </li>
+                </ul> 
             </li>
             <li class="nav-item w-100" id="contacts" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive }">                                  
                 <router-link class="nav-link border-right text-left pl-4" to="/contacts"><span><i class="fas fa-users"></i></span>Contacts</router-link>  
@@ -49,7 +63,12 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert'])
+        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert', 'engagementFilter'])
+    },
+    methods: {
+        filterEngagements(filter) {
+            this.$store.commit('changeEngagementFilter', filter)
+        }
     }
 }
 </script>
@@ -148,6 +167,30 @@ export default {
 
     .nav {
         margin-top: 32px!important;
+    }
+
+    .sublist {
+        list-style: none;
+        text-align: right;
+        background: rgb(243, 243, 243);
+        padding: 10px;
+        font-weight: bold;
+        border-bottom: 1px solid gray;
+        transition: all .5s;
+
+        li {
+            margin-right: 20px;
+            margin-bottom: 8px;
+        
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+    }
+
+    .sublist-link {
+        color: #0077ff;
     }
 
 </style>

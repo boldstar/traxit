@@ -1,5 +1,5 @@
 <template>
-    <div class="ml-3 d-flex flex-column align-items-center flex-fill card shadow-sm align-self-start questions">
+    <div class="d-flex flex-column align-items-center flex-fill card shadow-sm align-self-start questions">
 
       <div class="d-flex justify-content-between card-header py-2 mb-2 w-100 questions-header">
           <div class="align-self-center">

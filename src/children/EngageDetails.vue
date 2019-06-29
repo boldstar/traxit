@@ -1,5 +1,5 @@
 <template>
-    <div class="card px-0 mb-3 shadow-sm w-50">
+    <div class="card px-0 mb-3 shadow-sm w-100">
         <div class="card-header d-flex justify-content-between">
             <div class="text-primary font-weight-bold">
             <span v-if="engagement.done == true"><i class="far fa-folder" v-if="engagement.done == true"></i> | Completed</span>

@@ -104,5 +104,47 @@ export default {
     directives: {
         'b-modal': bModalDirective
     },
+    data() {
+        return {
+            detailsLoaded: false,
+            idForModal: null,
+            refForModal: null,
+            modalEngage: false,
+            modalShow: false,
+            modalEmail: false,
+            questionToDelete: null,
+            questionToEmail: null,
+            balance: 0,
+            owed: null,
+        }
+    },
+    computed: {
+        ...mapGetters(['successAlert', 'processing', 'errorMsgAlert']),
+    },
+    methods: {
+        deleteQuestion() {
+            this.$store.dispatch('deleteQuestion', this.questionToDelete)
+            .then(() => {
+                this.modalShow = false
+                this.$router.push({path: '/engagement/' +this.engagement.id});
+            })
+        }, 
+        sendEmailRequest(id) {
+            this.modalEmail = true
+            this.questionToEmail = id
+        },
+        sendEmail() {
+            this.$store.dispatch('sendEmail', this.questionToEmail)
+            .then(() => {
+                this.modalEmail = false
+            })
+        },
+        requestDelete(engagement, id) {
+            this.modalShow = true
+            this.questionToDelete = id
+            this.idForModal = id
+            this.refForModal = id
+        },
+    }
 }
 </script>

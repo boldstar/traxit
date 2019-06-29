@@ -145,49 +145,11 @@ export default {
         this.$router.push({path: '/engagements'});
       })
     },
-    deleteQuestion() {
-      this.$store.dispatch('deleteQuestion', this.questionToDelete)
-      .then(() => {
-        this.modalShow = false
-        this.$router.push({path: '/engagement/' +this.engagement.id});
-      })
-    },
-    deleteENote(id) {
-      this.$store.dispatch('deleteEngagementNote', id)
-      .then(() => {
-        this.deleteNote = false
-      })
-    },
-    sendEmailRequest(id) {
-      this.modalEmail = true
-      this.questionToEmail = id
-    },
-    sendEmail() {
-      this.$store.dispatch('sendEmail', this.questionToEmail)
-      .then(() => {
-        this.modalEmail = false
-      })
-    },
-    requestDelete(engagement, id) {
-      this.modalShow = true
-      this.questionToDelete = id
-      this.idForModal = id
-      this.refForModal = id
-    },
     requestEngagementDelete() {
       this.modalEngage = true
     },
     archiveEngagement() {
       this.$store.dispatch('archiveEngagement', this.engagement.id)
-    },
-  
-    confirmDelete(id) {
-      this.selectedNote = id
-      this.deleteNote = true
-    },
-    editNote(note) {
-      this.noteToEdit = note
-      this.$store.commit('editNoteModal')
     },
   },
   created: function(){

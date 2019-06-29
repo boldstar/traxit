@@ -67,7 +67,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['engagement','question', 'successAlert', 'processing', 'errorMsgAlert', 'engagementWorkflow','archiving', 'engagementNotes', 'noteModal', 'editNoteModal']),
+        ...mapGetters(['successAlert', 'processing', 'errorMsgAlert', 'noteModal', 'editNoteModal']),
     },
     methods: {
         addNoteModal() {
@@ -82,6 +82,10 @@ export default {
             .then(() => {
                 this.deleteNote = false
             })
+        },
+        confirmDelete(id) {
+            this.selectedNote = id
+            this.deleteNote = true
         },
     }
 }

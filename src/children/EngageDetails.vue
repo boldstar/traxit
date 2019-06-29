@@ -92,7 +92,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['engagement','question', 'successAlert', 'processing', 'errorMsgAlert', 'engagementWorkflow','archiving', 'engagementNotes', 'noteModal', 'editNoteModal']),
+        ...mapGetters(['successAlert', 'processing', 'errorMsgAlert', 'engagementWorkflow']),
         percentage() {
             const statuses = this.engagementWorkflow.statuses
             const percentage = this.calcPercent(statuses.length)

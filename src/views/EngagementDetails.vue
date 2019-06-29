@@ -186,8 +186,7 @@ export default {
   .question {
     overflow-wrap: normal;
     flex-basis: 100%;
-    max-width: 960px;
-    width: 100%;
+    width: 95%;
   }
 
   .note-btn {

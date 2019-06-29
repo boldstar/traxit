@@ -17,7 +17,7 @@
         </div>
 
         <transition-group name="question-animation" enter-active-class="animated bounceInUp">
-          <div class="card mb-3"  v-for="(question, index) in engagement.questions" :key="index" v-if="$route.name == 'engagement-details'">
+          <div class="card mb-3"  v-for="(question, index) in engagement.questions" :key="index">
               <div class="card-header py-2">
                 <div class="h6 m-0 justify-content-between d-flex">
                   <div class="d-flex">

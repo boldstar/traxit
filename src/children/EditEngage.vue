@@ -2,7 +2,7 @@
   <div class="page-wrapper d-flex justify-content-center align-items-center col-12">
     <div class="d-flex flex-column align-items-center col-md-6 shadow mb-5 edit-engagement-form">
     <div class="justify-content-between d-flex my-3 w-100">
-      <router-link v-bind:to="'/engagement/' + engagement.id" class="btn btn-outline-secondary"><i class="fas fa-arrow-circle-left mr-2"></i>Cancel</router-link>
+      <router-link v-bind:to="'/engagement/' + engagement.id + '/details'" class="btn btn-outline-secondary"><i class="fas fa-arrow-circle-left mr-2"></i>Cancel</router-link>
        <div class="h4 form-title">
         <span class="mr-3"><i class="fas fa-user-edit"></i> </span>
         {{ engagement.name }}

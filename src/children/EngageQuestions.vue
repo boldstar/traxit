@@ -126,7 +126,7 @@ export default {
             this.$store.dispatch('deleteQuestion', this.questionToDelete)
             .then(() => {
                 this.modalShow = false
-                this.$router.push({path: '/engagement/' +this.engagement.id});
+                this.$router.push({path: '/engagement/' +this.engagement.id+ '/questions'});
             })
         }, 
         sendEmailRequest(id) {

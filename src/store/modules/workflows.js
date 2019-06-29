@@ -148,5 +148,16 @@ export default {
               console.log(error.response.data)
             })
         },
+        switchWorkflowActivity(context, id) {
+            axios.patch('/workflow-activity/' + id)
+            .then(response => {
+                context.commit('editWorkflow', response.data.workflow)
+                context.commit('successAlert', response.data.message)
+            })
+            .catch(error => {
+                context.commit('editWorkflow', error.response.data.workflow)
+                context.commit('errorAlert', error.response.data.message)
+            })
+        }
     }
 }

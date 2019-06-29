@@ -50,7 +50,11 @@
               </tr>
             </draggable>
           </table>
-          <div class="card-footer text-right">
+          <div class="card-footer d-flex justify-content-between">
+            <button type="button" class="btn btn-sm font-weight-bold" :class="{'btn-danger': workflow.active, 'btn-success': !workflow.active}" @click="switchActivity(workflow.id)">
+              <span v-if="workflow.active">Deactivate</span>
+              <span v-else>Activate</span>
+            </button>
             <button type="button" class="btn btn-secondary btn-sm font-weight-bold" @click="requestDelete(workflow.id)">Delete</button>
           </div>
       </div>
@@ -193,6 +197,9 @@ export default {
       }).then(() => {
         this.modalDelete = false;
       })
+    },
+    switchActivity(id) {
+      this.$store.dispatch('switchWorkflowActivity', id)
     },
     requestDelete(id) {
       this.workflowToDelete = id

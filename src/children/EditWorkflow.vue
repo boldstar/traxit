@@ -92,7 +92,7 @@ export default {
             error: false,
             workflowLoaded: false,
             states: ['Staging', 'Active', 'Pending', 'Complete'],
-            engagementTypes: ['Tax Return', 'Bookkeeping', 'Tax Resolution', 'Tax Notices', 'Payroll'],
+            engagementTypes: ['Tax Return', 'Bookkeeping', 'Tax Resolution', 'Tax Notices', 'Payroll', 'Custom'],
             option: 'Choose Engagement Type..',
             workflowData: {
                 newStatuses: []

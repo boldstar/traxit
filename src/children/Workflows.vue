@@ -22,11 +22,15 @@
 
     <div class="d-flex flex-wrap justify-content-around workflow-content" v-if="$route.name == 'workflows'">
       <div class="workflow-card d-flex flex-column align-self-start border p-0 mb-3 shadow m-2" v-for="workflow in allWorkflows" :key="workflow.id">
-         <div class="card-header d-flex justify-content-between">
+          <div class="card-header d-flex justify-content-between">
            <span class="align-self-center font-weight-bold"><i class="fas fa-route mr-2 text-primary"></i>{{ workflow.workflow }}</span>
            <div>
             <router-link class="btn btn-sm btn-primary font-weight-bold" :to="{ path: '/administrator/workflows/edit-workflow/' + workflow.id }">Edit</router-link>
            </div>
+          </div>
+          <div class="text-left font-weight-bold px-4 py-2 d-flex justify-content-between">
+            <span><i class="fa fa-folder text-primary mr-2"></i>Type:</span>
+            <span>{{ workflow.engagement_type }}</span>
           </div>
           <table class="table table-hover mb-0">
             <thead>

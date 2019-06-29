@@ -44,8 +44,7 @@
             <i class="fas fa-cogs mr-2"></i>  Action
           </button>
           <div class="dropdown-menu mr-4">
-            <router-link class="dropdown-item" :to="'/engagement/' +engagement.id+ '/edit'" v-if="engagement.done == false"><i class="far fa-edit mr-2" ></i>Edit</router-link> 
-            <router-link class="dropdown-item" :to="'/engagement/' +engagement.id+ '/history'"><i class="fas fa-history mr-2"></i>History</router-link>
+            <router-link class="dropdown-item" :to="'/engagement/' +engagement.id+ '/edit'" v-if="engagement.done == false"><i class="far fa-edit mr-2" ></i>Edit</router-link>
             <button type="button" class="dropdown-item" @click="archiveEngagement"><i class="fas fa-archive"></i><span class="ml-2">
               <span v-if="!engagement.archive">Archive</span>
               <span v-else>Unarchive</span>

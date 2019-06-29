@@ -82,6 +82,7 @@ export default {
         editWorkflow(context, payload) {
             axios.patch('/workflowstatuses/' + payload.id, {
               workflow: payload.workflow,
+              engagement_type: payload.engagement_type,
               statuses: payload.statuses,
               newStatuses: payload.newStatuses
             })

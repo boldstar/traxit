@@ -11,6 +11,16 @@
       <div class="flex-row justify-content-between d-flex mt-0 card-body shadow-sm py-2 px-3">
         <span class="h5 align-self-center m-0 text-left engagement-name">Engagement | <strong class="text-primary"><router-link :to="'/contact/' +engagement.client.id + '/account'">{{engagement.name}}</router-link></strong></span>
 
+        <div>
+          <ul class="d-flex engagement-links">
+            <li class="engagement-link">Details</li>
+            <li class="engagement-link">Notes</li>
+            <li class="engagement-link">Q & A</li>
+            <li class="engagement-link">History</li>
+            <li class="engagement-link">Invoice</li>
+          </ul>
+        </div>
+
         <div class="d-flex">
         <div v-if="engagement.type == 'taxreturn' && engagement.balance != null" class="mr-3 d-flex engagement-balance">
           <span class="h5 align-self-center mb-0">
@@ -478,6 +488,21 @@ export default {
   button {
     cursor: pointer!important;
   }
+
+  .engagement-links {
+    list-style: none;
+    align-self: center;
+    margin: 0;
+    padding: 0;
+
+    .engagement-link {
+      align-self: center;
+      padding: 5px 30px;
+      border-bottom: none;
+      font-weight: bold;
+    }
+  }
+
 
   @media screen and (max-width: 1320px) {
 

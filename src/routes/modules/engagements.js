@@ -13,6 +13,50 @@ export default [
           },
         children: [
           {
+            path: 'details',
+            component: () => import('@/children/EngageDetails.vue'),
+              meta: {
+                requiresAuth: true,
+                layout: "default",
+                breadCrumb: [
+                  { name: 'Engagement Details' }
+              ]
+            },
+          },
+          {
+            path: 'notes',
+            component: () => import('@/children/EngageNotes.vue'),
+              meta: {
+                requiresAuth: true,
+                layout: "default",
+                breadCrumb: [
+                  { name: 'Engagement Notes' }
+              ]
+            },
+          },
+          {
+            path: 'questions',
+            component: () => import('@/children/EngageQuestions.vue'),
+              meta: {
+                requiresAuth: true,
+                layout: "default",
+                breadCrumb: [
+                  { name: 'Engagement Questions' }
+              ]
+            },
+          },
+          {
+            path: 'invoice',
+            component: () => import('@/children/EngageInvoice.vue'),
+              meta: {
+                requiresAuth: true,
+                layout: "default",
+                breadCrumb: [
+                  { name: 'Engagement Invoice' }
+              ]
+            },
+          },
+          {
             path: 'edit',
             component: () => import('@/children/EditEngage.vue'),
               meta: {

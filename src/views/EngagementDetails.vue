@@ -13,20 +13,20 @@
 
         <div>
           <ul class="d-flex engagement-links">
-            <li class="engagement-link">
-              <router-link :to="{path: '/engagement/' + engagement.id + '/details'}">Details</router-link>
+            <li class="engagement-link-wrapper">
+              <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'details'}" :to="{path: '/engagement/' + engagement.id + '/details'}">Details</router-link>
             </li>
-            <li class="engagement-link">
-              <router-link :to="{path: '/engagement/' + engagement.id + '/notes'}">Notes</router-link>
+            <li class="engagement-link-wrapper">
+              <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'notes'}" :to="{path: '/engagement/' + engagement.id + '/notes'}">Notes</router-link>
             </li>
-            <li class="engagement-link">
-              <router-link :to="{path: '/engagement/' + engagement.id + '/questions'}">Q & A</router-link>
+            <li class="engagement-link-wrapper">
+              <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'questions'}" :to="{path: '/engagement/' + engagement.id + '/questions'}">Q & A</router-link>
             </li>
-            <li class="engagement-link">
-              <router-link :to="{path: '/engagement/' + engagement.id + '/history'}">History</router-link>
+            <li class="engagement-link-wrapper">
+              <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'history'}" :to="{path: '/engagement/' + engagement.id + '/history'}">History</router-link>
             </li>
-            <li class="engagement-link">
-              <router-link :to="{path: '/engagement/' + engagement.id + '/invoice'}">Invoice</router-link>
+            <li class="engagement-link-wrapper">
+              <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'invoice'}" :to="{path: '/engagement/' + engagement.id + '/invoice'}">Invoice</router-link>
             </li>
           </ul>
         </div>
@@ -245,11 +245,19 @@ export default {
     margin: 0;
     padding: 0;
 
-    .engagement-link {
+    .engagement-link-wrapper {
       align-self: center;
       padding: 5px 30px;
       border-bottom: none;
       font-weight: bold;
+
+      .engagement-link {
+        color: black;
+      }
+
+      .active-engagement-link {
+        color: #0077ff;
+      }
     }
   }
 

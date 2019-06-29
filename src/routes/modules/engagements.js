@@ -14,6 +14,7 @@ export default [
         children: [
           {
             path: 'details',
+            name: 'details',
             component: () => import('@/children/EngageDetails.vue'),
               meta: {
                 requiresAuth: true,
@@ -25,6 +26,7 @@ export default [
           },
           {
             path: 'notes',
+            name: 'notes',
             component: () => import('@/children/EngageNotes.vue'),
               meta: {
                 requiresAuth: true,
@@ -36,6 +38,7 @@ export default [
           },
           {
             path: 'questions',
+            name: 'questions',
             component: () => import('@/children/EngageQuestions.vue'),
               meta: {
                 requiresAuth: true,
@@ -47,6 +50,7 @@ export default [
           },
           {
             path: 'invoice',
+            name: 'invoice',
             component: () => import('@/children/EngageInvoice.vue'),
               meta: {
                 requiresAuth: true,
@@ -69,6 +73,7 @@ export default [
           },
           {
             path: 'history',
+            name: 'history',
             component: () => import('@/children/EngageHistory.vue'),
               meta: {
                 requiresAuth: true,

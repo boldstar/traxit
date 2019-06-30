@@ -1,8 +1,6 @@
 <template>
   <div class="page-wrapper">
-    <!-- this is to view the details of the engagement and will be hidden if the following route does not match -->
     <div>
-
       <Alert v-if="successAlert" v-bind:message="successAlert" />
       <div class="sending-mail" v-if="processing && !noteModal && !deleteNote"><i class="far fa-envelope mr-3"></i>Sending Mail...</div>
 
@@ -55,32 +53,25 @@
         </div>
         </div>
       </div>
-        <!-- this is the modal to confirm or cancel the delete for the engagement -->
-        <b-modal v-model="modalEngage" hide-footer title="Delete Engagement">
-          <div class="d-block text-left">
-            <h5>Are you sure you want to delete engagement?</h5>
-            <br>
-            <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
-          </div>
-          <div class="d-flex">
-            <b-btn class="mt-3" variant="danger" @click="modalEngage = false">Cancel</b-btn>
-            <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteEngagement(engagement.id)">Confirm</b-btn>
-          </div>
-        </b-modal>
-
+      <!-- this is the modal to confirm or cancel the delete for the engagement -->
+      <b-modal v-model="modalEngage" hide-footer title="Delete Engagement">
+        <div class="d-block text-left">
+          <h5>Are you sure you want to delete engagement?</h5>
+          <br>
+          <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
+        </div>
+        <div class="d-flex">
+          <b-btn class="mt-3" variant="danger" @click="modalEngage = false">Cancel</b-btn>
+          <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteEngagement(engagement.id)">Confirm</b-btn>
+        </div>
+      </b-modal>
 
       <div class="row px-3 my-3"  v-if="!detailsLoaded">
-
         <router-view :engagement="engagement" :engagement-notes="engagementNotes" ></router-view>
-      <!-- this is the section where the qustions will go -->
-      
       </div>
+
       <spinner v-if="detailsLoaded"></spinner>
     </div>
-
-
-
-
   </div>
 </template>
 

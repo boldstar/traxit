@@ -1,7 +1,6 @@
 <template>
   <div class="page-wrapper">
     <!-- this is to view the details of the engagement and will be hidden if the following route does not match -->
-    <div v-if="!detailsLoaded">
     <div>
 
       <Alert v-if="successAlert" v-bind:message="successAlert" />
@@ -70,16 +69,15 @@
         </b-modal>
 
 
-      <div class="row px-3 my-3">
+      <div class="row px-3 my-3"  v-if="!detailsLoaded">
 
         <router-view :engagement="engagement" :engagement-notes="engagementNotes" ></router-view>
       <!-- this is the section where the qustions will go -->
       
       </div>
-    </div>
+      <spinner v-if="detailsLoaded"></spinner>
     </div>
 
-    <spinner v-if="detailsLoaded && $route.name == 'engagement-details'"></spinner>
 
 
 

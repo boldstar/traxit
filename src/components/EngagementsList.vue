@@ -175,7 +175,7 @@
                         <td class="mobile-hide-row">{{ engagement.year }}</td>
                         <td>{{ engagement.assigned_to }}</td>
                         <td class="mobile-hide-row">{{ engagement.status }}</td>
-                        <td class="text-center"><router-link v-bind:to="'/engagement/' + engagement.id"><i class="far fa-eye"></i></router-link></td>
+                        <td class="text-center"><router-link v-bind:to="'/engagement/' + engagement.id+ '/details'"><i class="far fa-eye"></i></router-link></td>
                     </tr>
                 </tbody>
             </table>
@@ -358,7 +358,7 @@ export default {
             this.$store.dispatch('downloadEngagements')
         },
         viewDetails(id) {
-            this.$router.push({path: '/engagement/' + id})
+            this.$router.push({path: '/engagement/' + id + '/details'})
         },
         clearFilters() {
             this.typeChecked = false

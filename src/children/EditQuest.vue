@@ -59,7 +59,7 @@ export default {
         question: this.question.question,
       })   
       .then(() => {
-        this.$router.push({path: '/engagement/' +this.engagement.id, query: {alert: 'The question has been edited!'}});
+        this.$router.push({path: '/engagement/' +this.engagement.id + '/questions'});
       })
     },
   },

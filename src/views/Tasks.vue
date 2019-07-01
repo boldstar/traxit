@@ -59,10 +59,14 @@
             <td  @click="viewDetails(task.engagements[0].id)" v-else class="hide-row">None</td>
             <td  @click="viewDetails(task.engagements[0].id)" class="hide-row">{{ task.engagements[0].year }}</td>
             <td class="px-0">
+                <button class="btn btn-sm btn-light border-primary text-secondary mr-2 font-weight-bold" @click="inProgress(task.engagements[0].id)">
+                  <span v-if="task.engagements[0].in_progress">Check In</span>
+                  <span v-else>Check Out</span>
+                </button>
                 <b-btn :disabled="batchUpdate" variant="primary" class="mr-2" size="sm" @click="requestUpdate(task.id, task.engagements[0].workflow_id)" data-toggle="tooltip" data-placement="top" title="Update Engagement Task"><i class="fas fa-pen-square mr-2"></i><span class="update-text">Update</span></b-btn>
             </td>
             <td class="px-0 hide-row">
-                <router-link class="btn btn-sm btn-secondary mr-2" :to="'/engagement/' +task.engagements[0].id " data-toggle="tooltip" data-placement="top" title="View Engagement"><i class="far fa-eye"></i></router-link>
+                <router-link class="btn btn-sm btn-secondary mr-2" :to="'/engagement/' +task.engagements[0].id+ '/details' " data-toggle="tooltip" data-placement="top" title="View Engagement"><i class="far fa-eye"></i></router-link>
                 <router-link class="btn btn-sm btn-primary" :to="'/engagement/' +task.engagements[0].id + '/add-question' " data-toggle="tooltip" data-placement="top" title="Add Question"><i class="far fa-question-circle"></i></router-link>
             </td>
           </tr>
@@ -423,6 +427,9 @@ export default {
     clearAlerts() {
       this.userError = false
       this.statusError = false
+    },
+    inProgress(id) {
+      this.$store.dispatch('engagementProgress', id)
     }
   },
   created() {

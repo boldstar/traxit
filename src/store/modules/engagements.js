@@ -284,13 +284,14 @@ export default {
                 fee: engagement.fee,
                 balance: engagement.balance,
                 owed: engagement.owed,
-                done: engagement.done
+                done: engagement.done,
+                in_progress: false
             })
             .then(response => {
                 context.commit('updateEngagement', response.data.engagement)
                 context.commit('successAlert', response.data.message)
                 context.commit('stopProcessing')
-                router.push({ path: '/engagement/' + response.data.engagement.id})
+                router.push({ path: '/engagement/' + response.data.engagement.id + '/details'})
             })
             .catch(error => {
                 console.log(error.response.data)
@@ -495,5 +496,16 @@ export default {
               console.log(error)
             })
         },
+        engagementViewProgress(context, id) {
+            axios.patch('/engagement-progress/' + id)
+            .then(response => {
+                context.commit('updateEngagement', response.data.engagement)
+                context.commit('successAlert', response.data.message)
+            })
+            .catch(error => {
+                console.log(error.response.data)
+                context.commit('errorMsgAlert', error.response.data.message)
+            })
+        }
     }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrapper">
-    <div>
+    <div v-if="engagement">
       <Alert v-if="successAlert" v-bind:message="successAlert" />
       <div class="sending-mail" v-if="processing && !noteModal && !deleteNote"><i class="far fa-envelope mr-3"></i>Sending Mail...</div>
 
@@ -46,6 +46,10 @@
               <span v-if="!engagement.archive">Archive</span>
               <span v-else>Unarchive</span>
             </span></button> 
+            <button type="button" class="dropdown-item" @click="inProgress">
+              <span v-if="engagement.in_progress"><i class="fas fa-sign-in-alt mr-2"></i>Check In</span>
+              <span v-else><i class="fas fa-sign-out-alt mr-2"></i>Check Out</span>
+            </button> 
             <button type="button" class="dropdown-item"><i class="far fa-envelope mr-2"></i>Mail</button>
             <div class="dropdown-divider"></div>
             <b-btn class="dropdown-item text-danger" @click="requestEngagementDelete()" v-if="$can('delete', engagement)"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
@@ -139,6 +143,9 @@ export default {
     archiveEngagement() {
       this.$store.dispatch('archiveEngagement', this.engagement.id)
     },
+    inProgress() {
+      this.$store.dispatch('engagementViewProgress', this.engagement.id)
+    }
   },
   created: function(){
     this.$store.dispatch('getEngagement', this.$route.params.id);

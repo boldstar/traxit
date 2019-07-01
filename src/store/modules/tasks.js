@@ -83,7 +83,6 @@ export default {
         engagementProgress(context, id) {
             axios.patch('/engagement-progress/' + id)
             .then(response => {
-                console.log(response.data)
                 context.commit('updateTaskEngagementProgress', response.data.task[0])
                 context.commit('successAlert', response.data.message)
             })

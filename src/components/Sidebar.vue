@@ -20,6 +20,9 @@
                     <li @click="filterEngagements('Active')" :class="{'sublist-link' : engagementFilter == 'Active'}">
                         Active
                     </li>
+                    <li @click="filterEngagements('In Progress')" :class="{'sublist-link' : engagementFilter == 'In Progress'}">
+                        In Progress
+                    </li>
                     <li @click="filterEngagements('Pending')" :class="{'sublist-link' : engagementFilter == 'Pending'}">
                         Pending
                     </li>

@@ -33,6 +33,8 @@ export default {
         return this.allEngagements.filter(engagement => {
                 if(this.engagementFilter === 'All'){ 
                     return engagement
+                } else if(this.engagementFilter === 'In Progress') {
+                    return engagement.in_progress == true
                 } else { 
                     //filter workflow that matches engagement
                     const workflow = this.allWorkflows.filter(flow => flow.id === engagement.workflow_id)[0].statuses

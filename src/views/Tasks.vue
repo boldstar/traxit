@@ -26,7 +26,28 @@
     <processing-bar v-if="processing"></processing-bar>
     <input v-if="searchInput" class="form-control mb-3" placeholder="Filter Task By Client Name" v-model="searchTasks" type="search">
     <spinner v-if="tasksLoaded" class="mx-auto"></spinner>
-    
+
+      <div class="card mb-3" v-if="inProgressTasks.length > 0 && !tasksLoaded && taskData">
+        <div class="card-header">
+          <span class="font-weight-bold">In Progress | <span class="text-primary">{{ inProgressTasks.length }}</span></span>
+        </div>
+        <table class="table text-center table-hover mb-0" >
+          <tbody class="table-bordered">
+            <tr v-for="(task, index) in inProgressTasks"  :key="index" v-if="task.engagements[0].in_progress">
+              <th  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].name }}</th>
+              <th  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].status }}</th>
+              <th>
+                <button class="btn btn-sm btn-light border-primary text-secondary mr-2 font-weight-bold" @click="inProgress(task.engagements[0].id)">
+                  <span v-if="task.engagements[0].in_progress">Check In</span>
+                  <span v-else>Check Out</span>
+                </button>
+                <b-btn :disabled="batchUpdate" variant="primary" class="mr-2" size="sm" @click="requestUpdate(task.id, task.engagements[0].workflow_id)" data-toggle="tooltip" data-placement="top" title="Update Engagement Task"><i class="fas fa-pen-square mr-2"></i><span class="update-text">Update</span></b-btn>
+                <router-link class="btn btn-sm btn-secondary mr-2" :to="'/engagement/' +task.engagements[0].id+ '/details' " data-toggle="tooltip" data-placement="top" title="View Engagement"><i class="far fa-eye"></i> View</router-link>
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <table class="table table-hover text-center" v-if="!tasksLoaded && taskData">
         <thead class="bg-primary text-light">
@@ -59,10 +80,14 @@
             <td  @click="viewDetails(task.engagements[0].id)" v-else class="hide-row">None</td>
             <td  @click="viewDetails(task.engagements[0].id)" class="hide-row">{{ task.engagements[0].year }}</td>
             <td class="px-0">
+                <button class="btn btn-sm btn-light border-primary text-secondary mr-2 font-weight-bold" @click="inProgress(task.engagements[0].id)">
+                  <span v-if="task.engagements[0].in_progress">Check In</span>
+                  <span v-else>Check Out</span>
+                </button>
                 <b-btn :disabled="batchUpdate" variant="primary" class="mr-2" size="sm" @click="requestUpdate(task.id, task.engagements[0].workflow_id)" data-toggle="tooltip" data-placement="top" title="Update Engagement Task"><i class="fas fa-pen-square mr-2"></i><span class="update-text">Update</span></b-btn>
             </td>
             <td class="px-0 hide-row">
-                <router-link class="btn btn-sm btn-secondary mr-2" :to="'/engagement/' +task.engagements[0].id " data-toggle="tooltip" data-placement="top" title="View Engagement"><i class="far fa-eye"></i></router-link>
+                <router-link class="btn btn-sm btn-secondary mr-2" :to="'/engagement/' +task.engagements[0].id+ '/details' " data-toggle="tooltip" data-placement="top" title="View Engagement"><i class="far fa-eye"></i></router-link>
                 <router-link class="btn btn-sm btn-primary" :to="'/engagement/' +task.engagements[0].id + '/add-question' " data-toggle="tooltip" data-placement="top" title="Add Question"><i class="far fa-question-circle"></i></router-link>
             </td>
           </tr>
@@ -241,6 +266,9 @@ export default {
         }).filter( task => {
         return !this.searchTasks || task.engagements[0].name.toLowerCase().indexOf(this.searchTasks.toLowerCase()) >= 0 })
     },
+    inProgressTasks() {
+      return this.tasks.filter(task => task.engagements[0].in_progress == true)
+    }
   },
   methods: {
     ...mapActions(['updateTask', 'batchUpdateTasks']),
@@ -393,7 +421,7 @@ export default {
       }, 3000);
     },
     viewDetails(id) {
-      this.$router.push('/engagement/'+ id)
+      this.$router.push('/engagement/'+ id + '/details')
     },
     fixCasing(string) {
       if(string == 'taxreturn') {
@@ -423,6 +451,9 @@ export default {
     clearAlerts() {
       this.userError = false
       this.statusError = false
+    },
+    inProgress(id) {
+      this.$store.dispatch('engagementProgress', id)
     }
   },
   created() {

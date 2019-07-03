@@ -151,7 +151,7 @@ export default {
         this.verify = false
         this.question = "" 
         this.idForQuestion++
-        this.$router.push({path: '/engagement/' +this.engagement.id});
+        this.$router.push({path: '/engagement/' +this.engagement.id + '/questions'});
       })
     },
     addNewQuestionWithEmail(to) {

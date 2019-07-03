@@ -1,8 +1,5 @@
 <template>
-  <div class="page-wrapper">
-  <div class="d-flex" v-if="dataReceived">
-    <router-link :to="{path: '/engagement/' + engagement.id }" class="mr-auto btn btn-link"><i class="fas fa-chevron-left mr-2"></i>Back</router-link>
-  </div>
+  <div class="page-wrapper w-100">
   <div class="d-flex justify-content-between mb-5 history-body" v-if="dataReceived">
     <div class="card-body radius shadow text-left p-0" v-if="engagementHistory">
       <div class="d-flex justify-content-between">
@@ -182,6 +179,10 @@ export default {
   font-size: 4rem;
   padding: 10px;
   color: #0077ff;
+}
+
+.history-body {
+  width: 100%;
 }
 
 @media screen and (max-width: 1100px) {

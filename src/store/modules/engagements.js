@@ -285,7 +285,8 @@ export default {
                 balance: engagement.balance,
                 owed: engagement.owed,
                 done: engagement.done,
-                in_progress: false
+                in_progress: false,
+                paid: engagement.paid
             })
             .then(response => {
                 context.commit('updateEngagement', response.data.engagement)

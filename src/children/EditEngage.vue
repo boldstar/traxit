@@ -12,7 +12,7 @@
     <form class="w-100 text-left">
       <div class="form-group">
 
-        <label for="name">Name</label>
+        <label for="name">Name<span class="text-danger">*</span></label>
         <input type="text" id="name" class="form-control mb-2" placeholder="Engagement Name" v-model="engagement.name">
 
         <label for="timespan" v-if="engagement.type == 'bookkeeping'">Timespan</label>
@@ -34,7 +34,7 @@
           </div>
         </div>
 
-        <label for="year">Year</label>
+        <label for="year">Year<span class="text-danger">*</span></label>
         <input id="year" type="text" class="form-control mb-2" placeholder="Year" v-model="engagement.year">
 
         <div class="mb-2" v-if="monthRange">
@@ -53,7 +53,7 @@
           </select>
         </div>
 
-        <label for="difficulty">Difficulty<span class="text-danger">*</span></label>
+        <label for="difficulty">Difficulty</label>
         <select class="form-control mb-2" id="difficulty" v-model="engagement.difficulty">
           <option v-for="(level, index) in levels" :key="index" :value="level">
             {{ level }}
@@ -106,9 +106,15 @@
 
 
         <div class="d-flex my-3 bg-light p-2 custom-control custom-checkbox bg-white form-control">
-        <span class="mr-3 font-weight-bold mb-1 h6">Engagement Complete</span>
-        <input type="checkbox" v-model="engagement.done" class="custom-control-input" id="customCompleteCheck">
-        <label class="custom-control-label ml-3 align-self-start" for="customCompleteCheck"></label>
+          <span class="mr-3 font-weight-bold mb-1 h6">Engagement Paid</span>
+          <input type="checkbox" v-model="engagement.paid" class="custom-control-input" id="customPaidCheck">
+          <label class="custom-control-label ml-3 align-self-start" for="customPaidCheck"></label>
+        </div>
+
+        <div class="d-flex my-3 bg-light p-2 custom-control custom-checkbox bg-white form-control">
+          <span class="mr-3 font-weight-bold mb-1 h6">Engagement Complete</span>
+          <input type="checkbox" v-model="engagement.done" class="custom-control-input" id="customCompleteCheck">
+          <label class="custom-control-label ml-3 align-self-start" for="customCompleteCheck"></label>
         </div>
         <div class="text-left mb-3 ml-1">
           <small class="text-danger" v-if="engagement.done == true">Warning: If Engagement Box Is Checked, Engagement Will Be Marked As Completed Or Has Already Been Complete</small>
@@ -194,7 +200,8 @@ export default {
           fee: this.engagement.fee,
           balance: this.engagement.balance,
           owed: this.engagement.owed,
-          done: this.engagement.done
+          done: this.engagement.done,
+          paid: this.engagement.paid
         })  
     },
     deleteEngagement(id) {

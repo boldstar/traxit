@@ -59,6 +59,10 @@
                 <span class="font-weight-bold">Estimated Date</span>
                 <span>{{ engagement.estimated_date | formatDate }}</span>
             </li>
+            <li class="d-flex justify-content-between p-2">
+                <span class="font-weight-bold">Paid</span>
+                <span>{{ paid(engagement.paid) }}</span>
+            </li>
             </ul>
         </div>
     </div>
@@ -140,6 +144,13 @@ export default {
             calcPercent(statuses) {
             return 100/statuses
         },
+        paid(state) {
+            if(state) {
+                return 'Yes'
+            } else {
+                return 'No'
+            }
+        }
     }
 }
 </script>

@@ -10,124 +10,88 @@
     <div class="card-body bg-light border mb-2">
       <h4 class="text-left text-primary m-0"><i class="far fa-folder-open mr-2"></i><strong class="text-secondary">{{workflow.workflow}} </strong>Engagement</h4>
     </div>
-    <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center bg-light px-3 pt-3 border pb-0">
-      <div class="form-group">
-
-        <input :class="{ 'input-error': errors.has('Year') }" type="text" class="form-control mb-3" placeholder="Year" v-model="engagement.year" v-validate="'required'" name="Year">
-        <span class="form-error" v-show="errors.has('Year')">{{ errors.first('Year')}}</span>
-
-        <div class="input-group my-3">
-          <div class="input-group-prepend">
-            <label class="input-group-text text-primary" for="option">Category</label>
+    <form @submit.prevent="validateBeforeSubmit" class="d-flex-column justify-content-center bg-light px-3 pt-3 border pb-0" v-if="data">
+      <div class="form-group text-left">
+        <span class=" font-weight-bold"><span class="text-danger">*</span> Required field</span>
+        <div v-if="workflow.engagement_type == 'Bookkeeping'">
+          <div class="d-flex justify-content-between mb-3 p-2 custom-control custom-checkbox bg-white form-control" v-bind:class="{'input-error' : nothingChecked}">
+            <div class="d-flex">
+              <span class="mr-3 font-weight-bold h6 span-4-checkbox">Monthly</span>
+              <input type="checkbox" v-model="monthChecked" class="custom-control-input ml-3" id="customCheck1" @change="selectedMonthRange">
+              <label class="custom-control-label ml-3" for="customCheck1"></label>
+            </div>
+            <div class="d-flex">
+              <span class="mr-3 font-weight-bold h6 span-4-checkbox">Quarterly</span>
+              <input type="checkbox" v-model="quarterChecked" class="custom-control-input ml-3" id="customCheck2" @change="selectedQuarterRange">
+              <label class="custom-control-label ml-3" for="customCheck2"></label>
+            </div>
+            <div class="d-flex">
+              <span class="mr-3 font-weight-bold h6 span-4-checkbox">Annual</span>
+              <input type="checkbox" v-model="annualChecked" class="custom-control-input ml-3" id="customCheck3" @change="selectedAnnualRange">
+              <label class="custom-control-label ml-3" for="customCheck3"></label>
+            </div>
           </div>
-          <select :class="{ 'input-error': errors.has('Category') }" class="form-control" id="client_id" v-model="engagement.category" v-validate="{ is_not: option }" name="Category" v-on:change="removeSelected">
-            <option disabled>{{ option }}</option>
-            <option v-for="(category, index) in categories" :key="index" :value="category">
-              {{ category }}
-            </option>
-          </select>
+          <small v-if="nothingChecked" class="text-danger">Please select a date range before submitting</small>
         </div>
-        <span class="form-error" v-show="errors.has('Category')">{{ errors.first('Category') }}</span>
 
-       
-        <div class="input-group my-3" v-if="engagement.category == 'personal'">
+        <form-select :options="years" :value_type="'array'" :selected="option" :label="'Tax Year'" :prop="'year'" @select-change="selectedValue" :required="true" :formError="errorsList"></form-select>
+
+        
+        <div class="input-group mb-3 d-flex">
           <div class="input-group-prepend">
-            <label class="input-group-text text-primary" for="option">Find Contact</label>
+            <label class="input-group-text text-primary font-weight-bold" for="due_date">Due Date</label>
           </div>
-          <select :class="{ 'input-error': errors.has('Contact') }" class="form-control" id="client_id" v-model.number="engagement.client_id" v-validate="{ is_not: option }" name="Contact">
-            <option disabled>{{ option }}</option>
-            <option v-for="client in allClients" :key="client.id" :value="client.id">
-              {{ client.last_name }}, {{client.first_name}} <span v-if="client.has_spouse == 1"> & </span>{{client.spouse_first_name }}
-            </option>
-          </select>
+          <v-date-picker
+            mode='single'
+            v-model='engagement.estimated_date'
+            :input-props='{class: "form-control h-100"}'
+            id="due_date"
+            >
+          </v-date-picker>
         </div>
-        <span class="form-error" v-show="errors.has('Contact')">{{ errors.first('Contact') }}</span>
 
-        <div class="input-group my-3" v-if="engagement.category == 'business'">
-          <div class="input-group-prepend">
-            <label class="input-group-text text-primary" for="option">Find Contact</label>
-          </div>
-          <select :class="{ 'input-error': errors.has('Business Contact') }" class="form-control" id="client_id" v-model.number="engagement.client_id" v-validate="{ is_not: option }" name="Business Contact">
-            <option disabled>{{ option }}</option>
-            <option v-for="client in allClients" :key="client.id" :value="client.id">
-              {{ client.last_name }}, {{client.first_name}} <span v-if="client.has_spouse == 1"> & </span>{{client.spouse_first_name }}
-            </option>
-          </select>
-        </div>
-        <span class="form-error" v-show="errors.has('Business Contact')">{{ errors.first('Business Contact') }}</span>
+        <form-select :options="numbers" :value_type="'array'" :selected="option" :label="'Difficulty'" :prop="'difficulty'" @select-change="selectedValue" :required="false" :formError="errorsList"></form-select>
+        <form-select :options="numbers" :value_type="'array'" :selected="option" :label="'Priority'" :prop="'priority'" @select-change="selectedValue" :required="false" :formError="errorsList"></form-select>
+        <form-select :options="categories" :value_type="'array'" :selected="option" :label="'Category'" :prop="'category'" @select-change="selectedValue" :required="true" :formError="errorsList"></form-select>
+        <form-select :options="sortClients" :value_type="'objects'" :selected="option" :label="'Client'" :prop="'client_id'" @select-change="selectedValue" :required="true" :formError="errorsList"></form-select>
+        <form-select :options="clientBusinesses" :value_type="'array'" :selected="option" :label="'Business'" :prop="'name'" @select-change="selectedValue" v-if="engagement.category == 'Business'" :required="true" :formError="errorsList"></form-select>
+        <form-select :options="monthly" :value_type="'array'" :selected="option" :label="'Month of'" :prop="'title'" @select-change="selectedValue" v-if="monthRange" :required="true" :formError="errorsList"></form-select>
+        <form-select :options="quarterly" :value_type="'array'" :selected="option" :label="'Quarter'" :prop="'title'" @select-change="selectedValue" v-if="quarterRange" :required="true" :formError="errorsList"></form-select>
+        <form-select :options="reducedReturnTypes" :value_type="'array'" :selected="option" :label="'Return Type'" :prop="'return_type'" @select-change="selectedValue" v-if="workflow.engagement_type != 'Bookkeeping'" :required="true" :formError="errorsList"></form-select>
+        <form-select :options="users" :value_type="'objects'" :selected="option" :label="'Assign To'" :prop="'assigned_to'" @select-change="selectedValue" :required="true" :formError="errorsList"></form-select>
+        <form-select :options="statuses" :value_type="'array'" :selected="option" :label="'Status'" :prop="'status'" @select-change="selectedValue" :required="true" :formError="errorsList"></form-select>
 
-        <div class="input-group my-3" v-if="engagement.category == 'business'">
-          <div class="input-group-prepend">
-            <label class="input-group-text text-primary" for="option">Find Business</label>
-          </div>
-          <select :class="{ 'input-error': errors.has('Business') }" class="form-control" id="client_id" v-model="engagement.name" v-validate="{ is_not: option }" name="Business">
-            <option disabled>{{ option }}</option>
-            <option v-for="(business, index) in clientBusinesses" :key="index">
-              {{business.business_name}} {{business.business_type}}
-            </option>
-          </select>
-        </div>
-        <span class="form-error" v-show="errors.has('Business')">{{ errors.first('Business') }}</span>
 
-        <div class="input-group my-3">
-          <div class="input-group-prepend">
-            <label class="input-group-text text-primary" for="option">Return Type</label>
-          </div>
-          <select :class="{ 'input-error': errors.has('Return Type') }" class="form-control" id="type" v-model="engagement.return_type" v-validate="{ is_not: option }" name="Return Type">
-              <option  selected disabled>{{ option }}</option>
-              <option v-for="type in returnTypes" :key="type.id" :value="type.return_type">{{ type.return_type }}</option>
-          </select>
-        </div>
-          <span class="form-error" v-show="errors.has('Return Type')">{{ errors.first('Return Type') }}</span>
-
-        <div class="input-group my-3">
-        <div class="input-group-prepend">
-          <label class="input-group-text text-primary" for="option">Assign To</label>
-        </div>
-        <select :class="{ 'input-error': errors.has('Assigned User') }" class="form-control" id="user_id" v-model="engagement.assigned_to" v-validate="{ is_not: option }" name="Assigned User">
-          <option  selected disabled>{{ option }}</option>
-          <option v-for="user in users" :key="user.id" :value="user.id">
-            {{ user.name }}
-          </option>
-        </select>
-      </div>
-        <span class="form-error" v-show="errors.has('Assigned User')">{{ errors.first('Assigned User') }}</span>
-
-     
-
-    <div>
-        <div class="input-group my-3">
-        <div class="input-group-prepend">
-            <label class="input-group-text text-primary" for="option">Status</label>
-        </div>
-            <select :class="{ 'input-error': errors.has('Status') }" class="form-control" id="status" v-model="engagement.status" v-validate="{ is_not: option }" name="Status">
-            <option  selected disabled>{{ option }}</option>
-            <option v-for="status in workflow.statuses" :key="status.id" :value="status.status">
-            {{ status.status }}
-            </option>
-        </select>
-        </div>
-    </div>
-    <span class="form-error" v-show="errors.has('Status')">{{ errors.first('Status') }}</span>
-      
-
-      <button type="submit" class="btn btn-primary d-flex justify-content-start">Create</button>
+      <button type="submit" class="btn btn-primary d-flex justify-content-start font-weight-bold">Create</button>
       </div>
     </form>
+
+    <spinner v-else></spinner>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-
+import FormSelect from '@/components/FormSelect.vue'
+import Spinner from '@/components/Spinner.vue'
 export default {
   name: 'StartEngagementForm',
   props: ['workflow'],
+  components: {FormSelect, Spinner},
   data() {
     return {
+      monthRange: false,
+      quarterRange: false,
+      annualRange: false,
+      monthChecked: false,
+      quarterChecked: false,
+      annualChecked: false,
+      nothingChecked: false,
       client: '',
+      data: false,
       engagement: {
-        year: '',
+        title: '',
+        year: null,
         category: null,
         client_id: null,
         name: null,
@@ -135,10 +99,20 @@ export default {
         return_type: null,
         assigned_to: null,
         status: null,
+        difficulty: null,
+        priority: null,
+        estimated_date: null
       },
       option: 'Choose...',
       empty: 'Please select workflow first...',
-      categories:['Personal', 'Business']
+      categories:['Personal', 'Business'],
+      monthly: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      quarterly: ['Jan-Mar', 'Apr-Jun', 'Jul-Sep', 'Oct-Dec'],
+      numbers: [1,2,3,4,5],
+      requiredTax: ['year', 'category', 'client_id', 'return_type', 'assigned_to', 'status'],
+      requiredBook: ['year', 'category', 'client_id', 'title', 'assigned_to', 'status'],
+      requiredOther: ['year', 'category', 'client_id', 'assigned_to', 'status'],
+      errorsList: []
     }
   },
   computed: {
@@ -150,19 +124,51 @@ export default {
           'returnTypes'
         ]
       ),
-  clientBusinesses() {
-    const client = this.allClients.filter(client => client.id === this.engagement.client_id)
-    const businesses = client.map(c => c.businesses)
-    const clientBusinesses = businesses.flat();
-    return clientBusinesses
-  },
-  sortClients() {
-    return this.allClients.sort((a,b) => {
-      if(a.last_name < b.last_name) return -1;
-      if(a.last_name > b.last_name)  return 1;
-      return 0;
-    })
-  }
+    clientBusinesses() {
+      const client = this.allClients.filter(client => client.id === this.engagement.client_id)
+      const businesses = client.map(c => c.businesses)
+      const clientBusinesses = businesses.flat();
+      return clientBusinesses.reduce((acc, bus) => {
+        acc.push(bus.business_name)
+        return acc
+      }, [])
+    },
+    sortClients() {
+      const sorted = this.allClients.sort((a,b) => {
+        if(a.last_name < b.last_name) return -1;
+        if(a.last_name > b.last_name)  return 1;
+        return 0;
+      })
+      
+      const reduced = sorted.reduce((acc, client) => {
+          const name = client.spouse_first_name ? client.last_name +', ' + client.first_name + ' & ' + client.spouse_first_name : client.last_name +', ' + client.first_name
+        
+          acc.push({value: name, id: client.id})
+          return acc
+      }, [])
+
+      return reduced
+    },
+    years() {
+        var currentYear = new Date().getFullYear(), years = [];
+        var startYear = currentYear - 10;  
+        while(startYear <= currentYear) {
+          years.push(startYear++)
+        } 
+        return years.reverse();
+    },
+    reducedReturnTypes() {
+      return this.returnTypes.reduce((acc, type) => {
+        acc.push(type.return_type)
+        return acc
+      }, [])
+    },
+    statuses() {
+      return this.workflow.statuses.reduce((acc, status) => {
+        acc.push(status.status)
+        return acc
+      }, [])
+    }
   },
   methods: {
     ...mapActions(['addEngagement']),
@@ -170,38 +176,101 @@ export default {
       this.engagement.client_id = this.option
       this.engagement.name = this.option
     },
+    validateFields(fields, engagement) {
+      for(var i = 0; i < fields.length; i++) {
+        console.log('im in')
+          const prop = fields[i]
+          const value = this.engagement[prop]
+          if(!value || value == this.option) {
+            this.errorsList.push(prop)
+          }
+      } if(this.errorsList.length > 0) {
+        return false
+      } else {
+        return true
+      } 
+    },
     validateBeforeSubmit() {
-          this.$validator.validateAll().then((result) => {
-              if (result) {
-                  this.addNewEngagement();
-              }
-          });
+          const result = null
+
+          if(this.workflow.engagement_type == 'Tax Return') {
+            const result = this.validateFields(this.requiredTax, this.engagement)
+          } else if(this.workflow.engagement_type == 'Bookkeeping') {
+            const result = this.validateFields(this.requiredBook, this.engagement)
+          } else {
+            const result = this.validateFields(this.requiredOther, this.engagement)
+          }
+
+          if(result) {
+            this.addNewEngagement()
+          } else {
+            return
+          }
       },
     addNewEngagement() {
-      if(!this.engagement.return_type || !this.engagement.year ) return;
+      
       this.addEngagement({
-        id: this.idForEngagement,
+        type: this.workflow.engagement_type.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s+/g,'' ).replace(/^\s/,'').replace(/\s$/,'').toLowerCase(),
+        title: this.engagement.title,
+        description: this.workflow.workflow,
         category: this.engagement.category,
         client_id: this.engagement.client_id,
         name: this.engagement.name,
-        workflow_id: this.engagement.workflow_id,
-        return_type: this.engagement.return_type,
+        workflow_id: this.workflow.id,
+        return_type: this.engagement.type == this.option ? null : this.engagement.return_type,
         year: this.engagement.year,
         assigned_to: this.engagement.assigned_to,
         status: this.engagement.status,
+        difficulty: this.engagement.difficulty == this.option ? null : this.engagement.difficulty,
+        priority: this.engagement.priority == this.option ? null : this.engagement.priority,
+        estimated_date: this.engagement.estimated_date == this.option ? null : this.engagement.estimated_date,
+        done: false
       })   
       .then(() => {
-        this.engagement = "" 
-        this.idForEngagement++
         this.$router.push({path: '/add'});
       })
     },
+    selectedValue(prop, value) {
+      if(this.errorsList.includes(prop)) {
+        var index = this.errorsList.indexOf(prop)
+        this.errorsList.splice(index, 1)
+      }
+      this.engagement[prop] = value
+      return
+    },
+      selectedMonthRange() {
+      this.monthRange = !this.monthRange
+      this.quarterRange = false
+      this.annualRange = false
+      this.quarterChecked = false
+      this.annualChecked = false
+      this.nothingChecked = false
+    },
+    selectedQuarterRange() {
+      this.quarterRange = !this.quarterRange
+      this.monthRange = false
+      this.annualRange = false
+      this.monthChecked = false
+      this.annualChecked = false
+      this.nothingChecked = false
+    },
+    selectedAnnualRange() {
+      this.annualRange = !this.annualRange
+      this.monthRange = false
+      this.quarterRange = false
+      this.monthChecked = false
+      this.quarterChecked = false
+      this.nothingChecked = false
+    }
   },
   created: function() {
     this.$store.dispatch('retrieveClientsWithBusinesses');
     this.$store.dispatch('retrieveWorkflows');
     this.$store.dispatch('retrieveUsers');
     this.$store.dispatch('getReturnTypes')
+    setTimeout(() => {
+      this.data = true
+    }, 2000)
     this.engagement.return_type = this.option
     this.engagement.client_id = this.option
     this.engagement.workflow_id = this.option
@@ -209,6 +278,7 @@ export default {
     this.engagement.status = this.option
     this.engagement.category = this.option
     this.engagement.name = this.option
+    this.engagement.year = this.option
   },
 }
 </script>
@@ -221,6 +291,11 @@ export default {
 
   .input-error {
       border: 1px solid red;
+  }
+
+  #due_date {
+    box-sizing: border-box;
+    flex-grow: 1;
   }
 
 </style>

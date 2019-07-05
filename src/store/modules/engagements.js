@@ -243,21 +243,7 @@ export default {
             })
         },
         addEngagement(context, engagement) {
-            axios.post(('/engagements'), {
-                category: engagement.category,
-                client_id: engagement.client_id,
-                type: engagement.type,
-                title: engagement.title,
-                description: engagement.description,
-                name: engagement.name,
-                workflow_id: engagement.workflow_id,
-                return_type: engagement.return_type,
-                year: engagement.year,
-                assigned_to: engagement.assigned_to,
-                status: engagement.status,
-                difficulty: engagement.difficulty,
-                done: false
-            })
+            axios.post(('/engagements'), engagement)
             .then(response => {
                 context.commit('addClientEngagement', response.data.engagement)
                 context.commit('successAlert', response.data.message)

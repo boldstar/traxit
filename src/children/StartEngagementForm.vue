@@ -178,34 +178,39 @@ export default {
     },
     validateFields(fields, engagement) {
       for(var i = 0; i < fields.length; i++) {
-        console.log('im in')
           const prop = fields[i]
           const value = this.engagement[prop]
           if(!value || value == this.option) {
+            console.log(prop)
             this.errorsList.push(prop)
           }
-      } if(this.errorsList.length > 0) {
+      } if(this.errorsList.length >= 1) {
         return false
       } else {
         return true
-      } 
+      }
     },
     validateBeforeSubmit() {
           const result = null
 
           if(this.workflow.engagement_type == 'Tax Return') {
             const result = this.validateFields(this.requiredTax, this.engagement)
+            if(result) {
+              this.addNewEngagement()
+            } 
           } else if(this.workflow.engagement_type == 'Bookkeeping') {
             const result = this.validateFields(this.requiredBook, this.engagement)
+            if(result) {
+              this.addNewEngagement()
+            }
           } else {
             const result = this.validateFields(this.requiredOther, this.engagement)
+            if(result) {
+              this.addNewEngagement()
+            }
           }
 
-          if(result) {
-            this.addNewEngagement()
-          } else {
-            return
-          }
+          return
       },
     addNewEngagement() {
       
@@ -279,6 +284,9 @@ export default {
     this.engagement.category = this.option
     this.engagement.name = this.option
     this.engagement.year = this.option
+    if(!this.workflow) {
+      this.$router.go(-1)
+    }
   },
 }
 </script>

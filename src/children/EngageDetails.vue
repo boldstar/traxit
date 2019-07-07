@@ -35,7 +35,7 @@
                 <span class="font-weight-bold">Time Period</span>
                 <span>{{ engagement.title}}</span>
             </li>
-            <li class="d-flex justify-content-between p-2" v-if="engagement.type == 'custom'">
+            <li class="d-flex justify-content-between p-2">
                 <span class="font-weight-bold">Subject</span>
                 <span>{{ engagement.description}}</span>
             </li>
@@ -55,8 +55,8 @@
                 <span class="font-weight-bold">Status</span>
                 <span>{{ engagement.status}}</span>
             </li>
-            <li class="d-flex justify-content-between p-2" v-if="engagement.type == 'taxreturn'">
-                <span class="font-weight-bold">Estimated Date</span>
+            <li class="d-flex justify-content-between p-2">
+                <span class="font-weight-bold">Due Date</span>
                 <span>{{ engagement.estimated_date | formatDate }}</span>
             </li>
             <li class="d-flex justify-content-between p-2">

@@ -87,7 +87,7 @@
           </select>
         </div>
 
-        <label for="user">Currently Assigned To<span class="text-danger">*</span></label>
+        <label for="user" class="w-100">Currently Assigned To<span class="text-danger">*</span></label>
         <select class="form-control mb-2" id="user" v-model="engagement.assigned_to" :class="{'input-error':assignAUser}" @change="clearAlarm">
           <option v-for="user in users" :key="user.id" :value="user.name" v-if="user.name != 'Admin'">
             {{ user.name }}
@@ -109,7 +109,7 @@
         <label for="fee">Preparation Fee</label>
         <currency-input id="fee" :placeholder="'Enter amount'"  v-model="engagement.fee" mask-type="currency" class="mb-2"></currency-input>
 
-        <label for="balance">Balance | {{ legend }}</label>
+        <label for="balance" class="w-100">Balance | {{ legend }}</label>
         <div class="input-group mb-3" >
         <input id="balance"  v-model="engagement.balance" :class="{'border-danger': balance}" class="form-control" placeholder="Enter Amount" type="text" />
         </div>
@@ -227,7 +227,8 @@ export default {
           owed: this.engagement.owed,
           done: this.engagement.done,
           paid: this.engagement.paid,
-          estimated_date: this.dueDate
+          estimated_date: this.dueDate,
+          priority: this.engagement.priority
         })  
     },
     deleteEngagement(id) {

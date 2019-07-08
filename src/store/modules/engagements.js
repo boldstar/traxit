@@ -273,7 +273,8 @@ export default {
                 done: engagement.done,
                 in_progress: false,
                 paid: engagement.paid,
-                estimated_date: engagement.estimated_date
+                estimated_date: engagement.estimated_date,
+                priority: engagement.priority
             })
             .then(response => {
                 context.commit('updateEngagement', response.data.engagement)

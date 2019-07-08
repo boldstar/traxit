@@ -1,15 +1,8 @@
 <template>
   <div class="page-wrapper d-flex justify-content-center align-items-center col-12">
     <div class="d-flex flex-column align-items-center col-md-6 shadow mb-5 edit-engagement-form">
-    <div class="justify-content-between d-flex my-3 w-100">
-      <router-link v-bind:to="'/engagement/' + engagement.id + '/details'" class="btn btn-outline-secondary"><i class="fas fa-arrow-circle-left mr-2"></i>Cancel</router-link>
-       <div class="h4 form-title">
-        <span class="mr-3"><i class="fas fa-user-edit"></i> </span>
-        {{ engagement.name }}
-      </div>
-    </div>  
 
-    <form class="w-100 text-left">
+    <form class="w-100 text-left py-2">
       <div class="form-group">
 
         <label for="name">Name<span class="text-danger">*</span></label>
@@ -34,11 +27,24 @@
           </div>
         </div>
 
-        <label for="year">Year<span class="text-danger">*</span></label>
-        <input id="year" type="text" class="form-control mb-2" placeholder="Year" v-model="engagement.year">
+        <div class="mb-2">
+          <label for="time">Tax Year<span class="text-danger">*</span></label>
+          <select class="form-control" id="time" v-model="engagement.year" name="Title">
+              <option v-for="(year, index) in years" :key="index" :value="year">{{ year }}</option>
+          </select>
+        </div>
+
+        <label for="due_date">Due Date</label>
+        <v-date-picker
+          mode='single'
+          v-model='dueDate'
+          :input-props='{class: "form-control mb-2"}'
+          id="due_date"
+        >
+        </v-date-picker>
 
         <div class="mb-2" v-if="monthRange">
-          <label for="time">Month Of</label>
+          <label for="time">Month Of<span class="text-danger">*</span></label>
           <select class="form-control" id="time" v-model="engagement.title" name="Title">
               <option v-for="(month, index) in monthly" :key="index" :value="month">{{ month }}</option>
           </select>
@@ -46,7 +52,7 @@
 
         <div class="input-group my-3" v-if="quarterRange">
           <div class="input-group-prepend">
-            <label class="input-group-text text-primary" for="option">Quarter Of</label>
+            <label class="input-group-text text-primary" for="option">Quarter Of<span class="text-danger">*</span></label>
           </div>
           <select class="form-control" id="type" v-model="engagement.title" name="Title">
               <option v-for="(quarter, index) in quarterly" :key="index" :value="quarter">{{ quarter }}</option>
@@ -55,6 +61,13 @@
 
         <label for="difficulty">Difficulty</label>
         <select class="form-control mb-2" id="difficulty" v-model="engagement.difficulty">
+          <option v-for="(level, index) in levels" :key="index" :value="level">
+            {{ level }}
+          </option>
+        </select>
+
+        <label for="priority">Priority</label>
+        <select class="form-control mb-2" id="priority" v-model="engagement.priority">
           <option v-for="(level, index) in levels" :key="index" :value="level">
             {{ level }}
           </option>
@@ -74,7 +87,7 @@
           </select>
         </div>
 
-        <label for="user">Assign To<span class="text-danger">*</span></label>
+        <label for="user">Currently Assigned To<span class="text-danger">*</span></label>
         <select class="form-control mb-2" id="user" v-model="engagement.assigned_to" :class="{'input-error':assignAUser}" @change="clearAlarm">
           <option v-for="user in users" :key="user.id" :value="user.name" v-if="user.name != 'Admin'">
             {{ user.name }}
@@ -120,10 +133,13 @@
           <small class="text-danger" v-if="engagement.done == true">Warning: If Engagement Box Is Checked, Engagement Will Be Marked As Completed Or Has Already Been Complete</small>
         </div>
 
-        <button type="button" class="btn btn-primary d-flex font-weight-bold" :disabled="processing" @click="editThisEngagement">
-          <span v-if="!processing">Save Changes</span>
-          <span v-if="processing">Saving...</span>
-        </button>
+        <div class="d-flex justify-content-between">
+          <button type="button" class="btn btn-primary d-flex font-weight-bold" :disabled="processing" @click="editThisEngagement">
+            <span v-if="!processing">Save Changes</span>
+            <span v-if="processing">Saving...</span>
+          </button>
+          <router-link v-bind:to="'/engagement/' + engagement.id + '/details'" class="btn btn-secondary font-weight-bold">Cancel</router-link>
+        </div>
         </div>
       </form>
     </div>
@@ -153,7 +169,8 @@ export default {
       quarterly: ['Jan-Mar', 'Apr-Jun', 'Jul-Sep', 'Oct-Dec'],
       levels: [1,2,3,4,5],
       owed: null,
-      legend: '(Refund < 0 || Owed > 0)'
+      legend: '(Refund < 0 || Owed > 0)',
+      dueDate: null
     }
   },
   components:{
@@ -168,7 +185,15 @@ export default {
           'returnTypes',
           'processing'
         ]
-      )
+      ),
+      years() {
+        var currentYear = new Date().getFullYear(), years = [];
+        var startYear = currentYear - 10;  
+        while(startYear <= currentYear) {
+          years.push(startYear++)
+        } 
+        return years.reverse();
+    },
   },
   methods: {
     ...mapActions(['updateEngagement']),
@@ -201,7 +226,8 @@ export default {
           balance: this.engagement.balance,
           owed: this.engagement.owed,
           done: this.engagement.done,
-          paid: this.engagement.paid
+          paid: this.engagement.paid,
+          estimated_date: this.dueDate
         })  
     },
     deleteEngagement(id) {
@@ -250,17 +276,18 @@ export default {
     this.$store.dispatch('retrieveUsers')
     this.$store.dispatch('retrieveWorkflows')
     this.$store.dispatch('getReturnTypes')
-    if(this.engagement.description == 'Monthly') {
+    this.dueDate = this.engagement.estimated_date ? new Date(this.engagement.estimated_date) : null
+    if(this.monthly.includes(this.engagement.title)) {
       this.monthChecked = true
       this.monthRange = true
       this.quarterRange = false
     }
-    if(this.engagement.description == 'Quarterly') {
+    if(this.quarterly.includes(this.engagement.title)) {
       this.quarterChecked = true
       this.quarterRange = true
       this.monthRange = false
     }
-    if(this.engagement.description == 'Annual') {
+    if(this.engagement.title == 'Annual') {
       this.annualChecked = true
     }
   }

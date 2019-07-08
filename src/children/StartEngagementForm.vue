@@ -44,7 +44,7 @@
           <v-date-picker
             mode='single'
             v-model='engagement.estimated_date'
-            :input-props='{class: "form-control h-100"}'
+            :input-props='{class: "form-control"}'
             id="due_date"
             >
           </v-date-picker>
@@ -222,7 +222,7 @@ export default {
         client_id: this.engagement.client_id,
         name: this.engagement.name,
         workflow_id: this.workflow.id,
-        return_type: this.engagement.type == this.option ? null : this.engagement.return_type,
+        return_type: this.engagement.return_type == this.option ? null : this.engagement.return_type,
         year: this.engagement.year,
         assigned_to: this.engagement.assigned_to,
         status: this.engagement.status,

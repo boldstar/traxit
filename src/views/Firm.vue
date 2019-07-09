@@ -35,7 +35,7 @@
               </select>
             </div>
             <div class="card-body p-0 d-flex flex-column">
-                <ul class="p-0 text-left workflow-list" :class="{'show-workflow-list': showList}" v-for="workflows in countEngagementsByStatus" :key="workflows.workflow_id" v-if="workflows.workflow_id === selectedWorkflowID"  @keyup="switchStatus">
+                <ul class="p-0 text-left workflow-list" :class="{'show-workflow-list': showList}" v-for="workflows in countEngagementsByStatus" :key="workflows.workflow_id" v-if="workflows.workflow_id === selectedWorkflowID"  @keyup="switchStatus($event)">
                   <li class="m-0 px-3 d-flex justify-content-between workflow-item" v-for="(status, index) in workflows.statuses" :key="index" :value="status.status"  @click="changeEngagementKey(status.status)" :class="{ active: engagementFilterKey === status.status, 'show-workflow-item': showList }">
                     <span class="text-muted status-text">{{ capitalize(status.status) }}</span>
                     <span class="badge badge-primary align-self-center">{{ status.count }}</span>
@@ -247,11 +247,26 @@ export default {
       this.showList = !this.showList
     },
     downloadEngagementsList() {
-      console.log('im in')
+      this.$store.dispatch('downloadEngagements', this.filteredEngagements.filter(eng => eng.workflow_id === this.selectedWorkflowID).reduce((acc, eng) => {
+        acc.push(eng.id)
+        return acc
+      }, []))
     },
-    switchStatus() {
-      console.log('switching')
+    switchStatus(event) {
+      const statuses = this.countEngagementsByStatus.filter(workflow => workflow.workflow_id === this.selectedWorkflowID)[0].statuses.reduce((acc, status) => {
+        acc.push(status.status)
+        return acc
+      }, [])
+      var index = statuses.indexOf(this.engagementFilterKey)
+      if(event.keyCode == 38 && index > 0) {
+        this.engagementFilterKey = statuses[index--]
+      } else if(event.keyCode == 40 && index < statuses.length) {
+        this.engagementFilterKey = statuses[index++]
+      }
     }
+  },
+  destroy() {
+    document.removeEventListener("keyup", this.switchStatus)
   },
   mounted() {
     document.addEventListener("keyup", this.switchStatus);

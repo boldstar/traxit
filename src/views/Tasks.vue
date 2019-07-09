@@ -2,7 +2,20 @@
   <div class="page-wrapper mt-1">
 <!-- this is the user tasks header -->
       <div class="card-header bg-white shadow w-100 d-flex justify-content-between border">
+          <div class="d-flex">
           <span class="mb-0 align-self-center h5">Tasks | <span class="text-primary">{{ tasks.length }}</span></span>
+
+          <div class="d-flex ml-5">
+            <span class="font-weight-bold mt-1 mr-2">Priority Level: </span>
+            <span class="font-weight-bold mt-1 text-secondary">High</span>
+            <div class="square high-priority"></div>
+            <span class="font-weight-bold mt-1 text-secondary">Medium</span>
+            <div class="square medium-priority"></div>
+            <span class="font-weight-bold mt-1 text-secondary">Low</span>
+            <div class="square"></div>
+          </div>
+
+          </div>
           <div class="align-self-center d-flex">
             <div class="batch-btn">
 
@@ -534,6 +547,14 @@ export default {
     height: 100%;
     min-height: calc(100vh - 190px);
     position: relative;
+  }
+
+  .square {
+    height: 25px;
+    width: 25px;
+    border: .3px solid gray;
+    align-self: center;
+    margin: 0 5px;
   }
 
   @media screen and (max-width: 1300px) {

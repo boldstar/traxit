@@ -14,6 +14,7 @@
 <script>
 import EngagementsList from '@/components/EngagementsList.vue'
 import Alert from '@/components/Alert.vue'
+import moment from 'moment'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -34,7 +35,15 @@ export default {
                 if(this.engagementFilter === 'All'){ 
                     return engagement
                 } else if(this.engagementFilter === 'In Progress') {
-                    return engagement.in_progress == true
+                    return engagement.in_progress == true && engagement.done == false
+                } else if(this.engagementFilter === 'Priority') {
+                    return engagement.priority >= 4 && engagement.done == false
+                } else if(this.engagementFilter === 'Past Due') {
+                    if(engagement.estimated_date && engagement.done == false) {
+                        if(moment(new Date(engagement.estimated_date)).format('YYYYMMDDHHMMSS') < moment(new Date()).format('YYYYMMDDHHMMSS')) {
+                            return engagement
+                        }
+                    }
                 } else { 
                     //filter workflow that matches engagement
                     const workflow = this.allWorkflows.filter(flow => flow.id === engagement.workflow_id)[0].statuses

@@ -2,51 +2,19 @@
     <div>
 
          <div class="d-flex mb-3">
-            <div class="btn-group mr-2">
-                <button type="button" class="btn btn-outline-primary" @click="showSearchInput">
-                    <i class="fas fa-search"></i>
-                </button>
-                <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-secondary font-weight-bold dropdown-toggle dropdown-toggle-split mobile-hide-row">
-                    Filter Options
-                </button>
-                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                    <div class="dropdown-item d-flex justify-content-between py-0 px-1">
-                        <span class="pb-1 font-weight-bold">Type</span>
-                        <input type="checkbox" class="align-self-center" v-model="typeChecked">
-                    </div>
-                    <div class="dropdown-divider"></div>
-                    <div class="dropdown-item d-flex justify-content-between py-0 px-1">
-                        <span class="pb-1 font-weight-bold">Status</span>
-                        <input type="checkbox" class="align-self-center" v-model="statusChecked">
-                    </div>
-                    <div class="dropdown-divider"></div>
-                    <div class="dropdown-item d-flex justify-content-between py-0 px-1">
-                        <span class="pb-1 font-weight-bold">Category</span>
-                        <input type="checkbox" class="align-self-center" v-model="categoryChecked">
-                    </div>
-                    <div class="dropdown-divider"></div>
-                    <div class="dropdown-item d-flex justify-content-between py-0 px-1">
-                        <span class="pb-1 font-weight-bold">Return Type</span>
-                        <input type="checkbox" class="align-self-center" v-model="returnChecked">
-                    </div>
-                    <div class="dropdown-divider"></div>
-                    <div class="dropdown-item d-flex justify-content-between py-0 px-1">
-                        <span class="pb-1 font-weight-bold">Assigned To</span>
-                        <input type="checkbox" class="align-self-center" v-model="assignedChecked">
-                    </div>
-                    <div class="dropdown-divider"></div>
-                    <div class="dropdown-item d-flex justify-content-between py-0 px-1">
-                        <span class="pb-1 font-weight-bold">Year</span>
-                        <input type="checkbox" class="align-self-center" v-model="yearChecked">
-                    </div>
-                    <div class="dropdown-divider"></div>
-                    <div class="dropdown-item d-flex justify-content-between py-0 px-1">
-                        <span class="pb-1 font-weight-bold">Workflows</span>
-                        <input type="checkbox" class="align-self-center" v-model="workflowChecked">
-                    </div>
-                    <div class="dropdown-divider"></div>
-                </div>
-            </div>
+
+             <div class="d-flex">
+                 <span class="font-weight-bold align-self-center">Viewing:
+                     <span v-if="engagementFilter == 'All'">All Engagements</span>
+                     <span v-if="engagementFilter == 'Past Due'">Past Due Engagements</span>
+                     <span v-if="engagementFilter == 'Priority'">Priority Engagements Of Level 4 & Higher</span>
+                     <span v-if="engagementFilter == 'Pending'">Pending Engagements</span>
+                     <span v-if="engagementFilter == 'Complete'">Complete Engagements</span>
+                     <span v-if="engagementFilter == 'In Progress'">Currently In Progress Engagements</span>
+                     <span class="text-primary"> | {{sortedEngagements.length}}</span>
+                 </span>
+             </div>
+
             <div class="d-flex">
                 <div class="mx-2" v-if="returnChecked">
                     <div class="input-group">
@@ -142,16 +110,61 @@
             </div>
 
             <div class="btn-group ml-auto">
-                <button class="btn btn-outline-primary" @click="clearFilters" data-toggle="tooltip" data-placement="top" title="Clear Filters"><i class="fas fa-filter"></i></button>
-                <button class="btn btn-outline-secondary  mobile-hide-row" @click="downloadEngagements" data-toggle="tooltip" data-placement="top" title="Download Engagements"><i class="far fa-file-excel"></i></button>
-                <router-link to="/add" class="btn btn-primary pt-2" data-toggle="tooltip" data-placement="top" title="Add New Engagement"><i class="far fa-plus-square"></i></router-link>
+                <div class="btn-group">
+                    <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-secondary btn-sm font-weight-bold dropdown-toggle dropdown-toggle-split mobile-hide-row">
+                        Filter Options
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                        <div class="dropdown-item d-flex justify-content-between py-0 px-1">
+                            <span class="pb-1 font-weight-bold">Type</span>
+                            <input type="checkbox" class="align-self-center" v-model="typeChecked">
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item d-flex justify-content-between py-0 px-1">
+                            <span class="pb-1 font-weight-bold">Status</span>
+                            <input type="checkbox" class="align-self-center" v-model="statusChecked">
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item d-flex justify-content-between py-0 px-1">
+                            <span class="pb-1 font-weight-bold">Category</span>
+                            <input type="checkbox" class="align-self-center" v-model="categoryChecked">
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item d-flex justify-content-between py-0 px-1">
+                            <span class="pb-1 font-weight-bold">Return Type</span>
+                            <input type="checkbox" class="align-self-center" v-model="returnChecked">
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item d-flex justify-content-between py-0 px-1">
+                            <span class="pb-1 font-weight-bold">Assigned To</span>
+                            <input type="checkbox" class="align-self-center" v-model="assignedChecked">
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item d-flex justify-content-between py-0 px-1">
+                            <span class="pb-1 font-weight-bold">Year</span>
+                            <input type="checkbox" class="align-self-center" v-model="yearChecked">
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item d-flex justify-content-between py-0 px-1">
+                            <span class="pb-1 font-weight-bold">Workflows</span>
+                            <input type="checkbox" class="align-self-center" v-model="workflowChecked">
+                        </div>
+                        <div class="dropdown-divider"></div>
+                    </div>
+                </div>
+                 <button type="button" class="btn btn-outline-primary btn-sm" @click="showSearchInput">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button class="btn btn-outline-primary btn-sm" @click="clearFilters" data-toggle="tooltip" data-placement="top" title="Clear Filters"><i class="fas fa-filter"></i></button>
+                <button class="btn btn-outline-secondary  mobile-hide-row btn-sm" @click="downloadEngagements" data-toggle="tooltip" data-placement="top" title="Download Engagements"><i class="far fa-file-excel"></i></button>
+                <router-link to="/add" class="btn btn-primary btn-sm pt-2" data-toggle="tooltip" data-placement="top" title="Add New Engagement"><i class="far fa-plus-square"></i></router-link>
             </div>
 
         </div>
 
         <div class="d-flex flex-column">
             <input v-if="showInput" class="form-control mb-3" placeholder="Filter By Last Name" v-model="searchEngagement" type="search">
-            <table class="table border table-light table-hover text-left">
+            <table class="table border table-light table-hover text-left ">
                 <thead class="text-primary hover">
                     <tr>
                         <th scope="col">Client</th>
@@ -179,10 +192,15 @@
                     </tr>
                 </tbody>
             </table>
+
+            <div v-if="sortedEngagements.length < 1 && !tableLoaded" class="d-flex flex-column m-3">
+                <span class="h5">There Are 0 Engagements</span>
+                <NoFirm class="m-3" />
+            </div>
         </div>
 
 
-        <nav aria-label="pagination" class="d-flex" v-if="!tableLoaded">
+        <nav aria-label="pagination" class="d-flex" v-if="!tableLoaded && sortedEngagements.length >= 1">
         <ul class="pagination">
             <li class="page-item">
                 <button class="page-link" @click="prevPage" :disabled="currentPage <= 1">Previous</button>            
@@ -222,6 +240,7 @@
 <script>
 import {mapGetters} from 'vuex'
 import Spinner from '@/components/Spinner.vue'
+import NoFirm from '@/components/NoFirm.vue'
 
 export default {
     name: 'EngagementsList',
@@ -232,7 +251,8 @@ export default {
         }
     },
     components: {
-        Spinner
+        Spinner,
+        NoFirm
     },
     data() {
         return {
@@ -262,7 +282,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['allWorkflows']),
+        ...mapGetters(['allWorkflows', 'engagementFilter']),
         sortedEngagements:function() {
             return this.engagements.sort((a,b) => {
             let modifier = 1;
@@ -416,6 +436,12 @@ export default {
 .search-input {
     width: 200px;
 }
+
+.engagement-table {
+    min-height: 50vh!important;
+    height: 100%;
+}
+
 .hover {
 
     &:hover {

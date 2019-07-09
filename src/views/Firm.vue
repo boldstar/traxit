@@ -4,6 +4,10 @@
       <div class="card-header bg-white shadow w-100 d-flex justify-content-between border">
           <div class="d-flex">
               <span class="h5 mb-0 align-self-center">Firm</span>
+              <span class="h5 mb-0 align-self-center mx-2">|</span>
+              <select name="year" id="year" class="form-control form-control-sm">
+                  <option value="2018">2018</option>
+              </select>
           </div>
           <div class="flex-fill mx-3 search-input-nav">
             <input class="form-control" placeholder="Filter By Last Name..." v-model="searchEngagement">
@@ -20,9 +24,9 @@
 
         <div class="col-2 col-sm-3 list" v-if="!listLoaded && Object.keys(allEngagements).length">
           <div class="card shadow-sm p-2">
-            <div class="input-group my-2">
+            <div class="input-group mt-2 mb-3">
               <div class="input-group-prepend">
-                <label class="input-group-text text-primary" for="option">Workflow</label>
+                <label class="input-group-text text-primary font-weight-bold" for="option">Workflow</label>
               </div>
               <select class="form-control" id="client_id" v-model="selectedWorkflowID">
                 <option v-for="workflow in allWorkflows" :key="workflow.id" :value="workflow.id">
@@ -30,11 +34,10 @@
                 </option>
               </select>
             </div>
-            <hr class="mt-2 mb-0">
             <div class="card-body p-0 d-flex flex-column">
-                <ul class="p-0 text-left workflow-list" :class="{'show-workflow-list': showList}" v-for="workflows in countEngagementsByStatus" :key="workflows.workflow_id" v-if="workflows.workflow_id === selectedWorkflowID">
+                <ul class="p-0 text-left workflow-list" :class="{'show-workflow-list': showList}" v-for="workflows in countEngagementsByStatus" :key="workflows.workflow_id" v-if="workflows.workflow_id === selectedWorkflowID"  @keyup="switchStatus">
                   <li class="m-0 px-3 d-flex justify-content-between workflow-item" v-for="(status, index) in workflows.statuses" :key="index" :value="status.status"  @click="changeEngagementKey(status.status)" :class="{ active: engagementFilterKey === status.status, 'show-workflow-item': showList }">
-                    <span class="text-muted">{{ capitalize(status.status) }}</span>
+                    <span class="text-muted status-text">{{ capitalize(status.status) }}</span>
                     <span class="badge badge-primary align-self-center">{{ status.count }}</span>
                   </li>
                 </ul>
@@ -48,15 +51,13 @@
         </div>
 
         <div class="col-10 col-sm-9 table-body" v-if="!listLoaded && Object.keys(allEngagements).length">
-          <div class="card p-0 shadow-sm mb-3 search-input-body">
-            <div class="d-flex my-3">
-                <span class="text-capitalize align-self-center h5 mb-0 font-weight-bold mx-3">
-                  {{ engagementFilterKey }}
-                </span>
-                <div class="flex-fill mx-3">
-                  <input class="form-control" placeholder="Filter By Last Name..." v-model="searchEngagement">
-                </div>             
-            </div>
+          <div class="p-0 search-input-body">
+            <div class="d-flex">
+                <div class="flex-fill search-engagements-body">
+                  <input class="search-engagement-input" placeholder="Filter By Last Name..." v-model="searchEngagement">
+                  <button class="btn btn-sm btn-outline-primary export-btn" @click="downloadEngagementsList"><i class="fas fa-file-export"></i></button>
+                </div>  
+            </div>           
           </div>
           <!-- only shows on mobile views -->
           <div class="status-header">
@@ -244,7 +245,16 @@ export default {
     },
     showWorkflowList() {
       this.showList = !this.showList
+    },
+    downloadEngagementsList() {
+      console.log('im in')
+    },
+    switchStatus() {
+      console.log('switching')
     }
+  },
+  mounted() {
+    document.addEventListener("keyup", this.switchStatus);
   },
   created() {
     this.listLoaded = true;
@@ -291,9 +301,14 @@ export default {
   }
 
   .active {
-    background-color: #aaaaaa34;
-    border: 1px solid #0077ff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px 0 rgba(0,0,0,.250);
     color: #0077ff;
+
+    .status-text {
+      font-weight: bold;
+      color: black!important;
+    }
   }
 
   .firm {
@@ -311,6 +326,27 @@ export default {
 
   .status-header {
     display: none;
+  }
+
+  .search-engagements-body {
+    position: relative;
+  }
+
+  .export-btn {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+  }
+
+  .search-engagement-input {
+    flex-grow: 1;
+    width: 100%;
+    padding: 10px;
+    border: .5px solid lightgray;
+    border-radius: 5px 5px 0 0;
+    background: #f3f3f3;
+    border-bottom: none;
+    font-weight: bold;
   }
 
 

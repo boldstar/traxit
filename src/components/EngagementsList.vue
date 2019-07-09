@@ -157,7 +157,7 @@
                 </button>
                 <button class="btn btn-outline-primary btn-sm" @click="clearFilters" data-toggle="tooltip" data-placement="top" title="Clear Filters"><i class="fas fa-filter"></i></button>
                 <button class="btn btn-outline-secondary  mobile-hide-row btn-sm" @click="downloadEngagements" data-toggle="tooltip" data-placement="top" title="Download Engagements" :disabled="processing"><i class="far fa-file-excel"></i><span v-if="processing" class="mx-2">Downloading...</span></button>
-                <router-link to="/add" class="btn btn-primary btn-sm pt-2" data-toggle="tooltip" data-placement="top" title="Add New Engagement"><i class="far fa-plus-square"></i></router-link>
+                <router-link to="/add" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Add New Engagement"><i class="far fa-plus-square font-weight-bold"></i></router-link>
             </div>
 
         </div>

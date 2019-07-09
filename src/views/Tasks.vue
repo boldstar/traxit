@@ -70,11 +70,9 @@
             <th scope="col">Task</th>
             <th scope="col" class="mobile-hide-row">Type</th>
             <th scope="col" @click="sort('name')">Client</th>
-            <th scope="col" class="mobile-hide-row">Assigned On</th>
             <th scope="col" class="hide-row">Time Period</th>
             <th scope="col" class="hide-row">Return Type</th>
             <th scope="col" class="hide-row">Year</th>
-            <th scope="col" class="hide-row">Priority</th>
             <th scope="col" class="hide-row">Due Date</th>
             <th scope="col">Action</th>
             <th scope="col" class="hide-row">Engagement</th>
@@ -88,13 +86,11 @@
             <th  @click="viewDetails(task.engagement_id)" class="text-capitalize mobile-hide-row" v-if="task.type == 'taxreturn'">{{fixCasing(task.type)}}</th>
             <th  @click="viewDetails(task.engagement_id)" class="text-capitalize mobile-hide-row" v-else>{{task.type}}</th>
             <td  @click="viewDetails(task.engagement_id)">{{ task.name }}</td>
-            <td  @click="viewDetails(task.engagement_id)" class="mobile-hide-row">{{ task.updated_at | formatDate }}</td>
             <td  @click="viewDetails(task.engagement_id)" v-if="task.title != null" class="hide-row">{{ task.title }}</td>
             <td  @click="viewDetails(task.engagement_id)" v-else class="hide-row">None</td>
             <td  @click="viewDetails(task.engagement_id)" v-if="task.type == 'taxreturn'" class="hide-row">{{ task.return_type }}</td>
             <td  @click="viewDetails(task.engagement_id)" v-else class="hide-row">None</td>
             <td  @click="viewDetails(task.engagement_id)" class="hide-row">{{ task.year }}</td>
-            <td  @click="viewDetails(task.engagement_id)" class="hide-row">{{ task.priority }}</td>
             <td  @click="viewDetails(task.engagement_id)" class="hide-row">{{ task.due_date | formatDate }}</td>
             <td class="px-0">
                 <button class="btn btn-sm btn-light border-primary text-secondary mr-2 font-weight-bold" @click="inProgress(task.engagement_id)">

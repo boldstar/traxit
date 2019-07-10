@@ -243,13 +243,17 @@ export default {
             })
         },
         addEngagement(context, engagement) {
+            context.commit('startProcessing')
             axios.post(('/engagements'), engagement)
             .then(response => {
                 context.commit('addClientEngagement', response.data.engagement)
                 context.commit('successAlert', response.data.message)
+                context.commit('stopProcessing')
+                router.push('/add')
             })
             .catch(error => {
                 console.log(error.response.data)
+                context.commit('stopProcessing')
                 context.commit('errorMsgAlert', error.response.data.message)
             })
         },

@@ -200,7 +200,7 @@
         </div>
 
 
-        <nav aria-label="pagination" class="d-flex" v-if="!tableLoaded && sortedEngagements.length >= 1">
+        <nav aria-label="pagination" class="d-flex" v-if="!tableLoaded && sortedEngagements.length >= 1" :class="{'mb-5': sortedEngagements.length < 8}">
         <ul class="pagination">
             <li class="page-item">
                 <button class="page-link" @click="prevPage" :disabled="currentPage <= 1">Previous</button>            
@@ -455,6 +455,7 @@ export default {
 tr {
     cursor: pointer;
 }
+
 
 
 @media screen and (max-width: 1300px) {

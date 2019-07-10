@@ -62,7 +62,10 @@
         <form-select :options="statuses" :value_type="'array'" :selected="option" :label="'Status'" :prop="'status'" @select-change="selectedValue" :required="true" :formError="errorsList"></form-select>
 
 
-      <button type="submit" class="btn btn-primary d-flex justify-content-start font-weight-bold">Create</button>
+      <button type="submit" class="btn btn-primary d-flex justify-content-start font-weight-bold" :disabled="processing">
+        <span v-if="!processing">Start Engagement</span>
+        <span v-if="processing">Starting...</span>
+      </button>
       </div>
     </form>
 
@@ -121,7 +124,8 @@ export default {
           'allClients',
           'allWorkflows',
           'users',
-          'returnTypes'
+          'returnTypes',
+          'processing'
         ]
       ),
     clientBusinesses() {
@@ -230,9 +234,6 @@ export default {
         priority: this.engagement.priority == this.option ? null : this.engagement.priority,
         estimated_date: this.engagement.estimated_date == this.option ? null : this.engagement.estimated_date,
         done: false
-      })   
-      .then(() => {
-        this.$router.push({path: '/add'});
       })
     },
     selectedValue(prop, value) {

@@ -1,5 +1,5 @@
 <template>
-    <div class="engagement-types card shadow-sm mb-3">
+    <div class="engagement-types w-75 mx-auto card shadow-sm mb-3">
         <div class="card-header d-flex justify-content-between w-100">
             <span class="engagement-types-header">Choose Workflow</span>
             <button @click="goBack" class="btn btn-secondary btn-sm font-weight-bold">Back</button>
@@ -10,7 +10,7 @@
                 <span class="engagement-type-header">
                     {{workflow.workflow}}
                 </span>
-                <button @click="showForm(workflow)" class="btn btn-outline-secondary btn-sm font-weight-bold mt-3">Start<i class="fas fa-arrow-right ml-3"></i></button>
+                <button @click="showForm(workflow)" class="btn btn-outline-secondary btn-sm font-weight-bold mt-3">Start <span class="text-dark">{{workflow.engagement_type}}</span><i class="fas fa-arrow-right ml-3"></i></button>
             </div>
         </div>
     </div>

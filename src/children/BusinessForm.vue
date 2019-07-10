@@ -28,6 +28,7 @@
 
                     <input type="text" :class="{ 'input-error': errors.has('Business Name') }" class="form-control mb-3" v-model="business.business_name" placeholder="Business Name" name="Business Name" v-validate="'required'">
                     <span class="form-error" v-show="errors.has('Business Name')">{{ errors.first('Business Name') }}</span>
+                    
                     <input type="text" class="form-control mb-3" v-model="business.address" placeholder="Address">
                     <input type="text" class="form-control mb-3" v-model="business.city" placeholder="City">
                     <input type="text" class="form-control mb-3" v-model="business.state" placeholder="State">

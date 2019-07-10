@@ -77,6 +77,7 @@
                   <th scope="col">Batch</th>
                   <th scope="col" @click="sort('name')">Client</th>
                   <th scope="col" @click="sort('created_at')" class="hide-row">Created On</th>
+                  <th scope="col" @click="sort('estimated_date')" class="hide-row">Due Date</th>
                   <th scope="col" class="hide-row">Status</th>
                   <th scope="col">Assigned To</th>
                   <th scope="col" class="hide-row">Year</th>
@@ -87,6 +88,8 @@
                   <th scope="row" class="custom-control custom-checkbox"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements.engagements" class="custom-control-input" :id="`${engagement.id}`"><label class="custom-control-label pb-3 ml-4" :for="`${engagement.id}`"></label></th>
                   <th @click="viewDetails(engagement.id)">{{ engagement.name}}</th>
                   <td @click="viewDetails(engagement.id)" class="hide-row">{{ engagement.created_at | formatDate }}</td>
+                  <td @click="viewDetails(engagement.id)" class="hide-row" v-if="engagement.estimated_date">{{ engagement.estimated_date | formatDate }}</td>
+                  <td @click="viewDetails(engagement.id)" class="hide-row" v-else>None</td>
                   <td @click="viewDetails(engagement.id)" class="hide-row">{{ engagement.status }}</td>
                   <td @click="viewDetails(engagement.id)">{{ engagement.assigned_to }}</td>
                   <td @click="viewDetails(engagement.id)" class="hide-row">{{ engagement.year }}</td>

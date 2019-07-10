@@ -91,7 +91,8 @@
             <td  @click="viewDetails(task.engagement_id)" v-if="task.type == 'taxreturn'" class="hide-row">{{ task.return_type }}</td>
             <td  @click="viewDetails(task.engagement_id)" v-else class="hide-row">None</td>
             <td  @click="viewDetails(task.engagement_id)" class="hide-row">{{ task.year }}</td>
-            <td  @click="viewDetails(task.engagement_id)" class="hide-row">{{ task.due_date | formatDate }}</td>
+            <td  @click="viewDetails(task.engagement_id)" class="hide-row font-weight-bold" v-if="task.due_date">{{ task.due_date | formatDate }}</td>
+            <td  @click="viewDetails(task.engagement_id)" class="hide-row" v-else>None</td>
             <td class="px-0">
                 <button class="btn btn-sm btn-light border-primary text-secondary mr-2 font-weight-bold" @click="inProgress(task.engagement_id)">
                   <span v-if="task.in_progress">Check In</span>

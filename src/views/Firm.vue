@@ -179,8 +179,7 @@ export default {
       if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
       if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
       return 0;
-      }).filter((engagement) => engagement.status === this.engagementFilterKey)
-      .filter( engagement => {
+      }).filter((engagement) => engagement.status === this.engagementFilterKey).filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear).filter( engagement => {
       return !this.searchEngagement || engagement.name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 });
     },
     countEngagementsByStatus () {
@@ -188,7 +187,7 @@ export default {
         workflow_id: id,
         statuses: statuses.reduce((acc, cur) => {
 
-        const count = this.allEngagements.filter(({workflow_id, status}) => workflow_id === id && status === cur.status).length;
+        const count = this.allEngagements.filter(({workflow_id, status}) => workflow_id === id && status === cur.status).filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear).length;
 
         acc.push({status: cur.status, count});
 

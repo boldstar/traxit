@@ -4,9 +4,15 @@
             <div class="d-flex">
                 <span class="h5 mb-0 align-self-center">Dashboard</span>
                 <span class="h5 mb-0 align-self-center mx-2">|</span>
-                <select name="year" id="year" class="form-control form-control-sm">
-                    <option value="2018">2018</option>
-                </select>
+                <div class="input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text text-secondary bg-white font-weight-bold" for="option">Tax Year</label>
+                    </div>
+                    <select name="year" id="year" class="form-control form-control-sm" v-model="currentYear">
+                        <option selected>{{option}}</option>
+                        <option v-for="(year, index) in filterYears" :value="year" :key="index">{{year}}</option>
+                    </select>
+                 </div>
             </div>
             <button class="btn btn-sm btn-outline-primary refresh" @click="refresh"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
         </div>
@@ -149,6 +155,8 @@ export default {
             loading: false,
             noData: false,
             selected: false,
+            currentYear: 'All',
+            option: 'All',
             backgroundColors: [
                 '#0077ff', 
                 '#0022ff',
@@ -182,16 +190,24 @@ export default {
             return `data:image/png;base64, ${this.accountDetails.logo}`
         },
         activeEngagements() {
-            return this.allEngagements.filter(engagement => engagement.done == false).length
+            return this.allEngagements.filter(engagement => engagement.done == false).filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear).length
         },
         totalTaxReturns() {
-            return this.allEngagements.filter(engagement => engagement.type == 'taxreturn').length
+            return this.allEngagements.filter(engagement => engagement.type == 'taxreturn').filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear).length
         },
         totalBookkeeping() {
-            return this.allEngagements.filter(engagement => engagement.type == 'bookkeeping').length
+            return this.allEngagements.filter(engagement => engagement.type == 'bookkeeping').filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear).length
         },
         totalCustom() {
-            return this.allEngagements.filter(engagement => engagement.type == 'custom').length
+            return this.allEngagements.filter(engagement => engagement.type == 'custom').filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear).length
+        },
+        filterYears() {
+            //map year
+            const years = this.allEngagements.map(engagement => engagement.year)
+            //filter duplicates
+            const result = years.filter((v, i) => years.indexOf(v) === i)
+
+            return result
         },
         mapStatuses() {
         if(this.allWorkflows && this.allWorkflows.length >= 1) {
@@ -219,7 +235,7 @@ export default {
                 workflow_id: id,
                 statuses: statuses.reduce((acc, cur) => {
     
-                const count = this.allEngagements.filter(({workflow_id, status, done}) => workflow_id === id && status === cur.status && done == false).length;
+                const count = this.allEngagements.filter(({workflow_id, status, done}) => workflow_id === id && status === cur.status && done == false).filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear).length;
     
                 acc.push(count);
     
@@ -233,7 +249,7 @@ export default {
         countEngagementsBySelectedWorkflow() {
             const workflow = this.allWorkflows.filter(workflow => workflow.id === this.workflowKey)
             const id = workflow.map(({id}) => id)
-            const res = this.allEngagements.filter(engagement => engagement.workflow_id === id[0] && engagement.done == false).length
+            const res = this.allEngagements.filter(engagement => engagement.workflow_id === id[0] && engagement.done == false).filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear).length
             
             return res
         },
@@ -255,7 +271,7 @@ export default {
         const workflows = this.allWorkflows.map(({id, workflow}) => ({
             workflow_id: id,
             workflow: workflow,
-            count: this.allEngagements.filter(({workflow_id, done}) => workflow_id === id && done == false).length
+            count: this.allEngagements.filter(({workflow_id, done}) => workflow_id === id && done == false).filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear).length
         }))
 
         const res = workflows.reduce((acc, workflow) => {
@@ -270,7 +286,7 @@ export default {
         const workflows = this.allWorkflows.map(({id, workflow}) => ({
             workflow_id: id,
             workflow: workflow,
-            count: this.allEngagements.filter(({workflow_id, done}) => workflow_id === id && done == true).length
+            count: this.allEngagements.filter(({workflow_id, done, year}) => workflow_id === id && done == true).filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear).length
         }))
 
         const res = workflows.reduce((acc, workflow) => {
@@ -321,7 +337,7 @@ export default {
             return res
         },
         createdDates() {
-            const dates = this.createdEngagements.map(e => e.date)
+            const dates = this.createdEngagements.filter(eng => this.currentYear === 'All' ? eng : eng[1] === this.currentYear).map(e => e[0].date)
             const formateddates = dates.reduce((acc, date) => {
                 const momentDate = new Date(date)
                 acc.push(moment(momentDate).format('MM/DD/YYYY'))
@@ -332,7 +348,7 @@ export default {
             return filtereddates
         },
         completedDates() {
-            const dates = this.completedEngagements.map(e => e.date)
+            const dates = this.completedEngagements.filter(eng => this.currentYear === 'All' ? eng : eng[1] === this.currentYear).map(e => e[0].date)
             const formateddates = dates.reduce((acc, date) => {
                 const momentDate = new Date(date)
                 acc.push(moment(momentDate).format('MM/DD/YYYY'))
@@ -343,8 +359,8 @@ export default {
             return filtereddates
         },
         average() {
-            const created = this.averageDays.created
-            const completed = this.averageDays.completed
+            const created = this.averageDays.created.filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear)
+            const completed = this.averageDays.completed.filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear)
             const cre_formatted = created.reduce((acc, data) => {
                 acc.push({date: moment(data.created_at).format('MM/DD/YYYY'), e_id: data.engagement_id})
 
@@ -373,7 +389,7 @@ export default {
                     data: this.countEngagementsLengthByWorkflow
                     }
                 ],
-                centerText: this.allEngagements.filter(engagement => engagement.done == false).length
+                centerText: this.allEngagements.filter(engagement => engagement.done == false).filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear).length
             }
         },
         workflowsetsfull() {
@@ -517,6 +533,7 @@ export default {
         this.$store.dispatch('averageEngagementDays')
         this.loading = true
         this.selected = true
+        this.currentYear = this.option
         var self = this
         setTimeout(() => {
             if(this.allWorkflows.length > 0 && this.allEngagements.length > 0) {

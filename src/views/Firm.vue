@@ -5,9 +5,15 @@
           <div class="d-flex">
               <span class="h5 mb-0 align-self-center">Firm</span>
               <span class="h5 mb-0 align-self-center mx-2">|</span>
-              <select name="year" id="year" class="form-control form-control-sm">
-                  <option value="2018">2018</option>
-              </select>
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                  <label class="input-group-text text-secondary bg-white font-weight-bold" for="option">Tax Year</label>
+                </div>
+                <select name="year" id="year" class="form-control form-control-sm" v-model="currentYear">
+                    <option selected>{{allYears}}</option>
+                    <option v-for="(year, index) in filterYears" :value="year" :key="index">{{year}}</option>
+                </select>
+              </div>
           </div>
           <div class="flex-fill mx-3 search-input-nav">
             <input class="form-control" placeholder="Filter By Last Name..." v-model="searchEngagement">
@@ -54,7 +60,7 @@
           <div class="p-0 search-input-body">
             <div class="d-flex">
                 <div class="flex-fill search-engagements-body">
-                  <input class="search-engagement-input" placeholder="Filter By Last Name..." v-model="searchEngagement">
+                  <input class="search-engagement-input" placeholder="Start Typing..." v-model="searchEngagement">
                   <button class="btn btn-sm btn-outline-primary export-btn" @click="downloadEngagementsList"><i class="fas fa-file-export"></i></button>
                 </div>  
             </div>           
@@ -145,6 +151,8 @@ export default {
   },
   data() {
     return {
+      currentYear: 'All',
+      allYears: 'All',
       selectedWorkflowID: 1,
       alert: '',
       searchEngagement: '',
@@ -189,6 +197,14 @@ export default {
         }, [])
       }))
       return res
+    },
+    filterYears() {
+        //map year
+        const years = this.allEngagements.map(engagement => engagement.year)
+        //filter duplicates
+        const result = years.filter((v, i) => years.indexOf(v) === i)
+
+        return result
     },
   },
   methods: {
@@ -278,6 +294,7 @@ export default {
     this.$store.dispatch('retrieveWorkflows')
     this.checkedEngagements.status = this.option
     this.checkedEngagements.assigned_to = this.option
+    this.currentYear = this.allYears
       var self = this;
         setTimeout(() => {
           self.listLoaded = false;

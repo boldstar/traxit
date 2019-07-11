@@ -231,7 +231,7 @@ export default {
         assigned_to: this.engagement.assigned_to,
         status: this.engagement.status,
         difficulty: this.engagement.difficulty == this.option ? null : this.engagement.difficulty,
-        priority: this.engagement.priority == this.option ? null : this.engagement.priority,
+        priority: this.engagement.priority == this.option ? 0 : this.engagement.priority,
         estimated_date: this.engagement.estimated_date == this.option ? null : this.engagement.estimated_date,
         done: false
       })

@@ -114,7 +114,7 @@ export default {
                 fax_number: ''
             }
         },
-        addBusiness(state, business) {
+        addNewBusiness(state, business) {
             state.client.businesses.push(business);
         },
         deleteBusiness(state, id) {
@@ -318,6 +318,8 @@ export default {
             .then(response => {
                 context.commit('stopProcessing')
                 context.commit('successAlert', response.data.message)
+                context.commit('addNewBusiness', response.data.business)
+                router.push('/contact/' + business.client_id + '/account')
             })
             .catch(error => {
                 console.log(error.response.data)

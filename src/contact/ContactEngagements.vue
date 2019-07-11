@@ -46,7 +46,7 @@
                     <th class="mobile-hide-row">{{ engagement.assigned_to}}</th>
                     <th>{{ engagement.status }}</th>
                     <th class="mobile-hide-row">{{ engagement.created_at | formatDate }}</th>
-                    <th><router-link v-bind:to="'/engagement/' + engagement.id " class="btn btn-primary btn-sm ml-auto"><i class="far fa-eye mr-2"></i>View</router-link></th>
+                    <th><router-link v-bind:to="'/engagement/' + engagement.id + '/details'" class="btn btn-primary btn-sm ml-auto"><i class="far fa-eye mr-2"></i>View</router-link></th>
                     </tr>
                 </tbody>
             </table> 
@@ -97,7 +97,7 @@ export default {
             }
         },
         viewDetails(id) {
-            this.$router.push({path: '/engagement/' + id})
+            this.$router.push({path: '/engagement/' + id + '/details'})
         },
         checkType(type, return_type) {
             if(type == 'taxreturn') {

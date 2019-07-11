@@ -249,7 +249,11 @@ export default {
                 context.commit('addClientEngagement', response.data.engagement)
                 context.commit('successAlert', response.data.message)
                 context.commit('stopProcessing')
-                router.push('/add')
+                if(router.history.current.path == '/add/engagement/form') {
+                    router.push('/add')
+                } else {
+                    router.push('/contact/' + engagement.client_id + '/engagements')
+                }
             })
             .catch(error => {
                 console.log(error.response.data)

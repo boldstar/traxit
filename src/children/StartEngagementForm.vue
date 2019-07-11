@@ -285,6 +285,7 @@ export default {
     this.engagement.category = this.option
     this.engagement.name = this.option
     this.engagement.year = this.option
+    this.engagement.priority = this.option
     if(!this.workflow) {
       this.$router.go(-1)
     }

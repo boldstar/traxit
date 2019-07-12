@@ -14,7 +14,9 @@
                     </select>
                  </div>
             </div>
-            <button class="btn btn-sm btn-outline-primary refresh" @click="refresh"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
+            <div class="d-flex">
+                <button class="btn btn-sm btn-outline-primary refresh" @click="refresh"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
+            </div>
         </div>
         <div class="d-flex justify-content-center w-100 mb-3 pt-3 body dashboard">
 
@@ -619,6 +621,10 @@ export default {
     font-size: .8rem;
     color: #0077ff;
     text-align: left;
+}
+
+a .fa-question-circle {
+    font-size: 1.25rem!important;
 }
 
 @media screen and (max-width: 1300px) {

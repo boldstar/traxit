@@ -7,7 +7,7 @@
               <span class="h5 mb-0 align-self-center mx-2">|</span>
               <div class="input-group input-group-sm">
                 <div class="input-group-prepend">
-                  <label class="input-group-text text-secondary bg-white font-weight-bold" for="option">Tax Yea</label>
+                  <label class="input-group-text text-secondary bg-white font-weight-bold" for="option">Tax Year</label>
                 </div>
                 <select name="year" id="year" class="form-control form-control-sm" v-model="currentYear">
                     <option selected>{{allYears}}</option>

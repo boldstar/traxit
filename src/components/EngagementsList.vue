@@ -194,7 +194,7 @@
             </table>
 
             <div v-if="sortedEngagements.length < 1 && !tableLoaded" class="d-flex flex-column m-3">
-                <span class="h5">There Are 0 Engagements</span>
+                <span class="h5">There Are <span class="text-primary">0</span> Engagements {{ engagementFilter }}</span>
                 <NoFirm class="m-3" />
             </div>
         </div>

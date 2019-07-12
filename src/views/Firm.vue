@@ -61,7 +61,7 @@
             <div class="d-flex">
                 <div class="flex-fill search-engagements-body">
                   <input class="search-engagement-input" placeholder="Start Typing..." v-model="searchEngagement">
-                  <button class="btn btn-sm btn-outline-primary export-btn" @click="downloadEngagementsList"><i class="fas fa-file-export"></i></button>
+                  <button class="btn btn-sm btn-outline-primary export-btn" @click="confirmEngagementsDownload" v-if="filteredEngagements && filteredEngagements.length > 0"><i class="fas fa-file-export"></i></button>
                 </div>  
             </div>           
           </div>
@@ -132,7 +132,8 @@
           
         </div>      
       </div>
-    
+
+      <ConfirmModal v-if="confirmDownload" @submit-download="downloadEngagementsList" @close-modal="cancelDownload" />
   </div>
 </template>
 
@@ -142,6 +143,7 @@ import Alert from '@/components/Alert.vue'
 import Spinner from '@/components/Spinner.vue'
 import ProcessingBar from '@/components/ProcessingBar.vue'
 import NoFirm from '@/components/NoFirm.vue'
+import ConfirmModal from '@/components/ConfirmModal.vue'
 
 export default {
   name: 'FirmView',
@@ -150,7 +152,8 @@ export default {
     Alert,
     Spinner,
     ProcessingBar,
-    NoFirm
+    NoFirm,
+    ConfirmModal
   },
   data() {
     return {
@@ -174,7 +177,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['allEngagements', 'users', 'allWorkflows', 'successAlert', 'processing']),
+    ...mapGetters(['allEngagements', 'users', 'allWorkflows', 'successAlert', 'processing', 'confirmDownload']),
     filteredEngagements () {
       return this.allEngagements.sort((a,b) => {
       let modifier = 1;
@@ -264,6 +267,9 @@ export default {
     showWorkflowList() {
       this.showList = !this.showList
     },
+    confirmEngagementsDownload() {
+      this.$store.commit('confirmDownloadState')
+    },
     downloadEngagementsList() {
       this.$store.dispatch('downloadEngagements', this.filteredEngagements.filter(eng => eng.workflow_id === this.selectedWorkflowID).reduce((acc, eng) => {
         acc.push(eng.id)
@@ -281,6 +287,9 @@ export default {
       } else if(event.keyCode == 40 && index < statuses.length) {
         this.engagementFilterKey = statuses[index++]
       }
+    },
+    cancelDownload() {
+      this.$store.commit('confirmDownloadState')
     }
   },
   destroy() {

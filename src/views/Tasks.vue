@@ -12,6 +12,8 @@
             <span class="font-weight-bold mt-1 text-secondary">Medium</span>
             <div class="square medium-priority"></div>
             <span class="font-weight-bold mt-1 text-secondary">Low</span>
+            <div class="square low-priority"></div>
+            <span class="font-weight-bold mt-1 text-secondary">None</span>
             <div class="square"></div>
           </div>
 
@@ -79,7 +81,7 @@
           </tr>
         </thead>
         <tbody class="table-bordered">
-          <tr v-for="(task, index) in sortedTasksCustom"  :key="index" :class="{'highlight-row': checkedTasks.includes(task.id), 'high-priority': task.priority >= 4, 'medium-priority': task.priority <= 3 && task.priority >= 2, 'low-priority': task.priority <= 1}">
+          <tr v-for="(task, index) in sortedTasksCustom"  :key="index" :class="{'highlight-row': checkedTasks.includes(task.id), 'high-priority': task.priority >= 4, 'medium-priority': task.priority <= 3 && task.priority >= 2, 'low-priority': task.priority === 1, 'no-priority': task.priority < 1}">
             <th v-if="batchUpdateColumn" class="task-border" data-toggle="tooltip" data-placement="left" title="Click To Batch Update" @click="checkTask(task.id, task.workflow_id)" :class="{'checkedtasks': checkedTasks.includes(task.id)}"><i v-if="checkedTasks.includes(task.id)" class="fas fa-check"></i></th>
             <th v-if="batchUpdateColumn"  @click="viewDetails(task.engagement_id)">{{ workflowName(task.workflow_id) }}</th>
             <th  @click="viewDetails(task.engagement_id)">{{ task.task }}</th>
@@ -523,7 +525,7 @@ export default {
   }
 
   .highlight-row {
-    background-color: rgba(0, 0, 0, 0.150);
+    background-color: rgba(0, 0, 0, 0.150)!important;
   }
 
   .high-priority {
@@ -535,7 +537,7 @@ export default {
   }
 
   .low-priority {
-    background-color: transparent;
+    background-color: rgba(4, 0, 255, 0.15);
   }
 
   

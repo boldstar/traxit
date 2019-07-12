@@ -3,13 +3,17 @@ import router from '../../router'
 
 export default {
     state: {
-
+      confirm: false
     },
     getters: {
-
+      confirmDownload(state) {
+        return state.confirm
+      }
     },
     mutations: {
-
+      confirmDownloadState(state) {
+        state.confirm = !state.confirm
+      }
     },
     actions: {
         downloadEngagements(context, engagements) {
@@ -17,6 +21,7 @@ export default {
             axios.post('/downloadengagements', engagements, {responseType: 'blob'})
             .then(response => {
               context.commit('stopProcessing')
+              context.commit('confirmDownloadState')
               const url = window.URL.createObjectURL(new Blob([response.data]));
               const link = document.createElement('a');
               link.href = url;
@@ -25,6 +30,7 @@ export default {
               link.click();
             })
             .catch(error => {
+              context.commit('confirmDownloadState')
               context.commit('stopProcessing')
               console.log(error)
             })

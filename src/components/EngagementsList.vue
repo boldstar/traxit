@@ -156,7 +156,7 @@
                     <i class="fas fa-search"></i>
                 </button>
                 <button class="btn btn-outline-primary btn-sm" @click="clearFilters" data-toggle="tooltip" data-placement="top" title="Clear Filters"><i class="fas fa-filter"></i></button>
-                <button class="btn btn-outline-secondary  mobile-hide-row btn-sm" @click="downloadEngagements" data-toggle="tooltip" data-placement="top" title="Download Engagements" :disabled="processing"><i class="far fa-file-excel"></i><span v-if="processing" class="mx-2">Downloading...</span></button>
+                <button class="btn btn-outline-secondary  mobile-hide-row btn-sm" @click="confirmEngagementsDownload" data-toggle="tooltip" data-placement="top" title="Download Engagements" :disabled="processing"><i class="far fa-file-excel"></i><span v-if="processing" class="mx-2">Downloading...</span></button>
                 <router-link to="/add" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Add New Engagement"><i class="far fa-plus-square font-weight-bold"></i></router-link>
             </div>
 
@@ -233,6 +233,7 @@
     </nav>
   
         <spinner v-if="tableLoaded"></spinner>
+        <ConfirmModal v-if="confirmDownload" @submit-download="downloadEngagements" @close-modal="cancelDownload" />
 
     </div>
 </template>
@@ -241,6 +242,7 @@
 import {mapGetters} from 'vuex'
 import Spinner from '@/components/Spinner.vue'
 import NoFirm from '@/components/NoFirm.vue'
+import ConfirmModal from '@/components/ConfirmModal.vue'
 
 export default {
     name: 'EngagementsList',
@@ -252,7 +254,8 @@ export default {
     },
     components: {
         Spinner,
-        NoFirm
+        NoFirm,
+        ConfirmModal
     },
     data() {
         return {
@@ -282,7 +285,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['allWorkflows', 'engagementFilter', 'processing']),
+        ...mapGetters(['allWorkflows', 'engagementFilter', 'processing', 'confirmDownload']),
         sortedEngagements:function() {
             return this.engagements.sort((a,b) => {
             let modifier = 1;
@@ -410,7 +413,13 @@ export default {
         },
         showSearchInput() {
             this.showInput = !this.showInput
-        }
+        },
+        confirmEngagementsDownload() {
+            this.$store.commit('confirmDownloadState')
+        },
+        cancelDownload() {
+            this.$store.commit('confirmDownloadState')
+        },
     },
     created() {
         this.$store.dispatch('retrieveEngagements')

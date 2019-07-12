@@ -61,7 +61,7 @@
             <div class="d-flex">
                 <div class="flex-fill search-engagements-body">
                   <input class="search-engagement-input" placeholder="Start Typing..." v-model="searchEngagement">
-                  <button class="btn btn-sm btn-outline-primary export-btn" @click="confirmEngagementsDownload" v-if="filteredEngagements && filteredEngagements.length > 0"><i class="fas fa-file-export"></i></button>
+                  <button class="btn btn-sm btn-outline-primary export-btn" @click="confirmEngagementsDownload" v-if="filteredEngagements && filteredEngagements.length > 0" data-toggle="tooltip" data-placement="bottom" title="Export Engagements List"><i class="fas fa-file-export"></i></button>
                 </div>  
             </div>           
           </div>

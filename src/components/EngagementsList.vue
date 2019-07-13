@@ -11,7 +11,7 @@
                      <span v-if="engagementFilter == 'Pending'">Pending Engagements</span>
                      <span v-if="engagementFilter == 'Complete'">Complete Engagements</span>
                      <span v-if="engagementFilter == 'In Progress'">Currently In Progress Engagements</span>
-                     <span class="text-primary"> | {{sortedEngagements.length}}</span>
+                     <span class="text-primary"> | {{sortedEngagements.length}} of {{engagements.length}}</span>
                  </span>
              </div>
 

@@ -82,6 +82,7 @@ export default {
         editWorkflow(context, payload) {
             axios.patch('/workflowstatuses/' + payload.id, {
               workflow: payload.workflow,
+              engagement_type: payload.engagement_type,
               statuses: payload.statuses,
               newStatuses: payload.newStatuses
             })
@@ -147,5 +148,16 @@ export default {
               console.log(error.response.data)
             })
         },
+        switchWorkflowActivity(context, id) {
+            axios.patch('/workflow-activity/' + id)
+            .then(response => {
+                context.commit('editWorkflow', response.data.workflow)
+                context.commit('successAlert', response.data.message)
+            })
+            .catch(error => {
+                context.commit('editWorkflow', error.response.data.workflow)
+                context.commit('errorAlert', error.response.data.message)
+            })
+        }
     }
 }

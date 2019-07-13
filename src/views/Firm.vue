@@ -4,6 +4,16 @@
       <div class="card-header bg-white shadow w-100 d-flex justify-content-between border">
           <div class="d-flex">
               <span class="h5 mb-0 align-self-center">Firm</span>
+              <span class="h5 mb-0 align-self-center mx-2">|</span>
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                  <label class="input-group-text text-secondary bg-white font-weight-bold" for="option">Tax Year</label>
+                </div>
+                <select name="year" id="year" class="form-control form-control-sm" v-model="currentYear">
+                    <option selected>{{allYears}}</option>
+                    <option v-for="(year, index) in filterYears" :value="year" :key="index">{{year}}</option>
+                </select>
+              </div>
           </div>
           <div class="flex-fill mx-3 search-input-nav">
             <input class="form-control" placeholder="Filter By Last Name..." v-model="searchEngagement">
@@ -20,9 +30,9 @@
 
         <div class="col-2 col-sm-3 list" v-if="!listLoaded && Object.keys(allEngagements).length">
           <div class="card shadow-sm p-2">
-            <div class="input-group my-2">
+            <div class="input-group mt-2 mb-3">
               <div class="input-group-prepend">
-                <label class="input-group-text text-primary" for="option">Workflow</label>
+                <label class="input-group-text text-primary font-weight-bold" for="option">Workflow</label>
               </div>
               <select class="form-control" id="client_id" v-model="selectedWorkflowID">
                 <option v-for="workflow in allWorkflows" :key="workflow.id" :value="workflow.id">
@@ -30,11 +40,10 @@
                 </option>
               </select>
             </div>
-            <hr class="mt-2 mb-0">
             <div class="card-body p-0 d-flex flex-column">
-                <ul class="p-0 text-left workflow-list" :class="{'show-workflow-list': showList}" v-for="workflows in countEngagementsByStatus" :key="workflows.workflow_id" v-if="workflows.workflow_id === selectedWorkflowID">
+                <ul class="p-0 text-left workflow-list" :class="{'show-workflow-list': showList}" v-for="workflows in countEngagementsByStatus" :key="workflows.workflow_id" v-if="workflows.workflow_id === selectedWorkflowID"  @keyup="switchStatus($event)">
                   <li class="m-0 px-3 d-flex justify-content-between workflow-item" v-for="(status, index) in workflows.statuses" :key="index" :value="status.status"  @click="changeEngagementKey(status.status)" :class="{ active: engagementFilterKey === status.status, 'show-workflow-item': showList }">
-                    <span class="text-muted">{{ capitalize(status.status) }}</span>
+                    <span class="text-muted status-text">{{ capitalize(status.status) }}</span>
                     <span class="badge badge-primary align-self-center">{{ status.count }}</span>
                   </li>
                 </ul>
@@ -48,15 +57,13 @@
         </div>
 
         <div class="col-10 col-sm-9 table-body" v-if="!listLoaded && Object.keys(allEngagements).length">
-          <div class="card p-0 shadow-sm mb-3 search-input-body">
-            <div class="d-flex my-3">
-                <span class="text-capitalize align-self-center h5 mb-0 font-weight-bold mx-3">
-                  {{ engagementFilterKey }}
-                </span>
-                <div class="flex-fill mx-3">
-                  <input class="form-control" placeholder="Filter By Last Name..." v-model="searchEngagement">
-                </div>             
-            </div>
+          <div class="p-0 search-input-body">
+            <div class="d-flex">
+                <div class="flex-fill search-engagements-body">
+                  <input class="search-engagement-input" placeholder="Start Typing..." v-model="searchEngagement">
+                  <button class="btn btn-sm btn-outline-primary export-btn" @click="confirmEngagementsDownload" v-if="filteredEngagements && filteredEngagements.length > 0" data-toggle="tooltip" data-placement="bottom" title="Export Engagements List"><i class="fas fa-file-export"></i></button>
+                </div>  
+            </div>           
           </div>
           <!-- only shows on mobile views -->
           <div class="status-header">
@@ -70,6 +77,7 @@
                   <th scope="col">Batch</th>
                   <th scope="col" @click="sort('name')">Client</th>
                   <th scope="col" @click="sort('created_at')" class="hide-row">Created On</th>
+                  <th scope="col" @click="sort('estimated_date')" class="hide-row">Due Date</th>
                   <th scope="col" class="hide-row">Status</th>
                   <th scope="col">Assigned To</th>
                   <th scope="col" class="hide-row">Year</th>
@@ -80,6 +88,8 @@
                   <th scope="row" class="custom-control custom-checkbox"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements.engagements" class="custom-control-input" :id="`${engagement.id}`"><label class="custom-control-label pb-3 ml-4" :for="`${engagement.id}`"></label></th>
                   <th @click="viewDetails(engagement.id)">{{ engagement.name}}</th>
                   <td @click="viewDetails(engagement.id)" class="hide-row">{{ engagement.created_at | formatDate }}</td>
+                  <td @click="viewDetails(engagement.id)" class="hide-row" v-if="engagement.estimated_date">{{ engagement.estimated_date | formatDate }}</td>
+                  <td @click="viewDetails(engagement.id)" class="hide-row" v-else>None</td>
                   <td @click="viewDetails(engagement.id)" class="hide-row">{{ engagement.status }}</td>
                   <td @click="viewDetails(engagement.id)">{{ engagement.assigned_to }}</td>
                   <td @click="viewDetails(engagement.id)" class="hide-row">{{ engagement.year }}</td>
@@ -122,7 +132,8 @@
           
         </div>      
       </div>
-    
+
+      <ConfirmModal v-if="confirmDownload" @submit-download="downloadEngagementsList" @close-modal="cancelDownload" />
   </div>
 </template>
 
@@ -132,6 +143,7 @@ import Alert from '@/components/Alert.vue'
 import Spinner from '@/components/Spinner.vue'
 import ProcessingBar from '@/components/ProcessingBar.vue'
 import NoFirm from '@/components/NoFirm.vue'
+import ConfirmModal from '@/components/ConfirmModal.vue'
 
 export default {
   name: 'FirmView',
@@ -140,10 +152,13 @@ export default {
     Alert,
     Spinner,
     ProcessingBar,
-    NoFirm
+    NoFirm,
+    ConfirmModal
   },
   data() {
     return {
+      currentYear: 'All',
+      allYears: 'All',
       selectedWorkflowID: 1,
       alert: '',
       searchEngagement: '',
@@ -162,7 +177,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['allEngagements', 'users', 'allWorkflows', 'successAlert', 'processing']),
+    ...mapGetters(['allEngagements', 'users', 'allWorkflows', 'successAlert', 'processing', 'confirmDownload']),
     filteredEngagements () {
       return this.allEngagements.sort((a,b) => {
       let modifier = 1;
@@ -170,8 +185,7 @@ export default {
       if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
       if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
       return 0;
-      }).filter((engagement) => engagement.status === this.engagementFilterKey)
-      .filter( engagement => {
+      }).filter((engagement) => engagement.status === this.engagementFilterKey).filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear).filter( engagement => {
       return !this.searchEngagement || engagement.name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 });
     },
     countEngagementsByStatus () {
@@ -179,7 +193,7 @@ export default {
         workflow_id: id,
         statuses: statuses.reduce((acc, cur) => {
 
-        const count = this.allEngagements.filter(({workflow_id, status}) => workflow_id === id && status === cur.status).length;
+        const count = this.allEngagements.filter(({workflow_id, status}) => workflow_id === id && status === cur.status).filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear).length;
 
         acc.push({status: cur.status, count});
 
@@ -188,6 +202,14 @@ export default {
         }, [])
       }))
       return res
+    },
+    filterYears() {
+        //map year
+        const years = this.allEngagements.map(engagement => engagement.year)
+        //filter duplicates
+        const result = years.filter((v, i) => years.indexOf(v) === i)
+
+        return result
     },
   },
   methods: {
@@ -244,7 +266,37 @@ export default {
     },
     showWorkflowList() {
       this.showList = !this.showList
+    },
+    confirmEngagementsDownload() {
+      this.$store.commit('confirmDownloadState')
+    },
+    downloadEngagementsList() {
+      this.$store.dispatch('downloadEngagements', this.filteredEngagements.filter(eng => eng.workflow_id === this.selectedWorkflowID).reduce((acc, eng) => {
+        acc.push(eng.id)
+        return acc
+      }, []))
+    },
+    switchStatus(event) {
+      const statuses = this.countEngagementsByStatus.filter(workflow => workflow.workflow_id === this.selectedWorkflowID)[0].statuses.reduce((acc, status) => {
+        acc.push(status.status)
+        return acc
+      }, [])
+      var index = statuses.indexOf(this.engagementFilterKey)
+      if(event.keyCode == 38 && index > 0) {
+        this.engagementFilterKey = statuses[index--]
+      } else if(event.keyCode == 40 && index < statuses.length) {
+        this.engagementFilterKey = statuses[index++]
+      }
+    },
+    cancelDownload() {
+      this.$store.commit('confirmDownloadState')
     }
+  },
+  destroy() {
+    document.removeEventListener("keyup", this.switchStatus)
+  },
+  mounted() {
+    document.addEventListener("keyup", this.switchStatus);
   },
   created() {
     this.listLoaded = true;
@@ -253,6 +305,7 @@ export default {
     this.$store.dispatch('retrieveWorkflows')
     this.checkedEngagements.status = this.option
     this.checkedEngagements.assigned_to = this.option
+    this.currentYear = this.allYears
       var self = this;
         setTimeout(() => {
           self.listLoaded = false;
@@ -291,9 +344,14 @@ export default {
   }
 
   .active {
-    background-color: #aaaaaa34;
-    border: 1px solid #0077ff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px 0 rgba(0,0,0,.250);
     color: #0077ff;
+
+    .status-text {
+      font-weight: bold;
+      color: black!important;
+    }
   }
 
   .firm {
@@ -311,6 +369,27 @@ export default {
 
   .status-header {
     display: none;
+  }
+
+  .search-engagements-body {
+    position: relative;
+  }
+
+  .export-btn {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+  }
+
+  .search-engagement-input {
+    flex-grow: 1;
+    width: 100%;
+    padding: 10px;
+    border: .5px solid lightgray;
+    border-radius: 5px 5px 0 0;
+    background: #f3f3f3;
+    border-bottom: none;
+    font-weight: bold;
   }
 
 

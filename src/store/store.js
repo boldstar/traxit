@@ -68,7 +68,8 @@ export default new Vuex.Store({
     status: '',
     role: localStorage.getItem('role'),
     links: false,
-    averagedays: ''
+    averagedays: '',
+    engagementFilter: 'All'
   },
   getters: {
     chartDataLength(state) {
@@ -112,6 +113,9 @@ export default new Vuex.Store({
     },
     averageDays(state) {
       return state.averagedays
+    },
+    engagementFilter(state) {
+      return state.engagementFilter
     }
   },
   mutations: {
@@ -167,6 +171,9 @@ export default new Vuex.Store({
     },
     averageDays(state, data) {
       state.averagedays = data
+    },
+    changeEngagementFilter(state, filter) {
+      state.engagementFilter = filter
     }
   },
   actions: {

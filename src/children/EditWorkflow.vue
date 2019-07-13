@@ -6,13 +6,23 @@
         <div>
             <form @submit.prevent="editThisWorkflow" class="d-flex-column justify-content-center workflow-card">
 
-                <div class="form-group card-body bg-light">
+                <div class="form-group card-body bg-light text-left border">
+                    <label for="workflow" class="font-weight-bold">Workflow Name</label>
                     <input class="form-control" type="text" v-model="workflow.workflow">
+                    <label for="engagement-type" class="font-weight-bold mt-2">Engagement Type</label>
+                    <select name="" id="" class="form-control" v-model="workflow.engagement_type">
+                        <option disabled>{{option}}</option>
+                        <option :value="type" v-for="(type, index) in engagementTypes" :key="index">{{type}}</option>
+                    </select>
                 </div>
                 <p v-if="error" class="text-danger">Please remove empty status inputs highlighted in red</p>
                 <div class="mx-2 mb-3">
                     <div v-for="oldStatus in workflow.statuses" :key="oldStatus.id" class="d-flex mt-3">
                         <input class="form-control" type="text" v-model="oldStatus.status">
+                        <select name="" id="" class="form-control state-select" v-model="oldStatus.state">
+                            <option disabled value="">{{option}}</option>
+                            <option :value="state" v-for="(state, index) in states" :key="index">{{state}}</option>
+                        </select>
                         <label class="check-container">
                             <input type="checkbox" v-model="oldStatus.notify_client">
                             <span class="checkmark"></span>
@@ -21,6 +31,10 @@
                     </div>
                     <div v-for="(status, index) in workflowData.newStatuses" :key="index" class="d-flex mt-3">
                         <input class="form-control" type="text" placeholder="Add Status" v-model="status.value" :class="{'input-error': error && status.value == ''}" @change="error = false">
+                         <select name="" id="" class="form-control state-select" v-model="status.state">
+                             <option disabled value="">{{option}}</option>
+                            <option :value="state" v-for="(state, index) in states" :key="index">{{state}}</option>
+                        </select>
                          <label class="check-container">
                             <input type="checkbox" v-model="status.notify_client">
                             <span class="checkmark"></span>
@@ -76,10 +90,13 @@ export default {
             modalShow: false,
             statusToDelete: null,
             error: false,
+            workflowLoaded: false,
+            states: ['Staging', 'Active', 'Pending', 'Complete'],
+            engagementTypes: ['Tax Return', 'Bookkeeping', 'Tax Resolution', 'Tax Notices', 'Payroll', 'Custom'],
+            option: 'Choose Engagement Type..',
             workflowData: {
                 newStatuses: []
             },
-            workflowLoaded: false
         }
     },
     components:{
@@ -106,6 +123,7 @@ export default {
             this.editWorkflow({
             id: this.workflow.id,
             workflow: this.workflow.workflow,
+            engagement_type: this.workflow.engagement_type,
             statuses: this.workflow.statuses,
             newStatuses: this.workflowData.newStatuses
             }).then(() => {
@@ -124,7 +142,7 @@ export default {
             this.modalShow = true
         },
         addField() {
-            this.workflowData.newStatuses.push({ value: '', notify_client: false, order: this.workflowData.newStatuses.length });
+            this.workflowData.newStatuses.push({ value: '', state: null, notify_client: false, order: this.workflowData.newStatuses.length });
         },
         deleteField(index) {
             this.workflowData.newStatuses.splice(index, 1);
@@ -136,6 +154,7 @@ export default {
     created: function(){
         this.workflowLoaded  = true
         this.$store.dispatch('getWorkflow', this.$route.params.workflow);
+        this.workflow.engagement_type = this.option
         var self = this;
             setTimeout(() => {
             self.workflowLoaded = false;
@@ -234,6 +253,11 @@ export default {
 
     .input-error {
         border: 1px solid red;
+    }
+
+    .state-select {
+        width: 200px;
+        margin-left: 10px;
     }
 
     @media screen and (max-width: 767px) {

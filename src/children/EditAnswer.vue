@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center col-12">
       <div class="answer-quest card p-0 col-8 shadow mb-3 edit-answer-form">
         <div class="card-header text-left">
           <span class="font-weight-bold">{{engagement.name}}</span>

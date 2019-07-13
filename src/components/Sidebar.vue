@@ -11,8 +11,33 @@
             <li class="nav-item w-100" id="tasks" v-bind:class="{ 'is-active': isActive }">
                 <router-link class="nav-link border-right text-left pl-4" to="/tasks"><span><i class="fas fa-list-ul"></i></span>Tasks</router-link>  
             </li>
-            <li class="nav-item w-100" id="engagements" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive }">                                  
-                <router-link class="nav-link border-right text-left pl-4" to="/engagements"><span><i class="far fa-folder-open"></i></span>Engagements</router-link>  
+            <li class="nav-item w-100" id="engagements" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive }">
+                <router-link class="nav-link border-right text-left pl-4" to="/engagements" @click.native="filterEngagements('All')"><span><i class="far fa-folder-open"></i></span>Engagements</router-link>
+                <transition name="list">
+                    <ul v-if="$route.path == '/engagements'" class="sublist" :class="{'show-sublist': $route.path == '/engagements'}">
+                        <!-- <li @click="filterEngagements('Staging')" :class="{'sublist-link' : engagementFilter == 'Staging'}">
+                            Staging
+                        </li>
+                        <li @click="filterEngagements('Active')" :class="{'sublist-link' : engagementFilter == 'Active'}">
+                            Active
+                        </li> -->
+                        <li @click="filterEngagements('In Progress')" :class="{'sublist-link' : engagementFilter == 'In Progress'}">
+                            In Progress
+                        </li>
+                        <li @click="filterEngagements('Past Due')" :class="{'sublist-link' : engagementFilter == 'Past Due'}">
+                            Past Due
+                        </li>
+                        <li @click="filterEngagements('Priority')" :class="{'sublist-link' : engagementFilter == 'Priority'}">
+                            Priority
+                        </li>
+                        <li @click="filterEngagements('Pending')" :class="{'sublist-link' : engagementFilter == 'Pending'}">
+                            Pending
+                        </li>
+                        <li @click="filterEngagements('Complete')" :class="{'sublist-link' : engagementFilter == 'Complete'}">
+                            Complete
+                        </li>
+                    </ul> 
+                </transition> 
             </li>
             <li class="nav-item w-100" id="contacts" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive }">                                  
                 <router-link class="nav-link border-right text-left pl-4" to="/contacts"><span><i class="fas fa-users"></i></span>Contacts</router-link>  
@@ -49,12 +74,27 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert'])
+        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert', 'engagementFilter'])
+    },
+    methods: {
+        filterEngagements(filter) {
+            this.$store.commit('changeEngagementFilter', filter)
+        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
+
+    .list-enter-active, .list-leave-active {
+        transition: opacity 1s;
+        min-height: 215px;
+        height: 100%;
+    }
+    .list-enter, .list-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        opacity: 0;
+        height: 0;
+    }
 
     .sidebar {
         position: fixed;
@@ -148,6 +188,57 @@ export default {
 
     .nav {
         margin-top: 32px!important;
+    }
+
+    .sublist {
+        list-style: none;
+        text-align: right;
+        background: #fff;
+        padding: 10px;
+        font-weight: bold;
+        border-right: 1px solid rgb(231, 231, 231);
+        transition: all .5s;
+
+        li {
+            margin-right: 20px;
+            margin-bottom: 8px;
+            position: relative;
+        
+            &:hover {
+                cursor: pointer;
+            }
+
+            &:before {
+                content: "";
+                position: absolute;
+                left: 12px;
+                margin-top: 8px;
+                height: 10px;
+                width: 10px;
+                box-sizing: border-box;
+                border-radius: 50%;
+                background: rgb(231, 231, 231);
+            }
+
+        }
+
+    }
+
+    .sublist-link {
+        color: #0077ff;
+
+        &:after {
+            content: " ";
+            position: absolute;
+            height: 0;
+            width: 0;
+            border-bottom: 8px solid transparent;
+            border-top: 8px solid transparent;
+            border-right: 8px solid rgb(231, 231, 231);
+            margin-top: 5px;
+            left: 196px;
+            transition: 1s;
+        }
     }
 
 </style>

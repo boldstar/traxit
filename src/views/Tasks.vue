@@ -2,7 +2,22 @@
   <div class="page-wrapper mt-1">
 <!-- this is the user tasks header -->
       <div class="card-header bg-white shadow w-100 d-flex justify-content-between border">
+          <div class="d-flex">
           <span class="mb-0 align-self-center h5">Tasks | <span class="text-primary">{{ tasks.length }}</span></span>
+
+          <div class="d-flex ml-5">
+            <span class="font-weight-bold mt-1 mr-2">Priority Level: </span>
+            <span class="font-weight-bold mt-1 text-secondary">High</span>
+            <div class="square high-priority"></div>
+            <span class="font-weight-bold mt-1 text-secondary">Medium</span>
+            <div class="square medium-priority"></div>
+            <span class="font-weight-bold mt-1 text-secondary">Low</span>
+            <div class="square low-priority"></div>
+            <span class="font-weight-bold mt-1 text-secondary">None</span>
+            <div class="square"></div>
+          </div>
+
+          </div>
           <div class="align-self-center d-flex">
             <div class="batch-btn">
 
@@ -26,7 +41,28 @@
     <processing-bar v-if="processing"></processing-bar>
     <input v-if="searchInput" class="form-control mb-3" placeholder="Filter Task By Client Name" v-model="searchTasks" type="search">
     <spinner v-if="tasksLoaded" class="mx-auto"></spinner>
-    
+
+      <div class="card mb-3" v-if="inProgressTasks.length > 0 && !tasksLoaded && taskData">
+        <div class="card-header">
+          <span class="font-weight-bold">In Progress | <span class="text-primary">{{ inProgressTasks.length }}</span></span>
+        </div>
+        <table class="table text-center table-hover mb-0" >
+          <tbody class="table-bordered">
+            <tr v-for="(task, index) in inProgressTasks"  :key="index" v-if="task.engagements[0].in_progress">
+              <th  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].name }}</th>
+              <th  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].status }}</th>
+              <th>
+                <button class="btn btn-sm btn-light border-primary text-secondary mr-2 font-weight-bold" @click="inProgress(task.engagements[0].id)">
+                  <span v-if="task.engagements[0].in_progress">Check In</span>
+                  <span v-else>Check Out</span>
+                </button>
+                <b-btn :disabled="batchUpdate" variant="primary" class="mr-2" size="sm" @click="requestUpdate(task.id, task.engagements[0].workflow_id)" data-toggle="tooltip" data-placement="top" title="Update Engagement Task"><i class="fas fa-pen-square mr-2"></i><span class="update-text">Update</span></b-btn>
+                <router-link class="btn btn-sm btn-secondary mr-2" :to="'/engagement/' +task.engagements[0].id+ '/details' " data-toggle="tooltip" data-placement="top" title="View Engagement"><i class="far fa-eye"></i> View</router-link>
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <table class="table table-hover text-center" v-if="!tasksLoaded && taskData">
         <thead class="bg-primary text-light">
@@ -36,34 +72,39 @@
             <th scope="col">Task</th>
             <th scope="col" class="mobile-hide-row">Type</th>
             <th scope="col" @click="sort('name')">Client</th>
-            <th scope="col" class="mobile-hide-row">Assigned On</th>
             <th scope="col" class="hide-row">Time Period</th>
             <th scope="col" class="hide-row">Return Type</th>
             <th scope="col" class="hide-row">Year</th>
+            <th scope="col" class="hide-row">Due Date</th>
             <th scope="col">Action</th>
             <th scope="col" class="hide-row">Engagement</th>
           </tr>
         </thead>
         <tbody class="table-bordered">
-          <tr v-for="(task, index) in sortedTasks"  :key="index" :class="{'highlight-row': checkedTasks.includes(task.id)}">
-            <th v-if="batchUpdateColumn" class="task-border" data-toggle="tooltip" data-placement="left" title="Click To Batch Update" @click="checkTask(task.id, task.engagements[0].workflow_id)" :class="{'checkedtasks': checkedTasks.includes(task.id)}"><i v-if="checkedTasks.includes(task.id)" class="fas fa-check"></i></th>
-            <th v-if="batchUpdateColumn"  @click="viewDetails(task.engagements[0].id)">{{ workflowName(task.engagements[0].workflow_id) }}</th>
-            <th  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].status }}</th>
-            <th  @click="viewDetails(task.engagements[0].id)" class="text-capitalize mobile-hide-row" v-if="task.engagements[0].type == 'taxreturn'">{{fixCasing(task.engagements[0].type)}}</th>
-            <th  @click="viewDetails(task.engagements[0].id)" class="text-capitalize mobile-hide-row" v-else>{{task.engagements[0].type}}</th>
-            <td  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].name }}</td>
-            <td  @click="viewDetails(task.engagements[0].id)" class="mobile-hide-row">{{ task.engagements[0].updated_at | formatDate }}</td>
-            <td  @click="viewDetails(task.engagements[0].id)" v-if="task.engagements[0].title != null" class="hide-row">{{ task.engagements[0].title }}</td>
-            <td  @click="viewDetails(task.engagements[0].id)" v-else class="hide-row">None</td>
-            <td  @click="viewDetails(task.engagements[0].id)" v-if="task.engagements[0].type == 'taxreturn'" class="hide-row">{{ task.engagements[0].return_type }}</td>
-            <td  @click="viewDetails(task.engagements[0].id)" v-else class="hide-row">None</td>
-            <td  @click="viewDetails(task.engagements[0].id)" class="hide-row">{{ task.engagements[0].year }}</td>
+          <tr v-for="(task, index) in sortedTasksCustom"  :key="index" :class="{'highlight-row': checkedTasks.includes(task.id), 'high-priority': task.priority >= 4, 'medium-priority': task.priority <= 3 && task.priority >= 2, 'low-priority': task.priority === 1, 'no-priority': task.priority < 1}">
+            <th v-if="batchUpdateColumn" class="task-border" data-toggle="tooltip" data-placement="left" title="Click To Batch Update" @click="checkTask(task.id, task.workflow_id)" :class="{'checkedtasks': checkedTasks.includes(task.id)}"><i v-if="checkedTasks.includes(task.id)" class="fas fa-check"></i></th>
+            <th v-if="batchUpdateColumn"  @click="viewDetails(task.engagement_id)">{{ workflowName(task.workflow_id) }}</th>
+            <th  @click="viewDetails(task.engagement_id)">{{ task.task }}</th>
+            <th  @click="viewDetails(task.engagement_id)" class="text-capitalize mobile-hide-row" v-if="task.type == 'taxreturn'">{{fixCasing(task.type)}}</th>
+            <th  @click="viewDetails(task.engagement_id)" class="text-capitalize mobile-hide-row" v-else>{{task.type}}</th>
+            <td  @click="viewDetails(task.engagement_id)">{{ task.name }}</td>
+            <td  @click="viewDetails(task.engagement_id)" v-if="task.title != null" class="hide-row">{{ task.title }}</td>
+            <td  @click="viewDetails(task.engagement_id)" v-else class="hide-row">None</td>
+            <td  @click="viewDetails(task.engagement_id)" v-if="task.type == 'taxreturn'" class="hide-row">{{ task.return_type }}</td>
+            <td  @click="viewDetails(task.engagement_id)" v-else class="hide-row">None</td>
+            <td  @click="viewDetails(task.engagement_id)" class="hide-row">{{ task.year }}</td>
+            <td  @click="viewDetails(task.engagement_id)" class="hide-row font-weight-bold" v-if="task.due_date">{{ task.due_date | formatDate }}</td>
+            <td  @click="viewDetails(task.engagement_id)" class="hide-row" v-else>None</td>
             <td class="px-0">
-                <b-btn :disabled="batchUpdate" variant="primary" class="mr-2" size="sm" @click="requestUpdate(task.id, task.engagements[0].workflow_id)" data-toggle="tooltip" data-placement="top" title="Update Engagement Task"><i class="fas fa-pen-square mr-2"></i><span class="update-text">Update</span></b-btn>
+                <button class="btn btn-sm btn-light border-primary text-secondary mr-2 font-weight-bold" @click="inProgress(task.engagement_id)">
+                  <span v-if="task.in_progress">Check In</span>
+                  <span v-else>Check Out</span>
+                </button>
+                <b-btn :disabled="batchUpdate" variant="primary" class="mr-2" size="sm" @click="requestUpdate(task.id, task.workflow_id)" data-toggle="tooltip" data-placement="top" title="Update Engagement Task"><i class="fas fa-pen-square mr-2"></i><span class="update-text">Update</span></b-btn>
             </td>
             <td class="px-0 hide-row">
-                <router-link class="btn btn-sm btn-secondary mr-2" :to="'/engagement/' +task.engagements[0].id " data-toggle="tooltip" data-placement="top" title="View Engagement"><i class="far fa-eye"></i></router-link>
-                <router-link class="btn btn-sm btn-primary" :to="'/engagement/' +task.engagements[0].id + '/add-question' " data-toggle="tooltip" data-placement="top" title="Add Question"><i class="far fa-question-circle"></i></router-link>
+                <router-link class="btn btn-sm btn-secondary mr-2" :to="'/engagement/' +task.engagement_id+ '/details' " data-toggle="tooltip" data-placement="top" title="View Engagement"><i class="far fa-eye"></i></router-link>
+                <router-link class="btn btn-sm btn-primary" :to="'/engagement/' +task.engagement_id + '/add-question' " data-toggle="tooltip" data-placement="top" title="Add Question"><i class="far fa-question-circle"></i></router-link>
             </td>
           </tr>
         </tbody>
@@ -209,7 +250,8 @@ export default {
       checkedTasks: [],
       option: 'Choose...',
       searchTasks: '',
-      currentSort: 'name',
+      firstSort: 'priority',
+      secondSort: 'due_date',
       currentSortDir: 'asc',
       batchAlert: ''
     }
@@ -231,16 +273,32 @@ export default {
       'successAlert',
       'processing'
     ]),
-    sortedTasks:function() {
-        return this.tasks.sort((a,b) => {
-        let modifier = 1;
-        if(this.currentSortDir === 'desc') modifier = -1;
-        if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
-        if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
-        return 0;
-        }).filter( task => {
-        return !this.searchTasks || task.engagements[0].name.toLowerCase().indexOf(this.searchTasks.toLowerCase()) >= 0 })
+    sortedTasksCustom() {
+      return this.tasks.reduce((acc, task) => {
+        acc.push({
+          id: task.id,
+          workflow_id: task.engagements[0].workflow_id,
+          engagement_id: task.engagements[0].id,
+          task: task.engagements[0].status,
+          due_date: task.engagements[0].estimated_date,
+          updated_at: task.engagements[0].updated_at,
+          name: task.engagements[0].name,
+          type: task.engagements[0].type,
+          return_type: task.engagements[0].return_type,
+          title: task.engagements[0].title,
+          in_progress: task.engagements[0].in_progress,
+          year: task.engagements[0].year,
+          priority: task.engagements[0].priority,
+        })
+        return acc
+      }, []).sort((a,b) => {
+        return b[this.firstSort] - a[this.firstSort] || new Date(b[this.secondSort]) - new Date(a[this.secondSort])
+      }).filter( task => {
+      return !this.searchTasks || task.name.toLowerCase().indexOf(this.searchTasks.toLowerCase()) >= 0 })
     },
+    inProgressTasks() {
+      return this.tasks.filter(task => task.engagements[0].in_progress == true)
+    }
   },
   methods: {
     ...mapActions(['updateTask', 'batchUpdateTasks']),
@@ -393,7 +451,7 @@ export default {
       }, 3000);
     },
     viewDetails(id) {
-      this.$router.push('/engagement/'+ id)
+      this.$router.push('/engagement/'+ id + '/details')
     },
     fixCasing(string) {
       if(string == 'taxreturn') {
@@ -423,6 +481,9 @@ export default {
     clearAlerts() {
       this.userError = false
       this.statusError = false
+    },
+    inProgress(id) {
+      this.$store.dispatch('engagementProgress', id)
     }
   },
   created() {
@@ -464,13 +525,35 @@ export default {
   }
 
   .highlight-row {
-    background-color: rgba(0, 0, 0, 0.150);
+    background-color: rgba(0, 0, 0, 0.150)!important;
   }
+
+  .high-priority {
+    background-color: rgba(255, 0, 0, 0.288);
+  }
+
+  .medium-priority {
+    background-color: rgba(255, 196, 0, 0.288);
+  }
+
+  .low-priority {
+    background-color: rgba(4, 0, 255, 0.15);
+  }
+
+  
 
   .tasks {
     height: 100%;
     min-height: calc(100vh - 190px);
     position: relative;
+  }
+
+  .square {
+    height: 25px;
+    width: 25px;
+    border: .3px solid gray;
+    align-self: center;
+    margin: 0 5px;
   }
 
   @media screen and (max-width: 1300px) {

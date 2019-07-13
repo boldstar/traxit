@@ -20,6 +20,10 @@ export default {
             const index = state.tasks.findIndex(item => item.id == task.id);
             state.tasks.splice(index, 1);
         },
+        updateTaskEngagementProgress(state, task) {
+            const index = state.tasks.findIndex(item => item.id == task.id);
+            state.tasks.splice(index, 1, task);
+        },
         batchUpdateTasks(state, checkedTasks) {
             checkedTasks.forEach((id) => {
               const index = state.tasks.findIndex(e => e.id === id);
@@ -76,5 +80,16 @@ export default {
                 context.commit('stopProcessing')
             })
         },
+        engagementProgress(context, id) {
+            axios.patch('/engagement-progress/' + id)
+            .then(response => {
+                context.commit('updateTaskEngagementProgress', response.data.task[0])
+                context.commit('successAlert', response.data.message)
+            })
+            .catch(error => {
+                console.log(error.response.data)
+                context.commit('errorMsgAlert', error.response.data.message)
+            })
+        }
     }
 }

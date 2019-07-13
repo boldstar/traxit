@@ -44,8 +44,8 @@
             <draggable :list="workflow.statuses" class="text-left" :element="'tbody'" v-model="workflow.statuses" @start="drag=true" @end="drag=false" @change="updateStatusOrder(workflow.id, workflow.statuses)" ref="table" :options="{animation: 200, handle: '.draggable'}" :sortable="true">
               <tr v-for="(status, index) in workflow.statuses" :key="index"  :class="{'highlight-status': checkValue(status.id)}" class="draggable">
                 <th scope="row" class="status-th hide-row"><div class="status-order"></div> {{ appendZero(index + 1) }}</th>
-                <td>{{ status.status }}</td>
-                <td class="hide-row font-weight-bold">{{ status.state }}</td>
+                <td class="status-text">{{ status.status }}</td>
+                <td class="hide-row font-weight-bold status-text">{{ status.state }}</td>
                 <td class="text-center" :class="{'notify': status.notify_client}" @click="showMessage(status)"><i  data-toggle="tooltip" data-placement="right" title="Add Custom Message" class="fas fa-check text-primary" v-if="status.notify_client"></i></td>
               </tr>
             </draggable>
@@ -266,7 +266,7 @@ export default {
 
 <style lang="scss" scoped>
 .table {
-  width: 400px;
+  width: 450px;
 }
 
 .workflow-card {
@@ -290,6 +290,10 @@ tr {
 .status-th {
   padding-left: 30px;
   color: white;
+}
+
+.status-text {
+  font-size: .8rem;
 }
 
 .status-order {

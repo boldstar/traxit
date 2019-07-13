@@ -145,7 +145,17 @@ export default {
     },
     inProgress() {
       this.$store.dispatch('engagementViewProgress', this.engagement.id)
-    }
+    },
+    modifyAmount(fee) {
+          if(fee == '' || fee == null) return;
+          const amount =  parseFloat(fee.replace(/,/g, ''));
+          if(amount < 0) {
+              return 'Tax Refunded: $' + (-amount)
+          } else {
+              return 'Tax Owed: $' + amount
+          }
+          return;
+      },
   },
   created: function(){
     this.$store.dispatch('getEngagement', this.$route.params.id);

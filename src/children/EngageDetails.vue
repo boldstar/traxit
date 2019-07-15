@@ -114,7 +114,6 @@ export default {
         fixCasing(string) {
             if(string == 'taxreturn') {
                 const newString = string.replace("taxreturn", "Tax Return")
-
                 return newString
             } else {
                 return string
@@ -122,20 +121,10 @@ export default {
         },
         amount(fee) {
             if(fee == null || fee == '') {
-            return '$0.00'
+                return '$0.00'
             } else {
-            return '$' + fee
-        }
-        },
-        modifyAmount(fee) {
-            if(fee == '' || fee == null) return;
-            const amount =  parseFloat(fee.replace(/,/g, ''));
-            if(amount < 0) {
-                return 'Tax Refunded: $' + (-amount)
-            } else {
-                return 'Tax Owed: $' + amount
+                return '$' + fee
             }
-            return;
         },
         removeCommas(fee) {
             const commaless = fee.replace(/[, ]+/g, " ").trim();

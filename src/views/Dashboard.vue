@@ -117,7 +117,7 @@
                                 <span class="font-weight-bold">Completed </span>
                             </div>
                             <div class="h5 mb-0 ml-3">
-                                <span v-if="average" class="font-weight-bold">Average | <span class="text-primary">{{ average }} days</span></span>
+                                <span v-if="average && averageCalc" class="font-weight-bold">Average | <span class="text-primary">{{ average }} days</span></span>
                             </div>
                         </div>
                         <div class="card-body">
@@ -159,6 +159,7 @@ export default {
             selected: false,
             currentYear: 'All',
             option: 'All',
+            averageCalc: false,
             backgroundColors: [
                 '#0077ff', 
                 '#0022ff',
@@ -375,6 +376,7 @@ export default {
             }, [])
 
             const days =  this.compareArrays(cre_formatted, com_formatted)
+            this.averageCalc = true
             return Math.round(days)
         },
         firmsetsfull() {

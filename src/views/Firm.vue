@@ -84,7 +84,7 @@
                 </tr>
               </thead>
               <tbody class="text-left">
-                <tr v-for="(engagement, index) in filteredEngagements" :key="index" v-if="engagement.workflow_id === selectedWorkflowID" >
+                <tr v-for="(engagement, index) in filteredEngagements" :key="index">
                   <th scope="row" class="custom-control custom-checkbox"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements.engagements" class="custom-control-input" :id="`${engagement.id}`"><label class="custom-control-label pb-3 ml-4" :for="`${engagement.id}`"></label></th>
                   <th @click="viewDetails(engagement.id)">{{ engagement.name}}</th>
                   <td @click="viewDetails(engagement.id)" class="hide-row">{{ engagement.created_at | formatDate }}</td>
@@ -185,7 +185,7 @@ export default {
       if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
       if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
       return 0;
-      }).filter((engagement) => engagement.status === this.engagementFilterKey).filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear).filter( engagement => {
+      }).filter(eng => eng.workflow_id === this.selectedWorkflowID).filter((engagement) => engagement.status === this.engagementFilterKey).filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear).filter( engagement => {
       return !this.searchEngagement || engagement.name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 });
     },
     countEngagementsByStatus () {

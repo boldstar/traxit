@@ -25,6 +25,12 @@
         <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
           <slot v-if="!setupTour" />
         </transition>
+
+        <transition name="router-animation" enter-active-class="animated slideInRight" leave-active-class="animated slideOutRight" mode="out-in">
+          <Timesheet v-if="timesheet" />
+        </transition>
+
+        <div class="timesheet-bg" v-if="timesheet" @click="toggleTimesheet"></div>
       </main>
     </div>
         
@@ -40,6 +46,7 @@ import Sidebar from '@/components/Sidebar.vue'
 import NotifyModal from '@/components/NotifyModal.vue'
 import MobileLinks from '@/components/MobileLinks.vue'
 import Setup from '@/components/Setup.vue'
+import Timesheet from '@/components/Timesheet.vue'
 
 export default {
   props: ['admin'],
@@ -49,7 +56,8 @@ export default {
     Sidebar,
     NotifyModal,
     MobileLinks,
-    Setup
+    Setup,
+    Timesheet
   },
   data () {
     return {
@@ -65,7 +73,12 @@ export default {
     toggleSidebar() {
       return this.$store.getters.sidebarOpen
     },
-    ...mapGetters(['notify', 'mobileLinks', 'setupTour', 'role', 'subscribeView']),
+    ...mapGetters(['notify', 'mobileLinks', 'setupTour', 'role', 'subscribeView', 'timesheet']),
+  },
+  methods: {
+    toggleTimesheet() {
+      this.$store.commit('toggleTimesheet')
+    },
   },
   watch: {
     subscribeView: function(val) {
@@ -108,6 +121,19 @@ export default {
 
 .main {
   padding-top: 110px;
+}
+
+.timesheet-bg {
+  font-family: 'Source Sans Pro', sans-serif!important;
+  z-index: 100;
+  position: absolute;
+  top: 52px;
+  left: 0;
+  background: rgba(0, 0, 0, 0.37);
+  height: calc(100% - 52px);
+  width: 100%;
+  display: flex;
+  align-items: center;
 }
 
 

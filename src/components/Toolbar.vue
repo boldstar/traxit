@@ -13,6 +13,13 @@
         <div v-if="grace">
             <span class="font-weight-bold" v-if="computedGrace.cancel_at_period_end">Account Will Expire On: <span class="text-danger">{{computedGrace.cancel_at}}</span></span>  
         </div>
+        <div>
+            <div class="align-self-center">
+                <button class="bg-light" @click="handleClick" data-toggle="tooltip" data-placement="bottom" title="Toggle Timesheet">
+                    <i class="fas fa-stopwatch text-primary"></i>
+                </button>
+            </div>
+        </div>
     </nav>
 </template>
 
@@ -39,7 +46,7 @@ export default {
     },
     methods: {
         handleClick () {
-            this.$store.dispatch('toggleSidebar')
+            this.$store.dispatch('toggleTimesheet')
         },
     }
 }

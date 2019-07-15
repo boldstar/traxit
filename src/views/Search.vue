@@ -82,7 +82,7 @@
                                 <td class="hide-row">{{engagement.year}}</td>
                                 <td class="mobile-hide-row">{{engagement.assigned_to}}</td>
                                 <td>{{engagement.status}}</td>
-                                <td><router-link :to="{ path: '/engagement/' + engagement.id}" class="btn btn-sm btn-primary align-self-center">View</router-link></td>
+                                <td><router-link :to="{ path: '/engagement/' + engagement.id + '/details'}" class="btn btn-sm btn-primary align-self-center">View</router-link></td>
                             </tr>
                         </tbody>
                     </table>

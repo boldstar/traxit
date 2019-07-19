@@ -1,93 +1,43 @@
 <template>
-    <nav class="bg-light timesheet">
+    <nav class="bg-white timesheet">
         <div class="timesheet-sticky d-flex flex-column">
             <div class="d-flex justify-content-between px-3">
-                <span class="align-self-center font-weight-bold">Timesheet | 01/01/2019 10:30:33</span>
+                <span class="align-self-center font-weight-bold">Timesheet</span>
                 <button @click="closeTimesheet" class="btn btn-link font-weight-bold timesheet-close-btn">X</button>
             </div>
-            <div class="timesheet-body">
-                <table class="table table-bordered mb-0">
-                    <thead>
-                        <tr>
-                            <th>Current</th>
-                            <th>Today</th>
-                            <th>Week</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>5:00 HR</td>
-                            <td>5:00 HR</td>
-                            <td>15:00 HR</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="card-footer text-right">
-                    <button class="btn btn-sm btn-danger">Clock Out</button>
+           
+            <TimesheetCard v-if="tsheetsAccessToken" />
+
+            <div class="mt-5 d-flex flex-column align-items-center" v-else>
+                <div class="d-flex justify-content-between w-100 px-5">
+                    <img src="../assets/tsheets_logo.png" alt="tsheets_logo" />
+                    <ConnectButton />
                 </div>
+                <p class="px-5 mt-2">Easily capture time of each engagement and your teams hours using the Tsheets Time Tracking integration. Simply click the <strong>"Connect Tsheets"</strong> button, provide your login information and you will be set to start tracking time today! If you do not have a Tsheets account <a href="https://www.tsheets.com">Click Here</a>to get signed up today.</p>
             </div>
-            <div class="timesheet-in-progress card m-3 shadow-sm">
-                <div class="card-header text-left">
-                    <span class="font-weight-bold">Currently Working On</span>
-                </div>
-                <div class="card-body">
-                    Details of what is in progress
-                </div>
-                <div class="card-footer">
-                    <button class=" btn btn-sm btn-secondary">Stop</button>
-                </div>
-            </div>
-            <div class="timesheet-body">
-                <div class="card-header text-left">
-                    <span class="font-weight-bold">Team</span>
-                </div>
-                <table class="table table-bordered mb-0">
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Time</th>
-                            <th>Week</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>John Doe</td>
-                            <td>5:00 HR</td>
-                            <td>15:00 HR</td>
-                        </tr>
-                        <tr>
-                            <td>Jane Go</td>
-                            <td>8:00 HR</td>
-                            <td>20:00 HR</td>
-                        </tr>
-                        <tr>
-                            <td>David John</td>
-                            <td>5:00 HR</td>
-                            <td>10:00 HR</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="card-footer text-right">
-                    <button class="btn btn-sm btn-danger">Clock Out</button>
-                </div>
-            </div>
+            
         </div>
     </nav>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
+import TimesheetCard from '@/tsheets/TimesheetCard.vue'
+import ConnectButton from '@/tsheets/ConnectButton.vue'
 
 export default {
     name: 'Timesheet',
     data () {
         return {
-        isActive: false,
-        role: localStorage.getItem('role')
+            tsheetsAccessToken: sessionStorage.getItem('tsheets_access_token')
         }
     },
+    components: {
+        TimesheetCard,
+        ConnectButton
+    },
     computed: {
-        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert', 'engagementFilter'])
+        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert'])
     },
     methods: {
         closeTimesheet() {

@@ -1,13 +1,25 @@
 import axios from 'axios'
 import moment from 'moment';
 import router from '../../router'
+import {notLastItem} from '../../plugins/tsheets'
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
 
 export default {
     state: {
        tsheets_user: null,
        current_tsheet: null,
-       total_tsheets: null
+       total_tsheets: null,
+       data_received: false,
+       customFields: null,
+       customFieldsLength: 0,
+       customFieldsReceived: false,
+       getItemPage: 1,
+       getPage: 1,
+       allPagesDone: false,
+       itemIndex: 0,
+       field_items: [],
+       job_codes: [],
+       job_codes_received: false
     },
     getters: {
       tsheets_user(state) {
@@ -18,6 +30,30 @@ export default {
       },
       total_tsheets(state) {
         return state.total_tsheets
+      },
+      data_received(state) {
+        return state.data_received
+      },
+      tsheets_access(state) {
+        return sessionStorage.getItem('tsheets_access_token')
+      },
+      custom_fields(state) {
+        return state.customFields
+      },
+      custom_field_items(state) {
+        return state.field_items
+      },
+      custom_fields_received(state) {
+        return state.customFieldsReceived
+      },
+      job_codes(state) {
+        return state.job_codes
+      },
+      job_codes_received(state) {
+        return state.job_codes_received
+      },
+      tsheet_id(state) {
+        return sessionStorage.tsheets_tsheet_id
       }
     },
     mutations: {
@@ -29,9 +65,29 @@ export default {
         },
         TOTAL_TIMESHEETS(state, total) {
           state.total_tsheets = total
+        },
+        DATA_RECEIVED(state) {
+          state.data_received = true
+        },
+        CUSTOM_FIELD_ITEMS(state, items) {
+          state.field_items.push(items)
+        },
+        CUSTOM_FIELDS(state, fields) {
+          state.customFields = fields
+        },
+        CUSTOM_FIELDS_LENGTH(state, length) {
+          state.customFieldsLength = length
+        },
+        CUSTOM_FIELDS_RECEIVED(state, boolean) {
+          state.customFieldsReceived = true
+        },
+        JOB_CODES(state, codes) {
+          state.job_codes.push(codes)
         }
     },
     actions: {
+      // GET
+      // Retrives token from tsheets api after clicking the connect button
       requestTsheetsToken(context) {
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/grant'
@@ -44,7 +100,7 @@ export default {
             'client_id': "7334d612a8cc42fe9b699f79e1f562e5",
             'client_secret': "45d60ca0fcee4cba901eadbfef5b46d8",
             'code': sessionStorage.getItem('code'),
-            'redirect_uri': "http://localhost:8082"
+            'redirect_uri': "http://localhost:8080"
           }
         }).then(res => {
           sessionStorage.tsheets_access_token = res.data.access_token
@@ -54,22 +110,32 @@ export default {
           sessionStorage.tsheets_client_url = res.data.client_url
           sessionStorage.tsheets_user_id = res.data.user_id
           router.replace({'query': null})
+          setTimeout(() => {
+            context.commit('toggleTimesheet')
+          }, 300)
         }).catch(err => {
           console.log(err.response)
         })
       },
+      // GET
+      // Retrieves the user information of the tsheet account
       requestCurrentUser(context) {
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/current_user'
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
         axios.get(proxy+url).then(res => {
           context.commit('TSHEETS_USER', res.data)
+          console.log(res.data)
         }).catch(err => {
           console.log(err.response)
         })
       },
+      //GET
+      // Retrieves the current time sheet of the user
       requestTimesheet(context) {
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/timesheets'
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
         axios({
           url: proxy+url,
           method: 'get',
@@ -81,13 +147,17 @@ export default {
         }).then(res => {
           context.commit('CURRENT_TIMESHEET', res.data)
           sessionStorage.tsheets_tsheet_id = Object.keys(res.data.results.timesheets)[0]
+          console.log(res.data)
         }).catch(err => {
           console.log(err.response)
         })
       },
+      // GET
+      // Retrieves all of the timesheets for the user for the day
       requestTimesheetTotal(context) {
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/timesheets'
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
         axios({
           url: proxy+url,
           method: 'get',
@@ -97,9 +167,84 @@ export default {
           }
         }).then(res => {
           context.commit('TOTAL_TIMESHEETS', res.data)
+          console.log(res.data)
         }).catch(err => {
           console.log(err.response)
         })
       },
-    }
+      // GET
+      // Retrieve custom fields that are used to get custom field items
+      requestCustomFields({commit, state, dispatch}) {
+        const proxy = 'https://cors-anywhere.herokuapp.com/'
+        const url = 'https://rest.tsheets.com/api/v1/customfields'
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
+        axios({
+          url: proxy+url,
+          method: 'get'
+        }).then(res => {
+          commit('CUSTOM_FIELDS', res.data.results.customfields)
+          commit('CUSTOM_FIELDS_LENGTH', Object.keys(state.customFields).length)
+          dispatch('requestCustomFieldItems')
+        }).catch(err => {
+          console.log(err.response)
+        })
+      },
+      // GET
+      // Retrieve custom fields items for the custom fields
+      requestCustomFieldItems({commit, state, dispatch}) {
+        const proxy = 'https://cors-anywhere.herokuapp.com/'
+        const url = 'https://rest.tsheets.com/api/v1/customfielditems'
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
+        axios({
+          url: proxy+url,
+          method: 'get',
+          params: {
+            customfield_id: Object.keys(state.customFields)[state.itemIndex],
+            page: state.getItemPage
+          }
+        }).then(res => {
+          commit('CUSTOM_FIELD_ITEMS', res.data.results.customfielditems)
+          console.log(notLastItem(state.customFields, state.customFieldsLength))
+          if(res.data.more) {
+            state.getItemPage++
+            dispatch('requestCustomFieldItems')
+          } else if(!notLastItem(state.customFields, state.customFieldsLength)) {
+            state.itemIndex++
+            dispatch('requestCustomFieldItems')
+          } else {
+            commit('CUSTOM_FIELDS_RECEIVED', true)
+          }
+        }).catch(err => {
+          console.log(err.response)
+          if(err.response.status === 417) {
+            commit('CUSTOM_FIELDS_RECEIVED', true)
+          }
+        })
+      },
+      // GET
+      // Retrieve job codes that contain the customer information
+      requestJobCodes({commit, state, dispatch}) {
+        const proxy = 'https://cors-anywhere.herokuapp.com/'
+        const url = 'https://rest.tsheets.com/api/v1/jobcodes'
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
+        axios({
+          url: proxy+url,
+          method: 'get',
+          params: {
+            active: 'both',
+            page: state.getPage
+          }
+        }).then(res => {
+          commit('JOB_CODES', res.data.results.jobcodes)
+          if(res.data.more) {
+            state.getPage++
+            dispatch('requestJobCodes')
+          } else {
+            state.job_codes_received = true
+          }
+        }).catch(err => {
+          console.log(err.response)
+        })
+      }
+    },
 }

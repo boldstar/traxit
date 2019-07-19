@@ -87,6 +87,14 @@ export default {
       }
     }
   },
+  mounted() {
+    if(this.$route.query && this.$route.query.code) {
+        sessionStorage.code = this.$route.query.code
+        sessionStorage.state = this.$route.query.state
+        this.$router.replace({'query': null})
+        this.$store.dispatch('requestTsheetsToken')
+    }
+  },
   created() {
     this.$store.dispatch('getAccountDetails')
     if(localStorage.getItem('access_token') != null) {

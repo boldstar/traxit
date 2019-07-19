@@ -1,9 +1,9 @@
 <template>
-    <nav class="bg-white timesheet">
-        <div class="timesheet-sticky d-flex flex-column">
+    <div class="bg-white timesheet">
+        <div class="timesheet-sticky d-flex flex-column" :key="timesheet">
             <div class="d-flex justify-content-between px-3">
                 <span class="align-self-center font-weight-bold">Timesheet</span>
-                <button @click="closeTimesheet" class="btn btn-link font-weight-bold timesheet-close-btn">X</button>
+                <button @click="closeTimesheet" class="btn btn-link text-danger font-weight-bold timesheet-close-btn">X</button>
             </div>
            
             <TimesheetCard v-if="tsheetsAccessToken" />
@@ -13,11 +13,11 @@
                     <img src="../assets/tsheets_logo.png" alt="tsheets_logo" />
                     <ConnectButton />
                 </div>
-                <p class="px-5 mt-2">Easily capture time of each engagement and your teams hours using the Tsheets Time Tracking integration. Simply click the <strong>"Connect Tsheets"</strong> button, provide your login information and you will be set to start tracking time today! If you do not have a Tsheets account <a href="https://www.tsheets.com">Click Here</a>to get signed up today.</p>
+                <p class="px-5 mt-2">Easily capture time of each engagement and your teams hours using the Tsheets Time Tracking integration. Simply click the <strong>"Connect Tsheets"</strong> button, provide your login information and you will be set to start tracking time today! If you do not have a Tsheets account <a href="https://www.tsheets.com">Click Here</a> to get signed up today.</p>
             </div>
             
         </div>
-    </nav>
+    </div>
 </template>
 
 <script>
@@ -29,7 +29,7 @@ export default {
     name: 'Timesheet',
     data () {
         return {
-            tsheetsAccessToken: sessionStorage.getItem('tsheets_access_token')
+            
         }
     },
     components: {
@@ -37,7 +37,10 @@ export default {
         ConnectButton
     },
     computed: {
-        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert'])
+        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert', 'timesheet']),
+        tsheetsAccessToken() {
+            return sessionStorage.getItem('tsheets_access_token')
+        }
     },
     methods: {
         closeTimesheet() {

@@ -1,5 +1,5 @@
 <template>
-    <div class="timesheet-totals">
+    <div class="timesheet-totals mx-3">
         <div class="timesheet-body">
             <table class="table table-bordered mb-0">
                 <thead>
@@ -17,9 +17,6 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="card-footer text-right">
-                <button class="btn btn-sm btn-danger">Clock Out</button>
-            </div>
         </div>
     </div>
 </template>

@@ -19,7 +19,9 @@ export default {
        itemIndex: 0,
        field_items: [],
        job_codes: [],
-       job_codes_received: false
+       job_codes_received: false,
+       switch: false,
+       tsheet_id: sessionStorage.getItem('tsheets_tsheet_id') || 'undefined'
     },
     getters: {
       tsheets_user(state) {
@@ -53,7 +55,7 @@ export default {
         return state.job_codes_received
       },
       tsheet_id(state) {
-        return sessionStorage.tsheets_tsheet_id
+        return state.tsheet_id
       }
     },
     mutations: {
@@ -66,8 +68,8 @@ export default {
         TOTAL_TIMESHEETS(state, total) {
           state.total_tsheets = total
         },
-        DATA_RECEIVED(state) {
-          state.data_received = true
+        DATA_RECEIVED(state, bool) {
+          state.data_received = bool
         },
         CUSTOM_FIELD_ITEMS(state, items) {
           state.field_items.push(items)
@@ -83,7 +85,7 @@ export default {
         },
         JOB_CODES(state, codes) {
           state.job_codes.push(codes)
-        }
+        },
     },
     actions: {
       // GET
@@ -145,9 +147,8 @@ export default {
             'on_the_clock': true
           }
         }).then(res => {
-          context.commit('CURRENT_TIMESHEET', res.data)
           sessionStorage.tsheets_tsheet_id = Object.keys(res.data.results.timesheets)[0]
-          console.log(res.data)
+          context.commit('CURRENT_TIMESHEET', res.data.results.timesheets[sessionStorage.tsheets_tsheet_id])
         }).catch(err => {
           console.log(err.response)
         })
@@ -241,10 +242,110 @@ export default {
             dispatch('requestJobCodes')
           } else {
             state.job_codes_received = true
+            commit('DATA_RECEIVED', true)
           }
         }).catch(err => {
           console.log(err.response)
         })
-      }
-    },
+      },
+      clockIn(context, job) {
+        context.commit('startProcessing')
+        const proxy = 'https://cors-anywhere.herokuapp.com/'
+        const url = 'https://rest.tsheets.com/api/v1/timesheets'
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
+        var payload = {'data': [{
+          'user_id': sessionStorage.tsheets_user_id,
+          'type': 'regular',
+          'start': new Date().toISOString().slice(0, -4).replace('.', '+00:00'),
+          'end': '',
+          'jobcode_id': job.id,
+          'customfields': job.customFields
+        }]}
+        fetch(proxy+url, {
+          method: "POST",
+          headers: {"Content-Type": "application/json", "Authorization": 'Bearer ' + sessionStorage.getItem('tsheets_access_token')},
+          body: JSON.stringify(payload)
+        }).then(function(response) {
+          return response.json();
+        }).then(function(responsebody) {
+          console.log(responsebody)
+          sessionStorage.tsheets_tsheet_id = responsebody.results.timesheets[1].id
+          context.commit('CURRENT_TIMESHEET', responsebody.results.timesheets[1])
+          context.commit('stopProcessing')
+        }).catch(function(error) {
+          console.log(error)
+          context.commit('stopProcessing')
+        });
+      },
+      clockOut({commit, state, dispatch}, job) {
+        commit('startProcessing')
+        const proxy = 'https://cors-anywhere.herokuapp.com/'
+        const url = 'https://rest.tsheets.com/api/v1/timesheets'
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
+        var payload = {'data': [{
+            'id': JSON.parse(sessionStorage.tsheets_tsheet_id),
+            'end': new Date().toISOString().slice(0, -4).replace('.', '+00:00'),
+            'jobcode_id': job
+          }]}
+          axios({
+            method: 'put',
+            url: proxy+url,
+            data: payload
+          }).then(res => {
+          commit('stopProcessing')
+          sessionStorage.removeItem('tsheets_tsheet_id')
+          commit('CURRENT_TIMESHEET', null)
+        }).catch(err => {
+          commit('stopProcessing')
+          console.log(err.response)
+        })
+      },
+      switchJob({commit, dispatch}, job) {
+        commit('startProcessing')
+        const proxy = 'https://cors-anywhere.herokuapp.com/'
+        const url = 'https://rest.tsheets.com/api/v1/timesheets'
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
+        var payload = {'data': [{
+          'id': JSON.parse(sessionStorage.tsheets_tsheet_id),
+            'end': new Date().toISOString().slice(0, -4).replace('.', '+00:00'),
+            'jobcode_id': job.id
+          }]}
+        axios({
+          method: 'put',
+          url: proxy+url,
+          data: payload
+        }).then(res => {
+          dispatch('newJob', job)
+        }).catch(err => {
+          console.log(err.response)
+        })
+      },
+      newJob({commit, state}, job) {
+        const proxy = 'https://cors-anywhere.herokuapp.com/'
+        const url = 'https://rest.tsheets.com/api/v1/timesheets'
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
+        var payload = {'data': [{
+          'user_id': sessionStorage.tsheets_user_id,
+          'type': 'regular',
+          'start': new Date().toISOString().slice(0, -4).replace('.', '+00:00'),
+          'end': '',
+          'jobcode_id': job.id,
+          'customfields': job.customFields
+        }  ]}
+        fetch(proxy+url, {
+          method: "POST",
+          headers: {"Content-Type": "application/json", "Authorization": 'Bearer ' + sessionStorage.getItem('tsheets_access_token')},
+          body: JSON.stringify(payload)
+        }).then(function(response) {
+          return response.json();
+        }).then(function(responsebody) {
+          console.log(responsebody)
+          sessionStorage.tsheets_tsheet_id = responsebody.results.timesheets[1].id
+          commit('CURRENT_TIMESHEET', responsebody.results.timesheets[1])
+          commit('stopProcessing')
+          }).catch(function(error) {
+            console.log(error)
+          });
+      },
+    }
 }

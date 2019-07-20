@@ -20,3 +20,23 @@ export function compressItems(items) {
     }
     return newArr
 }
+
+export function requiredFields(fields) {
+    var keys = Object.keys(fields)
+    var required = []
+    for(var i =0; i < keys.length; i++) {
+        if(fields[keys[i]].required) {
+            required.push(keys[i])
+        }
+    }
+    return required
+}
+
+export function validateFields(required, fields) {
+    var missing = []
+    for(var i = 0; i < required.length; i++) {
+        if(!fields[required[i]]) {
+            missing.push(required[i])
+        }
+    } return missing
+}

@@ -1,19 +1,28 @@
 <template>
-     <div class="mx-3 ">
-      <input type="text" @input="searchJobCodes($event)" class="search-customer-input" placeholder="Search for customers">
+     <div class="mx-3 shadow">
+      <input type="text" v-model="searchJob" class="search-customer-input" placeholder="Search for customers">
       <ul class="p-0 customer-card">
-        <!-- <li class="d-flex justify-content-between p-2 border">
-          <span class="align-self-center py-2">
-            {{ currentJob[0].name }}
+        <li class="d-flex justify-content-between p-2 border current-job-li" v-if="current">
+          <span class="align-self-center">
+            <i class="fas fa-star mr-2"></i>{{ currentJob.name }}
           </span>
-          <button class="btn btn-sm btn-danger clock-in-btn" @click="clockOut(currentJob[0].id)">Clock Out</button>
-        </li> -->
+          <button class="btn btn-sm btn-danger clock-in-btn font-weight-bold" @click="clockOut(currentJob.id)" :disabled="processing && clockingOut">
+                <span v-if="processing && clockingOut">Clocking Out..</span>
+                <span v-else>Clock Out</span>
+            </button>
+        </li>
         <li class="d-flex justify-content-between p-2 border" v-for="(code, index) in computedJobCodes" :key="index" @mouseover="showClockIn(code.id)">
-          <span class="align-self-center py-2">
+          <span class="align-self-center" :class="{'py-1': code.id != hoveredId}">
             {{code.name}}
           </span>
-          <button class="btn btn-sm btn-success clock-in-btn" v-if="clock && code.id == hoveredId">Clock In</button>
-          <button class="btn btn-sm btn-success clock-in-btn" v-else-if="code.id == hoveredId">Switch</button>
+          <button class="btn btn-sm btn-success clock-in-btn font-weight-bold" v-if="!current && code.id == hoveredId" @click="clockIn(code)" :disabled="processing">
+                <span v-if="!processing">Clock In</span>
+                <span v-if="processing">Clocking In..</span>
+            </button>
+          <button class="btn btn-sm btn-success clock-in-btn font-weight-bold" v-else-if="current && code.id == hoveredId" @click="switchJob(code)" :disabled="processing">
+                <span v-if="!processing">Switch</span>
+                <span v-if="processing">Switching..</span>
+            </button>
         </li>
       </ul>
     </div>
@@ -21,32 +30,44 @@
 
 <script>
 import {compressItems} from '../plugins/tsheets'
-import {mapActions} from 'vuex'
+import {mapGetters} from 'vuex'
 export default {
     name: 'CustomerList',
-    props: ['customers', 'clock'],
+    props: ['customers', 'clock', 'current'],
     data() {
         return {
-            searchJob: 'All',
-            hoveredId: null
+            searchJob: '',
+            hoveredId: null,
+            clockingOut: false
         }
     },
     computed: {
+        ...mapGetters(['tsheet_id', 'processing']),
         computedJobCodes() {
-            return compressItems(this.customers).filter(code => {if(this.searchJob === 'All'){ return code } else{ return code.name.toLowerCase().indexOf(this.searchJob.toLowerCase()) >= 0}})
+            return compressItems(this.customers).filter(code => {if(!this.searchJob){ return code } else{ return code.name.toLowerCase().indexOf(this.searchJob.toLowerCase()) >= 0}})
+        },
+        currentJob() {
+            return compressItems(this.customers).filter(code => code.id == this.current.jobcode_id)[0]
         },
     },
     methods: {
-        searchJobCodes(event) {
-            if(event.target.value.length > 0) {
-                this.searchJob = event.target.value
-            } else {
-                this.searchJob = 'All'
-            }
+        clockIn(code) {
+            this.$emit('clock-in', code)
+            this.searchJob = ''
+            this.clockingOut = false
         },
         showClockIn(id) {
             this.hoveredId = id
         },
+        clockOut(job) {
+            this.clockingOut = true
+            this.$store.dispatch('clockOut', job)
+        },
+        switchJob(job) {
+            this.$emit('switch-job', job)
+            this.searchJob = ''
+            this.clockingOut = false
+        }
     }
 }
 </script>
@@ -60,6 +81,10 @@ export default {
     .search-customer-input {
         width: 100%;
         padding: 10px;
-        font-size: 1.25rem;
+        font-size: 1.00rem;
+    }
+
+    .current-job-li {
+        background: #0077ff3b;
     }
 </style>

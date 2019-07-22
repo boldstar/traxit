@@ -1,10 +1,6 @@
 export function notLastItem(fields, fieldsLength) {
-    console.log(fields, fieldsLength)
     for(var i = 0; i < fieldsLength ;i++){
-        var item = Object.keys(fields)[i];
-        // Do something if is the last iteration of the array
         if((i + 1) == (fieldsLength)){
-            console.log(true)
             return true
         } else return false
     }
@@ -40,3 +36,102 @@ export function validateFields(required, fields) {
         }
     } return missing
 }
+
+export function currentTime(start) {
+    var startDate = new Date(start).getTime();
+
+    // Get today's date and time
+    var now = new Date().getTime();
+        
+    // Find the distance between now and the count down date
+    var distance = now - startDate;
+
+    // Time calculations for days, hours, minutes and seconds
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+    // Output the result in an element with id="demo"
+   
+    return hours + "h " + (minutes + 2) + "m " + seconds + "s "
+
+}
+
+export function daysTotal(time, current) {
+    var totals = []
+    for(var i in time) {
+        var start = time[i]['start']
+        var end = time[i]['end']
+        // Set the date we're counting down to
+        var startTime = new Date(start).getTime();
+
+        // Get today's date and time
+        var endTime = new Date(end).getTime(); 
+        var distance = endTime - startTime;
+        totals.push(distance)
+    }
+    totals.push(current)
+    const total = totals.reduce((a, b) => a + b, 0)
+    var hours = Math.floor((total % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((total % (1000 * 60 * 60)) / (1000 * 60));
+    return hours + ':' + minutes
+}
+
+export function weeksTotal(timesheets) {
+    console.log(timesheets)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// export function getTime(start, end) {
+//     var startTime = new Date(start).getTime();
+
+//     var endTime = new Date(end).getTime();
+        
+//     // Find the distance between now and the count down date
+//     var distance = endTime - startTime;
+
+//     var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+//     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+//     return hours + 'h' + ' ' + minutes + 'm'
+// }
+
+// export function daysTotal(timesheets) {
+//     if(localStorage.tsheets_tsheet_id && localStorage.tsheets_tsheet_id != 'undefined') {
+//         var times = []
+//         var total = []
+//         for(var i in timesheets) {
+//           times.push(i)
+//         }   for( var i = 0; i < times.length; i++) {
+//           var start = timesheets[times[i]].start
+//           var end = timesheets[times[i]].end
+//           total.push({
+//             start: start,
+//             end: end
+//           })
+//         } return total
+//       } else return;
+// }

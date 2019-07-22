@@ -2,7 +2,7 @@ import axios from 'axios'
 import moment from 'moment';
 import router from '../../router'
 import {notLastItem} from '../../plugins/tsheets'
-axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
+axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
 
 export default {
     state: {
@@ -21,7 +21,7 @@ export default {
        job_codes: [],
        job_codes_received: false,
        switch: false,
-       tsheet_id: sessionStorage.getItem('tsheets_tsheet_id') || 'undefined'
+       tsheet_id: localStorage.getItem('tsheets_tsheet_id') || 'undefined'
     },
     getters: {
       tsheets_user(state) {
@@ -37,7 +37,7 @@ export default {
         return state.data_received
       },
       tsheets_access(state) {
-        return sessionStorage.getItem('tsheets_access_token')
+        return localStorage.getItem('tsheets_access_token')
       },
       custom_fields(state) {
         return state.customFields
@@ -83,8 +83,15 @@ export default {
         CUSTOM_FIELDS_RECEIVED(state, boolean) {
           state.customFieldsReceived = true
         },
+        JOB_CODES_RECEIVED(state, bool) {
+          state.job_codes_received = bool
+        },
         JOB_CODES(state, codes) {
-          state.job_codes.push(codes)
+          if(localStorage.has_jobcodes) {
+            state.job_codes = codes
+          } else {
+            state.job_codes.push(codes)
+          }
         },
     },
     actions: {
@@ -101,16 +108,16 @@ export default {
             'grant_type': "authorization_code",
             'client_id': "7334d612a8cc42fe9b699f79e1f562e5",
             'client_secret': "45d60ca0fcee4cba901eadbfef5b46d8",
-            'code': sessionStorage.getItem('code'),
+            'code': localStorage.getItem('tsheets_code'),
             'redirect_uri': "http://localhost:8080"
           }
         }).then(res => {
-          sessionStorage.tsheets_access_token = res.data.access_token
-          sessionStorage.tsheets_refresh_token = res.data.refresh_token
-          sessionStorage.tsheets_expires_in = res.data.expires_in
-          sessionStorage.tsheets_company_id = res.data.company_id
-          sessionStorage.tsheets_client_url = res.data.client_url
-          sessionStorage.tsheets_user_id = res.data.user_id
+          localStorage.tsheets_access_token = res.data.access_token
+          localStorage.tsheets_refresh_token = res.data.refresh_token
+          localStorage.tsheets_expires_in = res.data.expires_in
+          localStorage.tsheets_company_id = res.data.company_id
+          localStorage.tsheets_client_url = res.data.client_url
+          localStorage.tsheets_user_id = res.data.user_id
           router.replace({'query': null})
           setTimeout(() => {
             context.commit('toggleTimesheet')
@@ -124,10 +131,9 @@ export default {
       requestCurrentUser(context) {
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/current_user'
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
         axios.get(proxy+url).then(res => {
           context.commit('TSHEETS_USER', res.data)
-          console.log(res.data)
         }).catch(err => {
           console.log(err.response)
         })
@@ -137,18 +143,18 @@ export default {
       requestTimesheet(context) {
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/timesheets'
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
         axios({
           url: proxy+url,
           method: 'get',
           params: {
-            'user_ids': sessionStorage.tsheets_user_id,
+            'user_ids': localStorage.tsheets_user_id,
             'start_date': new Date().toJSON().slice(0,10),
             'on_the_clock': true
           }
         }).then(res => {
-          sessionStorage.tsheets_tsheet_id = Object.keys(res.data.results.timesheets)[0]
-          context.commit('CURRENT_TIMESHEET', res.data.results.timesheets[sessionStorage.tsheets_tsheet_id])
+          localStorage.tsheets_tsheet_id = Object.keys(res.data.results.timesheets)[0]
+          context.commit('CURRENT_TIMESHEET', res.data.results.timesheets[localStorage.tsheets_tsheet_id])
         }).catch(err => {
           console.log(err.response)
         })
@@ -158,17 +164,16 @@ export default {
       requestTimesheetTotal(context) {
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/timesheets'
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
         axios({
           url: proxy+url,
           method: 'get',
           params: {
-            'user_ids': sessionStorage.tsheets_user_id,
+            'user_ids': localStorage.tsheets_user_id,
             'start_date': new Date().toJSON().slice(0,10)
           }
         }).then(res => {
           context.commit('TOTAL_TIMESHEETS', res.data)
-          console.log(res.data)
         }).catch(err => {
           console.log(err.response)
         })
@@ -178,7 +183,7 @@ export default {
       requestCustomFields({commit, state, dispatch}) {
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/customfields'
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
         axios({
           url: proxy+url,
           method: 'get'
@@ -195,7 +200,7 @@ export default {
       requestCustomFieldItems({commit, state, dispatch}) {
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/customfielditems'
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
         axios({
           url: proxy+url,
           method: 'get',
@@ -205,7 +210,6 @@ export default {
           }
         }).then(res => {
           commit('CUSTOM_FIELD_ITEMS', res.data.results.customfielditems)
-          console.log(notLastItem(state.customFields, state.customFieldsLength))
           if(res.data.more) {
             state.getItemPage++
             dispatch('requestCustomFieldItems')
@@ -216,7 +220,6 @@ export default {
             commit('CUSTOM_FIELDS_RECEIVED', true)
           }
         }).catch(err => {
-          console.log(err.response)
           if(err.response.status === 417) {
             commit('CUSTOM_FIELDS_RECEIVED', true)
           }
@@ -225,9 +228,15 @@ export default {
       // GET
       // Retrieve job codes that contain the customer information
       requestJobCodes({commit, state, dispatch}) {
+        if(localStorage.has_jobcodes) {
+          commit('JOB_CODES', JSON.parse(localStorage.jobcodes))
+          commit('JOB_CODES_RECEIVED', true)
+          commit('DATA_RECEIVED', true)
+          return
+        }
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/jobcodes'
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
         axios({
           url: proxy+url,
           method: 'get',
@@ -241,8 +250,10 @@ export default {
             state.getPage++
             dispatch('requestJobCodes')
           } else {
-            state.job_codes_received = true
+            commit('JOB_CODES_RECEIVED', true)
             commit('DATA_RECEIVED', true)
+            localStorage.setItem('jobcodes',  JSON.stringify(state.job_codes))
+            localStorage.has_jobcodes = true
           }
         }).catch(err => {
           console.log(err.response)
@@ -252,24 +263,23 @@ export default {
         context.commit('startProcessing')
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/timesheets'
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
         var payload = {'data': [{
-          'user_id': sessionStorage.tsheets_user_id,
+          'user_id': localStorage.tsheets_user_id,
           'type': 'regular',
-          'start': new Date().toISOString().slice(0, -4).replace('.', '+00:00'),
+          'start': moment().format(),
           'end': '',
           'jobcode_id': job.id,
           'customfields': job.customFields
         }]}
         fetch(proxy+url, {
           method: "POST",
-          headers: {"Content-Type": "application/json", "Authorization": 'Bearer ' + sessionStorage.getItem('tsheets_access_token')},
+          headers: {"Content-Type": "application/json", "Authorization": 'Bearer ' + localStorage.getItem('tsheets_access_token')},
           body: JSON.stringify(payload)
         }).then(function(response) {
           return response.json();
         }).then(function(responsebody) {
-          console.log(responsebody)
-          sessionStorage.tsheets_tsheet_id = responsebody.results.timesheets[1].id
+          localStorage.tsheets_tsheet_id = responsebody.results.timesheets[1].id
           context.commit('CURRENT_TIMESHEET', responsebody.results.timesheets[1])
           context.commit('stopProcessing')
         }).catch(function(error) {
@@ -281,10 +291,10 @@ export default {
         commit('startProcessing')
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/timesheets'
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
         var payload = {'data': [{
-            'id': JSON.parse(sessionStorage.tsheets_tsheet_id),
-            'end': new Date().toISOString().slice(0, -4).replace('.', '+00:00'),
+            'id': JSON.parse(localStorage.tsheets_tsheet_id),
+            'end': moment().format(),
             'jobcode_id': job
           }]}
           axios({
@@ -293,7 +303,7 @@ export default {
             data: payload
           }).then(res => {
           commit('stopProcessing')
-          sessionStorage.removeItem('tsheets_tsheet_id')
+          localStorage.removeItem('tsheets_tsheet_id')
           commit('CURRENT_TIMESHEET', null)
         }).catch(err => {
           commit('stopProcessing')
@@ -304,10 +314,10 @@ export default {
         commit('startProcessing')
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/timesheets'
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
         var payload = {'data': [{
-          'id': JSON.parse(sessionStorage.tsheets_tsheet_id),
-            'end': new Date().toISOString().slice(0, -4).replace('.', '+00:00'),
+          'id': JSON.parse(localStorage.tsheets_tsheet_id),
+            'end': moment().format(),
             'jobcode_id': job.id
           }]}
         axios({
@@ -323,24 +333,23 @@ export default {
       newJob({commit, state}, job) {
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/timesheets'
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('tsheets_access_token')
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
         var payload = {'data': [{
-          'user_id': sessionStorage.tsheets_user_id,
+          'user_id': localStorage.tsheets_user_id,
           'type': 'regular',
-          'start': new Date().toISOString().slice(0, -4).replace('.', '+00:00'),
+          'start': moment().format(),
           'end': '',
           'jobcode_id': job.id,
           'customfields': job.customFields
         }  ]}
         fetch(proxy+url, {
           method: "POST",
-          headers: {"Content-Type": "application/json", "Authorization": 'Bearer ' + sessionStorage.getItem('tsheets_access_token')},
+          headers: {"Content-Type": "application/json", "Authorization": 'Bearer ' + localStorage.getItem('tsheets_access_token')},
           body: JSON.stringify(payload)
         }).then(function(response) {
           return response.json();
         }).then(function(responsebody) {
-          console.log(responsebody)
-          sessionStorage.tsheets_tsheet_id = responsebody.results.timesheets[1].id
+          localStorage.tsheets_tsheet_id = responsebody.results.timesheets[1].id
           commit('CURRENT_TIMESHEET', responsebody.results.timesheets[1])
           commit('stopProcessing')
           }).catch(function(error) {

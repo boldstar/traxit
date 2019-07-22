@@ -1,5 +1,6 @@
 <template>
-     <div class="mx-3 shadow">
+    <div>   
+     <div class="mx-3 shadow" v-if="job_codes_received">
       <input type="text" v-model="searchJob" class="search-customer-input" placeholder="Search for customers">
       <ul class="p-0 customer-card">
         <li class="d-flex justify-content-between p-2 border current-job-li" v-if="current">
@@ -26,14 +27,21 @@
         </li>
       </ul>
     </div>
+    <div class="d-flex flex-column align-items-center bg-light m-3 p-3 shadow" v-else>
+       <span class="font-weight-bold">Retrieving Customers. This Could Take A Minute.</span> 
+        <Spinner />
+    </div>
+    </div>
 </template>
 
 <script>
 import {compressItems} from '../plugins/tsheets'
 import {mapGetters} from 'vuex'
+import Spinner from '../components/Spinner.vue'
 export default {
     name: 'CustomerList',
     props: ['customers', 'clock', 'current'],
+    components: {Spinner},
     data() {
         return {
             searchJob: '',
@@ -42,7 +50,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['tsheet_id', 'processing']),
+        ...mapGetters(['tsheet_id', 'processing', 'job_codes_received']),
         computedJobCodes() {
             return compressItems(this.customers).filter(code => {if(!this.searchJob){ return code } else{ return code.name.toLowerCase().indexOf(this.searchJob.toLowerCase()) >= 0}})
         },
@@ -53,7 +61,6 @@ export default {
     methods: {
         clockIn(code) {
             this.$emit('clock-in', code)
-            this.searchJob = ''
             this.clockingOut = false
         },
         showClockIn(id) {
@@ -68,6 +75,9 @@ export default {
             this.searchJob = ''
             this.clockingOut = false
         }
+    },
+    mounted() {
+        this.searchJob = ''
     }
 }
 </script>

@@ -13,16 +13,16 @@
 const landing_layout = "landing";
 import {mapActions, mapGetters} from 'vuex'
 import {destroyToken} from './plugins/session.js'
-
+import axios from 'axios'
 export default {
     computed: {
-        ...mapGetters(['subscribeView']),
+        ...mapGetters(['subscribeView', 'timesheet']),
         layout() {
             return (this.$route.meta.layout || landing_layout) + '-layout';
         },
     },
     methods: {
-        ...mapActions(['destroyToken']),
+        ...mapActions(['destroyToken', 'tsheet']),
         destroySessionIfTokenIsExpired() {
             if(destroyToken()) {
                 this.$store.dispatch('destroyToken')
@@ -33,6 +33,11 @@ export default {
     watch: {
         '$route': function(to, from) {
             this.destroySessionIfTokenIsExpired()
+        },
+        'timesheet': function(open) {
+            if(!open) {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access_token')
+            }
         }
     },
     mounted() {

@@ -1,10 +1,10 @@
 <template>
     <div class="timesheet-card">
-        <div v-if="data_received">
+        <div>
             <CurrentJob />
-            <TimesheetTotals />
-            <CustomerList :customers="job_codes" :current="current_tsheet" v-if="job_codes_received" :clock="tsheet_id" @clock-in="clockIn" @switch-job="switchJob" @clock-out="blankFields = []"/>
-            <TimesheetSelects :key="processing" :cfields="custom_fields" :current-fields="currentFieldsObj" :items="custom_field_items" v-if="custom_fields_received" @item-select="setItemObj" @current-obj="setCurrentObj" :missing-fields="blankFields" @remove-error="removeFromErrors"/>
+            <TimesheetTotals :key="timesheet || processing" :current="current_tsheet" :totals="total_tsheets" />
+            <CustomerList :key="processing" :customers="job_codes" :current="current_tsheet" :clock="tsheet_id" @clock-in="clockIn" @switch-job="switchJob" @clock-out="blankFields = []"/>
+            <TimesheetSelects :key="!processing" :cfields="custom_fields" :current-fields="currentFieldsObj" :items="custom_field_items" v-if="custom_fields_received" @item-select="setItemObj" @current-obj="setCurrentObj" :missing-fields="blankFields" @remove-error="removeFromErrors"/>
             <!-- <TeamTimesheet /> -->
             <div class="d-flex mx-3" v-if="current_tsheet">
                 <button class="btn btn-sm btn-danger font-weight-bold" :disabled="processing" @click="clockOut">
@@ -12,12 +12,6 @@
                     <span v-else>Clock Out</span>
                 </button>
             </div>
-        </div>
-        <div v-else>
-            <p class="font-weight-bold bg-light py-3 mt-1">Building Timesheet. This could take a minute...</p>
-            <div class="border mx-3 shadow">
-                <spinner></spinner> 
-            </div>   
         </div>
     </div>
 </template>
@@ -59,10 +53,14 @@ export default {
             'job_codes',
             'job_codes_received',
             'tsheet_id',
-            'processing'
+            'processing',
+            'timesheet'
         ]),
         currentFieldsObj() {
             return this.current_tsheet && this.current_tsheet.customfields ? this.current_tsheet.customfields : this.createObj()
+        },
+        storedJobCodes() {
+            return JSON.parse(localStorage.getItem('jobcodes'))
         }
     },
     methods: {

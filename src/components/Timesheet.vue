@@ -39,7 +39,7 @@ export default {
     computed: {
         ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert', 'timesheet']),
         tsheetsAccessToken() {
-            return sessionStorage.getItem('tsheets_access_token')
+            return localStorage.getItem('tsheets_access_token')
         }
     },
     methods: {

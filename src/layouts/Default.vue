@@ -12,7 +12,7 @@
     </transition>
 
 <!-- this section is controling the main content section -->
-    <div class="d-flex main-wrapper page-wrapper">
+    <div class="d-flex main-wrapper page-wrapper" >
       <main role="main" class="flex-fill px-3 main">
 
         <!-- this is if they have not done a setup tour -->
@@ -27,7 +27,7 @@
         </transition>
 
         <transition name="router-animation" enter-active-class="animated slideInRight" leave-active-class="animated slideOutRight" mode="out-in">
-          <Timesheet v-if="timesheet" />
+          <Timesheet v-if="timesheet" :key="timesheet" />
         </transition>
 
         <div class="timesheet-bg" v-if="timesheet" @click="toggleTimesheet"></div>
@@ -89,8 +89,8 @@ export default {
   },
   mounted() {
     if(this.$route.query && this.$route.query.code) {
-        sessionStorage.code = this.$route.query.code
-        sessionStorage.state = this.$route.query.state
+        localStorage.tsheets_code = this.$route.query.code
+        localStorage.tsheets_state = this.$route.query.state
         this.$router.replace({'query': null})
         this.$store.dispatch('requestTsheetsToken')
     }

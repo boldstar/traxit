@@ -1,12 +1,15 @@
 <template>
     <div class="timesheet-card">
-        <div>
+        <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
+            <TimesheetAlert v-if="tsheet_alert" :message="tsheet_alert" />
+        </transition>
+        <div class="card mx-3 shadow">
             <CurrentJob :current-job="tasks" :key="timesheet" />
             <TimesheetTotals :key="timesheet || processing" :current="current_tsheet" :totals="total_tsheets" :week-total="weeks_tsheets" />
             <CustomerList :key="processing" :customers="job_codes" :current="current_tsheet" :clock="tsheet_id" @clock-in="clockIn" @switch-job="switchJob" @clock-out="blankFields = []"/>
             <TimesheetSelects :key="!processing" :cfields="custom_fields" :current-fields="currentFieldsObj" :items="custom_field_items" v-if="custom_fields_received" @item-select="setItemObj" @current-obj="setCurrentObj" :missing-fields="blankFields" @remove-error="removeFromErrors"/>
             <!-- <TeamTimesheet /> -->
-            <div class="d-flex justify-content-between mx-3">
+            <div class="d-flex justify-content-between card-footer">
                 <button class="btn btn-sm btn-danger font-weight-bold" v-if="current_tsheet" :disabled="processing" @click="clockOut">
                     <span v-if="processing">Clocking Out..</span>
                     <span v-else>Clock Out</span>
@@ -28,6 +31,7 @@ import CustomerList from './CustomerList.vue'
 import TimesheetTotals from './TimesheetTotals.vue'
 import TeamTimesheet from './TeamTimesheet.vue'
 import TimesheetSelects from './TimesheetSelects.vue'
+import TimesheetAlert from './TimesheetAlert.vue'
 import {requiredFields, validateFields, compressItems} from '../plugins/tsheets'
 export default {
     name: 'TimesheetCard',
@@ -43,7 +47,8 @@ export default {
         CustomerList,
         TimesheetTotals,
         TimesheetSelects,
-        TeamTimesheet
+        TeamTimesheet,
+        TimesheetAlert
     },
     computed: {
         ...mapGetters([
@@ -60,7 +65,8 @@ export default {
             'processing',
             'timesheet',
             'weeks_tsheets',
-            'tasks'
+            'tasks',
+            'tsheet_alert'
         ]),
         currentFieldsObj() {
             return this.current_tsheet && this.current_tsheet.customfields ? this.current_tsheet.customfields : this.createObj()
@@ -84,6 +90,12 @@ export default {
         },
         setItemObj(items) {
             this.selectedCustomFields = items
+            if(this.current_tsheet) {
+                this.$store.dispatch('updateFieldItems', {id: this.current_tsheet.jobcode_id, customFields: this.selectedCustomFields}).then(() => {
+                    this.selectedCustomFields = {}
+                    this.blankFields = []  
+                })
+            } return
         },
         removeFromErrors(item) {
             if(this.blankFields.indexOf(item) >= 0) {

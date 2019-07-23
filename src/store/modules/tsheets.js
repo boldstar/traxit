@@ -22,7 +22,8 @@ export default {
        job_codes: [],
        job_codes_received: false,
        switch: false,
-       tsheet_id: localStorage.getItem('tsheets_tsheet_id') || 'undefined'
+       tsheet_id: localStorage.getItem('tsheets_tsheet_id') || 'undefined',
+       tsheet_alert: null
     },
     getters: {
       tsheets_user(state) {
@@ -60,6 +61,9 @@ export default {
       },
       tsheet_id(state) {
         return state.tsheet_id
+      },
+      tsheet_alert(state) {
+        return state.tsheet_alert
       }
     },
     mutations: {
@@ -104,6 +108,9 @@ export default {
             state.job_codes.push(codes)
           }
         },
+        TSHEET_ALERT(state, alert) {
+          state.tsheet_alert = alert
+        }
     },
     actions: {
       // GET
@@ -323,6 +330,7 @@ export default {
           localStorage.tsheets_tsheet_id = responsebody.results.timesheets[1].id
           context.commit('CURRENT_TIMESHEET', responsebody.results.timesheets[1])
           context.commit('stopProcessing')
+          commit('TSHEET_ALERT', 'Clocked In')
         }).catch(function(error) {
           console.log(error)
           context.commit('stopProcessing')
@@ -346,6 +354,7 @@ export default {
           commit('stopProcessing')
           localStorage.removeItem('tsheets_tsheet_id')
           commit('CURRENT_TIMESHEET', null)
+          commit('TSHEET_ALERT', 'Clocked Out')
         }).catch(err => {
           commit('stopProcessing')
           console.log(err.response)
@@ -393,9 +402,33 @@ export default {
           localStorage.tsheets_tsheet_id = responsebody.results.timesheets[1].id
           commit('CURRENT_TIMESHEET', responsebody.results.timesheets[1])
           commit('stopProcessing')
+          commit('TSHEET_ALERT', 'Customer Switched')
           }).catch(function(error) {
             console.log(error)
           });
+      },
+      updateFieldItems({commit, state, dispatch}, job) {
+        commit('startProcessing')
+        const proxy = 'https://cors-anywhere.herokuapp.com/'
+        const url = 'https://rest.tsheets.com/api/v1/timesheets'
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
+        var payload = {'data': [{
+            'id': JSON.parse(localStorage.tsheets_tsheet_id),
+            'jobcode_id': job.id,
+            'customfields':  job.customFields
+          }]}
+          axios({
+            method: 'put',
+            url: proxy+url,
+            data: payload
+          }).then(res => {
+          commit('stopProcessing')
+          commit('CURRENT_TIMESHEET', res.data.results.timesheets[1])
+          commit('TSHEET_ALERT', 'Service Item Updated')
+        }).catch(err => {
+          commit('stopProcessing')
+          console.log(err.response)
+        })
       },
       syncTsheets(context) {
 

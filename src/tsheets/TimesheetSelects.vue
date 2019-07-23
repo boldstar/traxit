@@ -1,6 +1,6 @@
 <template>
-    <div class="timesheet-selects mx-3">
-        <div class="input-group item-select text-left mb-3" v-for="(field, index) in cfields" :key="index">
+    <div class="timesheet-selects bg-light p-3">
+        <div class="input-group item-select text-left mb-2" v-for="(field, index) in cfields" :key="index">
             <div class="input-group-prepend">
                 <label class="input-group-text text-primary font-weight-bold item-label" :for="field.name">{{field.name}}</label>
             </div>

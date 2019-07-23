@@ -1,5 +1,5 @@
 <template>
-    <div class="timesheet-totals mx-3 shadow">
+    <div class="timesheet-totals">
         <div class="timesheet-body">
             <table class="table  mb-0">
                 <thead>

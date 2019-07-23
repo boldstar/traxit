@@ -1,8 +1,8 @@
 <template>
     <div>   
-     <div class="mx-3 shadow" v-if="job_codes_received">
+     <div v-if="job_codes_received">
       <input type="text" v-model="searchJob" class="search-customer-input" placeholder="Search for customers">
-      <ul class="p-0 customer-card">
+      <ul class="p-0 customer-card mb-0">
         <li class="d-flex justify-content-between p-2 border current-job-li" v-if="current">
           <span class="align-self-center">
             <i class="fas fa-star mr-2"></i>{{ currentJob.name }}

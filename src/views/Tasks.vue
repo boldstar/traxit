@@ -38,7 +38,7 @@
 
 <!-- this is the list of the assigned user tasks -->
     <div class="text-left card-body mb-3 tasks d-flex flex-column">
-    <processing-bar v-if="processing"></processing-bar>
+    <processing-bar v-if="processing && !timesheet"></processing-bar>
     <input v-if="searchInput" class="form-control mb-3" placeholder="Filter Task By Client Name" v-model="searchTasks" type="search">
     <spinner v-if="tasksLoaded" class="mx-auto"></spinner>
 
@@ -271,7 +271,8 @@ export default {
       'tasks',
       'users',
       'successAlert',
-      'processing'
+      'processing',
+      'timesheet'
     ]),
     sortedTasksCustom() {
       return this.tasks.reduce((acc, task) => {

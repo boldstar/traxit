@@ -6,10 +6,14 @@
             <CustomerList :key="processing" :customers="job_codes" :current="current_tsheet" :clock="tsheet_id" @clock-in="clockIn" @switch-job="switchJob" @clock-out="blankFields = []"/>
             <TimesheetSelects :key="!processing" :cfields="custom_fields" :current-fields="currentFieldsObj" :items="custom_field_items" v-if="custom_fields_received" @item-select="setItemObj" @current-obj="setCurrentObj" :missing-fields="blankFields" @remove-error="removeFromErrors"/>
             <!-- <TeamTimesheet /> -->
-            <div class="d-flex mx-3" v-if="current_tsheet">
-                <button class="btn btn-sm btn-danger font-weight-bold" :disabled="processing" @click="clockOut">
+            <div class="d-flex justify-content-between mx-3">
+                <button class="btn btn-sm btn-danger font-weight-bold" v-if="current_tsheet" :disabled="processing" @click="clockOut">
                     <span v-if="processing">Clocking Out..</span>
                     <span v-else>Clock Out</span>
+                </button>
+                <button class="btn btn-sm btn-primary font-weight-bold" :disabled="processing" @click="syncTsheets">
+                    <span v-if="processing">Syncing...</span>
+                    <span v-else>Sync Tsheets</span>
                 </button>
             </div>
         </div>
@@ -113,6 +117,9 @@ export default {
         },
         clockOut() {
             this.$store.dispatch('clockOut', this.current_tsheet.jobcode_id)
+        },
+        syncTsheets() {
+            this.$store.dispatch('syncTsheets')
         }
     },
     created() {

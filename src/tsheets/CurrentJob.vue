@@ -2,10 +2,12 @@
     <div class="current-job" v-if="inProgressExists && inProgressExists.length > 0">
         <div class="timesheet-in-progress card mx-3 mb-3 shadow-sm">
             <div class="card-header text-left d-flex justify-content-between">
-                <span class="font-weight-bold"><span class="text-primary">In Progress</span> | 5:10:36</span>
+                <span class="font-weight-bold"><span class="text-primary">In Progress</span></span>
                 <div class="d-flex">
-                    <button class="mr-2 btn btn-sm btn-secondary font-weight-bold">Stop</button>
-                    <button class=" btn btn-sm btn-outline-primary font-weight-bold">Check In</button>
+                    <button class=" btn btn-sm btn-outline-primary font-weight-bold" :disabled="processing" @click="updateTask()">
+                        <span v-if="processing">Checking In...</span>
+                        <span v-if="!processing">Check In</span>
+                    </button>
                 </div>
             </div>
             <div class="card-body d-flex justify-content-between">
@@ -17,10 +19,13 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+import axios from 'axios'
 export default {
     name: 'CurrentJob',
     props: ['current-job'],
     computed: {
+        ...mapGetters(['processing']),
         inProgress() {
             return this.currentJob.reduce((acc, task) => {
                 acc.push({
@@ -40,6 +45,14 @@ export default {
                 })
                 return acc
             }, []).filter(t => t.in_progress == true)
+        }
+    },
+    methods: {
+        updateTask() {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access_token')
+            this.$store.dispatch('engagementProgress', this.inProgress.engagement_id).then(() => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
+            })
         }
     }
 }

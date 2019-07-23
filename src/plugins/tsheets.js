@@ -38,8 +38,9 @@ export function validateFields(required, fields) {
 }
 
 export function currentTotal(start) {
-    var startDate = new Date(start).getTime();
-
+    var date = new Date(start);
+    var addMin = date.setMinutes( date.getMinutes() - 2)
+    var startDate = new Date(addMin).getTime()
     // Get today's date and time
     var now = new Date().getTime();
         
@@ -54,12 +55,15 @@ export function currentTotal(start) {
         
     // Output the result in an element with id="demo"
    
-    return hours + ":" + (minutes + 2) + ":" + seconds
+    return (JSON.stringify(seconds).length <= 1) ? hours + ":" + minutes + ":" + '0' + seconds : hours + ":" + minutes + ":" + seconds
 
 }
 
 export function distance(start) {
-    var startDate = new Date(start).getTime();
+    var date = new Date(start);
+    var addMin = date.setMinutes( date.getMinutes() - 2)
+    var startDate = new Date(addMin).getTime()
+
     var now = new Date().getTime();
     return now - startDate;
 }
@@ -70,10 +74,15 @@ export function daysTotal(time, current) {
         var start = time[i]['start']
         var end = time[i]['end']
         // Set the date we're counting down to
-        var startTime = new Date(start).getTime();
+        var start_date = new Date(start);
+        var addStartMin = start_date.setMinutes( start_date.getMinutes() - 2)
+        var startTime = new Date(addStartMin).getTime()
 
         // Get today's date and time
-        var endTime = new Date(end).getTime(); 
+        var end_date = new Date(end);
+        var addEndMin = end_date.setMinutes( end_date.getMinutes() - 2)
+        var endTime = new Date(addEndMin).getTime()
+
         var distance = endTime - startTime;
         totals.push(distance)
     }
@@ -82,10 +91,6 @@ export function daysTotal(time, current) {
     var hours = Math.floor((total % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     var minutes = Math.floor((total % (1000 * 60 * 60)) / (1000 * 60));
     return (JSON.stringify(minutes).length <= 1) ? hours + ':' + '0' + minutes : hours + ':' + minutes
-}
-
-export function weeksTotal(timesheets) {
-    console.log(timesheets)
 }
 
 export function getMonday(d) {

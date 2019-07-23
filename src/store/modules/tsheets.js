@@ -79,7 +79,11 @@ export default {
           state.data_received = bool
         },
         CUSTOM_FIELD_ITEMS(state, items) {
-          state.field_items.push(items)
+          if(localStorage.has_fielditems) {
+            state.field_items = items
+          } else {
+            state.field_items.push(items)
+          }
         },
         CUSTOM_FIELDS(state, fields) {
           state.customFields = fields
@@ -224,6 +228,11 @@ export default {
       // GET
       // Retrieve custom fields items for the custom fields
       requestCustomFieldItems({commit, state, dispatch}) {
+        if(localStorage.has_fielditems) {
+          commit('CUSTOM_FIELD_ITEMS', JSON.parse(localStorage.customfield_items))
+          commit('CUSTOM_FIELDS_RECEIVED', true)
+          return
+        }
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/customfielditems'
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
@@ -244,9 +253,15 @@ export default {
             dispatch('requestCustomFieldItems')
           } else {
             commit('CUSTOM_FIELDS_RECEIVED', true)
+            localStorage.setItem('customfield_items',  JSON.stringify(state.field_items))
+            localStorage.has_fielditems = true
           }
         }).catch(err => {
           if(err.response.status === 417) {
+            if(state.field_items.length > 0) {
+              localStorage.setItem('customfield_items',  JSON.stringify(state.field_items))
+              localStorage.has_fielditems = true
+            }
             commit('CUSTOM_FIELDS_RECEIVED', true)
           }
         })
@@ -382,5 +397,8 @@ export default {
             console.log(error)
           });
       },
+      syncTsheets(context) {
+
+      }
     }
 }

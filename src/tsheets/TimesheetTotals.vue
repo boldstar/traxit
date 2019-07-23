@@ -12,7 +12,7 @@
                 <tbody>
                     <tr class="table-bordered">
                         <td class="font-weight-bold time-td">
-                            <span v-if="totalForCurent != null">{{ totalForCurent }}</span>
+                            <span v-if="totalForCurrent != null">{{ totalForCurrent }}</span>
                             <span v-else-if="calculating">Loading...</span>
                             <span v-else>-:--</span>
                         </td>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import {daysTotal, currentTotal} from '../plugins/tsheets'
+import {daysTotal, currentTotal, distance} from '../plugins/tsheets'
 export default {
     name: 'TimesheetTotals',
     props: ['current', 'totals', 'week-total'],

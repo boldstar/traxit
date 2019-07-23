@@ -1,15 +1,16 @@
 <template>
-    <div class="current-job">
+    <div class="current-job" v-if="inProgressExists && inProgressExists.length > 0">
         <div class="timesheet-in-progress card mx-3 mb-3 shadow-sm">
             <div class="card-header text-left d-flex justify-content-between">
-                <span class="font-weight-bold">Currently Working On</span>
+                <span class="font-weight-bold"><span class="text-primary">In Progress</span> | 5:10:36</span>
                 <div class="d-flex">
                     <button class="mr-2 btn btn-sm btn-secondary font-weight-bold">Stop</button>
-                    <button class=" btn btn-sm btn-info font-weight-bold">Check In</button>
+                    <button class=" btn btn-sm btn-outline-primary font-weight-bold">Check In</button>
                 </div>
             </div>
-            <div class="card-body">
-                Details of what is in progress
+            <div class="card-body d-flex justify-content-between">
+                <span v-if="inProgress.name">{{ inProgress.name }}</span>
+                <span v-if="inProgress.type">{{ inProgress.type }}</span>
             </div>
         </div>
     </div>
@@ -17,7 +18,30 @@
 
 <script>
 export default {
-    name: 'CurrentJob'
+    name: 'CurrentJob',
+    props: ['current-job'],
+    computed: {
+        inProgress() {
+            return this.currentJob.reduce((acc, task) => {
+                acc.push({
+                    id: task.id,
+                    engagement_id: task.engagements[0].id,
+                    name: task.engagements[0].name,
+                    type: task.engagements[0].description,
+                    in_progress: task.engagements[0].in_progress
+                })
+                return acc
+            }, []).filter(t => t.in_progress == true)[0]
+        },
+        inProgressExists() {
+            return this.currentJob.reduce((acc, task) => {
+                acc.push({
+                    in_progress: task.engagements[0].in_progress
+                })
+                return acc
+            }, []).filter(t => t.in_progress == true)
+        }
+    }
 }
 </script>
 

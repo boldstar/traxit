@@ -12,7 +12,7 @@
                 <span v-else>Clock Out</span>
             </button>
         </li>
-        <li class="d-flex justify-content-between p-2 border" v-for="(code, index) in computedJobCodes" :key="index" @mouseover="showClockIn(code.id)">
+        <li class="d-flex justify-content-between p-2 border" v-for="(code, index) in computedJobCodes" :key="index" @mouseover="showClockIn(code.id)" @mouseout="hideClockIn">
           <span class="align-self-center" :class="{'py-1': code.id != hoveredId}">
             {{code.name}}
           </span>
@@ -65,6 +65,9 @@ export default {
         },
         showClockIn(id) {
             this.hoveredId = id
+        },
+        hideClockIn() {
+            this.hoveredId = null
         },
         clockOut(job) {
             this.clockingOut = true

@@ -1,8 +1,8 @@
 <template>
     <div class="timesheet-card">
         <div>
-            <CurrentJob />
-            <TimesheetTotals :key="timesheet || processing" :current="current_tsheet" :totals="total_tsheets" />
+            <CurrentJob :current-job="tasks" :key="timesheet" />
+            <TimesheetTotals :key="timesheet || processing" :current="current_tsheet" :totals="total_tsheets" :week-total="weeks_tsheets" />
             <CustomerList :key="processing" :customers="job_codes" :current="current_tsheet" :clock="tsheet_id" @clock-in="clockIn" @switch-job="switchJob" @clock-out="blankFields = []"/>
             <TimesheetSelects :key="!processing" :cfields="custom_fields" :current-fields="currentFieldsObj" :items="custom_field_items" v-if="custom_fields_received" @item-select="setItemObj" @current-obj="setCurrentObj" :missing-fields="blankFields" @remove-error="removeFromErrors"/>
             <!-- <TeamTimesheet /> -->
@@ -54,7 +54,9 @@ export default {
             'job_codes_received',
             'tsheet_id',
             'processing',
-            'timesheet'
+            'timesheet',
+            'weeks_tsheets',
+            'tasks'
         ]),
         currentFieldsObj() {
             return this.current_tsheet && this.current_tsheet.customfields ? this.current_tsheet.customfields : this.createObj()
@@ -117,8 +119,10 @@ export default {
         this.$store.dispatch('requestCurrentUser')
         this.$store.dispatch('requestTimesheet')
         this.$store.dispatch('requestTimesheetTotal')
+        this.$store.dispatch('requestWeeksTimesheets')
         this.$store.dispatch('requestCustomFields')
         this.$store.dispatch('requestJobCodes')
+         this.$store.dispatch('retrieveTasks');
     }
 }
 </script>

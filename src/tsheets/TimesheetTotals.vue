@@ -1,28 +1,28 @@
 <template>
     <div class="timesheet-totals mx-3 shadow">
         <div class="timesheet-body">
-            <table class="table table-bordered mb-0">
+            <table class="table  mb-0">
                 <thead>
-                    <tr>
+                    <tr class="text-primary">
                         <th>Current</th>
                         <th>Day</th>
                         <th>Week</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="font-weight-bold">
-                            <span v-if="time != null">{{ time }}</span>
+                    <tr class="table-bordered">
+                        <td class="font-weight-bold time-td">
+                            <span v-if="totalForCurent != null">{{ totalForCurent }}</span>
                             <span v-else-if="calculating">Loading...</span>
                             <span v-else>-:--</span>
                         </td>
-                        <td>
+                        <td class="time-td">
                             <span v-if="totalForToday != null">{{ totalForToday }}</span>
                             <span v-else-if="calculating">Loading...</span>
                             <span v-else>-:--</span>
                         </td>
-                        <td>
-                            <span v-if="timestate">{{ weeksTime(totals) }}</span>
+                        <td class="time-td">
+                            <span v-if="totalForWeek != null">{{ totalForWeek }}</span>
                             <span v-else-if="calculating">Loading...</span>
                             <span v-else>-:--</span>
                         </td>
@@ -34,17 +34,18 @@
 </template>
 
 <script>
-import {daysTotal} from '../plugins/tsheets'
+import {daysTotal, currentTotal} from '../plugins/tsheets'
 export default {
     name: 'TimesheetTotals',
-    props: ['current', 'totals'],
+    props: ['current', 'totals', 'week-total'],
     data() {
         return {
-            time: null,
+            totalForCurrent: null,
             calculating: true,
             timestate: false,
             currentDistance: null,
-            totalForToday: null
+            totalForToday: null,
+            totalForWeek: null
         }
     },
     computed: {
@@ -54,27 +55,19 @@ export default {
         daysTime() {
             this.totalForToday = daysTotal(this.totals.results.timesheets, this.currentDistance)
         },
-        weeksTime(totals) {
-
+        weeksTime() {
+            this.totalForWeek = daysTotal(this.weekTotal, this.currentDistance)
         },
         currentTime() {
             if(this.current == undefined)return; 
-            var startDate = new Date(this.current.start).getTime();
-            var now = new Date().getTime();
-            var distance = now - startDate;
-            this.currentDistance = distance
-            // Time calculations for hours, minutes and seconds
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
- 
-            // Output the result
-            this.time = hours + ":" + (minutes + 2) + ":" + seconds
+            this.currentDistance = distance(this.current.start)
+            this.totalForCurrent = currentTotal(this.current.start)
         },
     },
     mounted() {
         setInterval(this.currentTime, 1000)
         setInterval(this.daysTime, 1000)
+        setInterval(this.weeksTime, 1000)
         setTimeout(() => {
             this.calculating = false
         }, 3000)
@@ -83,5 +76,8 @@ export default {
 </script>
 
 <style>
-
+    .time-td {
+        font-size: 1.1rem;
+        padding: 10px!important;
+    }
 </style>

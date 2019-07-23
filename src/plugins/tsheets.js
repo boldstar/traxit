@@ -37,7 +37,7 @@ export function validateFields(required, fields) {
     } return missing
 }
 
-export function currentTime(start) {
+export function currentTotal(start) {
     var startDate = new Date(start).getTime();
 
     // Get today's date and time
@@ -54,8 +54,14 @@ export function currentTime(start) {
         
     // Output the result in an element with id="demo"
    
-    return hours + "h " + (minutes + 2) + "m " + seconds + "s "
+    return hours + ":" + (minutes + 2) + ":" + seconds
 
+}
+
+export function distance(start) {
+    var startDate = new Date(start).getTime();
+    var now = new Date().getTime();
+    return now - startDate;
 }
 
 export function daysTotal(time, current) {
@@ -75,11 +81,18 @@ export function daysTotal(time, current) {
     const total = totals.reduce((a, b) => a + b, 0)
     var hours = Math.floor((total % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     var minutes = Math.floor((total % (1000 * 60 * 60)) / (1000 * 60));
-    return hours + ':' + minutes
+    return (JSON.stringify(minutes).length <= 1) ? hours + ':' + '0' + minutes : hours + ':' + minutes
 }
 
 export function weeksTotal(timesheets) {
     console.log(timesheets)
+}
+
+export function getMonday(d) {
+    d = new Date(d);
+    var day = d.getDay(),
+        diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
+    return new Date(d.setDate(diff));
 }
 
 

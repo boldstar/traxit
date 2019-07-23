@@ -1,7 +1,7 @@
 import axios from 'axios'
 import moment from 'moment';
 import router from '../../router'
-import {notLastItem} from '../../plugins/tsheets'
+import {notLastItem, getMonday} from '../../plugins/tsheets'
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
 
 export default {
@@ -9,6 +9,7 @@ export default {
        tsheets_user: null,
        current_tsheet: null,
        total_tsheets: null,
+       weeks_tsheets: null,
        data_received: false,
        customFields: null,
        customFieldsLength: 0,
@@ -32,6 +33,9 @@ export default {
       },
       total_tsheets(state) {
         return state.total_tsheets
+      },
+      weeks_tsheets(state) {
+        return state.weeks_tsheets
       },
       data_received(state) {
         return state.data_received
@@ -67,6 +71,9 @@ export default {
         },
         TOTAL_TIMESHEETS(state, total) {
           state.total_tsheets = total
+        },
+        TOTAL_WEEKS_TIMESHEETS(state, total) {
+          state.weeks_tsheets = total
         },
         DATA_RECEIVED(state, bool) {
           state.data_received = bool
@@ -174,6 +181,25 @@ export default {
           }
         }).then(res => {
           context.commit('TOTAL_TIMESHEETS', res.data)
+        }).catch(err => {
+          console.log(err.response)
+        })
+      },
+      // GET
+      // Retrieves all of the timesheets for the user for the day
+      requestWeeksTimesheets(context) {
+        const proxy = 'https://cors-anywhere.herokuapp.com/'
+        const url = 'https://rest.tsheets.com/api/v1/timesheets'
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
+        axios({
+          url: proxy+url,
+          method: 'get',
+          params: {
+            'user_ids': localStorage.tsheets_user_id,
+            'start_date': moment(getMonday(new Date())).format('YYYY-MM-DD')
+          }
+        }).then(res => {
+          context.commit('TOTAL_WEEKS_TIMESHEETS', res.data.results.timesheets)
         }).catch(err => {
           console.log(err.response)
         })

@@ -23,7 +23,10 @@ export default {
        job_codes_received: false,
        switch: false,
        tsheet_id: localStorage.getItem('tsheets_tsheet_id') || 'undefined',
-       tsheet_alert: null
+       tsheet_alert: null,
+       updating_items: false,
+       tsheet_sync: false,
+       clock_out: false
     },
     getters: {
       tsheets_user(state) {
@@ -64,6 +67,15 @@ export default {
       },
       tsheet_alert(state) {
         return state.tsheet_alert
+      },
+      updating_items(state) {
+        return state.updating_items
+      },
+      sync_tsheets(state) {
+        return state.tsheet_sync
+      },
+      clock_out_state(state) {
+        return state.clock_out
       }
     },
     mutations: {
@@ -110,12 +122,24 @@ export default {
         },
         TSHEET_ALERT(state, alert) {
           state.tsheet_alert = alert
+        },
+        UPDATING_ITEMS(state) {
+          state.updating_items = !state.updating_items
+        },
+        START_SYNC(state) {
+          state.tsheet_sync = true
+        },
+        STOP_SYNC(state) {
+          state.tsheet_sync = false
+        },
+        CLOCKOUT_STATE(state) {
+          state.clock_out = !state.clock_out
         }
     },
     actions: {
-      // GET
+      // POST
       // Retrives token from tsheets api after clicking the connect button
-      requestTsheetsToken(context) {
+      requestTsheetsToken({commit, dispatch}) {
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/grant'
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + 'S.9__a3309368c6e004fd4fa3a01a333bf6eb5719a091'
@@ -136,11 +160,49 @@ export default {
           localStorage.tsheets_company_id = res.data.company_id
           localStorage.tsheets_client_url = res.data.client_url
           localStorage.tsheets_user_id = res.data.user_id
+          if(res.data.tsheets_expires_in) {
+            setTimeout(() => {
+              dispatch('requestTsheetsRefreshToken')
+            }, res.data.tsheets_expires_in)
+          }
           router.replace({'query': null})
           setTimeout(() => {
-            context.commit('toggleTimesheet')
+            commit('toggleTimesheet')
           }, 300)
         }).catch(err => {
+          console.log(err.response)
+        })
+      },
+      // POST
+      // Retrives refresh token from tsheets api after when expires on date is reached
+      requestTsheetsRefreshToken({commit, dispatch}) {
+        const proxy = 'https://cors-anywhere.herokuapp.com/'
+        const url = 'https://rest.tsheets.com/api/v1/grant'
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
+        axios({
+          method: 'post',
+          url: proxy+url,
+          data: {
+            'grant_type': "refresh_token",
+            'client_id': "7334d612a8cc42fe9b699f79e1f562e5",
+            'client_secret': "45d60ca0fcee4cba901eadbfef5b46d8",
+            'refresh_token': localStorage.getItem('tsheets_refresh_token')
+          }
+        }).then(res => {
+          localStorage.tsheets_access_token = res.data.access_token
+          localStorage.tsheets_refresh_token = res.data.refresh_token
+          localStorage.tsheets_expires_in = res.data.expires_in
+          localStorage.tsheets_company_id = res.data.company_id
+          localStorage.tsheets_client_url = res.data.client_url
+          localStorage.tsheets_user_id = res.data.user_id
+          if(res.data.tsheets_expires_in) {
+            setTimeout(() => {
+              dispatch('requestTsheetsRefreshToken')
+            }, res.data.tsheets_expires_in)
+          }
+        }).catch(err => {
+          dispatch('removeTsheetItems')
+          window.location.href = '/'
           console.log(err.response)
         })
       },
@@ -302,11 +364,15 @@ export default {
             commit('DATA_RECEIVED', true)
             localStorage.setItem('jobcodes',  JSON.stringify(state.job_codes))
             localStorage.has_jobcodes = true
+            commit('STOP_SYNC')
           }
         }).catch(err => {
           console.log(err.response)
+          commit('STOP_SYNC')
         })
       },
+      // POST
+      // Clock in to job
       clockIn(context, job) {
         context.commit('startProcessing')
         const proxy = 'https://cors-anywhere.herokuapp.com/'
@@ -330,19 +396,22 @@ export default {
           localStorage.tsheets_tsheet_id = responsebody.results.timesheets[1].id
           context.commit('CURRENT_TIMESHEET', responsebody.results.timesheets[1])
           context.commit('stopProcessing')
-          commit('TSHEET_ALERT', 'Clocked In')
+          context.commit('TSHEET_ALERT', 'Clocked In')
         }).catch(function(error) {
           console.log(error)
+          context.commit('TSHEET_ALERT', 'Oops, Something went wrong. Try again.')
           context.commit('stopProcessing')
         });
       },
+      // PUT
+      // Clock out of job
       clockOut({commit, state, dispatch}, job) {
-        commit('startProcessing')
+        commit('CLOCKOUT_STATE')
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/timesheets'
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
         var payload = {'data': [{
-            'id': JSON.parse(localStorage.tsheets_tsheet_id),
+          'id': JSON.parse(localStorage.tsheets_tsheet_id),
             'end': moment().format(),
             'jobcode_id': job
           }]}
@@ -351,15 +420,18 @@ export default {
             url: proxy+url,
             data: payload
           }).then(res => {
-          commit('stopProcessing')
+          commit('CLOCKOUT_STATE')
           localStorage.removeItem('tsheets_tsheet_id')
           commit('CURRENT_TIMESHEET', null)
           commit('TSHEET_ALERT', 'Clocked Out')
         }).catch(err => {
-          commit('stopProcessing')
+          commit('CLOCKOUT_STATE')
+          commit('TSHEET_ALERT', 'Oops, Something went wrong. Try again.')
           console.log(err.response)
         })
       },
+      // PUT
+      // Clock out of current job to switch to new job
       switchJob({commit, dispatch}, job) {
         commit('startProcessing')
         const proxy = 'https://cors-anywhere.herokuapp.com/'
@@ -380,7 +452,9 @@ export default {
           console.log(err.response)
         })
       },
-      newJob({commit, state}, job) {
+      // POST
+      // Clock in to new job after clocking out of old job
+      newJob({commit, state, dispatch}, job) {
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/timesheets'
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
@@ -403,12 +477,17 @@ export default {
           commit('CURRENT_TIMESHEET', responsebody.results.timesheets[1])
           commit('stopProcessing')
           commit('TSHEET_ALERT', 'Customer Switched')
+          dispatch('requestWeeksTimesheets')
+          dispatch('requestTimesheetTotal')
           }).catch(function(error) {
+            commit('TSHEET_ALERT', 'Oops, Something went wrong. Try again.')
             console.log(error)
           });
       },
+      // PUT
+      // Update service item on the fly
       updateFieldItems({commit, state, dispatch}, job) {
-        commit('startProcessing')
+        commit('UPDATING_ITEMS')
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/timesheets'
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
@@ -422,16 +501,47 @@ export default {
             url: proxy+url,
             data: payload
           }).then(res => {
-          commit('stopProcessing')
+          commit('UPDATING_ITEMS')
           commit('CURRENT_TIMESHEET', res.data.results.timesheets[1])
           commit('TSHEET_ALERT', 'Service Item Updated')
         }).catch(err => {
-          commit('stopProcessing')
+          commit('UPDATING_ITEMS')
+          commit('TSHEET_ALERT', 'Oops, Something went wrong. Try again.')
           console.log(err.response)
         })
       },
-      syncTsheets(context) {
-
+      // Sync local storage items to most recent data from tsheets
+      syncTsheets({commit, dispatch, state}) {
+        commit('START_SYNC')
+        localStorage.removeItem('jobcodes')
+        localStorage.removeItem('customfield_items')
+        localStorage.removeItem('has_jobcodes')
+        localStorage.removeItem('has_fielditems')
+        state.field_items = []
+        state.customFields = null 
+        state.customFieldsLength = 0
+        state.getItemPage = 1
+        state.getPage = 1
+        state.allPagesDone = false
+        state.itemIndex = 0
+        commit('CUSTOM_FIELDS_RECEIVED', false)
+        dispatch('requestTimesheet')
+        dispatch('requestTimesheetTotal')
+        dispatch('requestWeeksTimesheets')
+        dispatch('requestJobCodes')
+        dispatch('requestCustomFields')
+      },
+      removeTsheetItems(context) {
+        localStorage.removeItem('jobcodes')
+        localStorage.removeItem('customfield_items')
+        localStorage.removeItem('has_jobcodes')
+        localStorage.removeItem('has_fielditems')
+        localStorage.removeItem('tsheets_user_id')
+        localStorage.removeItem('tsheets_tsheet_id')
+        localStorage.removeItem('tsheets_access_token')
+        localStorage.removeItem('tsheets_refresh_token')
+        localStorage.removeItem('tsheets_client_url')
+        localStorage.removeItem('tsheets_company_id')
       }
     }
 }

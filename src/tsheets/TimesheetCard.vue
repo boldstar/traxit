@@ -1,21 +1,21 @@
 <template>
-    <div class="timesheet-card">
+    <div class="timesheet-card" :key="sync_tsheets">
         <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
             <TimesheetAlert v-if="tsheet_alert" :message="tsheet_alert" />
         </transition>
+        <!-- <CurrentJob :current-job="tasks" :key="timesheet" /> -->
         <div class="card mx-3 shadow">
-            <CurrentJob :current-job="tasks" :key="timesheet" />
-            <TimesheetTotals :key="timesheet || processing" :current="current_tsheet" :totals="total_tsheets" :week-total="weeks_tsheets" />
+            <TimesheetTotals :key="timesheet" :current="current_tsheet" :totals="total_tsheets" :week-total="weeks_tsheets" />
             <CustomerList :key="processing" :customers="job_codes" :current="current_tsheet" :clock="tsheet_id" @clock-in="clockIn" @switch-job="switchJob" @clock-out="blankFields = []"/>
-            <TimesheetSelects :key="!processing" :cfields="custom_fields" :current-fields="currentFieldsObj" :items="custom_field_items" v-if="custom_fields_received" @item-select="setItemObj" @current-obj="setCurrentObj" :missing-fields="blankFields" @remove-error="removeFromErrors"/>
+            <TimesheetSelects :updating="updating_items" :key="updating_items" :cfields="custom_fields" :current-fields="currentFieldsObj" :items="custom_field_items" v-if="custom_fields_received" @item-select="setItemObj" @current-obj="setCurrentObj" :missing-fields="blankFields" @remove-error="removeFromErrors"/>
             <!-- <TeamTimesheet /> -->
             <div class="d-flex justify-content-between card-footer">
-                <button class="btn btn-sm btn-danger font-weight-bold" v-if="current_tsheet" :disabled="processing" @click="clockOut">
-                    <span v-if="processing">Clocking Out..</span>
+                <button class="btn btn-sm btn-danger font-weight-bold" v-if="current_tsheet" :disabled="clock_out_state" @click="clockOut">
+                    <span v-if="clock_out_state">Clocking Out..</span>
                     <span v-else>Clock Out</span>
                 </button>
-                <button class="btn btn-sm btn-primary font-weight-bold" :disabled="processing" @click="syncTsheets">
-                    <span v-if="processing">Syncing...</span>
+                <button class="btn btn-sm btn-primary font-weight-bold" :disabled="sync_tsheets" @click="syncTsheets">
+                    <span v-if="sync_tsheets">Syncing...</span>
                     <span v-else>Sync Tsheets</span>
                 </button>
             </div>
@@ -38,7 +38,7 @@ export default {
     data() {
         return {
             selectedCustomFields: {},
-            blankFields: []
+            blankFields: [],
         }
     },
     components: {
@@ -66,7 +66,10 @@ export default {
             'timesheet',
             'weeks_tsheets',
             'tasks',
-            'tsheet_alert'
+            'tsheet_alert',
+            'updating_items',
+            'sync_tsheets',
+            'clock_out_state'
         ]),
         currentFieldsObj() {
             return this.current_tsheet && this.current_tsheet.customfields ? this.current_tsheet.customfields : this.createObj()
@@ -81,6 +84,7 @@ export default {
             const validated = validateFields(required, this.selectedCustomFields)
             if(validated.length > 0) {
                 this.blankFields = validated
+                this.$store.commit('TSHEET_ALERT', 'Please provide service item')
             } else {
                 this.$store.dispatch('clockIn', {id: job.id, customFields: this.selectedCustomFields}).then(() => {
                     this.selectedCustomFields = {}
@@ -108,6 +112,7 @@ export default {
             const validated = validateFields(required, this.selectedCustomFields)
             if(validated.length > 0) {
                 this.blankFields = validated
+                this.$store.commit('TSHEET_ALERT', 'Please provide service item')
             } else {
                 this.$store.dispatch('switchJob', {id: job.id, customFields: this.selectedCustomFields}).then(() => {
                     this.selectedCustomFields = {}

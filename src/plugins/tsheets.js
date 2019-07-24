@@ -100,56 +100,10 @@ export function getMonday(d) {
     return new Date(d.setDate(diff));
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// export function getTime(start, end) {
-//     var startTime = new Date(start).getTime();
-
-//     var endTime = new Date(end).getTime();
-        
-//     // Find the distance between now and the count down date
-//     var distance = endTime - startTime;
-
-//     var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-//     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-
-//     return hours + 'h' + ' ' + minutes + 'm'
-// }
-
-// export function daysTotal(timesheets) {
-//     if(localStorage.tsheets_tsheet_id && localStorage.tsheets_tsheet_id != 'undefined') {
-//         var times = []
-//         var total = []
-//         for(var i in timesheets) {
-//           times.push(i)
-//         }   for( var i = 0; i < times.length; i++) {
-//           var start = timesheets[times[i]].start
-//           var end = timesheets[times[i]].end
-//           total.push({
-//             start: start,
-//             end: end
-//           })
-//         } return total
-//       } else return;
-// }
+export function isEmpty(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}

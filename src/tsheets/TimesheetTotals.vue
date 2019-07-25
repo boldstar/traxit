@@ -63,10 +63,10 @@ export default {
             if(this.current == undefined)return; 
             this.currentDistance = distance(this.current.start)
             this.totalForCurrent = currentTotal(this.current.start)
+            this.$store.commit('CURRENT_TIME', this.totalForCurrent)
         },
     },
     beforeDestroy() {
-        clearInterval(this.currentTime)
         clearInterval(this.daysTime)
         clearInterval(this.weeksTime)
     },

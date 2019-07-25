@@ -55,8 +55,10 @@ export function currentTotal(start) {
         
     // Output the result in an element with id="demo"
    
-    return (JSON.stringify(seconds).length <= 1) ? hours + ":" + minutes + ":" + '0' + seconds : hours + ":" + minutes + ":" + seconds
-
+    return (JSON.stringify(minutes).length <= 1) && (JSON.stringify(seconds).length <= 1) ? hours + ":" + '0' + minutes + ":" + '0' + seconds
+           : (JSON.stringify(seconds).length <= 1) ? hours + ":" + minutes + ":" + '0' + seconds 
+           : (JSON.stringify(minutes).length <= 1) ? hours + ":" + '0' + minutes + ":" + seconds
+           : hours + ":" + minutes + ":" + seconds
 }
 
 export function distance(start) {

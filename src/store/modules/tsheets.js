@@ -26,7 +26,8 @@ export default {
        tsheet_alert: null,
        updating_items: false,
        tsheet_sync: false,
-       clock_out: false
+       clock_out: false,
+       current_time: null
     },
     getters: {
       tsheets_user(state) {
@@ -76,6 +77,9 @@ export default {
       },
       clock_out_state(state) {
         return state.clock_out
+      },
+      current_time(state) {
+        return state.current_time
       }
     },
     mutations: {
@@ -134,6 +138,9 @@ export default {
         },
         CLOCKOUT_STATE(state) {
           state.clock_out = !state.clock_out
+        },
+        CURRENT_TIME(state, time) {
+          state.current_time = time
         }
     },
     actions: {
@@ -423,9 +430,11 @@ export default {
           localStorage.removeItem('tsheets_tsheet_id')
           commit('CURRENT_TIMESHEET', null)
           commit('TSHEET_ALERT', 'Clocked Out')
+          commit('CURRENT_TIME', null)
         }).catch(err => {
           commit('CLOCKOUT_STATE')
           commit('TSHEET_ALERT', 'Oops, Something went wrong. Try again.')
+          commit('CURRENT_TIME', null)
           console.log(err.response)
         })
       },
@@ -446,13 +455,16 @@ export default {
           data: payload
         }).then(res => {
           dispatch('newJob', job)
+          commit('CURRENT_TIME', null)
         }).catch(err => {
+          commit('CURRENT_TIME', null)
           console.log(err.response)
         })
       },
       // POST
       // Clock in to new job after clocking out of old job
       newJob({commit, state, dispatch}, job) {
+        commit('CURRENT_TIME', null)
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/timesheets'
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
@@ -491,7 +503,6 @@ export default {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
         var payload = {'data': [{
           'id': JSON.parse(localStorage.tsheets_tsheet_id),
-          'jobcode_id': job.id,
           'customfields':  job.customFields
         }]}
         axios({
@@ -529,7 +540,8 @@ export default {
         dispatch('requestJobCodes')
         dispatch('requestCustomFields')
       },
-      removeTsheetItems(context) {
+      removeTsheetItems({commit}) {
+        commit('CURRENT_TIME', null)
         localStorage.removeItem('jobcodes')
         localStorage.removeItem('customfield_items')
         localStorage.removeItem('has_jobcodes')

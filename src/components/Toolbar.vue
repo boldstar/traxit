@@ -16,7 +16,7 @@
         <div>
             <div class="align-self-center">
                 <button class="bg-light" @click="handleClick" data-toggle="tooltip" data-placement="bottom" title="Toggle Timesheet">
-                    <i class="fas fa-stopwatch text-primary"></i>
+                    <i class="fas fa-stopwatch text-primary"></i> <span v-if="current_time" class="ml-2 font-weight-bold">{{ current_time }}</span>
                 </button>
             </div>
         </div>
@@ -36,7 +36,7 @@ export default {
         'route'
     ],
     computed: {
-        ...mapGetters(['grace']),
+        ...mapGetters(['grace', 'current_time']),
         open () {
             return this.$store.state.sidebarOpen
         },

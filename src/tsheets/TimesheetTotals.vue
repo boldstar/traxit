@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import {daysTotal, currentTotal, distance, isEmpty} from '../plugins/tsheets'
+import {daysTotal, weeksTotal, currentTotal, distance, isEmpty} from '../plugins/tsheets'
 export default {
     name: 'TimesheetTotals',
     props: ['current', 'totals', 'week-total'],
@@ -57,7 +57,7 @@ export default {
             this.totalForToday = daysTotal(this.totals.results.timesheets, this.currentDistance)
         },
         weeksTime() {
-            this.totalForWeek = daysTotal(this.weekTotal, this.currentDistance)
+            this.totalForWeek = weeksTotal(this.weekTotal, this.currentDistance)
         },
         currentTime() {
             if(this.current == undefined)return; 

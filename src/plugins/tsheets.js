@@ -93,6 +93,32 @@ export function daysTotal(time, current) {
     return (JSON.stringify(minutes).length <= 1) ? hours + ':' + '0' + minutes : hours + ':' + minutes
 }
 
+export function weeksTotal(time, current) {
+    var totals = []
+    for(var i in time) {
+        var start = time[i]['start']
+        var end = time[i]['end']
+        // Set the date we're counting down to
+        var start_date = new Date(start);
+        var addStartMin = start_date.setMinutes( start_date.getMinutes() - 2)
+        var startTime = new Date(addStartMin).getTime()
+
+        // Get today's date and time
+        var end_date = new Date(end);
+        var addEndMin = end_date.setMinutes( end_date.getMinutes() - 2)
+        var endTime = new Date(addEndMin).getTime()
+
+        var distance = endTime - startTime;
+        totals.push(distance)
+    }
+    totals.push(current)
+    const total = totals.reduce((a, b) => a + b, 0)
+    var days = Math.floor(total / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((total / (1000 * 60 * 60)));
+    var minutes = Math.floor((total % (1000 * 60 * 60)) / (1000 * 60));
+    return  (JSON.stringify(minutes).length <= 1) ? hours + ':' + '0' + minutes : hours + ':' + minutes
+}
+
 export function getMonday(d) {
     d = new Date(d);
     var day = d.getDay(),

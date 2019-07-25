@@ -2,7 +2,7 @@
     <div class="bg-white timesheet">
         <div class="timesheet-sticky d-flex flex-column" :key="timesheet">
             <div class="d-flex justify-content-between px-3">
-                <span class="align-self-center font-weight-bold">Timesheet</span>
+                <span class="align-self-center font-weight-bold"><i class="fas fa-stopwatch mr-2 text-primary"></i>Timesheet</span>
                 <button @click="closeTimesheet" class="btn btn-link text-danger font-weight-bold timesheet-close-btn">X</button>
             </div>
            

@@ -1,7 +1,13 @@
 <template>
     <div>   
-     <div v-if="job_codes_received">
-      <input type="text" v-model="searchJob" class="search-customer-input" placeholder="Search for customers">
+     <div v-if="job_codes_received" class="customer-list-body">
+        <div class="input-group search-input-group">
+            <input type="text" v-model="searchJob" class="search-customer-input" placeholder="Search for customers">
+            <i class="fab fa-searchengin"></i>
+        </div>
+       <div class="processing-list" v-if="processing">
+            <div class="list-spinner"><Spinner /></div>
+        </div>
       <ul class="p-0 customer-card mb-0">
         <li class="d-flex justify-content-between p-2 border current-job-li" v-if="current">
           <span class="align-self-center">
@@ -10,6 +16,15 @@
           <button class="btn btn-sm btn-danger clock-in-btn font-weight-bold" @click="clockOut(currentJob.id)" :disabled="processing && clockingOut">
                 <span v-if="processing && clockingOut">Clocking Out..</span>
                 <span v-else>Clock Out</span>
+            </button>
+        </li>
+        <li class="d-flex justify-content-between p-2 border previous-job-li" v-if="previousTimesheets && job.id != currentJob.id" v-for="job in previousTimesheets" :key="job.id" @mouseover="showClockIn(job.id)" @mouseout="hideClockIn">
+          <span class="align-self-center" :class="{'py-1': job.id != hoveredId}">
+            <i class="fas fa-history mr-2"></i>{{ job.name }}
+          </span>
+           <button class="btn btn-sm btn-success clock-in-btn font-weight-bold" v-if="current && job.id == hoveredId" @click="switchJob(job)" :disabled="processing">
+                <span v-if="!processing">Switch</span>
+                <span v-if="processing">Switching..</span>
             </button>
         </li>
         <li class="d-flex justify-content-between p-2 border" v-for="(code, index) in computedJobCodes" :key="index" @mouseover="showClockIn(code.id)" @mouseout="hideClockIn">
@@ -40,7 +55,7 @@ import {mapGetters} from 'vuex'
 import Spinner from '../components/Spinner.vue'
 export default {
     name: 'CustomerList',
-    props: ['customers', 'clock', 'current'],
+    props: ['customers', 'clock', 'current', 'previous'],
     components: {Spinner},
     data() {
         return {
@@ -57,6 +72,9 @@ export default {
         currentJob() {
             return compressItems(this.customers).filter(code => code.id == this.current.jobcode_id)[0]
         },
+        previousTimesheets() {
+            return this.previous && this.previous.supplemental_data ? this.previous.supplemental_data.jobcodes : null
+        }
     },
     methods: {
         clockIn(code) {
@@ -99,5 +117,38 @@ export default {
 
     .current-job-li {
         background: #0077ff3b;
+    }
+
+    .previous-job-li {
+        background: #d4d4d43b;
+    }
+
+    .customer-list-body {
+        position: relative;
+    }
+
+    .processing-list {
+        position: absolute;
+        background: rgba(0, 0, 0, 0.199);
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+    }
+
+    .list-spinner {
+        margin-top: 100px;
+    }
+
+    .search-input-group {
+        position: relative;
+    }
+
+    .fa-searchengin {
+        position: absolute;
+        right: 20px;
+        top: 10px;
+        font-size: 1.7rem!important;
     }
 </style>

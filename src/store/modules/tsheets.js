@@ -412,14 +412,13 @@ export default {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
         var payload = {'data': [{
           'id': JSON.parse(localStorage.tsheets_tsheet_id),
-            'end': moment().format(),
-            'jobcode_id': job
-          }]}
-          axios({
-            method: 'put',
-            url: proxy+url,
-            data: payload
-          }).then(res => {
+          'end': moment().format(),
+        }]}
+        axios({
+          method: 'put',
+          url: proxy+url,
+          data: payload
+        }).then(res => {
           commit('CLOCKOUT_STATE')
           localStorage.removeItem('tsheets_tsheet_id')
           commit('CURRENT_TIMESHEET', null)
@@ -439,9 +438,8 @@ export default {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
         var payload = {'data': [{
           'id': JSON.parse(localStorage.tsheets_tsheet_id),
-            'end': moment().format(),
-            'jobcode_id': job.id
-          }]}
+          'end': moment().format(),
+        }]}
         axios({
           method: 'put',
           url: proxy+url,
@@ -465,7 +463,7 @@ export default {
           'end': '',
           'jobcode_id': job.id,
           'customfields': job.customFields
-        }  ]}
+        }]}
         fetch(proxy+url, {
           method: "POST",
           headers: {"Content-Type": "application/json", "Authorization": 'Bearer ' + localStorage.getItem('tsheets_access_token')},
@@ -492,15 +490,15 @@ export default {
         const url = 'https://rest.tsheets.com/api/v1/timesheets'
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
         var payload = {'data': [{
-            'id': JSON.parse(localStorage.tsheets_tsheet_id),
-            'jobcode_id': job.id,
-            'customfields':  job.customFields
-          }]}
-          axios({
-            method: 'put',
-            url: proxy+url,
-            data: payload
-          }).then(res => {
+          'id': JSON.parse(localStorage.tsheets_tsheet_id),
+          'jobcode_id': job.id,
+          'customfields':  job.customFields
+        }]}
+        axios({
+          method: 'put',
+          url: proxy+url,
+          data: payload
+        }).then(res => {
           commit('UPDATING_ITEMS')
           commit('CURRENT_TIMESHEET', res.data.results.timesheets[1])
           commit('TSHEET_ALERT', 'Service Item Updated')

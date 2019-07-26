@@ -12,7 +12,7 @@
     </transition>
 
 <!-- this section is controling the main content section -->
-    <div class="d-flex main-wrapper page-wrapper" >
+    <div class="d-flex main-wrapper page-wrapper" :class="{'main-wrapper-collapsed': !sidebarOpen }">
       <main role="main" class="flex-fill px-3 main">
 
         <!-- this is if they have not done a setup tour -->
@@ -73,7 +73,7 @@ export default {
     toggleSidebar() {
       return this.$store.getters.sidebarOpen
     },
-    ...mapGetters(['notify', 'mobileLinks', 'setupTour', 'role', 'subscribeView', 'timesheet']),
+    ...mapGetters(['notify', 'mobileLinks', 'setupTour', 'role', 'subscribeView', 'timesheet', 'sidebarOpen']),
   },
   methods: {
     toggleTimesheet() {
@@ -120,11 +120,20 @@ export default {
 .toolbar {
   margin-left: 215px;
   margin-right: 0;
+  transition: margin-left .5s;
+}
+
+.toolbar-collapsed {
+  margin-left: 50px!important;
 }
 
 .main-wrapper {
   margin-left: 215px;
   margin-right: 0;
+}
+
+.main-wrapper-collapsed {
+  margin-left: 50px!important;
 }
 
 .main {

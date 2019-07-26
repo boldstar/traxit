@@ -22,7 +22,7 @@ export default {
        job_codes: [],
        job_codes_received: false,
        switch: false,
-       tsheet_id: localStorage.getItem('tsheets_tsheet_id') || 'undefined',
+       tsheet_id: localStorage.getItem('tsheets_tsheet_id') || null,
        tsheet_alert: null,
        updating_items: false,
        tsheet_sync: false,
@@ -431,6 +431,9 @@ export default {
           commit('CURRENT_TIMESHEET', null)
           commit('TSHEET_ALERT', 'Clocked Out')
           commit('CURRENT_TIME', null)
+          dispatch('requestTimesheetTotal')
+          dispatch('requestWeeksTimesheets')
+          dispatch('requestTimesheet')
         }).catch(err => {
           commit('CLOCKOUT_STATE')
           commit('TSHEET_ALERT', 'Oops, Something went wrong. Try again.')

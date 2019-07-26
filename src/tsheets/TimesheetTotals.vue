@@ -10,7 +10,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="table-bordered">
+                    <tr class="table-bordered" :key="clock_out_state">
                         <td class="font-weight-bold time-td">
                             <span v-if="totalForCurrent != null">{{ totalForCurrent }}</span>
                             <span v-else-if="calculating">Loading...</span>
@@ -35,6 +35,7 @@
 
 <script>
 import {daysTotal, weeksTotal, currentTotal, distance, isEmpty} from '../plugins/tsheets'
+import {mapGetters} from 'vuex'
 export default {
     name: 'TimesheetTotals',
     props: ['current', 'totals', 'week-total'],
@@ -49,12 +50,12 @@ export default {
         }
     },
     computed: {
-        
+       ...mapGetters(['clock_out_state']) 
     },
     methods: {
         daysTime() {
             if(isEmpty(this.totals.results.timesheets)) return;
-            this.totalForToday = daysTotal(this.totals.results.timesheets, this.currentDistance)
+            this.totalForToday = daysTotal(this.totals.results.timesheets, this.currentDistance ? this.currentDistance : 0)
         },
         weeksTime() {
             this.totalForWeek = weeksTotal(this.weekTotal, this.currentDistance)
@@ -65,6 +66,17 @@ export default {
             this.totalForCurrent = currentTotal(this.current.start)
             this.$store.commit('CURRENT_TIME', this.totalForCurrent)
         },
+        stopCurrentTime() {
+            clearInterval(this.currentTime)
+            this.totalForCurrent = null
+        }
+    },
+    watch: {
+        'clock_out_state': (val) => {
+            if(val) {
+                this.stopCurrentTime()
+            }
+        }
     },
     beforeDestroy() {
         clearInterval(this.daysTime)

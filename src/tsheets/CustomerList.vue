@@ -9,7 +9,7 @@
             <div class="list-spinner"><Spinner /></div>
         </div>
       <ul class="p-0 customer-card mb-0">
-        <li class="d-flex justify-content-between p-2 border current-job-li" v-if="current">
+        <li class="d-flex justify-content-between p-2 border current-job-li" v-if="current && currentJob">
           <span class="align-self-center">
             <i class="fas fa-star mr-2"></i>{{ currentJob.name }}
           </span>
@@ -25,6 +25,10 @@
            <button class="btn btn-sm btn-success clock-in-btn font-weight-bold" v-if="current && job.id == hoveredId" @click="switchJob(job)" :disabled="processing">
                 <span v-if="!processing">Switch</span>
                 <span v-if="processing">Switching..</span>
+            </button>
+           <button class="btn btn-sm btn-success clock-in-btn font-weight-bold" v-else-if="job.id == hoveredId" @click="clockIn(job)" :disabled="processing">
+                <span v-if="!processing">Clock In</span>
+                <span v-if="processing">Clocking In..</span>
             </button>
         </li>
         <li class="d-flex justify-content-between p-2 border" v-for="(code, index) in computedJobCodes" :key="index" @mouseover="showClockIn(code.id)" @mouseout="hideClockIn">
@@ -70,7 +74,7 @@ export default {
             return compressItems(this.customers).filter(code => {if(!this.searchJob){ return code } else{ return code.name.toLowerCase().indexOf(this.searchJob.toLowerCase()) >= 0}})
         },
         currentJob() {
-            return compressItems(this.customers).filter(code => code.id == this.current.jobcode_id)[0]
+            return this.current && this.current.jobcode_id ? compressItems(this.customers).filter(code => code.id == this.current.jobcode_id)[0] : false
         },
         previousTimesheets() {
             return this.previous && this.previous.supplemental_data ? this.previous.supplemental_data.jobcodes : null

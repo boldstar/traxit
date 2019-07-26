@@ -1,11 +1,11 @@
 <template>
-    <nav class="navbar fixed-top bg-light flex-md-nowrap shadow-sm justify-content-between toolbar">
+    <nav class="navbar fixed-top bg-light flex-md-nowrap shadow-sm justify-content-between toolbar" :class="{'toolbar-collapsed': !sidebarOpen}">
         <div class="d-flex">
-            <!-- <div class="align-self-center left-sidebar-button">
-                <button class="bg-light" @click="handleClick" data-toggle="tooltip" data-placement="bottom" title="Toggle Sidebar">
+            <div class="align-self-center left-sidebar-button">
+                <button class="bg-light" @click="toggleSidebar" data-toggle="tooltip" data-placement="bottom" title="Toggle Sidebar">
                     <i class="fas fa-bars"></i>
                 </button>
-            </div> -->
+            </div>
             <div>
                 <breadcrumb class="breadcrumb" :route="route"></breadcrumb>
             </div>
@@ -16,7 +16,7 @@
         <div>
             <div class="align-self-center">
                 <button class="bg-light" @click="handleClick" data-toggle="tooltip" data-placement="bottom" title="Toggle Timesheet">
-                    <i class="fas fa-stopwatch text-primary"></i> <span v-if="current_time" class="ml-2 font-weight-bold">{{ current_time }}</span>
+                    <i class="fas fa-stopwatch text-primary"></i> <span v-if="current_time" class="ml-2 font-weight-bold text-dark">{{ current_time }}</span>
                 </button>
             </div>
         </div>
@@ -36,7 +36,7 @@ export default {
         'route'
     ],
     computed: {
-        ...mapGetters(['grace', 'current_time']),
+        ...mapGetters(['grace', 'current_time', 'sidebarOpen']),
         open () {
             return this.$store.state.sidebarOpen
         },
@@ -48,6 +48,9 @@ export default {
         handleClick () {
             this.$store.dispatch('toggleTimesheet')
         },
+        toggleSidebar() {
+            this.$store.commit('toggleSidebar')
+        }
     }
 }
 </script>

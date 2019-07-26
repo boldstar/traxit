@@ -255,7 +255,7 @@ export default {
       }
     },
     viewDetails(id) {
-      this.$router.push('/engagement/' + id)
+      this.$router.push('/engagement/' + id +'/details')
     },
     sort:function(s) {
         //if s == current sort, reverse

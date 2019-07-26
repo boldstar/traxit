@@ -72,7 +72,7 @@ export default {
         }
     },
     watch: {
-        'clock_out_state': (val) => {
+        'clock_out_state': function(val) {
             if(val) {
                 this.stopCurrentTime()
             }

@@ -48,7 +48,7 @@
             </li>
             <li class="nav-item w-100" id="add-new" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive && sidebarOpen }">
                 <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
-                    <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/add"><i class="far fa-plus-square align-self-center"></i><span :class="sidebarOpen ? 'show-link' : 'hide-link'">Add New</span></router-link>  
+                    <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/add"><i class="far fa-plus-square align-self-center"></i><span class="add-new" :class="sidebarOpen ? 'show-link' : 'hide-link'">Add New</span></router-link>  
                 </transition>
             </li>
         </ul>
@@ -133,6 +133,10 @@ export default {
         visibility: hidden!important;
         display: none;
         opacity: 0;
+    }
+
+    .add-new {
+        min-width: 86px;
     }
 
     .sidebar-sticky {

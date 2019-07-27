@@ -17,7 +17,7 @@ import setUp from  './plugins/setup.js';
 import { Button } from 'bootstrap-vue/es/components';
 import { abilitiesPlugin } from '@casl/vue';
 import { ability } from './store/store';
-import {beforeEachCustom} from './plugins/guards.js'
+import { beforeEachCustom } from './plugins/guards.js'
 global.jQuery = jQuery;
 global.Popper = Popper;
 

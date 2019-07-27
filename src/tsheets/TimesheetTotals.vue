@@ -69,6 +69,7 @@ export default {
         stopCurrentTime() {
             clearInterval(this.currentTime)
             this.totalForCurrent = null
+            this.$store.commit('CURRENT_TIME', null)
         }
     },
     watch: {

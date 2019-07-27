@@ -14,7 +14,7 @@
             <span class="font-weight-bold" v-if="computedGrace.cancel_at_period_end">Account Will Expire On: <span class="text-danger">{{computedGrace.cancel_at}}</span></span>  
         </div>
         <div>
-            <div class="align-self-center">
+            <div class="align-self-center" v-if="aewcpa == 'aewcpa.traxit.pro'">
                 <button class="bg-light" @click="handleClick" data-toggle="tooltip" data-placement="bottom" title="Toggle Timesheet">
                     <i class="fas fa-stopwatch text-primary"></i> <span v-if="current_time" :key="timesheet" class="ml-2 font-weight-bold text-dark">{{ current_time }}</span>
                 </button>
@@ -43,6 +43,9 @@ export default {
         computedGrace() {
             return this.grace.data
         },
+        aewcpa() {
+            return localStorage.getItem('fqdn_api_url')
+        }
     },
     methods: {
         handleClick () {

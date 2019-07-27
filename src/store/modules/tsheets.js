@@ -149,7 +149,7 @@ export default {
       requestTsheetsToken({commit, dispatch}) {
         const proxy = 'https://cors-anywhere.herokuapp.com/'
         const url = 'https://rest.tsheets.com/api/v1/grant'
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + 'S.9__a3309368c6e004fd4fa3a01a333bf6eb5719a091'
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + process.env.VUE_APP_TSHEETS_TOKEN || 'S.9__a3309368c6e004fd4fa3a01a333bf6eb5719a091'
         axios({
           method: 'post',
           url: proxy+url,

@@ -8,7 +8,7 @@ export default {
     data() {
         return {
             authEndpoint: 'https://rest.tsheets.com/api/v1/authorize?',
-            redirectUri: 'http://localhost:8080',
+            redirectUri: 'https://app.traxit.io',
             clientId: process.env.VUE_APP_TSHEETS_CLIENT_ID,
             state: 'MYSTATE',
             token: process.env.VUE_APP_TSHEETS_TOKEN

@@ -158,7 +158,7 @@ export default {
             'client_id': process.env.VUE_APP_TSHEETS_CLIENT_ID,
             'client_secret': process.env.VUE_APP_TSHEETS_CLIENT_SECRET,
             'code': localStorage.getItem('tsheets_code'),
-            'redirect_uri': "http://localhost:8080"
+            'redirect_uri': 'https://app.traxit.io'
           }
         }).then(res => {
           localStorage.tsheets_access_token = res.data.access_token

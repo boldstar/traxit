@@ -1,26 +1,28 @@
 <template>
-    <nav class="bg-light sidebar">
+    <nav class="bg-light sidebar" :class="{'sidebar-collapsed': !sidebarOpen}">
         <div class="sidebar-sticky d-flex flex-column">
         <ul class="nav nav-fill flex-column align-items-start">
-            <li class="nav-item w-100" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive }" id="dashboard">                                        
-                <router-link class="nav-link border-right text-left pl-4" to="/"><span><i class="fas fa-tachometer-alt"></i></span>Dashboard</router-link>   
+            <li class="nav-item w-100" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive && sidebarOpen }" id="dashboard">
+                <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
+                    <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/"><i class="fas fa-tachometer-alt align-self-center"></i><span :class="sidebarOpen ? 'show-link' : 'hide-link'">Dashboard</span></router-link>  
+                </transition> 
             </li>
-            <li class="nav-item w-100" v-if="role != 'Outsource'" id="firm" v-bind:class="{ 'is-active': isActive }">                                        
-                <router-link class="nav-link border-right text-left pl-4" to="/firm"><span><i class="fas fa-home"></i></span>Firm</router-link>  
+            <li class="nav-item w-100" v-if="role != 'Outsource'" id="firm" v-bind:class="{ 'is-active': isActive && sidebarOpen }">
+                <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">         
+                    <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/firm"><i class="fas fa-home align-self-center"></i><span :class="sidebarOpen ? 'show-link' : 'hide-link'">Firm</span></router-link>
+                </transition>  
             </li>
-            <li class="nav-item w-100" id="tasks" v-bind:class="{ 'is-active': isActive }">
-                <router-link class="nav-link border-right text-left pl-4" to="/tasks"><span><i class="fas fa-list-ul"></i></span>Tasks</router-link>  
+            <li class="nav-item w-100" id="tasks" v-bind:class="{ 'is-active': isActive && sidebarOpen }">
+                <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
+                    <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/tasks"><i class="fas fa-list-ul align-self-center"></i><span :class="sidebarOpen ? 'show-link' : 'hide-link'">Tasks</span></router-link>  
+                </transition>
             </li>
-            <li class="nav-item w-100" id="engagements" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive }">
-                <router-link class="nav-link border-right text-left pl-4" to="/engagements" @click.native="filterEngagements('All')"><span><i class="far fa-folder-open"></i></span>Engagements</router-link>
+            <li class="nav-item w-100" id="engagements" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive && sidebarOpen }">
+                <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
+                    <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/engagements" @click.native="filterEngagements('All')"><i class="far fa-folder-open align-self-center"></i><span :class="sidebarOpen ? 'show-link' : 'hide-link'">Engagements</span></router-link>
+                </transition>
                 <transition name="list">
-                    <ul v-if="$route.path == '/engagements'" class="sublist" :class="{'show-sublist': $route.path == '/engagements'}">
-                        <!-- <li @click="filterEngagements('Staging')" :class="{'sublist-link' : engagementFilter == 'Staging'}">
-                            Staging
-                        </li>
-                        <li @click="filterEngagements('Active')" :class="{'sublist-link' : engagementFilter == 'Active'}">
-                            Active
-                        </li> -->
+                    <ul v-if="$route.path == '/engagements' && sidebarOpen" class="sublist" :class="{'show-sublist': $route.path == '/engagements'}">
                         <li @click="filterEngagements('In Progress')" :class="{'sublist-link' : engagementFilter == 'In Progress'}">
                             In Progress
                         </li>
@@ -39,11 +41,15 @@
                     </ul> 
                 </transition> 
             </li>
-            <li class="nav-item w-100" id="contacts" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive }">                                  
-                <router-link class="nav-link border-right text-left pl-4" to="/contacts"><span><i class="fas fa-users"></i></span>Contacts</router-link>  
+            <li class="nav-item w-100" id="contacts" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive && sidebarOpen }"> 
+                <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">            
+                    <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/contacts"><i class="fas fa-users align-self-center"></i><span :class="sidebarOpen ? 'show-link' : 'hide-link'">Contacts</span></router-link>
+                </transition>  
             </li>
-            <li class="nav-item w-100" id="add-new" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive }">                                  
-                <router-link class="nav-link border-right text-left pl-4" to="/add"><span><i class="far fa-plus-square"></i></span>Add New</router-link>  
+            <li class="nav-item w-100" id="add-new" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive && sidebarOpen }">
+                <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
+                    <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/add"><i class="far fa-plus-square align-self-center"></i><span class="add-new" :class="sidebarOpen ? 'show-link' : 'hide-link'">Add New</span></router-link>  
+                </transition>
             </li>
         </ul>
         <div class="mt-auto mb-3">
@@ -74,7 +80,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert', 'engagementFilter'])
+        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert', 'engagementFilter', 'sidebarOpen'])
     },
     methods: {
         filterEngagements(filter) {
@@ -105,6 +111,32 @@ export default {
         padding: 52px 0 0; /* Height of navbar */
         box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
         width: 215px!important;
+        transition: width .5s;
+    }
+
+    .sidebar-collapsed {
+        width: 50px!important;
+    }
+
+    .sidebar-collapsed-link {
+        padding-left: 13px!important;
+    }
+
+    .show-link {
+        visibility: visible!important;
+        display: block;
+        transition: all .5s;
+        opacity: 1;
+    }
+    
+    .hide-link {
+        visibility: hidden!important;
+        display: none;
+        opacity: 0;
+    }
+
+    .add-new {
+        min-width: 86px;
     }
 
     .sidebar-sticky {

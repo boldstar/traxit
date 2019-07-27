@@ -1,17 +1,24 @@
 <template>
-    <nav class="navbar fixed-top bg-light flex-md-nowrap shadow-sm justify-content-between toolbar">
+    <nav class="navbar fixed-top bg-light flex-md-nowrap shadow-sm justify-content-between toolbar" :class="{'toolbar-collapsed': !sidebarOpen}">
         <div class="d-flex">
-            <!-- <div class="align-self-center left-sidebar-button">
-                <button class="bg-light" @click="handleClick" data-toggle="tooltip" data-placement="bottom" title="Toggle Sidebar">
+            <div class="align-self-center left-sidebar-button">
+                <button class="bg-light" @click="toggleSidebar" data-toggle="tooltip" data-placement="bottom" title="Toggle Sidebar">
                     <i class="fas fa-bars"></i>
                 </button>
-            </div> -->
+            </div>
             <div>
                 <breadcrumb class="breadcrumb" :route="route"></breadcrumb>
             </div>
         </div>
         <div v-if="grace">
             <span class="font-weight-bold" v-if="computedGrace.cancel_at_period_end">Account Will Expire On: <span class="text-danger">{{computedGrace.cancel_at}}</span></span>  
+        </div>
+        <div>
+            <div class="align-self-center">
+                <button class="bg-light" @click="handleClick" data-toggle="tooltip" data-placement="bottom" title="Toggle Timesheet">
+                    <i class="fas fa-stopwatch text-primary"></i> <span v-if="current_time" :key="timesheet" class="ml-2 font-weight-bold text-dark">{{ current_time }}</span>
+                </button>
+            </div>
         </div>
     </nav>
 </template>
@@ -29,7 +36,7 @@ export default {
         'route'
     ],
     computed: {
-        ...mapGetters(['grace']),
+        ...mapGetters(['grace', 'current_time', 'sidebarOpen', 'timesheet']),
         open () {
             return this.$store.state.sidebarOpen
         },
@@ -39,8 +46,11 @@ export default {
     },
     methods: {
         handleClick () {
-            this.$store.dispatch('toggleSidebar')
+            this.$store.dispatch('toggleTimesheet')
         },
+        toggleSidebar() {
+            this.$store.commit('toggleSidebar')
+        }
     }
 }
 </script>

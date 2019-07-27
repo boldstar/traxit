@@ -2,7 +2,7 @@
   <div class="page-wrapper">
     <div v-if="engagement">
       <Alert v-if="successAlert" v-bind:message="successAlert" />
-      <div class="sending-mail" v-if="processing && !noteModal && !deleteNote"><i class="far fa-envelope mr-3"></i>Sending Mail...</div>
+      <div class="sending-mail" v-if="processing && !noteModal && !deleteNote && !timesheet"><i class="far fa-envelope mr-3"></i>Sending Mail...</div>
 
       <!-- this is the header section of the engagement details -->
       <div class="flex-row justify-content-between d-flex mt-0 card-body shadow-sm py-2 px-3">
@@ -115,7 +115,7 @@ export default {
     'b-modal': bModalDirective
   },
   computed: {
-    ...mapGetters(['engagement','question', 'successAlert', 'processing', 'errorMsgAlert', 'engagementWorkflow','archiving', 'engagementNotes', 'noteModal', 'editNoteModal']),
+    ...mapGetters(['engagement','question', 'successAlert', 'processing', 'errorMsgAlert', 'engagementWorkflow','archiving', 'engagementNotes', 'noteModal', 'editNoteModal', 'timesheet']),
     percentage() {
       const statuses = this.engagementWorkflow.statuses
       const percentage = this.calcPercent(statuses.length)

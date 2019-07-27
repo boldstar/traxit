@@ -16,6 +16,7 @@ import emails from './modules/emails'
 import search from './modules/search'
 import downloads from './modules/downloads'
 import setup from './modules/setup'
+import tsheets from './modules/tsheets'
 
 import { abilityPlugin, ability as appAbility } from './ability'
 import storage from './storage'
@@ -51,7 +52,8 @@ export default new Vuex.Store({
     emails,
     search,
     downloads,
-    setup
+    setup,
+    tsheets
   },
   state: {
     processing: false,
@@ -69,7 +71,8 @@ export default new Vuex.Store({
     role: localStorage.getItem('role'),
     links: false,
     averagedays: '',
-    engagementFilter: 'All'
+    engagementFilter: 'All',
+    timesheet: false
   },
   getters: {
     chartDataLength(state) {
@@ -116,6 +119,9 @@ export default new Vuex.Store({
     },
     engagementFilter(state) {
       return state.engagementFilter
+    },
+    timesheet(state) {
+      return state.timesheet
     }
   },
   mutations: {
@@ -174,11 +180,17 @@ export default new Vuex.Store({
     },
     changeEngagementFilter(state, filter) {
       state.engagementFilter = filter
+    },
+    toggleTimesheet(state) {
+      state.timesheet = !state.timesheet
     }
   },
   actions: {
     toggleSidebar({commit}) {
       commit('toggleSidebar')
+    },
+    toggleTimesheet({commit}) {
+      commit('toggleTimesheet')
     },
     notifyClient(context, task) {
       context.commit('startProcessing')

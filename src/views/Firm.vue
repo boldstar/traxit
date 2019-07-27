@@ -24,7 +24,7 @@
       <Alert v-if="successAlert" :message="successAlert" class="my-2" />
 
       <div class="row d-flex justify-content-between card-body col-12 mx-auto mb-3 firm" >
-        <processing-bar v-if="processing"></processing-bar>
+        <processing-bar v-if="processing && !timesheet"></processing-bar>
         <NoFirm v-if="noEngagements &&!listLoaded" class="mx-auto align-self-center"/>
         <spinner v-if="listLoaded" class="mx-auto"></spinner>
 
@@ -177,7 +177,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['allEngagements', 'users', 'allWorkflows', 'successAlert', 'processing', 'confirmDownload']),
+    ...mapGetters(['allEngagements', 'users', 'allWorkflows', 'successAlert', 'processing', 'confirmDownload', 'timesheet']),
     filteredEngagements () {
       return this.allEngagements.sort((a,b) => {
       let modifier = 1;
@@ -255,7 +255,7 @@ export default {
       }
     },
     viewDetails(id) {
-      this.$router.push('/engagement/' + id)
+      this.$router.push('/engagement/' + id +'/details')
     },
     sort:function(s) {
         //if s == current sort, reverse

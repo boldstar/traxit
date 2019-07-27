@@ -11,7 +11,7 @@ export default {
             redirectUri: 'http://localhost:8080',
             clientId: '7334d612a8cc42fe9b699f79e1f562e5',
             state: 'MYSTATE',
-            token: 'S.9__a3309368c6e004fd4fa3a01a333bf6eb5719a091'
+            token: process.env.VUE_APP_TSHEETS_TOKEN || 'S.9__a3309368c6e004fd4fa3a01a333bf6eb5719a091'
         }
     },
     computed: {

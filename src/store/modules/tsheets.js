@@ -155,8 +155,8 @@ export default {
           url: proxy+url,
           data: {
             'grant_type': "authorization_code",
-            'client_id': "7334d612a8cc42fe9b699f79e1f562e5",
-            'client_secret': "45d60ca0fcee4cba901eadbfef5b46d8",
+            'client_id': process.env.VUE_APP_TSHEETS_CLIENT_ID || "7334d612a8cc42fe9b699f79e1f562e5",
+            'client_secret': process.env.VUE_APP_TSHEETS_CLIENT_SECRET || "45d60ca0fcee4cba901eadbfef5b46d8",
             'code': localStorage.getItem('tsheets_code'),
             'redirect_uri': "http://localhost:8080"
           }
@@ -191,8 +191,8 @@ export default {
           url: proxy+url,
           data: {
             'grant_type': "refresh_token",
-            'client_id': "7334d612a8cc42fe9b699f79e1f562e5",
-            'client_secret': "45d60ca0fcee4cba901eadbfef5b46d8",
+            'client_id': process.env.VUE_APP_TSHEETS_CLIENT_ID || "7334d612a8cc42fe9b699f79e1f562e5",
+            'client_secret': process.env.VUE_APP_TSHEETS_CLIENT_SECRET || "45d60ca0fcee4cba901eadbfef5b46d8",
             'refresh_token': localStorage.getItem('tsheets_refresh_token')
           }
         }).then(res => {

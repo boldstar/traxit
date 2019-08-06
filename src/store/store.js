@@ -17,6 +17,7 @@ import search from './modules/search'
 import downloads from './modules/downloads'
 import setup from './modules/setup'
 import tsheets from './modules/tsheets'
+import invoice from './modules/tsheets'
 
 import { abilityPlugin, ability as appAbility } from './ability'
 import storage from './storage'
@@ -53,7 +54,8 @@ export default new Vuex.Store({
     search,
     downloads,
     setup,
-    tsheets
+    tsheets,
+    invoice
   },
   state: {
     processing: false,

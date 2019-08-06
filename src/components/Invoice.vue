@@ -1,6 +1,6 @@
 <template>
      <div class="invoice w-50 mx-auto mt-5">
-            <div class="card shadow-sm mb-3">
+            <div class="card shadow mb-3">
                 <div class="card-header text-left">
                     <span class="font-weight-bold">Invoice</span>
                 </div>
@@ -20,7 +20,7 @@
                         </div>
                     </div>
                     <div class="align-self-center text-primary">
-                         <i class="fas fa-file-invoice-dollar fa-5x"></i>
+                         <i class="fas fa-file-invoice-dollar fa-5x shadow"></i>
                     </div>
                 </div>
                 <div class="card-body p-0">
@@ -47,7 +47,8 @@
                 </div>
                 <div class="card-footer d-flex justify-content-between">
                     <div class="align-self-center d-flex">
-                        <button class="btn btn-primary font-weight-bold mr-2">Send</button>
+                        <button class="btn btn-info font-weight-bold mr-2">Create</button>
+                        <button class="btn btn-primary font-weight-bold mr-2">Create & Send</button>
                         <button class="btn btn-secondary font-weight-bold" @click="cancelInvoice">Cancel</button>
                     </div>
                     <div class="d-flex flex-column font-weight-bold text-left">

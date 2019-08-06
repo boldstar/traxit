@@ -1,10 +1,12 @@
 <template>
     <div class="mx-auto w-100">
-        <div class="card mt-5 w-25 mx-auto shadow-sm" v-if="!data">
+        <div class="card mt-5 w-25 mx-auto shadow" v-if="!data">
             <div class="card-body">
-                <i class="fas fa-file-invoice-dollar fa-5x"></i>
+                <InvoiceSvg />
             </div>
-            <button class="py-2 btn-primary font-weight-bold" @click="data = true">Create Invoice</button>
+            <div class="card-footer">
+                <button class="btn btn-block btn-primary font-weight-bold" @click="data = true">Create Invoice</button>
+            </div>
         </div>
 
         <Invoice :eng="engagement" v-if="data" @close="data = false" />
@@ -13,10 +15,11 @@
 
 <script>
 import Invoice from '@/components/Invoice.vue'
+import InvoiceSvg from '@/components/InvoiceSvg.vue'
 export default {
     name: 'EngageInvoice',
     props: ['engagement'],
-    components: {Invoice},
+    components: {Invoice, InvoiceSvg},
     data() {
         return {
             data: false

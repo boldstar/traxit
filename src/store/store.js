@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import moment from 'moment'
-import router from '../router'
 import auth from './modules/auth'
 import engagements from './modules/engagements'
 import contact from './modules/contact'
@@ -19,17 +17,16 @@ import setup from './modules/setup'
 import tsheets from './modules/tsheets'
 import invoice from './modules/tsheets'
 
+// this is for the abilities plug in.
 import { abilityPlugin, ability as appAbility } from './ability'
 import storage from './storage'
 export const ability = appAbility
 
 Vue.use(Vuex)
-if(localStorage.getItem('fqdn_api_url')!= null) {
-  axios.defaults.baseURL = 'http://' + localStorage.getItem('fqdn_api_url') + '/api'
-}else {
-  axios.defaults.baseURL = 'http://traxit.test/api'
-}
-axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access_token')
+
+//this is the inital settings for axios requests dependent on local storage state
+localStorage.getItem('fqdn_api_url')!= null ? axios.defaults.baseURL = 'http://' + localStorage.getItem('fqdn_api_url') + '/api' : axios.defaults.baseURL = 'http://traxit.test/api';
+axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access_token');
 
 
 export default new Vuex.Store({

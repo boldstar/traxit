@@ -91,18 +91,6 @@ export default [
             ],
         },
         {
-        // this is the path to view the files belonging to client
-        path: 'files',
-        component: () => import('@/contact/Files.vue'),
-            meta: {
-            requiresAuth: true,
-            layout: "default",
-            breadCrumb: [
-                { name: 'Files' }
-            ]
-            },
-        },
-        {
         // this is the path to view the notes belonging to client
             path: 'notes',
             name: 'notes',
@@ -153,13 +141,13 @@ export default [
         },
         {
             // this is the path to view the portal belonging to the client
-            path: 'portal',
-            component: () => import('@/contact/Portal.vue'),
+            path: 'files',
+            component: () => import('@/contact/Files.vue'),
             meta: {
             requiresAuth: true,
             layout: "default",
             breadCrumb: [
-                { name: 'Portal' }
+                { name: 'Files' }
             ]
             },
         }

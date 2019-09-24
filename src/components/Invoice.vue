@@ -10,13 +10,17 @@
                             <div class="input-group-prepend">
                                 <label class="input-group-text invoice-label font-weight-bold" for="email_to">Bill To</label>
                             </div>
-                            <input type="text" class="form-control" placeholder="email@example.com">
+                            <select name="" id="" class="form-control">
+                                <option value="" v-for="(email, index) in clientEmails" :key="index" v-if="email">{{email}}</option>
+                            </select>
                         </div>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <label class="input-group-text invoice-label font-weight-bold" for="cc">CC</label>
                             </div>
-                            <input type="text" class="form-control" placeholder="email@example.com">
+                            <select name="" id="" class="form-control">
+                                <option value="" v-for="(email, index) in clientEmails" :key="index" v-if="email">{{email}}</option>
+                            </select>
                         </div>
                     </div>
                     <div class="align-self-center text-primary">
@@ -34,8 +38,8 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <th>{{ eng.description }}</th>
-                                <td>1</td>
+                                <th class="pt-3">{{ eng.description }}</th>
+                                <td class="pt-3">1</td>
                                 <td><input type="text" placeholder="Enter Amount Ex: 50" class="form-control amount-input"></td>
                             </tr>
                         </tbody>
@@ -43,6 +47,12 @@
                     <div class="text-left p-3">
                         <span class="font-weight-bold mb-2">Special Note:</span>
                         <textarea class="form-control" placeholder="Start typing..." name="" id="" cols="30" rows="5"></textarea>
+                    </div>
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text font-weight-bold" for="payment_link">Payment Link</label>
+                        </div>
+                        <input type="text" class="form-control" placeholder="https://payment.link">
                     </div>
                 </div>
                 <div class="card-footer d-flex justify-content-between">
@@ -67,6 +77,14 @@
 export default {
     name: 'Invoice',
     props: ['eng'],
+    computed: {
+        clientEmails() {
+            const client = this.eng.client
+            const taxpayer = client.email
+            const spouse = client.spouse_email
+            return [taxpayer, spouse]
+        }
+    },
     methods: {
         cancelInvoice() {
             this.$emit('close')

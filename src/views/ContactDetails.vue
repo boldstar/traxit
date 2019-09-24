@@ -25,9 +25,9 @@
           <li class="nav-item" v-bind:class="{ 'is-active' : isClicked }">
             <router-link  :to="{ path: '/contact/' + client.id + '/notes' }" class="nav-link mx-3" data-toggle="tab" role="tab"><i class="pr-2 far fa-clipboard"></i>Notes</router-link>
           </li>
-          <li class="nav-item" v-bind:class="{ 'is-active' : isClicked }">
+          <!-- <li class="nav-item" v-bind:class="{ 'is-active' : isClicked }">
             <router-link  :to="{ path: '/contact/' + client.id + '/files' }" class="nav-link mx-3" data-toggle="tab" role="tab"><i class="pr-2 fas fa-sign-in-alt"></i>Files</router-link>
-          </li>
+          </li> -->
         </ul>
       </div>
 

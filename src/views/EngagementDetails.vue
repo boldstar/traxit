@@ -22,9 +22,9 @@
             <li class="engagement-link-wrapper">
               <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'history'}" :to="{path: '/engagement/' + engagement.id + '/history'}">History</router-link>
             </li>
-            <li class="engagement-link-wrapper">
+            <!-- <li class="engagement-link-wrapper">
               <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'invoice'}" :to="{path: '/engagement/' + engagement.id + '/invoice'}">Invoice</router-link>
-            </li>
+            </li> -->
           </ul>
         </div>
 

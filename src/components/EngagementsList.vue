@@ -315,6 +315,30 @@ export default {
             if(index >= start && index < end) return true;
             }); 
         },
+        sortedEngagementsForDownload:function() {
+            return this.engagements.sort((a,b) => {
+            let modifier = 1;
+            if(this.currentSortDir === 'desc') modifier = -1;
+            if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+            if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+            return 0;
+            }).filter(engagement => {
+              if(this.filterType === 'All'){ return engagement } else{ return engagement.return_type === this.filterType} 
+            }).filter(engagement => {
+              if(this.filterCategory === 'All'){ return engagement } else{ return engagement.category === this.filterCategory} 
+            }).filter(engagement => {
+              if(this.filterAssigned === 'All'){ return engagement } else{ return engagement.assigned_to === this.filterAssigned} 
+            }).filter(engagement => {
+              if(this.filterYear === 'All'){ return engagement } else{ return engagement.year === this.filterYear} 
+            }).filter(engagement => {
+              if(this.filterWorkflow === 'All'){ return engagement } else{ return engagement.workflow_id === this.filterWorkflow} 
+            }).filter(engagement => {
+              if(this.filterEngageType === 'All'){ return engagement } else{ return engagement.type === this.filterEngageType} 
+            }).filter(engagement => {
+              if(this.filterStatusType === 'All'){ return engagement } else{ return engagement.status === this.filterStatusType} 
+            }).filter( engagement => {
+            return !this.searchEngagement || engagement.name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 })
+        },
         filterReturnTypes() {
             //map return types
             const returns = this.engagements.map(engagement => engagement.return_type)
@@ -378,7 +402,7 @@ export default {
             if(this.currentPage > 1) this.currentPage--; 
         },
         downloadEngagements() {
-            this.$store.dispatch('downloadEngagements', this.sortedEngagements.reduce((acc, eng) => {
+            this.$store.dispatch('downloadEngagements', this.sortedEngagementsForDownload.reduce((acc, eng) => {
                 acc.push(eng.id)
                 return acc;
             }, []))

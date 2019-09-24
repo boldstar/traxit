@@ -20,6 +20,8 @@
                 </button>
             </div>
         </div>
+
+         <img src="../assets/tsheets_logo.png" alt="tsheets_logo" class="mt-3" />
     </div>
 </template>
 

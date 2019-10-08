@@ -264,7 +264,7 @@ export default {
     ...mapActions(['addEngagement']),
     validateBeforeSubmit() {
           if(this.engagementType[0].engagement_type == 'Bookkeeping') {
-            if(this.monthChecked === false && this.quarterChecked === false && this.annualChecked === false) {
+            if(this.engagement.title == false) {
               this.nothingChecked = true
               return;
             }
@@ -314,21 +314,21 @@ export default {
     },
     selectedMonthRange() {
       this.monthRange = !this.monthRange
-      this.engagement.title = this.option
       this.quarterRange = false
       this.annualRange = false
       this.quarterChecked = false
       this.annualChecked = false
       this.nothingChecked = false
+      this.engagement.title = 'Monthly'
     },
     selectedQuarterRange() {
       this.quarterRange = !this.quarterRange
-      this.engagement.title = this.option
       this.monthRange = false
       this.annualRange = false
       this.monthChecked = false
       this.annualChecked = false
       this.nothingChecked = false
+      this.engagement.title = 'Quarterly'
     },
     selectedAnnualRange() {
       this.annualRange = !this.annualRange
@@ -337,6 +337,7 @@ export default {
       this.monthChecked = false
       this.quarterChecked = false
       this.nothingChecked = false
+      this.engagement.title = 'Annual'
     },
     setCategory() {
       if(this.engagementType[0].engagement_type == 'Bookkeeping') {

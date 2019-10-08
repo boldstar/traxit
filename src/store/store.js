@@ -15,7 +15,7 @@ import search from './modules/search'
 import downloads from './modules/downloads'
 import setup from './modules/setup'
 import tsheets from './modules/tsheets'
-import invoice from './modules/tsheets'
+import invoice from './modules/invoice'
 
 // this is for the abilities plug in.
 import { abilityPlugin, ability as appAbility } from './ability'

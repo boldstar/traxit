@@ -26,7 +26,7 @@ export default [
           },
           {
             path: 'notes',
-            name: 'notes',
+            name: 'enotes',
             component: () => import('@/children/EngageNotes.vue'),
               meta: {
                 requiresAuth: true,

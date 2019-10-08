@@ -218,7 +218,7 @@ export default {
           title: this.engagement.title,
           description: this.engagement.description,
           return_type: this.engagement.return_type,
-          year: this.engagement.year,
+          year: JSON.stringify(this.engagement.year),
           assigned_to: this.engagement.assigned_to,
           status: this.engagement.status,
           difficulty: this.engagement.difficulty,

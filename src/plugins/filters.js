@@ -13,7 +13,9 @@ Vue.filter('formatDate', function(created_at) {
 export function formatNumber(value) {
   //regex removes special characters and white space so that the number can be compared
   var number = value.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s+/g,'' ).replace(/^\s/,'').replace(/\s$/,'')
+  if(value.indexOf(',') > 0) return value
   if(value && parseFloat(number) > 100000000) {
+    if(isNaN(value) && value.indexOf(',') > 0) return value
     value = value.replace(/[^0-9]/g, '')
                   .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')    
     return value
@@ -25,7 +27,9 @@ export function formatNumber(value) {
 export function formatDob(value) {
   //regex removes special characters and white space so that the number can be compared
   var number = value.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s+/g,'' ).replace(/^\s/,'').replace(/\s$/,'')
+  if(value.indexOf(',') > 0) return value
   if(value && parseFloat(number) < 100000000) {
+    if(isNaN(value)) return value
     value = value.replace(/[^0-9]/g, '')
                   .replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3')
     return value;

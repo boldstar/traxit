@@ -14,7 +14,7 @@
               <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'details'}" :to="{path: '/engagement/' + engagement.id + '/details'}">Details</router-link>
             </li>
             <li class="engagement-link-wrapper">
-              <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'notes'}" :to="{path: '/engagement/' + engagement.id + '/notes'}">Notes</router-link>
+              <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'enotes'}" :to="{path: '/engagement/' + engagement.id + '/notes'}">Notes</router-link>
             </li>
             <li class="engagement-link-wrapper">
               <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'questions'}" :to="{path: '/engagement/' + engagement.id + '/questions'}">Q & A</router-link>

@@ -251,6 +251,7 @@ export default {
       this.quarterChecked = false
       this.annualChecked = false
       this.nothingChecked = false
+      this.engagement.title = 'Monthly'
     },
     selectedQuarterRange() {
       this.quarterRange = !this.quarterRange
@@ -259,6 +260,7 @@ export default {
       this.monthChecked = false
       this.annualChecked = false
       this.nothingChecked = false
+      this.engagement.title = 'Quarterly'
     },
     selectedAnnualRange() {
       this.annualRange = !this.annualRange
@@ -267,6 +269,7 @@ export default {
       this.monthChecked = false
       this.quarterChecked = false
       this.nothingChecked = false
+      this.engagement.title = 'Annual'
     }
   },
   created: function() {

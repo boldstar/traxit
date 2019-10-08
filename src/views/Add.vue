@@ -44,7 +44,6 @@
       </div>
     </div>
 
-
     <EngagementTypes @go-back="engagementsCard=false" v-if="engagementsCard" @show-form="startEngagement" />
 
 
@@ -69,7 +68,7 @@ export default {
   },
   components: {
     Alert,
-    EngagementTypes
+    EngagementTypes,
   },
   computed: {
     ...mapGetters(['successAlert'])

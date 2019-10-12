@@ -217,7 +217,6 @@ export default {
           return
       },
     addNewEngagement() {
-      
       this.addEngagement({
         type: this.workflow.engagement_type.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s+/g,'' ).replace(/^\s/,'').replace(/\s$/,'').toLowerCase(),
         title: this.engagement.title,

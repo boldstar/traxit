@@ -4,6 +4,7 @@ import engagements from './routes/modules/engagements'
 import addnew from './routes/modules/addnew'
 import administrator from './routes/modules/administrator'
 import contact from './routes/modules/contact'
+import files from './routes/modules/files'
 import { routeOutsourceGuard } from './plugins/guards.js'
 
 Vue.use(Router)
@@ -150,7 +151,7 @@ const baseRoutes = [
   }
 ]
 
-const routes = baseRoutes.concat(engagements, addnew, administrator, contact)
+const routes = baseRoutes.concat(engagements, addnew, administrator, contact, files)
 
 
 export default new Router({

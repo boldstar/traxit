@@ -51,6 +51,11 @@
                     <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/add"><i class="far fa-plus-square align-self-center"></i><span class="add-new" :class="sidebarOpen ? 'show-link' : 'hide-link'">Add New</span></router-link>  
                 </transition>
             </li>
+            <li class="nav-item w-100" id="files" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive && sidebarOpen }">
+                <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
+                    <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/files"><i class="fas fa-file-download align-self-center"></i><span class="add-new" :class="sidebarOpen ? 'show-link' : 'hide-link'">Files</span></router-link>  
+                </transition>
+            </li>
         </ul>
         <div class="mt-auto mb-3">
             <transition name="router-animation" enter-active-class="animated bounceInLeft" leave-active-class="animated fadeOut" mode="out-in">

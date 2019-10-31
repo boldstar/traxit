@@ -36,3 +36,8 @@ export function formatDob(value) {
   }
   return value
 }
+
+export function formatFileName(name) {
+  const index = name.indexOf('.')
+  return name.slice(index + 1)
+}

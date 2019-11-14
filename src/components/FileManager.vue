@@ -3,11 +3,11 @@
         <div class="card shadow-sm p-0 file-manager">
             <div class="card-header bg-primary d-flex justify-content-between">
                 <span class="text-white font-weight-bold align-self-center h5 mb-0">File Manager</span>
-                <button class="btn btn-sm bg-white text-dark font-weight-bold">Attachments</button>
+                <span class="text-white font-weight-bold align-self-center h5 mb-0">{{selected}}</span>
             </div>
             <div class="file-details-body d-flex" v-if="files && files.length > 0 || search.length > 0">
                 <ul class="inbox-list">
-                    <input type="text" placeholder="Filter By Name" class="file-input-filter form-control" @input="handleInput($event)" >
+                    <input type="text" placeholder="Filter By Name" class="file-input-filter" @input="handleInput($event)" >
                     <li v-for="(file, index) in files" :key="index" @click="selectFile(index)" :class="{'active-file': file.id === current_file.id}">
                         <div class="d-flex flex-column align-items-between">
                             <div class="d-flex justify-content-between"><span class="font-weight-bold file-name">{{ file.name}}</span><span class="align-self-center file-list-date" :class="{'active-file-list-date': file.id === current_file.id}">{{ file.created_at | formatDate }}</span></div>
@@ -26,20 +26,18 @@
                 <div class="file-details" v-if="current_file">
                     <div class="file-detail-buttons p-2 d-flex">
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fas fa-trash"></i></button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fas fa-folder-open"></i></button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="archive"><i class="fas fa-archive"></i></button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fas fa-print"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="verify('delete')"><i class="fas fa-trash"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="verify('archive')"><i class="fas fa-archive"></i></button>
                         </div>
                     </div>
                     <div class="file-details-header p-2" >
                         <div class="file-details-header-text">
                             <span>From: <strong>{{current_file.name}}</strong> {{ fromEmail(current_file.from) }} </span>
-                            <span> {{current_file.created_at}}</span>
+                            <span>Created: {{current_file.created_at | formatDate}}</span>
                         </div>
                         <div class="file-details-header-text">
                             <span>To: {{account_email}}</span>
-                            <span> {{current_file.expires_on}}</span>
+                            <span>Expires: {{current_file.expires_on | formatDate}}</span>
                         </div>
                         <div class="file-details-header-text">
                             <span class="file-subject-main"> {{current_file.subject}}</span>
@@ -49,8 +47,8 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <span v-if="current_file.attachments" v-for="(name, index) in JSON.parse(current_file.attachments)" :key="index" class="dropdown-item file-item" @click="downloadFile(name)"><i class="fas fa-download"></i>{{ getFileName(name) }}</span>
-                                    <div class="dropdown-divider"></div>
-                                    <button class="dropdown-item font-weight-bold btn" @click="downloadAll">Download All</button>
+                                    <div class="dropdown-divider" v-if="JSON.parse(current_file.attachments).length > 1"></div>
+                                    <button class="dropdown-item font-weight-bold btn" @click="downloadAll"  v-if="JSON.parse(current_file.attachments).length > 1">Download All</button>
                                 </div>
                             </div>
                         </div>
@@ -64,24 +62,42 @@
                     <h3 class="mt-3">No File Selected</h3>
                 </div>
             </div>
+            <div v-else-if="noData" class="mt-5"><p class="font-weight-bold h3">There are no files.</p></div>
             <div v-else><Spinner /></div>
         </div>
+
+         <b-modal v-model="showModal" centered hide-footer hide-header>
+            <div class="d-block text-center my-5">
+                <span>
+                    Are you sure you would like to <strong>{{ verifyRequest }}</strong> this file?
+                </span>
+            </div>
+            <div class="d-flex justify-content-between mt-3">
+                <button class="btn btn-primary btn-sm font-weight-bold" type="button" @click="approve">Submit</button>
+                <button type="button" class="btn btn-secondary btn-sm font-weight-bold" @click="closeModal">Cancel</button>
+            </div>
+        </b-modal>
     </div>
 </template>
 
 <script>
 import Spinner from '@/components/Spinner.vue'
+import bModal from 'bootstrap-vue/es/components/modal/modal';
+import bModalDirective from 'bootstrap-vue/es/directives/modal/modal';
 export default {
     name: 'FileManager',
-    props: ['files', 'account_email', 'current_file', 'search'],
-    components: {Spinner},
+    props: ['files', 'account_email', 'current_file', 'search', 'selected'],
+    components: {Spinner,'b-modal': bModal},
     data() {
         return {
-           
+           showModal: false,
+           verifyRequest: '',
+           timeSinceCreation: 0,
+           noData: false
         }
     },
-    computed: {
-
+    directives: {
+        'b-modal': bModalDirective
     },
     methods: {
         getTime(date) {
@@ -113,11 +129,48 @@ export default {
         },
         archive() {
             this.$store.dispatch('archiveClientFiles', this.current_file.id)
+            this.showModal = false
         },
         handleInput(event) {
             this.$emit('search-input', event.target.value)
+        },
+        deleteFiles() {
+            this.$store.dispatch('deleteFiles', this.current_file.id)
+            this.showModal = false
+        },
+        verify(type) {
+            this.showModal = true
+            this.verifyRequest = type
+        },
+        approve() {
+            if(this.verifyRequest) {
+                if(this.verifyRequest === 'archive') {
+                    this.archive()
+                } else if(this.verifyRequest === 'delete') {
+                    this.deleteFiles()
+                }
+            }
+        },
+        closeModal() {
+            this.showModal = false
+        },
+        startCounting() {
+            this.timeSinceCreation++
+            if(this.timeSinceCreation === 10 && this.files.length <= 0) {
+                this.noData = true
+            } return this.timeSinceCreation
         }
     },
+    watch: {
+        'startCounting': function(val) {
+            if(val >= 10) {
+                clearInterval(this.startCounting)
+            }
+        }
+    },
+    mounted() {
+        setInterval(this.startCounting, 1000)
+    }
 }
 </script>
 
@@ -228,5 +281,11 @@ export default {
 
     .fa-download {
         margin-right: 5px;
+    }
+
+    .file-input-filter {
+        width: 100%;
+        padding: 10px;
+        font-size: 1.1rem;
     }
 </style>

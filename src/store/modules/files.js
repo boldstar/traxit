@@ -17,6 +17,10 @@ export default {
         UPDATE_FILES(state, id) {
             const index = state.allFiles.findIndex(file => file.id == id)
             state.allFiles.splice(index, 1)
+        },
+        DELETE_FILE(state, id) {
+            const index = state.allFiles.findIndex(file => file.id == id)
+            state.allFiles.splice(index, 1)
         }
     },
     actions: {
@@ -47,7 +51,7 @@ export default {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', 'file.zip');
+                link.setAttribute('download', 'files.zip');
                 document.body.appendChild(link);
                 link.click();
            }).catch(error => {
@@ -55,11 +59,29 @@ export default {
            })
        },
        archiveClientFiles(context, id) {
+           context.commit('startProcessing')
            axios.patch('/archive-client-files/' + id)
            .then(response => {
-               context.commit('UPDATE_FILES', id)
-           }).catch(error => {
-               console.log(error.response.data)
+                context.commit('UPDATE_FILES', id)
+                context.commit('stopProcessing')
+                context.commit('successAlert', 'Files Archived')
+            }).catch(error => {
+                context.commit('stopProcessing')
+                context.commit('errorMsgAlert', error.response.data.message)
+                console.log(error.response.data)
+            })
+        },
+        deleteFiles(context, id) {
+            context.commit('startProcessing')
+            axios.delete('/delete-files/' + id)
+            .then(response => {
+                context.commit('DELETE_FILE', id)
+                context.commit('stopProcessing')
+                context.commit('successAlert', 'Files Deleted')
+            }).catch(error => {
+                console.log(error.response.data)
+                context.commit('errorMsgAlert', error.response.data.message)
+                context.commit('stopProcessing')
            })
        }
     }

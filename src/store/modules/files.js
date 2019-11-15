@@ -3,11 +3,15 @@ import {formatFileName} from '../../plugins/filters.js'
 
 export default {
     state: {
-        allFiles: []
+        allFiles: [],
+        filesLength: 0
     },
     getters: {
         all_files(state) {
             return state.allFiles
+        },
+        files_length(state) {
+            return state.filesLength
         }
     },
     mutations: {
@@ -21,6 +25,9 @@ export default {
         DELETE_FILE(state, id) {
             const index = state.allFiles.findIndex(file => file.id == id)
             state.allFiles.splice(index, 1)
+        },
+        FILES_LENGTH(state, number) {
+            state.filesLength = number
         }
     },
     actions: {
@@ -82,6 +89,15 @@ export default {
                 console.log(error.response.data)
                 context.commit('errorMsgAlert', error.response.data.message)
                 context.commit('stopProcessing')
+           })
+       },
+       filesLength(context) {
+           axios.get('/number-of-files')
+           .then(response => {
+               context.commit('FILES_LENGTH', response.data)
+           })
+           .catch(error => {
+               console.log(error.response.data)
            })
        }
     }

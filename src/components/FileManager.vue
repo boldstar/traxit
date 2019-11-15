@@ -62,7 +62,7 @@
                     <h3 class="mt-3">No File Selected</h3>
                 </div>
             </div>
-            <div v-else-if="noData" class="mt-5"><p class="font-weight-bold h3">There are no files.</p></div>
+            <div v-else-if="noData" class="mt-5"><p class="font-weight-bold h3">There are no files.</p><i class="far fa-folder-open fa-7x mt-3 text-primary"></i></div>
             <div v-else><Spinner /></div>
         </div>
 

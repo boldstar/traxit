@@ -12,12 +12,14 @@
                         <button class="btn btn-block bg-white font-weight-bold d-flex justify-content-between file-btn" @click="changeItem('Archive')" :class="{'selected-item': selected === 'Archive'}">Archive<i class="fas fa-archive align-self-center text-primary"></i>
                         </button>
                     </li>
+                    <hr>
                     <li class="mt-3">
                         <p class="mb-0 d-flex justify-content-between text-secondary font-weight-bold ml-2 mb-1">
                             <span>File Share Link</span>
                             <i class="far fa-copy font-weight-bold align-self-center copy-btn" data-toggle="tooltip" data-placement="right" title="Copy Link" @click="copyLink"></i>
                         </p>
                         <input type="text" id="link" v-model="url" class="form-control">
+                        <p class="link-info">Share this link with contacts so they can securely share documents with you and your team</p>
                     </li>
                 </ul>
             </div>
@@ -85,5 +87,11 @@ export default {
         &:hover {
             color: #0077ff;
         }
+    }
+
+    .link-info {
+        font-size: .7rem;
+        padding: 5px;
+        margin-bottom: 0;
     }
 </style>

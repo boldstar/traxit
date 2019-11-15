@@ -53,7 +53,9 @@
             </li>
             <li class="nav-item w-100" id="files" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive && sidebarOpen }">
                 <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
-                    <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/files"><i class="fas fa-inbox align-self-center"></i><span class="add-new" :class="sidebarOpen ? 'show-link' : 'hide-link'">Files</span></router-link>  
+                    <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/files"><i class="fas fa-inbox align-self-center"></i><span class="add-new" :class="sidebarOpen ? 'show-link' : 'hide-link'">Files</span>
+                    <span class="badge badge-danger" :class="sidebarOpen ? 'file-badge' : 'collapsed-badge'" v-if="files_length > 0">{{files_length}}</span>
+                    </router-link>  
                 </transition>
             </li>
         </ul>
@@ -85,12 +87,15 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert', 'engagementFilter', 'sidebarOpen'])
+        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert', 'engagementFilter', 'sidebarOpen', 'files_length'])
     },
     methods: {
         filterEngagements(filter) {
             this.$store.commit('changeEngagementFilter', filter)
         }
+    },
+    created() {
+        this.$store.dispatch('filesLength')
     }
 }
 </script>
@@ -278,5 +283,22 @@ export default {
         }
     }
 
+    .nav-item {
+        position: relative!important;
+    }
+
+    .file-badge {
+        position: absolute;
+        left: 35px;
+        top: 13px;
+        font-size: .7rem!important;
+    }
+
+    .collapsed-badge {
+        position: absolute;
+        left: 25px;
+        top: 9px;
+        font-size: .7rem!important;
+    }
 </style>
 

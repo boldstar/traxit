@@ -17,6 +17,7 @@ import setup from './modules/setup'
 import tsheets from './modules/tsheets'
 import invoice from './modules/invoice'
 import files from './modules/files'
+import portal from './modules/portal'
 
 // this is for the abilities plug in.
 import { abilityPlugin, ability as appAbility } from './ability'
@@ -54,7 +55,8 @@ export default new Vuex.Store({
     setup,
     tsheets,
     invoice,
-    files
+    files,
+    portal
   },
   state: {
     processing: false,

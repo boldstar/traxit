@@ -25,8 +25,11 @@
           <li class="nav-item" v-bind:class="{ 'is-active' : isClicked }">
             <router-link  :to="{ path: '/contact/' + client.id + '/notes' }" class="nav-link mx-3" data-toggle="tab" role="tab"><i class="pr-2 far fa-clipboard"></i>Notes</router-link>
           </li>
-          <li class="nav-item" v-bind:class="{ 'is-active' : isClicked }">
+          <!-- <li class="nav-item" v-bind:class="{ 'is-active' : isClicked }">
             <router-link  :to="{ path: '/contact/' + client.id + '/files' }" class="nav-link mx-3" data-toggle="tab" role="tab"><i class="pr-2 fas fa-sign-in-alt"></i>Files</router-link>
+          </li> -->
+          <li class="nav-item" v-bind:class="{ 'is-active' : isClicked }">
+            <router-link  :to="{ path: '/contact/' + client.id + '/portal' }" class="nav-link mx-3" data-toggle="tab" role="tab"><i class="pr-2 fas fa-sign-in-alt"></i>Portal</router-link>
           </li>
         </ul>
       </div>
@@ -67,7 +70,7 @@
     <div class="tab-content" id="myTabContent">   
       <!-- these are the panes for the different tab views -->
       <div class="tab-pane fade show active" role="tabpanel">
-        <router-view></router-view>
+        <router-view :clientDetails="client"></router-view>
       </div>
     </div>
   </div>

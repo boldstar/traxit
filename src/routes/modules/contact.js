@@ -141,16 +141,28 @@ export default [
         },
         {
             // this is the path to view the portal belonging to the client
-            path: 'files',
-            component: () => import('@/contact/Files.vue'),
+            path: 'portal',
+            component: () => import('@/contact/Portal.vue'),
             meta: {
             requiresAuth: true,
             layout: "default",
             breadCrumb: [
-                { name: 'Files' }
+                { name: 'Portal' }
             ]
             },
-        }
+        },
+        // {
+        //     // this is the path to view the portal belonging to the client
+        //     path: 'files',
+        //     component: () => import('@/contact/Files.vue'),
+        //     meta: {
+        //     requiresAuth: true,
+        //     layout: "default",
+        //     breadCrumb: [
+        //         { name: 'Files' }
+        //     ]
+        //     },
+        // },
     ],
     },
 ]

@@ -4,16 +4,24 @@
             <div class="ml-3 pr-2  h3 align-self-center m-0">
                 <span>Portal</span>
             </div>
-            <!-- <div class="btn-group dropleft  m-0 align-self-center mr-3 ">
+            <div class="btn-group dropleft  m-0 align-self-center mr-3 ">
                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="mr-2 fas fa-plus-square"></i></button>
                 <div class="dropdown-menu">
-                    <button class="btn dropdown-item font-weight-bold" type="button">Create Folder</button>
+                    <button class="btn dropdown-item font-weight-bold" type="button">Invite Contact</button>
+                    <button class="btn dropdown-item font-weight-bold" type="button">Share Document</button>
+                    <div class="dropdown-divider"></div>
+                    <button class="btn dropdown-item font-weight-bold text-danger" type="button">Delete Portal</button>
                 </div>
-            </div> -->
+            </div>
         </div>
         <div class="portal-body">
-            <FileShareSvg class="mt-5 mb-3" />
-            <button class="btn btn-primary font-weight-bold" @click="inviteContact">Invite Contact</button>
+            <div v-if="!inviteStatus">
+                <FileShareSvg class="mt-5 mb-3" />
+                <button class="btn btn-primary font-weight-bold" @click="inviteContact">Invite Contact</button>
+            </div>
+            <div v-else>
+                Share Documents
+            </div>
         </div>
 
 
@@ -35,8 +43,11 @@
           
           </div>
         <div class="d-flex justify-content-between mt-4">
-            <button class="btn btn-primary btn-sm font-weight-bold" @click="submitInvite">Send Invite</button>
-            <button type="button" class="btn btn-secondary btn-sm font-weight-bold" @click="modal = false">Cancel</button>
+            <button class="btn btn-primary btn-sm font-weight-bold" @click="submitInvite" :disabled="processing">
+              <span v-if="processing">Sending</span>
+              <span v-else>Send Invite</span>
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm font-weight-bold" @click="$store.commit('portal_modal')">Cancel</button>
         </div>
       </b-modal>
 
@@ -47,6 +58,7 @@
 import FileShareSvg from '@/components/FileShareSvg.vue'
 import bModal from 'bootstrap-vue/es/components/modal/modal';
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal';
+import {mapGetters} from 'vuex'
 export default {
     name: 'Portal',
     props: ['clientDetails'],
@@ -59,16 +71,26 @@ export default {
     },
     data() {
         return {
-            modal: false,
             taxpayer: '',
             spouse: '',
             both: '',
-            nothingSelected: false
+            nothingSelected: false,
         }
+    },
+    computed: {
+        ...mapGetters(['processing','portalModal', 'inviteStatus']),
+         modal: {
+             get() {
+                 return this.portalModal
+             },
+             set(newState) {
+                 return newState
+             }
+         }
     },
     methods: {
         inviteContact() {
-            this.modal = true
+            this.$store.commit('portal_modal')
         },
         submitInvite() {
             if(!this.taxpayer && !this.spouse && !this.both) {
@@ -79,6 +101,9 @@ export default {
                 send_to: this.both ? this.both : this.taxpayer ? this.taxpayer : this.spouse ? this.spouse : null
             })
         }
+    },
+    created() {
+        this.$store.dispatch('checkInvitations', this.clientDetails.id)
     }
 }
 </script>

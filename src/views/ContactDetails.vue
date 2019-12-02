@@ -69,8 +69,8 @@
 
     <div class="tab-content" id="myTabContent">   
       <!-- these are the panes for the different tab views -->
-      <div class="tab-pane fade show active" role="tabpanel">
-        <router-view :clientDetails="client"></router-view>
+      <div class="tab-pane fade show active" role="tabpanel" v-if="client['id']">
+        <router-view  :clientDetails="client"></router-view>
       </div>
     </div>
   </div>

@@ -8,6 +8,7 @@ import jQuery from 'jquery';
 import Popper from 'popper.js';
 import VueCarousel from 'vue-carousel';
 import VCalendar from 'v-calendar';
+import vueDropzone from 'vue2-dropzone';
 import 'v-calendar/lib/v-calendar.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
@@ -34,6 +35,7 @@ Vue.component('landing-layout', Landing);
 Vue.component('admin-layout', Admin);
 Vue.component('reset-layout', ResetPassword);
 Vue.component('breadcrumb', Breadcrumb);
+Vue.component('vue-dropzone', vueDropzone);
 
 Vue.prototype.$setUp = setUp
 

@@ -7,6 +7,7 @@
             <div class="btn-group dropleft  m-0 align-self-center mr-3 ">
                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="mr-2 fas fa-plus-square"></i></button>
                 <div class="dropdown-menu">
+                    <button class="btn dropdown-item font-weight-bold" type="button" @click="$store.commit('portal_upload')">Share File</button>
                     <button class="btn dropdown-item font-weight-bold" type="button">Invite Contact</button>
                     <div class="dropdown-divider"></div>
                     <button class="btn dropdown-item font-weight-bold text-danger" type="button">Delete Portal</button>
@@ -18,13 +19,14 @@
                 <FileShareSvg class="mt-5 mb-3" />
                 <button class="btn btn-primary font-weight-bold" @click="inviteContact">Invite Contact</button>
             </div>
-            <div class="d-flex" v-else>
-                <PortalUploader />
-                <PortalTable />
+            <div v-else>
+                <PortalUploader v-if="portalUpload" @close-uploader="$store.commit('portal_upload')" />
+                <PortalTable @view-file-options="setFile"/>
             </div>
         </div>
 
-        <PortalModal v-if="modal" />
+        <PortalModal v-if="modal" @approve-invite="submitInvite" />
+        <PortalOptions v-if="fileOptions && portalFile" :file="viewFileOptions" />
 
     </div>
 </template>
@@ -35,6 +37,7 @@ import FileShareSvg from '@/components/FileShareSvg.vue'
 import PortalTable from './portal/PortalTable.vue'
 import PortalUploader from './portal/PortalUploader.vue'
 import PortalModal from './portal/PortalModal.vue'
+import PortalOptions from './portal/PortalOptions.vue'
 export default {
     name: 'Portal',
     props: ['clientDetails'],
@@ -42,15 +45,17 @@ export default {
         FileShareSvg,
         PortalTable,
         PortalUploader,
-        PortalModal
+        PortalModal,
+        PortalOptions
     },
     data() {
         return {
-
+            showUploader: false,
+            viewFileOptions: null
         }
     },
     computed: {
-        ...mapGetters(['processing','portalModal', 'inviteStatus']),
+        ...mapGetters(['processing','portalModal', 'inviteStatus', 'portalUpload', 'fileOptions', 'portalFile']),
          modal: {
              get() {
                  return this.portalModal
@@ -72,6 +77,9 @@ export default {
                 client_id: this.clientDetails.id,
                 send_to: this.both ? this.both : this.taxpayer ? this.taxpayer : this.spouse ? this.spouse : null
             })
+        },
+        setFile(file) {
+            this.viewFileOptions = file
         }
     },
     created() {

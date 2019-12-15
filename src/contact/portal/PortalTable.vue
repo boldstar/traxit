@@ -1,47 +1,24 @@
 <template>
-    <div class="w-100 ml-3">
+    <div class="w-100">
         <table class="table border">
             <thead>
                 <tr>
-                    <td>Batch Action</td>
+                    <td>Type</td>
                     <td>Name</td>
-                    <td>Size</td>
                     <td>Shared On</td>
                     <td>Shared By</td>
                     <td>Options</td>
-                    <td>Preview</td>
                 </tr>
             </thead>
             <tbody class="table-bordered">
-                <tr>
-                    <th> <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                            <label class="custom-control-label batch-label pb-3" for="customCheck1"></label>
-                        </div></th>
-                    <th>file.pdf</th>
-                    <th>1.2 kb</th>
-                    <th>12/01/2019</th>
-                    <th>User Name</th>
+                <tr v-for="file in portalFiles" :key="file.id">
+                    <th><i class="far fa-file-pdf text-danger"></i></th>
+                    <th>{{ file.document_name }}</th>
+                    <th>{{ file.created_at | formatDate}}</th>
+                    <th>{{ file.uploaded_by }}</th>
                     <th>
-                        <button class="btn-link btn btn-sm font-weight-bold">View</button>
-                        <!-- <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                            <label class="custom-control-label" for="customCheck1">Shared</label>
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                            <label class="custom-control-label" for="customCheck1">Downloadable</label>
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                            <label class="custom-control-label" for="customCheck1">Signature Required</label>
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                            <label class="custom-control-label" for="customCheck1">Payment Required</label>
-                        </div> -->
+                        <button class="btn-link btn btn-sm font-weight-bold" @click="viewOptions(file)">Edit</button>
                     </th>
-                    <th><button class="btn-link btn btn-sm font-weight-bold">View</button></th>
                 </tr>
             </tbody>
         </table>
@@ -49,8 +26,22 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 export default {
-    name: 'PortalTable'
+    name: 'PortalTable',
+    computed: {
+        ...mapGetters(['portalFiles'])
+    },
+    methods: {
+        viewOptions(file) {
+            this.$emit('view-file-options', file)
+            this.$store.commit('file_options')
+            this.$store.dispatch('getPortalFile', file.id)
+        }
+    },
+    created() {
+        this.$store.dispatch('getPortalFiles', this.$route.params.id)
+    }
 }
 </script>
 

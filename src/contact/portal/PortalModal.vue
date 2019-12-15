@@ -17,7 +17,7 @@
           
           </div>
         <div class="d-flex justify-content-between mt-4">
-            <button class="btn btn-primary btn-sm font-weight-bold" @click="submitInvite" :disabled="processing">
+            <button class="btn btn-primary btn-sm font-weight-bold" @click="approveInvite" :disabled="processing">
               <span v-if="processing">Sending</span>
               <span v-else>Send Invite</span>
             </button>
@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import bModal from 'bootstrap-vue/es/components/modal/modal'
+import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 import {mapGetters} from 'vuex'
 export default {
     name: 'PortalModal',
@@ -38,9 +40,15 @@ export default {
             nothingSelected: false,
         }
     },
+    components:{
+        'b-modal': bModal,
+    },
+    directives: {
+        'b-modal': bModalDirective
+    },
     computed: {
+        ...mapGetters(['portalModal', 'processing']),
         modal: {
-            ...mapGetters(['portalModal']),
              get() {
                  return this.portalModal
              },
@@ -53,6 +61,9 @@ export default {
         inviteContact() {
             this.$store.commit('portal_modal')
         },
+        approveInvite() {
+            this.$emit('approve-invite')
+        }
     }
 }
 </script>

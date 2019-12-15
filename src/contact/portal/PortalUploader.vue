@@ -1,44 +1,77 @@
 <template>
-    <div class="card col-4 p-0">
-        <div class="card-header">
-            <p class="m-0 font-weight-bold">Upload documents to share with contact</p>
-        </div>
-        <div class="vue-drop-wrapper">
-            <vue-dropzone 
-                ref="myVueDropzone" 
-                id="dropzone" 
-                :options="dropzoneOptions" 
-                :useCustomSlot="true"
-                v-on:vdropzone-file-added="addFile($event)"
-                v-on:vdropzone-removed-file="removeFile($event)"
-            >
-                <img src="../../assets/upload_icon.png" alt="upload_icon" class="upload_icon_img">
-            </vue-dropzone>
-        </div>
-        <div class="py-2 bg-light"><p class="m-0 font-weight-bold">Options</p></div>
-        <div class="d-flex flex-column align-items-start pl-3 my-3">
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="customCheck1">
-                <label class="custom-control-label" for="customCheck1">Downloadable</label>
+    <div class="portal-wrapper">
+        <div class="col-4 p-0 portal-card">
+            <div class="card-header">
+                <p class="m-0 font-weight-bold">Upload document to share with contact</p>
             </div>
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="customCheck1">
-                <label class="custom-control-label" for="customCheck1">Signature Required</label>
+            <div class="vue-drop-wrapper">
+                <vue-dropzone 
+                    ref="myVueDropzone" 
+                    id="dropzone" 
+                    :options="dropzoneOptions" 
+                    :useCustomSlot="true"
+                    :include-styling="false"
+                    v-on:vdropzone-file-added="addFile($event)"
+                    v-on:vdropzone-removed-file="removeFile($event)"
+                >
+                    <div class="dropzone-custom-img">
+                        <img  src="../../assets/upload_icon.png" alt="upload_icon" class="upload_icon_img">
+                    </div>
+                </vue-dropzone>
             </div>
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="customCheck1">
-                <label class="custom-control-label" for="customCheck1">Payment Required</label>
+            <div class="py-2 bg-light"><p class="m-0 font-weight-bold">Preview</p></div>
+            <div>
+                <embed :src="docPreview" type="" v-if="docPreview" class="w-100">
+                <div v-else class="p-5 bg-secondary text-white font-weight-bold">Upload Preview</div>
+            </div>
+            <div class="py-2 bg-light"><p class="m-0 font-weight-bold">Options</p></div>
+            <div class="d-flex flex-column align-items-start pl-3 my-3">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="customCheck1" v-model="options.downloadable">
+                    <label class="custom-control-label" for="customCheck1">Downloadable</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="customCheck2" v-model="options.signature_required">
+                    <label class="custom-control-label" for="customCheck2">Signature Required</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="customCheck3" v-model="options.payment_required">
+                    <label class="custom-control-label" for="customCheck3">Payment Required</label>
+                </div>
+            </div>
+            <div class="py-2 bg-light"><p class="m-0 font-weight-bold">Message</p></div>
+            <div class="d-flex flex-column align-items-start">
+                <textarea name="message" id="message" class="form-control" placeholder="Send a message or instructions with the file..." cols="10" rows="5" v-model="options.message"></textarea>
+            </div>
+            <div class="d-flex mt-3 card-footer">
+                <button class="btn btn-primary btn-block font-weight-bold" @click="upload">
+                    <span v-if="!processing">Share</span>
+                    <span v-if="processing">Sharing...</span>
+                </button>
+                <button class="btn btn-secondary font-weight-bold ml-3" @click="$emit('close-uploader')">Cancel</button>
             </div>
         </div>
-        <div class="py-2 bg-light"><p class="m-0 font-weight-bold">Message</p></div>
-        <div class="d-flex flex-column align-items-start">
-            <textarea name="message" id="message" class="form-control" placeholder="Send a message or instructions with the file..." cols="10" rows="5"></textarea>
-        </div>
-        <button class="btn btn-primary btn-block font-weight-bold mt-3">Share</button>
     </div>
 </template>
 
 <script>
+const getTemplate = () => `
+<div class="dz-preview dz-file-preview">
+  <div class="dz-image">
+    <div data-dz-thumbnail-bg></div>
+  </div>
+  <div class="dz-details">
+    <div class="dz-size"><span data-dz-size></span></div>
+    <div class="dz-filename"><span data-dz-name></span></div>
+  </div>
+  <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+  <div class="dz-error-message"><span data-dz-errormessage></span></div>
+  <div class="dz-success-mark"><i class="fa fa-check"></i></div>
+  <div class="dz-error-mark"><i class="fa fa-close"></i></div>
+</div>
+`;
+
+import {mapGetters} from 'vuex'
 export default {
     name: 'PortalUploader',
     data() {
@@ -48,189 +81,156 @@ export default {
                 url: 'https://httpbin.org/post',
                 maxFilesize: 0.5,
                 addRemoveLinks: true,
-                dictRemoveFile: 'X',
-                dictCancelUpload: 'Cancel'
+                dictRemoveFile: 'Remove',
+                dictCancelUpload: 'Cancel',
+                previewTemplate: getTemplate()
             },
+            options: {
+                downloadable: true,
+                payment_required: false,
+                signature_required: false,
+                message: '',
+                client_id: ''
+            },
+            docPreview: ''
         }
     },
+    computed: {
+        ...mapGetters(['processing'])
+    },
     methods: {
-            addFile(event) {
+        addFile(event) {
             this.files.push(event)
+            this.docPreview = URL.createObjectURL(event)
         },
         removeFile(event) {
             const index = this.files.findIndex(file => file.upload.uuid == event.upload.uuid)
             this.files.splice(index, 1)
+            this.docPreview = ''
+        },
+        upload() {
+            if(this.files.length < 1) return;
+
+            var account = localStorage.getItem('fqdn_api_url')
+            var index = account.indexOf('.')
+            var fqdn = account.slice(0, index)
+            this.options.account = fqdn
+            this.options.client_id = this.$route.params.id
+            this.$store.dispatch('uploadDocument', {
+                files: this.files,
+                options: this.options
+            })
         },
     }
 }
 </script>
 
 <style lang="scss">
-    textarea,
-input[type=text] {
-    font-family:Arial;
-}
 
-.input-wrapper {
-    box-sizing: border-box;
-    position: relative;
-}
-
-.input-error {
-    border-color: red!important;
-}
-
-.file-manager-wrapper {
-    box-sizing: border-box;
-}
-
-.account-label {
+.portal-wrapper {
     position: absolute;
-    top: 17px;
-    left: 8px;
-    background: rgb(233, 233, 233);
-    font-weight: bold;
-    padding: 3px 20px;
-    border-radius: 3px;
-    box-shadow: 0 0 5px 0 rgba(0,0,0,0.4);
-}
+    z-index: 10000;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,.3);
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
 
-
-.button-div {
-    margin-top: 20px;
+    .portal-card {
+        background: white;
+        border-radius: 10px;
+        align-self: center;
+    }
 }
 
 .vue-drop-wrapper {
     border: 4px dashed rgb(145, 145, 145);
     padding: 6px;
+    position: relative;
+    z-index: 0;
 }
 
-.fa-paper-plane {
-    margin-left: 10px;
+.dropzone-custom-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: -2;
+
+    .upload_icon_img {
+        height: 75px;
+        width: auto;
+    }
 }
 
-.upload_icon_img {
-    height: 100px;
-    width: auto;
-}
 
-.vue-dropzone {
-    padding: 10px!important;
-    margin: 0!important;
-    box-sizing: border-box!important;
-    display: flex!important;
-    flex-direction: column!important;
-}
-
-.dz-preview {
-    width: 100%;
-    max-height: 40px!important;
-    min-height: 40px!important;
+#dropzone {
     padding: 0!important;
     margin: 0!important;
-    display: flex;
-    background: white!important;
-    color: white!important;
-    // box-shadow: 0 0 5px 0 rgba(0,0,0,.9);
-    border: 2px solid lightgray;
-    border-bottom: none;
-}
+    box-sizing: border-box!important;
+    min-height: 100px;
 
-.dz-preview:last-of-type {
-    border-bottom: 2px solid lightgray;
-}
+    .dz-preview {
+        width: 100%;
+        height: 100px;
+        padding: 0!important;
+        margin: 0!important;
+        background: white!important;
+        border: 2px solid lightgray;
+        border-bottom: none;
+        position: relative;
 
-.dz-image {
-    display: none!important;
-}
-.vue-dropzone>.dz-preview .dz-details {
-    background-color: transparent!important;
-}
+        .dz-details {
+            background: white;
+            display: flex;
+            flex-direction: row-reverse;
+            position: relative;
+            .dz-filename {
+                margin-right: auto;
+                margin-left: 5px;
+                color: black;
+                position: absolute;
+                left: 5px;
+                font-weight: bold;
+            }
 
-.dz-details {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-start!important;
-    color: white!important;
-    max-height: 40px!important;
-    min-height: 40px!important;
-    opacity: 1!important;
-    line-height: 0!important;
-    padding-top: 19px!important;
-}
+            .dz-size {
+                color: #0077ff;
+                margin-right: 10px; 
+            }
+        }
 
-.dz-filename {
-    span {
-        color: #9b9b9b!important;
-        opacity: 1!important;
-        font-weight: bold;
+        .dz-remove {
+            color: red;
+            font-weight: bold;
+            width: 100%;
+            display: block;
+            margin-top: 28px;
+            box-sizing: border-box;
+            position: absolute;
+            bottom: 0;
+            text-decoration: none;
+        }
+
+        .dz-success-mark {
+            position: absolute;
+            top: 0;
+            color: green;
+            display: none;
+        }
+
+        .dz-error-mark {
+            display: none;
+        }
+        
+        &:last-of-type {
+            border-bottom: 2px solid lightgray;
+        }
     }
 }
-
-.dz-size {
-    span {
-        color: #0077ff!important;
-        opacity: 1!important;
-    }
-}
-
-.dropzone .dz-preview .dz-details .dz-filename {
-    margin-bottom: 1em!important;
-    font-size: 16px!important;
-    line-height: 0!important;
-}
-
-.vue-dropzone>.dz-preview .dz-details .dz-filename {
-    overflow: visible!important;
-}
-
-.dropzone .dz-preview .dz-details .dz-size {
-    margin-bottom: 1em!important;
-    font-size: 16px!important;
-    line-height: 0!important;
-}
-
-.dz-success-mark {
-    svg {
-       height: 20px!important;
-       width: auto!important;
-       color: green; 
-    }
-}
-
-.dz-error-mark {
-    svg {
-        height: 20px!important;
-        width: auto!important;
-    }
-}
-
-.vue-dropzone>.dz-preview .dz-remove {
-    color: red!important;
-    opacity: 1!important;
-    align-self: center!important;
-    top: 8px!important;
-    bottom: 10px!important;
-    padding: 0 5px!important;
-    padding-top: 3px!important;
-    border: none!important;
-}
-
-.vue-dropzone>.dz-preview .dz-progress .dz-upload {
-    background: #0077ff!important;
-}
-
-.no-files {
-    border-color: red;
-}
-
-.vue-editor {
-    margin-bottom: 10px;
-    border: 3px solid rgb(201, 201, 201);
-    border-radius: 5px;
-    min-height: 150px;
-}
-
-#vueText .ql-editor { min-height:150px }
 
 </style>

@@ -11,7 +11,8 @@ module.exports = {
     configureWebpack: {
         output: {
             filename: 'js/[name].js',
-            chunkFilename: 'js/[name].js'
+            chunkFilename: 'js/[name].js',
+            globalObject: 'this'
         }
     }
 }

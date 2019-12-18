@@ -90,7 +90,8 @@ export default {
                 payment_required: false,
                 signature_required: false,
                 message: '',
-                client_id: ''
+                client_id: '',
+                tax_year: ''
             },
             docPreview: ''
         }

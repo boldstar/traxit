@@ -75,7 +75,9 @@ export default new Vuex.Store({
     links: false,
     averagedays: '',
     engagementFilter: 'All',
-    timesheet: false
+    timesheet: false,
+    delete_modal: false,
+    delete_modal_details: null
   },
   getters: {
     chartDataLength(state) {
@@ -125,6 +127,12 @@ export default new Vuex.Store({
     },
     timesheet(state) {
       return state.timesheet
+    },
+    deleteModal(state) {
+      return state.delete_modal
+    },
+    deleteModalDetails(state) {
+      return state.delete_modal_details
     }
   },
   mutations: {
@@ -186,6 +194,10 @@ export default new Vuex.Store({
     },
     toggleTimesheet(state) {
       state.timesheet = !state.timesheet
+    },
+    toggleDeleteModal(state, data) {
+      state.delete_modal = !state.delete_modal
+      state.delete_modal_details = data
     }
   },
   actions: {

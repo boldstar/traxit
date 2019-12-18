@@ -19,6 +19,7 @@ import { Button } from 'bootstrap-vue/es/components';
 import { abilitiesPlugin } from '@casl/vue';
 import { ability } from './store/store';
 import { beforeEachCustom } from './plugins/guards.js'
+import DeleteModal from './components/DeleteModal'
 global.jQuery = jQuery;
 global.Popper = Popper;
 
@@ -36,6 +37,7 @@ Vue.component('admin-layout', Admin);
 Vue.component('reset-layout', ResetPassword);
 Vue.component('breadcrumb', Breadcrumb);
 Vue.component('vue-dropzone', vueDropzone);
+Vue.component('delete-modal', DeleteModal)
 
 Vue.prototype.$setUp = setUp
 

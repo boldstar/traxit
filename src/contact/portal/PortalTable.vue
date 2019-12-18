@@ -8,6 +8,7 @@
                     <td>Shared On</td>
                     <td>Shared By</td>
                     <td>Options</td>
+                    <td><i class="fas fa-trash"></i></td>
                 </tr>
             </thead>
             <tbody class="table-bordered">
@@ -19,9 +20,14 @@
                     <th>
                         <button class="btn-link btn btn-sm font-weight-bold" @click="viewOptions(file)">Edit</button>
                     </th>
+                    <th>
+                        <button class="btn-link btn btn-sm font-weight-bold text-danger" @click="requestDelete(file)">X</button>
+                    </th>
                 </tr>
             </tbody>
         </table>
+
+        <delete-modal :name="fileToDelete"></delete-modal>
     </div>
 </template>
 
@@ -29,6 +35,11 @@
 import {mapGetters} from 'vuex'
 export default {
     name: 'PortalTable',
+    data() {
+        return {
+            fileToDelete: null
+        }
+    },
     computed: {
         ...mapGetters(['portalFiles'])
     },
@@ -37,6 +48,10 @@ export default {
             this.$emit('view-file-options', file)
             this.$store.commit('file_options')
             this.$store.dispatch('getPortalFile', file.id)
+        },
+        requestDelete(file) {
+            this.fileToDelete = file.document_name
+            this.$store.commit('toggleDeleteModal', {id: file.id, action: 'deletePortalFile'})
         }
     },
     created() {

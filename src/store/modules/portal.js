@@ -91,6 +91,7 @@ export default {
             formData.append('signature_required', data.options.signature_required)
             formData.append('downloadable', data.options.downloadable)
             formData.append('message', data.options.message)
+            formData.append('tax_year', data.options.tax_year)
             axios.post('/portal-upload', formData, {headers: {
                 'Content-Type': 'multipart/form-data'
             }}).then(response => {
@@ -115,6 +116,15 @@ export default {
             axios.get('/portal-file/' +id,  {responseType: 'blob'})
             .then(response => {
                 context.commit('portal_file', response.data)
+            }).catch(error => {
+                console.log(error.response.data)
+            })
+        },
+        deletePortalFile(context, id) {
+            console.log(id)
+            axios.delete('/portal-file/'+id)
+            .then(response => {
+                console.log(response.data)
             }).catch(error => {
                 console.log(error.response.data)
             })

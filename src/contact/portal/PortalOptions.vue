@@ -5,21 +5,21 @@
             <div class="d-flex flex-column text-left file-body">
                 <div class="file-options">
                     <p>Options</p>
-                    <PortalInput :data="file.payment_required" :label="'Payment Required'"/>
-                    <PortalInput :data="file.signature_required" :label="'Signature Required'"/>
-                    <PortalInput :data="file.downloadable" :label="'Downloadable'"/>
+                    <PortalInput v-model="file.payment_required" :data="file.payment_required" :label="'Payment Required'"/>
+                    <PortalInput v-model="file.signature_required" :data="file.signature_required" :label="'Signature Required'"/>
+                    <PortalInput v-model="file.downloadable" :data="file.downloadable" :label="'Downloadable'"/>
                     <label for="message" class="font-weight-bold mt-2">Message:</label>
                     <textarea name="message" class="form-control mb-2" cols="20" rows="5" v-model="file.message" v-if="file.message"></textarea>
                 </div>
                 <div class="file-status">
                     <p>Status</p>
-                    <PortalInput :data="file.paid" :label="'Paid'"/>
-                    <PortalInput :data="file.signed" :label="'Signed'"/>
+                    <PortalInput v-model="file.paid" :data="file.paid" :label="'Paid'"/>
+                    <PortalInput v-model="file.signed" :data="file.signed" :label="'Signed'"/>
                 </div>
             </div>
         </div>
         <div class="d-flex justify-content-between mt-4">
-            <button class="btn btn-primary btn-sm font-weight-bold" :disabled="processing">
+            <button class="btn btn-primary btn-sm font-weight-bold" :disabled="processing" @click="saveOptions">
               <span v-if="processing">Submitting...</span>
               <span v-else>Submit Edit</span>
             </button>
@@ -62,11 +62,14 @@ export default {
         },
         fileUrl() {
             return URL.createObjectURL(new Blob([this.portalFile]));
-        }
+        },
     },
     methods: {
         closeOptions() {
             this.$store.commit('file_options')
+        },
+        saveOptions() {
+            this.$store.dispatch('updatePortalFile', this.file)
         }
     }
 }

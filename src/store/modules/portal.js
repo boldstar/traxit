@@ -56,6 +56,14 @@ export default {
         },
         portal_file(state, blob) {
             state.portal_file = blob
+        },
+        delete_portal_file(state, id) {
+            const index = state.portal_files.findIndex(file =>  file.id === id)
+            state.portal_files.splice(index, 1)
+        },
+        update_portal_file(state, file) {
+            const index = state.portal_files.findIndex(item => item.id === file.id)
+            state.portal_files.splice(index, 1, file)
         }
     },
     actions: {
@@ -120,13 +128,34 @@ export default {
                 console.log(error.response.data)
             })
         },
-        deletePortalFile(context, id) {
-            console.log(id)
-            axios.delete('/portal-file/'+id)
+        updatePortalFile(context, data) {
+            context.commit('startProcessing')
+            axios.patch('/update-portal-file/'+data.id, data)
             .then(response => {
                 console.log(response.data)
+                context.commit('stopProcessing')
+                context.commit('successAlert', response.data.message)
+                context.commit('update_portal_file', response.data.document)
+                context.commit('file_options')
             }).catch(error => {
                 console.log(error.response.data)
+                context.commit('stopProcessing')
+                context.commit('file_options')
+                context.commit('errorMsgAlert', error.response.data)
+            })
+        },
+        deletePortalFile(context, id) {
+            context.commit('startProcessing')
+            axios.delete('/portal-file/'+id)
+            .then(response => {
+                context.commit('stopProcessing')
+                context.commit('delete_portal_file', id)
+                context.commit('successAlert', response.data)
+                context.commit('toggleDeleteModal', null)
+            }).catch(error => {
+                console.log(error.response.data)
+                context.commit('stopProcessing')
+                context.commit('errorMsgAlert', error.response.data)
             })
         }
     }

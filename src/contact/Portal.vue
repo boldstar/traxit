@@ -8,9 +8,9 @@
                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="mr-2 fas fa-plus-square"></i></button>
                 <div class="dropdown-menu">
                     <button class="btn dropdown-item font-weight-bold" type="button" @click="$store.commit('portal_upload')">Share File</button>
-                    <button class="btn dropdown-item font-weight-bold" type="button">Invite Contact</button>
+                    <button class="btn dropdown-item font-weight-bold" type="button" @click="inviteContact">Invite Contact</button>
                     <div class="dropdown-divider"></div>
-                    <button class="btn dropdown-item font-weight-bold text-danger" type="button">Delete Portal</button>
+                    <button class="btn dropdown-item font-weight-bold text-danger" type="button" @click="removePortal()">Remove Portal</button>
                 </div>
             </div>
         </div>
@@ -25,8 +25,9 @@
             </div>
         </div>
 
-        <PortalModal v-if="modal" @approve-invite="submitInvite" />
+        <PortalModal v-if="modal" @approve-invite="submitInvite" :alert="nothingSelected" @clear-alert="nothingSelected = false"/>
         <PortalOptions v-if="fileOptions && portalFile" :file="viewFileOptions" />
+        <delete-modal :name="'Portal'" :warning="'All files associated with this client will be removed.'"></delete-modal>
 
     </div>
 </template>
@@ -38,6 +39,7 @@ import PortalTable from './portal/PortalTable.vue'
 import PortalUploader from './portal/PortalUploader.vue'
 import PortalModal from './portal/PortalModal.vue'
 import PortalOptions from './portal/PortalOptions.vue'
+import DeleteModal from '@/components/DeleteModal.vue'
 export default {
     name: 'Portal',
     props: ['clientDetails'],
@@ -46,12 +48,14 @@ export default {
         PortalTable,
         PortalUploader,
         PortalModal,
-        PortalOptions
+        PortalOptions,
+        DeleteModal
     },
     data() {
         return {
             showUploader: false,
-            viewFileOptions: null
+            viewFileOptions: null,
+            nothingSelected: false
         }
     },
     computed: {
@@ -69,17 +73,20 @@ export default {
         inviteContact() {
             this.$store.commit('portal_modal')
         },
-        submitInvite() {
-            if(!this.taxpayer && !this.spouse && !this.both) {
+        submitInvite(invite) {
+            if(!invite.taxpayer && !invite.spouse && !invite.both) {
                 this.nothingSelected = true
                 return
             }   this.$store.dispatch('inviteContact', {
                 client_id: this.clientDetails.id,
-                send_to: this.both ? this.both : this.taxpayer ? this.taxpayer : this.spouse ? this.spouse : null
+                send_to: invite.both ? invite.both : invite.taxpayer ? invite.taxpayer : invite.spouse ? invite.spouse : null
             })
         },
         setFile(file) {
             this.viewFileOptions = file
+        },
+        removePortal() {
+               this.$store.commit('toggleDeleteModal', {id: this.clientDetails.id, action: 'removePortal'})
         }
     },
     created() {

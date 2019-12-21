@@ -64,6 +64,9 @@ export default {
         update_portal_file(state, file) {
             const index = state.portal_files.findIndex(item => item.id === file.id)
             state.portal_files.splice(index, 1, file)
+        },
+        remove_portal(state, portal) {
+
         }
     },
     actions: {
@@ -81,8 +84,10 @@ export default {
             .then(response => {
                 context.commit('stopProcessing')
                 context.commit('portal_modal')
+                context.commit('successAlert', 'Invitations Sent')
             }).catch(error => {
                 context.commit('stopProcessing')
+                context.commit('errorMsgAlert', 'Oops, something went wrong')
                 console.log(error.response.data)
             })
         },
@@ -156,6 +161,21 @@ export default {
                 console.log(error.response.data)
                 context.commit('stopProcessing')
                 context.commit('errorMsgAlert', error.response.data)
+            })
+        },
+        removePortal(context, id) {
+            context.commit('startProcessing')
+            axios.delete('/delete-portal-users/' + id)
+            .then(response => {
+                context.commit('stopProcessing')
+                context.commit('remove_portal')
+                context.commit('toggleDeleteModal', null)
+                context.commit('successAlert', 'Portal Removed')
+            }).catch(error => {
+                context.commit('stopProcessing')
+                context.commit('toggleDeleteModal', null)
+                context.commit('errorMsgAlert', 'Oops, Something went wrong')
+                console.log(error.response.data)
             })
         }
     }

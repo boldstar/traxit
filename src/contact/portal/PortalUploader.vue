@@ -1,10 +1,13 @@
 <template>
     <div class="portal-wrapper">
-        <div class="col-4 p-0 portal-card">
+        <div class="p-0 portal-card">
             <div class="card-header">
                 <p class="m-0 font-weight-bold">Upload document to share with contact</p>
             </div>
-            <div class="vue-drop-wrapper">
+            <div class="portal-body">
+                <div class="portal-body-left">
+                <div class="py-2 bg-light file-title"><p class="m-0 font-weight-bold">File</p></div>
+                    <div class="vue-drop-wrapper">
                 <vue-dropzone 
                     ref="myVueDropzone" 
                     id="dropzone" 
@@ -18,32 +21,44 @@
                         <img  src="../../assets/upload_icon.png" alt="upload_icon" class="upload_icon_img">
                     </div>
                 </vue-dropzone>
-            </div>
-            <div class="py-2 bg-light"><p class="m-0 font-weight-bold">Preview</p></div>
-            <div>
-                <embed :src="docPreview" type="" v-if="docPreview" class="w-100">
-                <div v-else class="p-5 bg-secondary text-white font-weight-bold">Upload Preview</div>
-            </div>
-            <div class="py-2 bg-light"><p class="m-0 font-weight-bold">Options</p></div>
-            <div class="d-flex flex-column align-items-start pl-3 my-3">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheck1" v-model="options.downloadable">
-                    <label class="custom-control-label" for="customCheck1">Downloadable</label>
                 </div>
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheck2" v-model="options.signature_required">
-                    <label class="custom-control-label" for="customCheck2">Signature Required</label>
+                <div class="py-2 bg-light"><p class="m-0 font-weight-bold">Options</p></div>
+                <div class="d-flex flex-column align-items-start pl-3 my-3">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="customCheck1" v-model="options.downloadable">
+                        <label class="custom-control-label" for="customCheck1">Downloadable</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="customCheck2" v-model="options.signature_required">
+                        <label class="custom-control-label" for="customCheck2">Signature Required</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="customCheck3" v-model="options.payment_required">
+                        <label class="custom-control-label" for="customCheck3">Payment Required</label>
+                    </div>
                 </div>
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheck3" v-model="options.payment_required">
-                    <label class="custom-control-label" for="customCheck3">Payment Required</label>
+                <div class="py-2 bg-light"><p class="m-0 font-weight-bold">Message</p></div>
+                <div class="d-flex flex-column align-items-start">
+                    <textarea name="message" id="message" class="form-control" placeholder="Send a message or instructions with the file..." cols="10" rows="5" v-model="options.message"></textarea>
+                </div>
+                <div class="py-2 bg-light"><p class="m-0 font-weight-bold">Tax Year</p></div>
+                <div class="d-flex flex-column align-items-start p-3">
+                    <select name="year" id="year" v-model="options.tax_year" class="form-control">
+                        <option  disabled>{{selected}}</option>
+                        <option :value="value" v-for="(value, index) in years" :key="index">{{value}}</option>
+                    </select>
+            </div>
+                </div>
+                <div class="portal-body-right">
+                    <div class="py-2 bg-light"><p class="m-0 font-weight-bold">Preview</p></div>
+                    <div class="doc-preview">
+                        <embed :src="docPreview" type="" v-if="docPreview" class="doc-preview-content">
+                        <div v-else class="p-5 bg-secondary text-white font-weight-bold doc-preview-content">Upload Preview</div>
+                    </div>
                 </div>
             </div>
-            <div class="py-2 bg-light"><p class="m-0 font-weight-bold">Message</p></div>
-            <div class="d-flex flex-column align-items-start">
-                <textarea name="message" id="message" class="form-control" placeholder="Send a message or instructions with the file..." cols="10" rows="5" v-model="options.message"></textarea>
-            </div>
-            <div class="d-flex mt-3 card-footer">
+            
+            <div class="d-flex card-footer">
                 <button class="btn btn-primary btn-block font-weight-bold" @click="upload">
                     <span v-if="!processing">Share</span>
                     <span v-if="processing">Sharing...</span>
@@ -93,11 +108,20 @@ export default {
                 client_id: '',
                 tax_year: ''
             },
-            docPreview: ''
+            docPreview: '',
+            selected: 'Choose Tax Year...'
         }
     },
     computed: {
-        ...mapGetters(['processing'])
+        ...mapGetters(['processing']),
+        years() {
+            var currentYear = new Date().getFullYear(), years = [];
+            var startYear = currentYear - 10;  
+            while(startYear <= currentYear) {
+            years.push(startYear++)
+            } 
+            return years.reverse();
+        },
     },
     methods: {
         addFile(event) {
@@ -122,6 +146,9 @@ export default {
                 options: this.options
             })
         },
+    },
+    created() {
+        this.options.tax_year = this.selected
     }
 }
 </script>
@@ -144,6 +171,42 @@ export default {
         background: white;
         border-radius: 10px;
         align-self: center;
+        min-width: 600px;
+
+        .portal-body {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            .portal-body-left {
+                flex-grow: 1;
+
+                .file-title {
+                    border-right: 1px solid lightgray;
+                }
+            }
+
+            .portal-body-right {
+                width: 50%;
+                height: 100%;
+                min-height: 548px;
+
+                .doc-preview {
+                    height: 100%;
+                    min-height: 548px;
+
+                    .doc-preview-content {
+                        min-height: 548px;
+                        height: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1250px) {
+    .portal-card {
+        min-width: 800px;
     }
 }
 

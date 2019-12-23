@@ -7,10 +7,13 @@
             <div class="btn-group dropleft  m-0 align-self-center mr-3 ">
                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="mr-2 fas fa-plus-square"></i></button>
                 <div class="dropdown-menu">
-                    <button class="btn dropdown-item font-weight-bold" type="button" @click="$store.commit('portal_upload')">Share File</button>
-                    <button class="btn dropdown-item font-weight-bold" type="button" @click="inviteContact">Invite Contact</button>
+                    <button class="btn dropdown-item font-weight-bold" type="button" @click="$store.commit('portal_upload')"><i class="fas fa-file-upload mr-2 text-success"></i>Share File</button>
                     <div class="dropdown-divider"></div>
-                    <button class="btn dropdown-item font-weight-bold text-danger" type="button" @click="removePortal()">Remove Portal</button>
+                    <button class="btn dropdown-item font-weight-bold" type="button" @click="inviteContact"><i class="fas fa-user-plus mr-2 text-success"></i>Invite Contact</button>
+                    <div class="dropdown-divider"></div>
+                    <button class="btn dropdown-item font-weight-bold " type="button" @click="removeContact"><i class="fas fa-user-times mr-2 text-danger"></i>Remove Contact</button>
+                    <div class="dropdown-divider"></div>
+                    <button class="btn dropdown-item font-weight-bold " type="button" @click="removePortal()"><i class="fas fa-trash mr-2 text-danger"></i>Remove Portal</button>
                 </div>
             </div>
         </div>
@@ -25,9 +28,9 @@
             </div>
         </div>
 
-        <PortalModal v-if="modal" @approve-invite="submitInvite" :alert="nothingSelected" @clear-alert="nothingSelected = false"/>
-        <PortalOptions v-if="fileOptions && portalFile" :file="viewFileOptions" />
-        <delete-modal :name="'Portal'" :warning="'All files associated with this client will be removed.'"></delete-modal>
+        <PortalModal v-if="modal" :client="clientDetails" @approve-invite="submitInvite" :alert="nothingSelected" @clear-alert="nothingSelected = false"/>
+        <PortalOptions  :file="viewFileOptions" />
+        <delete-modal ></delete-modal>
 
     </div>
 </template>
@@ -86,7 +89,15 @@ export default {
             this.viewFileOptions = file
         },
         removePortal() {
-               this.$store.commit('toggleDeleteModal', {id: this.clientDetails.id, action: 'removePortal'})
+               this.$store.commit('toggleDeleteModal', {
+                    id: this.clientDetails.id, 
+                    action: 'removePortal',
+                    warning: 'All files associated with this client will be removed.',
+                    name: 'Portal'
+                })
+        },
+        removeContact() {
+
         }
     },
     created() {

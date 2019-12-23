@@ -2,16 +2,17 @@
     <b-modal v-model="modal" centered hide-footer title="Invite Contact To Portal">
           <div class="d-flex flex-column text-left">
               <div class="invite-alert" v-if="alert">Please select who to invite.</div>
-            <h5 class="mb-4">Who would you like to invite?</h5>
-             <div class="custom-control custom-radio">
+            <h5 class="mb-2">Who would you like to invite?</h5>
+            <p class="invite-info">Only showing contacts with an email address.</p>
+             <div class="custom-control custom-radio" v-if="client && client.email">
                 <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" v-model="invite.taxpayer" value="taxpayer" @click="invite.spouse = '', invite.both = '', $emit('clear-alert')">
                 <label class="custom-control-label" for="customRadio1">Taxpayer</label>
             </div>
-            <div class="custom-control custom-radio">
+            <div class="custom-control custom-radio" v-if="client && client.spouse_email">
                 <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" v-model="invite.spouse" value="spouse" @click="invite.taxpayer = '', invite.both = '', $emit('clear-alert')">
                 <label class="custom-control-label" for="customRadio2">Spouse</label>
             </div>
-            <div class="custom-control custom-radio">
+            <div class="custom-control custom-radio" v-if="client && client.email && client.spouse_email">
                 <input type="radio" id="customRadio3" name="customRadio" class="custom-control-input" v-model="invite.both" value="both" @click="invite.spouse = '', invite.taxpayer = '', $emit('clear-alert')">
                 <label class="custom-control-label" for="customRadio3">Both</label>
             </div>
@@ -33,7 +34,7 @@ import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 import {mapGetters} from 'vuex'
 export default {
     name: 'PortalModal',
-    props: ['alert'],
+    props: ['alert', 'client'],
     data() {
         return {
             invite: {
@@ -79,6 +80,15 @@ export default {
     border-radius: 5px;
     padding: 10px;
     margin: 10px;
+    color: white;
+    font-weight: bold;
+}
+
+.invite-info {
+    font-size: .8rem;
+    background: lightgray;
+    border-radius: 5px;
+    padding: 5px;
 }
 
 </style>

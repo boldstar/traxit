@@ -126,6 +126,7 @@ export default {
             })
         },
         getPortalFile(context, id) {
+            context.commit('portal_file', null)
             axios.get('/portal-file/' +id,  {responseType: 'blob'})
             .then(response => {
                 context.commit('portal_file', response.data)
@@ -170,6 +171,7 @@ export default {
                 context.commit('stopProcessing')
                 context.commit('remove_portal')
                 context.commit('toggleDeleteModal', null)
+                context.commit('portal_files', null)
                 context.commit('successAlert', 'Portal Removed')
             }).catch(error => {
                 context.commit('stopProcessing')

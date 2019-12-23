@@ -1,7 +1,13 @@
 <template>
-    <b-modal v-model="showOptions" centered hide-footer :title="file.document_name">
-        <div class="d-flex">
-            <div><pdf :src="fileUrl"></pdf></div>
+    <b-modal v-model="showOptions" centered hide-footer :title="file.document_name" class="options-modal">
+        <div class="card-header p-3 text-left">
+            <span class="font-weight-bold">Update Document Options or Status</span>
+        </div>
+        <div class="d-flex p-3">
+            <div class="pdf">
+                <pdf :src="fileUrl" v-if="portalFile"></pdf>
+                <div v-else><Spinner /></div>
+            </div>
             <div class="d-flex flex-column text-left file-body">
                 <div class="file-options">
                     <p>Options</p>
@@ -18,10 +24,18 @@
                 </div>
             </div>
         </div>
-        <div class="d-flex justify-content-between mt-4">
+        <div class="card-header p-3 text-left">
+            <span class="font-weight-bold">Update Tax Year</span>
+        </div>
+        <div class="p-3">
+            <select name="tax_year" id="tax_year" v-model="file.tax_year" class="form-control">
+                <option v-for="(year, index) in years" :key="index" :value="year">{{year}}</option>
+            </select>
+        </div>
+        <div class="d-flex justify-content-between p-3">
             <button class="btn btn-primary btn-sm font-weight-bold" :disabled="processing" @click="saveOptions">
               <span v-if="processing">Submitting...</span>
-              <span v-else>Submit Edit</span>
+              <span v-else>Submit Update</span>
             </button>
             <button type="button" class="btn btn-secondary btn-sm font-weight-bold" @click="$store.commit('file_options')">Cancel</button>
         </div>
@@ -34,6 +48,7 @@ import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 import PortalInput from './PortalInput.vue'
 import {mapGetters} from 'vuex'
 import pdf from 'vue-pdf'
+import Spinner from '@/components/Spinner.vue'
 export default {
     name: 'PortalOptions',
     props: ['file'],
@@ -45,7 +60,8 @@ export default {
     components:{
         'b-modal': bModal,
         pdf,
-        PortalInput
+        PortalInput,
+        Spinner
     },
     directives: {
         'b-modal': bModalDirective
@@ -62,6 +78,14 @@ export default {
         },
         fileUrl() {
             return URL.createObjectURL(new Blob([this.portalFile]));
+        },
+        years() {
+            var currentYear = new Date().getFullYear(), years = [];
+            var startYear = currentYear - 10;  
+            while(startYear <= currentYear) {
+            years.push(JSON.stringify(startYear++))
+            } 
+            return years.reverse();
         },
     },
     methods: {
@@ -96,4 +120,12 @@ export default {
     }
 }
 
+.options-modal .modal-body {
+    padding: 0!important;
+}
+
+
+.pdf {
+    flex-grow: 1;
+}
 </style>

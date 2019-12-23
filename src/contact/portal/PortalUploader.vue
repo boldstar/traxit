@@ -43,7 +43,7 @@
                 </div>
                 <div class="py-2 bg-light"><p class="m-0 font-weight-bold">Tax Year</p></div>
                 <div class="d-flex flex-column align-items-start p-3">
-                    <select name="year" id="year" v-model="options.tax_year" class="form-control">
+                    <select name="year" id="year" v-model="options.tax_year" class="form-control" :class="{'border-danger': noYear}" @change="noYear = false">
                         <option  disabled>{{selected}}</option>
                         <option :value="value" v-for="(value, index) in years" :key="index">{{value}}</option>
                     </select>
@@ -94,7 +94,9 @@ export default {
             files: [],
             dropzoneOptions: {
                 url: 'https://httpbin.org/post',
-                maxFilesize: 0.5,
+                maxFilesize: 2.0,
+                maxFiles: 1,
+                acceptedFiles: 'application/pdf',
                 addRemoveLinks: true,
                 dictRemoveFile: 'Remove',
                 dictCancelUpload: 'Cancel',
@@ -109,7 +111,8 @@ export default {
                 tax_year: ''
             },
             docPreview: '',
-            selected: 'Choose Tax Year...'
+            selected: 'Choose Tax Year...',
+            noYear: false
         }
     },
     computed: {
@@ -135,7 +138,10 @@ export default {
         },
         upload() {
             if(this.files.length < 1) return;
-
+            if(!this.options.tax_year || this.options.tax_year === this.selected) {
+                this.noYear = true
+                return
+            }
             var account = localStorage.getItem('fqdn_api_url')
             var index = account.indexOf('.')
             var fqdn = account.slice(0, index)

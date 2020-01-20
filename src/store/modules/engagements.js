@@ -365,6 +365,7 @@ export default {
               context.commit('addQuestion', response.data.question)
               context.commit('successAlert', response.data.message)
               context.commit('stopProcessing')
+              context.commit('showUpdateStatusModal')
             })
             .catch(error => {
               console.log(error.response.data)
@@ -389,6 +390,7 @@ export default {
             })
             .then(response => {
                 context.commit('updateQuestion', response.data)
+                context.commit('showUpdateStatusModal')
             })
             .catch(error => {
                 console.log(error)
@@ -402,6 +404,7 @@ export default {
             })
             .then(response => {
                 context.commit('updateAnswer', response.data)
+                context.commit('showUpdateStatusModal')
             })
             .catch(error => {
                 console.log(error)
@@ -415,6 +418,7 @@ export default {
             })
             .then(response => {
                 context.commit('updateAnswer', response.data)
+                context.commit('showUpdateStatusModal')
             })
             .catch(error => {
                 console.log(error.response.data)
@@ -432,6 +436,9 @@ export default {
               context.commit('showNoteModal', '')
               context.commit('engagementNotes', response.data.notes)
               context.commit('successAlert', response.data.message)
+              setTimeout(() => {
+                  context.commit('showUpdateStatusModal')
+              }, 500)
             })
             .catch(error => {
               context.commit('stopProcessing')
@@ -503,6 +510,6 @@ export default {
                 console.log(error.response.data)
                 context.commit('errorMsgAlert', error.response.data.message)
             })
-        }
+        },
     }
 }

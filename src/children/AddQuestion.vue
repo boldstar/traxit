@@ -147,11 +147,11 @@ export default {
         email_sent: false,
         question: this.question.question,
       })   
-      .then(() => {
+      .then(response => {
         this.verify = false
         this.question = "" 
         this.idForQuestion++
-        this.$router.push({path: '/engagement/' +this.engagement.id + '/questions'});
+        this.$router.push('/engagement/' + this.engagement.id  + '/details')
       })
     },
     addNewQuestionWithEmail(to) {
@@ -172,10 +172,10 @@ export default {
         question: this.question.question,
         send_to: to
       })   
-      .then(() => {
+      .then(response => {
         this.question = "" 
         this.idForQuestion++
-        this.$router.push({path: '/engagement/' +this.engagement.id});
+        this.$router.push('/engagement/' + this.engagement.id + '/details')
       })
     },
     validateEmail(to) {

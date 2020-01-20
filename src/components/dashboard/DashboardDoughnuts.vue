@@ -83,10 +83,18 @@ export default {
         }
     },
     computed: {
+        selectedWorkflow: {
+            get() {
+                return this.current_workflow
+            },
+            set(value) {
+                return value
+            }
+        },
         mapStatuses() {
         if(this.workflows && this.workflows.length >= 1) {
                
-                const selectedWorkflow = this.workflows.filter(workflow => workflow.id === this.current_workflow)
+                const selectedWorkflow = this.workflows.filter(workflow => workflow.id === this.selectedWorkflow)
 
                 const res = selectedWorkflow.map(({statuses}) => ({
                     statuses: statuses.reduce((acc, cur) => {
@@ -103,7 +111,7 @@ export default {
         },
         countEngagementsByStatus () {
         if(this.workflows && this.workflows.length >= 1) {
-            const selectedWorkflow = this.workflows.filter(workflow => workflow.id === this.current_workflow)
+            const selectedWorkflow = this.workflows.filter(workflow => workflow.id === this.selectedWorkflow)
     
             const res = selectedWorkflow.map(({statuses, id}) => ({
                 workflow_id: id,
@@ -121,7 +129,7 @@ export default {
             }
         },
         countEngagementsBySelectedWorkflow() {
-            const workflow = this.workflows.filter(workflow => workflow.id === this.current_workflow)
+            const workflow = this.workflows.filter(workflow => workflow.id === this.selectedWorkflow)
             const id = workflow.map(({id}) => id)
             const res = this.engagements.filter(engagement => engagement.workflow_id === id[0] && engagement.done == false).filter(eng => this.tax_year === 'All' ? eng : eng.year === this.tax_year).length
             
@@ -259,13 +267,13 @@ export default {
     },
     methods: {
         changeKey(id) {
-            this.current_workflow = id
+            this.selectedWorkflow = id
             this.selected = true
         },
         handleClick() {
             const index = this.$refs.slide[0].$parent.currentPage
             const id = this.$refs.slide[index].title
-            this.current_workflow = JSON.parse(id)
+            this.selectedWorkflow = JSON.parse(id)
         },
         getUnique(arr, comp) {
             const unique = arr.map(e => e[comp]).map((e, i, final) => final.indexOf(e) === i && i).filter(e => arr[e]).map(e => arr[e]);

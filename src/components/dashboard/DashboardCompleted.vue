@@ -11,7 +11,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <bar-chart class="w-100" :height="barHeight" :chart-data="barData"></bar-chart>
+                <bar-chart class="w-100" :height="barHeight" v-if="engagements && engagements.length > 0" :chart-data="barData"></bar-chart>
             </div>
         </div>
     </div>
@@ -58,6 +58,9 @@ export default {
         }
     },
     computed: {
+        mapWorkflows() {
+            return this.workflows.map(workflow => workflow.workflow)
+        },
         countEngagementsCompleteByWorkflow () {
         const workflows = this.workflows.map(({id, workflow}) => ({
             workflow_id: id,
@@ -122,8 +125,4 @@ export default {
     }
 }
 </script>
-
-<style>
-
-</style>
                     

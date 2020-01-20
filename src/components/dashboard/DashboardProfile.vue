@@ -6,7 +6,7 @@
                         <router-link :disabled="role != 'Admin'" to="/administrator/account" class="btn btn-secondary btn-sm font-weight-bold align-self-center" v-else>Add Bussiness Name</router-link>
                     </div>
                     <div class="card-body px-0 pb-0">
-                        <img class="ml-5" v-if="details && details.logo && logo" v-bind:src="logo" />
+                        <img class="ml-5 profile-logo" v-if="details && details.logo && logo" v-bind:src="logo" />
                         <router-link :disabled="role != 'Admin'" to="/administrator/account" class="btn btn-primary font-weight-bold my-5" v-else>Add Logo</router-link>
                         <hr>
                         <ul class="px-2">
@@ -187,6 +187,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss">
+    .profile-logo {
+        max-height: 150px;
+        width: auto;
+    }
 </style>

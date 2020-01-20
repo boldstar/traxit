@@ -2,7 +2,7 @@
   <div class="page-wrapper">
     <div v-if="engagement">
       <Alert v-if="successAlert" v-bind:message="successAlert" />
-      <div class="sending-mail" v-if="processing && !noteModal && !deleteNote && !timesheet"><i class="far fa-envelope mr-3"></i>Sending Mail...</div>
+      <div class="sending-mail" v-if="processing && !noteModal && !timesheet"><i class="far fa-envelope mr-3"></i>Sending Mail...</div>
 
       <!-- this is the header section of the engagement details -->
       <div class="flex-row justify-content-between d-flex mt-0 card-body shadow-sm py-2 px-3">
@@ -76,6 +76,8 @@
 
       <spinner v-if="detailsLoaded"></spinner>
     </div>
+
+    <UpdateStatusModal  :current_id="engagement.id" />
   </div>
 </template>
 
@@ -87,6 +89,7 @@ import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 import Spinner from '@/components/Spinner.vue'
 import NoteModal from '@/components/NoteModal.vue'
 import EditNoteModal from '@/components/EditNoteModal.vue'
+import UpdateStatusModal from '@/components/UpdateStatusModal.vue'
 
 export default {
   name: 'EngagementDetails',
@@ -109,7 +112,8 @@ export default {
     Alert,
     Spinner,
     NoteModal,
-    EditNoteModal
+    EditNoteModal,
+    UpdateStatusModal
   },
   directives: {
     'b-modal': bModalDirective

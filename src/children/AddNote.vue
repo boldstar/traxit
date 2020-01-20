@@ -54,7 +54,7 @@ export default {
         client_id: this.client.id,
         note: this.note.note,
       })   
-      .then(() => {
+      .then(response => {
         this.note = "" 
         this.idForNote++
         this.$router.push({path: '/contact/' +this.client.id+ '/notes', query: {alert: 'A new note has been added!'}});

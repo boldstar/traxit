@@ -73,7 +73,8 @@ export default new Vuex.Store({
     links: false,
     averagedays: '',
     engagementFilter: 'All',
-    timesheet: false
+    timesheet: false,
+    show_update_status_modal: false
   },
   getters: {
     chartDataLength(state) {
@@ -123,6 +124,9 @@ export default new Vuex.Store({
     },
     timesheet(state) {
       return state.timesheet
+    },
+    showUpdateStatusModal(state) {
+      return state.show_update_status_modal
     }
   },
   mutations: {
@@ -184,6 +188,9 @@ export default new Vuex.Store({
     },
     toggleTimesheet(state) {
       state.timesheet = !state.timesheet
+    },
+    showUpdateStatusModal(state) {
+      state.show_update_status_modal = !state.show_update_status_modal
     }
   },
   actions: {

@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import ContactSetupModal from '@/components/ContactSetupModal.vue'
-import WorkflowSetupModal from '@/components/WorkflowSetupModal.vue'
+import ContactSetupModal from '@/components/modals/ContactSetupModal.vue'
+import WorkflowSetupModal from '@/components/modals/WorkflowSetupModal.vue'
 import AccountSetup from '@/components/AccountSetup.vue'
 import {mapGetters} from 'vuex'
 export default {

@@ -42,7 +42,7 @@ import PortalTable from './portal/PortalTable.vue'
 import PortalUploader from './portal/PortalUploader.vue'
 import PortalModal from './portal/PortalModal.vue'
 import PortalOptions from './portal/PortalOptions.vue'
-import DeleteModal from '@/components/DeleteModal.vue'
+import DeleteModal from '@/components/modals/DeleteModal.vue'
 export default {
     name: 'Portal',
     props: ['clientDetails'],

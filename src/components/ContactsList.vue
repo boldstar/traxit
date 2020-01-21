@@ -121,7 +121,7 @@
 
 <script>
 import Spinner from '@/components/Spinner.vue'
-import ContactSetupModal from '@/components/ContactSetupModal.vue'
+import ContactSetupModal from '@/components/modals/ContactSetupModal.vue'
 export default {
     name: 'client-info',
     props: {

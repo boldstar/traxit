@@ -133,7 +133,7 @@
 import { mapGetters } from 'vuex'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
-import Business from '@/components/Business'
+import Business from '@/components/contact/Business'
 
 
 export default {

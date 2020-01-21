@@ -46,7 +46,7 @@ import Sidebar from '@/components/layout/Sidebar.vue'
 import NotifyModal from '@/components/modals/NotifyModal.vue'
 import MobileLinks from '@/components/layout/MobileLinks.vue'
 import Setup from '@/components/onboard/Setup.vue'
-import Timesheet from '@/components/Timesheet.vue'
+import Timesheet from '@/components/tsheets/Timesheet.vue'
 
 export default {
   props: ['admin'],

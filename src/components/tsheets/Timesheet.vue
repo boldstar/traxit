@@ -10,7 +10,7 @@
 
             <div class="mt-5 d-flex flex-column align-items-center" v-else>
                 <div class="d-flex justify-content-between w-100 px-5">
-                    <img src="../assets/tsheets_logo.png" alt="tsheets_logo" />
+                    <img src="../../assets/tsheets_logo.png" alt="tsheets_logo" />
                     <ConnectButton />
                 </div>
                 <p class="px-5 mt-2">Easily capture time of each engagement and your teams hours using the Tsheets Time Tracking integration. Simply click the <strong>"Connect Tsheets"</strong> button, provide your login information and you will be set to start tracking time today! If you do not have a Tsheets account <a href="https://www.tsheets.com">Click Here</a> to get signed up today.</p>

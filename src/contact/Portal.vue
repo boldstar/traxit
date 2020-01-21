@@ -37,7 +37,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import FileShareSvg from '@/components/FileShareSvg.vue'
+import FileShareSvg from '@/components/placeholders/FileShareSvg.vue'
 import PortalTable from './portal/PortalTable.vue'
 import PortalUploader from './portal/PortalUploader.vue'
 import PortalModal from './portal/PortalModal.vue'

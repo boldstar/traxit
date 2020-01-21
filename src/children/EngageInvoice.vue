@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import Invoice from '@/components/Invoice.vue'
-import InvoiceSvg from '@/components/InvoiceSvg.vue'
+import Invoice from '@/components/invoice/Invoice.vue'
+import InvoiceSvg from '@/components/invoice/InvoiceSvg.vue'
 export default {
     name: 'EngageInvoice',
     props: ['engagement'],

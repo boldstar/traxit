@@ -12,7 +12,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import ContactsList from '@/components/ContactsList'
+import ContactsList from '@/components/contact/ContactsList'
 import Alert from '@/components/alerts/Alert'
 
 

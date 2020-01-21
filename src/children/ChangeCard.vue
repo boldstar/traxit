@@ -38,7 +38,7 @@
 
 <script>
     import { createToken, Card } from 'vue-stripe-elements-plus'
-    import CardElement from '@/components/CardElement.vue'
+    import CardElement from '@/components/stripe/CardElement.vue'
     import {mapGetters} from 'vuex'
 
     export default {

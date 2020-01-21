@@ -15,19 +15,19 @@ export default [
         {
         path: 'account',
         name: 'app-account',
-        component: () => import('@/children/Account.vue'),
+        component: () => import('@/children/admin/Account.vue'),
             meta: meta,
             children: [
             {
                 path: 'edit-account',
                 name: 'edit-account',
-                component: () => import('@/children/EditAccount'),
+                component: () => import('@/children/admin/EditAccount'),
                 meta: meta
             },
             {
                 path: 'add-account',
                 name: 'add-account',
-                component: () => import('@/children/AddAccount'),
+                component: () => import('@/children/admin/AddAccount'),
                 meta: meta
             },
             ]
@@ -35,19 +35,19 @@ export default [
         {
             path: 'subscription',
             name: 'subscription',
-            component: () => import('@/children/Subscription.vue'),
+            component: () => import('@/children/admin/Subscription.vue'),
             meta: meta,
             children: [
             {
                 path: 'plans',
                 name: 'plans',
-                component: () => import('@/children/Plans.vue'),
+                component: () => import('@/children/admin/Plans.vue'),
                 meta: meta,
             },
             {
                 path: 'update-card',
                 name: 'update-card',
-                component: () => import('@/children/ChangeCard.vue'),
+                component: () => import('@/children/admin/ChangeCard.vue'),
                 meta: meta,
             },
             ]
@@ -55,13 +55,13 @@ export default [
         {
         path: 'workflows',
         name: 'workflows',
-        component: () => import('@/children/Workflows.vue'),
+        component: () => import('@/children/admin/Workflows.vue'),
             meta: meta,
             children: [
             {
                 path: 'edit-workflow/:workflow',
                 name: 'edit-workflow',
-                component: () => import('@/children/EditWorkflow.vue'),
+                component: () => import('@/children/admin/EditWorkflow.vue'),
                 meta: meta,
             }
             ]
@@ -69,13 +69,13 @@ export default [
         {
             path: 'team',
             name: 'team',
-            component: () => import('@/children/Team.vue'),
+            component: () => import('@/children/admin/Team.vue'),
             meta: meta,
             children: [
             {
                 path: 'user/:user',
                 name: 'user',
-                component: () => import('@/children/UserCrud.vue'),
+                component: () => import('@/children/admin/UserCrud.vue'),
                 meta: meta
             }
             ]
@@ -83,13 +83,13 @@ export default [
         {
             path: 'reports',
             name: 'reports',
-            component: () => import('@/children/Reports.vue'),
+            component: () => import('@/children/admin/Reports.vue'),
             meta: meta
         },
         {
             path: 'templates',
             name: 'templates',
-            component: () => import('@/children/Templates.vue'),
+            component: () => import('@/children/admin/Templates.vue'),
             meta: meta,
         },
     ]

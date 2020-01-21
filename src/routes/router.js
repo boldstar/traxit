@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import engagements from './routes/modules/engagements'
-import addnew from './routes/modules/addnew'
-import administrator from './routes/modules/administrator'
-import contact from './routes/modules/contact'
-import inbox from './routes/modules/inbox'
-import { routeOutsourceGuard } from './plugins/guards.js'
+import engagements from './modules/engagements'
+import addnew from './modules/addnew'
+import administrator from './modules/administrator'
+import contact from './modules/contact'
+import inbox from './modules/inbox'
+import { routeOutsourceGuard } from '../plugins/guards.js'
 
 Vue.use(Router)
 
@@ -14,7 +14,7 @@ const baseRoutes = [
     // this is the route for logging in to the app
     path: '/login',
     name: 'login',
-    component: () => import(/* webpackChunkName: "login" */ './views/Login.vue'),
+    component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue'),
     props: true,
     meta: {
       requiresVisitor: true,
@@ -25,7 +25,7 @@ const baseRoutes = [
     // this is the route for logging in to the app
     path: '/get-reset-link',
     name: 'get-reset-link',
-    component: () => import(/* webpackChunkName: "login" */ './views/EmailReset.vue'),
+    component: () => import(/* webpackChunkName: "login" */ '../views/EmailReset.vue'),
     props: true,
     meta: {
       requiresVisitor: true,
@@ -36,7 +36,7 @@ const baseRoutes = [
     // this is the route for logging in to the app
     path: '/reset-password/:token',
     name: 'reset-password',
-    component: () => import(/* webpackChunkName: "login" */ './views/Reset.vue'),
+    component: () => import(/* webpackChunkName: "login" */ '../views/Reset.vue'),
     props: true,
     meta: {
       passwordReset: true,
@@ -47,7 +47,7 @@ const baseRoutes = [
     // this is the dashboard view
     path: '/',
     name: 'dashboard',
-    component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue'),
+    component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
     beforeEnter: routeOutsourceGuard,
     meta: {
       requiresAuth: true,
@@ -61,7 +61,7 @@ const baseRoutes = [
     // this is the firm overview view
     path: '/firm',
     name: 'firm',
-    component: () => import(/* webpackChunkName: "firm" */ './views/Firm.vue'),
+    component: () => import(/* webpackChunkName: "firm" */ '../views/Firm.vue'),
     beforeEnter: routeOutsourceGuard,
     meta: {
       requiresAuth: true,
@@ -75,7 +75,7 @@ const baseRoutes = [
     // this is the list of all clients view
     path: '/contacts',
     name: 'contacts',
-    component: () => import(/* webpackChunkName: "about" */ './views/Contacts.vue'),
+    component: () => import(/* webpackChunkName: "about" */ '../views/Contacts.vue'),
     beforeEnter: routeOutsourceGuard,
     meta: {
       requiresAuth: true,
@@ -89,7 +89,7 @@ const baseRoutes = [
     // this is the path to view the tasks belonging to a user
     path: '/tasks',
     name: 'tasks',
-    component: () => import(/* webpackChunkName: "tasks" */ './views/Tasks.vue'),
+    component: () => import(/* webpackChunkName: "tasks" */ '../views/Tasks.vue'),
     meta: {
       requiresAuth: true,
       layout: "default",
@@ -101,7 +101,7 @@ const baseRoutes = [
   {
     path: '/profile',
     name: 'profile',
-    component: () => import(/* webpackChunkName: "tasks" */ './views/Profile.vue'),
+    component: () => import(/* webpackChunkName: "tasks" */ '../views/Profile.vue'),
     meta: {
       requiresAuth: true,
       layout: "default",
@@ -114,7 +114,7 @@ const baseRoutes = [
     // this is the path to view the list of all engagements
   path: '/engagements',
   name: 'engagements',
-  component: () => import(/* webpackChunkName: "engagements" */ './views/Engagements.vue'),
+  component: () => import(/* webpackChunkName: "engagements" */ '../views/Engagements.vue'),
   beforeEnter: routeOutsourceGuard,
   meta: {
       requiresAuth: true,
@@ -127,7 +127,7 @@ const baseRoutes = [
   {
     path: '/search',
     name: 'search',
-    component: () => import(/* webpackChunkName: "search" */ './views/Search.vue'),
+    component: () => import(/* webpackChunkName: "search" */ '../views/Search.vue'),
     meta: {
         requiresAuth: true,
         layout: "default",
@@ -139,7 +139,7 @@ const baseRoutes = [
   {
     path: '/404',
     name: '404',
-    component: () => import(/* webpackChunkName: "404" */ './components/placeholders/404.vue'),
+    component: () => import(/* webpackChunkName: "404" */ '../components/placeholders/404.vue'),
     meta: {
       passwordReset: true,
       layout: "reset",

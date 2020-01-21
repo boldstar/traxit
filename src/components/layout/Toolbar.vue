@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import Breadcrumb from '@/components/Breadcrumb.vue'
+import Breadcrumb from '@/components/layout/Breadcrumb.vue'
 import {mapGetters} from 'vuex'
 
 export default {

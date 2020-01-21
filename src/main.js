@@ -28,7 +28,7 @@ import Default from './layouts/Default.vue';
 import Landing from "./layouts/Landing.vue";
 import Admin from "./layouts/Admin.vue";
 import ResetPassword from "./layouts/ResetPassword.vue";
-import Breadcrumb from "./components/Breadcrumb.vue";
+import Breadcrumb from "./components/layout/Breadcrumb.vue";
 
 //these are global layout components and global breadcrumb
 Vue.component('default-layout', Default);

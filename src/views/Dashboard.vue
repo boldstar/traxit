@@ -63,7 +63,7 @@
 import DashboardDoughnuts from '@/components/dashboard/DashboardDoughnuts.vue'
 import DashboardProfile from '@/components/dashboard/DashboardProfile.vue'
 import DashboardCompleted from '@/components/dashboard/DashboardCompleted.vue'
-import Welcome from '@/components/Welcome.vue'
+import Welcome from '@/components/onboard/Welcome.vue'
 import Spinner from '@/components/Spinner.vue'
 import moment from 'moment'
 import { mapGetters } from 'vuex'

@@ -28,7 +28,7 @@
 <script>
 import ContactSetupModal from '@/components/modals/ContactSetupModal.vue'
 import WorkflowSetupModal from '@/components/modals/WorkflowSetupModal.vue'
-import AccountSetup from '@/components/AccountSetup.vue'
+import AccountSetup from '@/components/onboard/AccountSetup.vue'
 import {mapGetters} from 'vuex'
 export default {
     name: 'Setup',
@@ -133,7 +133,7 @@ export default {
     }
 
     .intro-img {
-        background-image: url('../assets/taskillustration.png');
+        background-image: url('../../assets/taskillustration.png');
         height: 300px;
         width: 100%;
         background-position: center;
@@ -142,7 +142,7 @@ export default {
         margin: 0 auto;
     }
     .workflow-img {
-        background-image: url('../assets/workflow-img.png');
+        background-image: url('../../assets/workflow-img.png');
         height: 300px;
         width: 90%;
         background-position: center;
@@ -151,7 +151,7 @@ export default {
         margin: 0 auto;
     }
     .contact-img {
-        background-image: url('../assets/contact-img.png');
+        background-image: url('../../assets/contact-img.png');
         height: 300px;
         width: 90%;
         background-position: center;
@@ -160,7 +160,7 @@ export default {
         margin: 0 auto;
     }
     .addnew-img {
-        background-image: url('../assets/add-new-img.png');
+        background-image: url('../../assets/add-new-img.png');
         height: 300px;
         width: 90%;
         background-position: center;
@@ -170,7 +170,7 @@ export default {
         border-radius: 5px;
     }
     .welcome-img {
-        background-image: url('../assets/Welcome.png');
+        background-image: url('../../assets/Welcome.png');
         height: 300px;
         width: 100%;
         background-position: center;
@@ -180,7 +180,7 @@ export default {
         border-radius: 5px;
     }
     .account-img {
-        background-image: url('../assets/traxit_logo_official.png');
+        background-image: url('../../assets/traxit_logo_official.png');
         height: 100px;
         width: 75%;
         background-position: center;

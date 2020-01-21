@@ -52,7 +52,6 @@ import DashboardDoughnuts from '@/components/dashboard/DashboardDoughnuts.vue'
 import DoughnutChart from '@/components/DoughnutChart.vue'
 import BarChart from '@/components/BarChart.vue'
 import LineChart from '@/components/LineChart.vue'
-import Welcome from '@/components/Welcome.vue'
 import Spinner from '@/components/Spinner.vue'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
@@ -65,7 +64,6 @@ export default {
         DoughnutChart,
         BarChart,
         LineChart,
-        Welcome,
         Spinner
     },
     data () {

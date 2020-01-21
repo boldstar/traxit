@@ -45,7 +45,7 @@ import Toolbar from '@/components/Toolbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import NotifyModal from '@/components/modals/NotifyModal.vue'
 import MobileLinks from '@/components/MobileLinks.vue'
-import Setup from '@/components/Setup.vue'
+import Setup from '@/components/onboard/Setup.vue'
 import Timesheet from '@/components/Timesheet.vue'
 
 export default {

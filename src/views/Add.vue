@@ -55,7 +55,7 @@
 
 <script>
 import Alert from '@/components/Alert.vue'
-import EngagementTypes from '@/components/EngagementType.vue'
+import EngagementTypes from '@/components/engagement/EngagementType.vue'
 import {mapGetters} from 'vuex'
 export default {
   name: 'add',

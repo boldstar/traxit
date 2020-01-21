@@ -10,24 +10,24 @@
         </div>
         <processing-bar v-if="processing"></processing-bar>
         <div class="files-body">
-            <FileSidebar :selected="sidebar_item" @change-item="changeSelectedItem" :inbox_length="inboxFiles" :url="'https://fileshare.traxit.io/?fqdn='+account"/>
-            <FileManager :key="reset" :files="filteredFiles" :current_file="currentFile" :account_email="accountDetails.email" v-if="all_files" @select-file="changeCurrentFile" @search-input="search" :search="searchFile" :selected="sidebar_item"/>
+            <InboxSidebar :selected="sidebar_item" @change-item="changeSelectedItem" :inbox_length="inboxFiles" :url="'https://fileshare.traxit.io/?fqdn='+account"/>
+            <InboxManager :key="reset" :files="filteredFiles" :current_file="currentFile" :account_email="accountDetails.email" v-if="all_files" @select-file="changeCurrentFile" @search-input="search" :search="searchFile" :selected="sidebar_item"/>
         </div>
 
     </div>
 </template>
 
 <script>
-import FileSidebar from '@/components/FileSidebar.vue'
-import FileManager from '@/components/FileManager.vue'
+import InboxSidebar from '@/components/inbox/InboxSidebar.vue'
+import InboxManager from '@/components/inbox/InboxManager.vue'
 import ProcessingBar from '@/components/ProcessingBar.vue'
 import {mapGetters} from 'vuex'
 
 export default {
-    name: 'Files',
+    name: 'Inbox',
     components: {
-        FileSidebar,
-        FileManager,
+        InboxSidebar,
+        InboxManager,
         ProcessingBar
     },
     data() {

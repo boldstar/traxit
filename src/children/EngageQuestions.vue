@@ -89,8 +89,6 @@ import Alert from '@/components/Alert.vue'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 import Spinner from '@/components/Spinner.vue'
-import NoteModal from '@/components/NoteModal.vue'
-import EditNoteModal from '@/components/EditNoteModal.vue'
 export default {
     name: 'EngageQuestions',
     props: ['engagement'],
@@ -98,8 +96,6 @@ export default {
         'b-modal': bModal,
         Alert,
         Spinner,
-        NoteModal,
-        EditNoteModal
     },
     directives: {
         'b-modal': bModalDirective

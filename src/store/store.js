@@ -16,7 +16,7 @@ import downloads from './modules/downloads'
 import setup from './modules/setup'
 import tsheets from './modules/tsheets'
 import invoice from './modules/invoice'
-import files from './modules/files'
+import inbox from './modules/inbox'
 import portal from './modules/portal'
 
 // this is for the abilities plug in.
@@ -55,7 +55,7 @@ export default new Vuex.Store({
     setup,
     tsheets,
     invoice,
-    files,
+    inbox,
     portal
   },
   state: {

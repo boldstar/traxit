@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import Alert from '@/components/Alert.vue'
+import Alert from '@/components/alerts/Alert.vue'
 import EngagementTypes from '@/components/engagement/EngagementType.vue'
 import {mapGetters} from 'vuex'
 export default {

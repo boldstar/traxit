@@ -13,7 +13,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import ContactsList from '@/components/ContactsList'
-import Alert from '@/components/Alert'
+import Alert from '@/components/alerts/Alert'
 
 
 export default {

@@ -27,7 +27,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import Spinner from '../components/Spinner.vue'
+import Spinner from '../components/loaders/Spinner.vue'
 import CurrentJob from './CurrentJob.vue'
 import CustomerList from './CustomerList.vue'
 import TimesheetTotals from './TimesheetTotals.vue'

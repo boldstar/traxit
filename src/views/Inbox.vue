@@ -20,7 +20,7 @@
 <script>
 import InboxSidebar from '@/components/inbox/InboxSidebar.vue'
 import InboxManager from '@/components/inbox/InboxManager.vue'
-import ProcessingBar from '@/components/ProcessingBar.vue'
+import ProcessingBar from '@/components/loaders/ProcessingBar.vue'
 import {mapGetters} from 'vuex'
 
 export default {

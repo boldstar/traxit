@@ -240,8 +240,8 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import Spinner from '@/components/Spinner.vue'
-import NoFirm from '@/components/NoFirm.vue'
+import Spinner from '@/components/loaders/Spinner.vue'
+import NoFirm from '@/components/placeholders/NoFirm.vue'
 import ConfirmModal from '@/components/modals/ConfirmModal.vue'
 
 export default {

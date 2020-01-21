@@ -75,8 +75,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import FormSelect from '@/components/FormSelect.vue'
-import Spinner from '@/components/Spinner.vue'
+import FormSelect from '@/components/forms/FormSelect.vue'
+import Spinner from '@/components/loaders/Spinner.vue'
 export default {
   name: 'StartEngagementForm',
   props: ['workflow'],

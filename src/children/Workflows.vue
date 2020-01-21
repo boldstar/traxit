@@ -111,7 +111,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import draggable from 'vuedraggable'
-import Alert from '@/components/Alert.vue'
+import Alert from '@/components/alerts/Alert.vue'
 import MessageModal from '@/components/modals/MessageModal.vue'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'

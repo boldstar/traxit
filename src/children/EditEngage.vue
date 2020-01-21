@@ -149,7 +149,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
-import CurrencyInput from '@/components/CurrencyInput.vue'
+import CurrencyInput from '@/components/forms/CurrencyInput.vue'
 
 export default {
   name: 'EditEngagement',

@@ -39,10 +39,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Alert from '@/components/Alert.vue'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
-import Spinner from '@/components/Spinner.vue'
+import Spinner from '@/components/loaders/Spinner.vue'
 import NoteModal from '@/components/engagement/NoteModal.vue'
 import EditNoteModal from '@/components/engagement/EditNoteModal.vue'
 
@@ -51,7 +50,6 @@ export default {
     props: ['engagement-notes', 'engagement'],
     components:{
         'b-modal': bModal,
-        Alert,
         Spinner,
         NoteModal,
         EditNoteModal

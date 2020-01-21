@@ -56,7 +56,7 @@
 <script>
 import {compressItems} from '../plugins/tsheets'
 import {mapGetters} from 'vuex'
-import Spinner from '../components/Spinner.vue'
+import Spinner from '../components/loaders/Spinner.vue'
 export default {
     name: 'CustomerList',
     props: ['customers', 'clock', 'current', 'previous'],

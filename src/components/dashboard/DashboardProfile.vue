@@ -48,11 +48,7 @@
 </template>
 
 <script>
-import DashboardDoughnuts from '@/components/dashboard/DashboardDoughnuts.vue'
-import DoughnutChart from '@/components/DoughnutChart.vue'
-import BarChart from '@/components/BarChart.vue'
-import LineChart from '@/components/LineChart.vue'
-import Spinner from '@/components/Spinner.vue'
+import LineChart from '@/components/charts/LineChart.vue'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
 
@@ -60,11 +56,7 @@ export default {
    name: 'DashboardProfile',
    props: ['workflows', 'tasks', 'engagements', 'tax_year', 'current_workflow', 'created_engagements', 'completed_engagements','details'],
    components: {
-        DashboardDoughnuts,
-        DoughnutChart,
-        BarChart,
         LineChart,
-        Spinner
     },
     data () {
         return {

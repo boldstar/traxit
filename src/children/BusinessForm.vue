@@ -50,7 +50,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import NumberInput from '@/components/NumberInput.vue'
+import NumberInput from '@/components/forms/NumberInput.vue'
 
 export default {
     name: 'BusinessForm',

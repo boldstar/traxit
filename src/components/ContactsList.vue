@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import Spinner from '@/components/Spinner.vue'
+import Spinner from '@/components/loaders/Spinner.vue'
 import ContactSetupModal from '@/components/modals/ContactSetupModal.vue'
 export default {
     name: 'client-info',

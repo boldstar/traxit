@@ -69,7 +69,7 @@ import { mapGetters, mapActions } from 'vuex'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 import { VueEditor } from "vue2-editor";
-import Spinner from '@/components/Spinner.vue'
+import Spinner from '@/components/loaders/Spinner.vue'
 
 export default {
 name: 'Pending',

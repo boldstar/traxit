@@ -66,7 +66,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import Alert from '@/components/Alert.vue'
+import Alert from '@/components/alerts/Alert.vue'
 
 export default {
   name: 'Templates',

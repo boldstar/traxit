@@ -72,7 +72,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Spinner from '@/components/Spinner.vue'
+import Spinner from '@/components/loaders/Spinner.vue'
 
 export default {
     name: 'contact-engagements',

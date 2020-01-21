@@ -139,7 +139,7 @@ const baseRoutes = [
   {
     path: '/404',
     name: '404',
-    component: () => import(/* webpackChunkName: "404" */ './components/404.vue'),
+    component: () => import(/* webpackChunkName: "404" */ './components/placeholders/404.vue'),
     meta: {
       passwordReset: true,
       layout: "reset",

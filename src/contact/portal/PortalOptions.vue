@@ -48,7 +48,7 @@ import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 import PortalInput from './PortalInput.vue'
 import {mapGetters} from 'vuex'
 import pdf from 'vue-pdf'
-import Spinner from '@/components/Spinner.vue'
+import Spinner from '@/components/loaders/Spinner.vue'
 export default {
     name: 'PortalOptions',
     props: ['file'],

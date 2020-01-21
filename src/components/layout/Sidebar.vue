@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import Toaster from '@/components/Toaster.vue'
+import Toaster from '@/components/alerts/Toaster.vue'
 import {mapGetters} from 'vuex'
 
 export default {

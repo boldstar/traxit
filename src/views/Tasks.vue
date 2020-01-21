@@ -221,9 +221,9 @@
 import { mapGetters, mapActions } from 'vuex'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
-import Spinner from '@/components/Spinner.vue'
-import ProcessingBar from '@/components/ProcessingBar.vue'
-import NoTask from '@/components/NoTask.vue'
+import Spinner from '@/components/loaders/Spinner.vue'
+import ProcessingBar from '@/components/loaders/ProcessingBar.vue'
+import NoTask from '@/components/placeholders/NoTask.vue'
 
 export default {
   name: 'UserTasks',

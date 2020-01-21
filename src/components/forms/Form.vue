@@ -24,8 +24,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import {formatNumber} from '../plugins/filters.js'
-import {formatDob} from '../plugins/filters.js'
+import {formatNumber, formatDob} from '../../plugins/filters.js'
 export default {
     name: 'Form',
     props: [

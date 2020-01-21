@@ -25,7 +25,7 @@
 
 <script>
 import {compressItems} from '../plugins/tsheets'
-import Spinner from '../components/Spinner.vue'
+import Spinner from '../components/loaders/Spinner.vue'
 export default {
     name: 'TimesheetSelects',
     props: ['cfields', 'items', 'current-fields', 'missing-fields', 'updating'],

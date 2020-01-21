@@ -84,8 +84,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
-import DateInput from '@/components/DateInput.vue'
-import NumberInput from '@/components/NumberInput.vue'
+import DateInput from '@/components/forms/DateInput.vue'
+import NumberInput from '@/components/forms/NumberInput.vue'
 
 export default {
   name: 'EditContact',

@@ -27,9 +27,9 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import Form from '@/components/Form.vue'
+import Form from '@/components/forms/Form.vue'
 import {validate, validateEmail} from '../plugins/validate.js'
-import Spinner from '@/components/Spinner.vue'
+import Spinner from '@/components/loaders/Spinner.vue'
 export default {
     name: 'UserCrud',
     components: {

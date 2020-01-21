@@ -39,8 +39,7 @@
 </template>
 
 <script>
-import DoughnutChart from '@/components/DoughnutChart.vue'
-import Spinner from '@/components/Spinner.vue'
+import DoughnutChart from '@/components/charts/DoughnutChart.vue'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
 
@@ -48,8 +47,7 @@ export default {
     name: 'DashboardDoughnuts',
     props: ['workflows', 'tasks', 'engagements', 'tax_year', 'current_workflow'],
     components: {
-        DoughnutChart,
-        Spinner
+        DoughnutChart
     },
     data () {
         return {

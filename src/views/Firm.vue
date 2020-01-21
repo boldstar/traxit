@@ -139,10 +139,10 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import Alert from '@/components/Alert.vue'
-import Spinner from '@/components/Spinner.vue'
-import ProcessingBar from '@/components/ProcessingBar.vue'
-import NoFirm from '@/components/NoFirm.vue'
+import Alert from '@/components/alerts/Alert.vue'
+import Spinner from '@/components/loaders/Spinner.vue'
+import ProcessingBar from '@/components/loaders/ProcessingBar.vue'
+import NoFirm from '@/components/placeholders/NoFirm.vue'
 import ConfirmModal from '@/components/modals/ConfirmModal.vue'
 
 export default {

@@ -53,7 +53,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import Cogs from '@/components/Cogs.vue'
+import Cogs from '@/components/loaders/Cogs.vue'
 export default {
     name: 'login-form',
     props: {

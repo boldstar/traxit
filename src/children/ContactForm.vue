@@ -101,8 +101,8 @@
 
 <script>
 import { mapActions } from 'vuex'
-import NumberInput from '@/components/NumberInput.vue'
-import DateInput  from '@/components/DateInput.vue'
+import NumberInput from '@/components/forms/NumberInput.vue'
+import DateInput  from '@/components/forms/DateInput.vue'
 
 export default {
   name: 'contact',

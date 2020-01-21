@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import BarChart from '@/components/BarChart.vue'
+import BarChart from '@/components/charts/BarChart.vue'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
 export default {

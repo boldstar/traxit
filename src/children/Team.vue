@@ -57,7 +57,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import Alert from '@/components/Alert.vue'
+import Alert from '@/components/alerts/Alert.vue'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 

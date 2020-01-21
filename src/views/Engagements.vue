@@ -13,7 +13,7 @@
 
 <script>
 import EngagementsList from '@/components/engagement/EngagementsList.vue'
-import Alert from '@/components/Alert.vue'
+import Alert from '@/components/alerts/Alert.vue'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
 

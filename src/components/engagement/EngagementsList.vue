@@ -23,7 +23,7 @@
                     </div>
                     <select class="custom-select" id="client_id" v-model="filterType">
                         <option> {{ type }}</option>
-                        <option v-for="(returntype, index) in filterReturnTypes" :key="index" v-if="returntype != null">
+                        <option v-for="(returntype, index) in filterReturnTypes" :key="index">
                         {{ returntype }}
                         </option>
                     </select>
@@ -49,7 +49,7 @@
                     </div>
                     <select class="custom-select text-capitalize" id="category" v-model="filterAssigned">
                         <option> {{ type }}</option>
-                        <option v-for="(name, index) in filterAssignedTo" :key="index" v-if="name != 'Complete'">
+                        <option v-for="(name, index) in filterAssignedTo" :key="index">
                         {{ name }}
                         </option>
                     </select>
@@ -345,7 +345,7 @@ export default {
             //filter duplicates
             const result = returns.filter((v, i) => returns.indexOf(v) === i)
             //return result
-            return result
+            return result.filter(r => r.return_type != null)
         },
         filterStatuses() {
             //map return types
@@ -369,7 +369,7 @@ export default {
             //filter duplicates
             const result = names.filter((v, i) => names.indexOf(v) === i)
 
-            return result
+            return result.filter(r => r.name != 'Complete')
         },
         filterYears() {
             //map year

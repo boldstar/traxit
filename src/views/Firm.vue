@@ -41,7 +41,7 @@
               </select>
             </div>
             <div class="card-body p-0 d-flex flex-column">
-                <ul class="p-0 text-left workflow-list" :class="{'show-workflow-list': showList}" v-for="workflows in countEngagementsByStatus" :key="workflows.workflow_id" v-if="workflows.workflow_id === selectedWorkflowID"  @keyup="switchStatus($event)">
+                <ul class="p-0 text-left workflow-list" :class="{'show-workflow-list': showList}" v-for="workflows in countEngagementsByStatus" :key="workflows.workflow_id"  @keyup="switchStatus($event)">
                   <li class="m-0 px-3 d-flex justify-content-between workflow-item" v-for="(status, index) in workflows.statuses" :key="index" :value="status.status"  @click="changeEngagementKey(status.status)" :class="{ active: engagementFilterKey === status.status, 'show-workflow-item': showList }">
                     <span class="text-muted status-text">{{ capitalize(status.status) }}</span>
                     <span class="badge badge-primary align-self-center">{{ status.count }}</span>
@@ -100,7 +100,7 @@
 
             <form @submit.prevent="updateChecked" class="d-flex mb-5" v-if="$can('delete', admin)">
               
-              <div class="input-group mr-3" v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id === selectedWorkflowID">
+              <div class="input-group mr-3" v-for="workflow in filteredWorkflow" :key="workflow.id">
                 <div class="input-group-prepend">
                   <label class="input-group-text bg-light font-weight-bold text-primary" for="option">Status</label>
                 </div>
@@ -119,7 +119,7 @@
                 </div>
                 <select class="custom-select" id="client_id" v-model="checkedEngagements.assigned_to">
                   <option  selected disabled>{{ option }}</option>
-                  <option v-for="user in users" :key="user.id" :value="user.id" v-if="user.name != 'Admin'">
+                  <option v-for="user in filteredUsers" :key="user.id" :value="user.id">
                     {{ user.name }}
                   </option>
                 </select>
@@ -178,6 +178,12 @@ export default {
   },
   computed: {
     ...mapGetters(['allEngagements', 'users', 'allWorkflows', 'successAlert', 'processing', 'confirmDownload', 'timesheet']),
+    filteredUsers() {
+      return this.users.filter(u => u.name != 'Admin')
+    },
+    filteredWorkflow() {
+      return this.allWorkflows.filter(w => w.id == this.selectedWorkflowID)
+    },
     filteredEngagements () {
       return this.allEngagements.sort((a,b) => {
       let modifier = 1;
@@ -189,7 +195,7 @@ export default {
       return !this.searchEngagement || engagement.name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 });
     },
     countEngagementsByStatus () {
-       const res = this.allWorkflows.map(({statuses, id}) => ({
+       const res = this.allWorkflows.filter(w =>w.id == this.selectedWorkflowID).map(({statuses, id}) => ({
         workflow_id: id,
         statuses: statuses.reduce((acc, cur) => {
 

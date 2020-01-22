@@ -341,11 +341,11 @@ export default {
         },
         filterReturnTypes() {
             //map return types
-            const returns = this.engagements.map(engagement => engagement.return_type)
+            const returns = this.engagements.filter(r => r.return_type != null).map(engagement => engagement.return_type)
             //filter duplicates
             const result = returns.filter((v, i) => returns.indexOf(v) === i)
             //return result
-            return result.filter(r => r.return_type != null)
+            return result
         },
         filterStatuses() {
             //map return types
@@ -365,11 +365,11 @@ export default {
         },
         filterAssignedTo() {
             //map names
-            const names = this.engagements.map(engagement => engagement.assigned_to)
+            const names = this.engagements.filter(r => r.assigned_to != 'Complete').map(engagement => engagement.assigned_to)
             //filter duplicates
             const result = names.filter((v, i) => names.indexOf(v) === i)
 
-            return result.filter(r => r.name != 'Complete')
+            return result
         },
         filterYears() {
             //map year

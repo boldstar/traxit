@@ -84,7 +84,7 @@ export default {
      computedUsers() {
        if(this.users.length > 0 ) {
           const index = 0
-  		    return this.users.filter(u => u.user != 'Admin').map((user) =>({id: user.id, user: user.name, email: user.email, role: user.roles[index]}))
+  		    return this.users.filter(u => u.name != 'Admin').map((user) =>({id: user.id, user: user.name, email: user.email, role: user.roles[index]}))
        }  
     }
   },

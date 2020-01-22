@@ -9,7 +9,7 @@
       <Alert v-if="passwordAlert" v-bind:message="passwordAlert.message" />
       <Alert v-if="successAlert" v-bind:message="successAlert" />
       <Alert v-if="processing" v-bind:message="'Sending Email To The Requested User...'" />
-      <table class="mt-4 table border table-light table-hover text-left">
+      <table class="mt-4 table border table-light table-hover text-left" v-if="users.length > 0">
         <thead class="text-primary hover">
             <tr>
                 <th scope="col">Name</th>
@@ -21,7 +21,7 @@
             </tr>
         </thead> 
         <tbody class="client-info table-bordered">
-            <tr v-for="(user, index) in computedUsers"  :key="index" v-if="users.length > 0 && user.user != 'Admin'">
+            <tr v-for="(user, index) in computedUsers"  :key="index">
                 <td class="text-capitalize">{{ user.user }}</td>
                 <td class="hide-row">{{ user.email }}</td>
                 <td class="hide-row">{{ user.role.name }}</td>
@@ -84,7 +84,7 @@ export default {
      computedUsers() {
        if(this.users.length > 0 ) {
           const index = 0
-  		    return this.users.map((user) =>({id: user.id, user: user.name, email: user.email, role: user.roles[index]}))
+  		    return this.users.filter(u => u.user != 'Admin').map((user) =>({id: user.id, user: user.name, email: user.email, role: user.roles[index]}))
        }  
     }
   },

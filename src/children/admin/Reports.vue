@@ -88,7 +88,7 @@
                 <option v-for="(workflow, index) in allWorkflows" :key="index" :value="workflow.id">{{workflow.workflow}}</option>
               </select>
               <label for="workflow" class="ml-3 text-primary font-weight-bold" v-if="filters.workflow != option">Status</label>
-              <div class="mb-3" v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id === filters.workflow">
+              <div class="mb-3" v-for="workflow in filteredWorkflows" :key="workflow.id">
                 <select class="custom-select" id="status" v-model="filters.status">
                   <option  selected disabled>{{ option }}</option>
                   <option v-for="status in workflow.statuses" :key="status.id" :value="status.status">
@@ -176,6 +176,9 @@ export default {
             years.push(startYear++);
         }   
         return years;
+    },
+    filteredWorkflows() {
+      return this.allWorkflows.filter(workflow => workflow.id == this.filters.workflow)
     }
   },
   methods: {

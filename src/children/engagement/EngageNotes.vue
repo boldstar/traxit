@@ -10,24 +10,26 @@
             <div v-if="engagementNotes.length <= 0" class="card-body shadow-sm note-div">
                 <span class="font-weight-bold">There are currrently no notes</span>
             </div>
-            <div class="card-body border-bottom py-0 text-left note-div" v-for="(note, index) in engagementNotes" :key="index" v-if="engagementNotes.length > 0">
-                <div class="note p-1">
-                <div v-html="note.note"></div>
-                <div class="d-flex justify-content-between">
-                    <div class="d-flex">
-                    <span class="note-date mr-1" v-if="note.username != null">Created By: {{ note.username }} | </span>
-                    <span class="note-date">{{ note.created_at | formatDate }}</span>
+            <div v-if="engagementNotes.length > 0">
+                <div class="card-body border-bottom py-0 text-left note-div" v-for="(note, index) in engagementNotes" :key="index">
+                    <div class="note p-1">
+                    <div v-html="note.note"></div>
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex">
+                        <span class="note-date mr-1" v-if="note.username != null">Created By: {{ note.username }} | </span>
+                        <span class="note-date">{{ note.created_at | formatDate }}</span>
+                        </div>
+                        <div class="d-flex">     
+                        <button type="button" class="edit-btn" @click="editNote(note)">Edit</button>  
+                        <span v-if="deleteNote && note.id == selectedNote" class="note-span">Are you sure?</span>
+                        <button type="button" class="note-btn">
+                            <span v-if="!deleteNote" @click="confirmDelete(note.id)">Delete</span>
+                            <span v-if="deleteNote && note.id == selectedNote" @click="deleteENote(note.id)">Yes</span>
+                        </button>
+                        <button class="note-btn ml-2" v-if="deleteNote && note.id == selectedNote" @click="deleteNote = false">Cancel</button>
+                        </div>
+                    </div>  
                     </div>
-                    <div class="d-flex">     
-                    <button type="button" class="edit-btn" @click="editNote(note)">Edit</button>  
-                    <span v-if="deleteNote && note.id == selectedNote" class="note-span">Are you sure?</span>
-                    <button type="button" class="note-btn">
-                        <span v-if="!deleteNote" @click="confirmDelete(note.id)">Delete</span>
-                        <span v-if="deleteNote && note.id == selectedNote" @click="deleteENote(note.id)">Yes</span>
-                    </button>
-                    <button class="note-btn ml-2" v-if="deleteNote && note.id == selectedNote" @click="deleteNote = false">Cancel</button>
-                    </div>
-                </div>  
                 </div>
             </div>
         </div>

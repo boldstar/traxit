@@ -89,13 +89,13 @@
 
         <label for="user" class="w-100">Currently Assigned To<span class="text-danger">*</span></label>
         <select class="form-control mb-2" id="user" v-model="engagement.assigned_to" :class="{'input-error':assignAUser}" @change="clearAlarm">
-          <option v-for="user in users" :key="user.id" :value="user.name" v-if="user.name != 'Admin'">
+          <option v-for="user in computedUsers" :key="user.id" :value="user.name">
             {{ user.name }}
           </option>
         </select>
         <small class="text-danger" v-if="assignAUser">Please Assign Task To User</small>
 
-        <div class="mb-2" v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id === engagement.workflow_id">
+        <div class="mb-2" v-for="workflow in computedWorkflows" :key="workflow.id">
             <label for="status">Status<span class="text-danger">*</span></label>
             <select class="form-control" id="status" v-model="engagement.status">
             <option v-for="status in workflow.statuses" :key="status.id" :value="status.status">
@@ -194,6 +194,12 @@ export default {
         } 
         return years.reverse();
     },
+    computedUsers() {
+      this.users.filter(user => user.name != 'Admin')
+    },
+    computedWorkflows() {
+      this.allWorkflows.filter(w => w.id == this.engagement.workflow_id)
+    }
   },
   methods: {
     ...mapActions(['updateEngagement']),

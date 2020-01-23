@@ -23,29 +23,31 @@
         <div v-else>
 
             <div v-if="!notesLoaded">
-                <div class="card mb-3 shadow-sm p-0" v-for="(note, index) in clientNotes" :key="index" v-if="$route.name == 'notes'">
-                    <div class="card-header text-left font-weight-bold">
-                        Note:
-                    </div>
-                    <div class="card-body text-left">
-                        <span v-html="note.note"></span>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between">
-                        <router-link :to="'/contact/' + client.id + '/notes/edit-note/' +note.id " class="btn btn-sm btn-primary ml-auto"><i class="far fa-edit mr-2"></i>Edit</router-link>
-                        <button class="btn btn-sm btn-outline-secondary ml-3" @click="modalShow = !modalShow">Delete</button>
-                    </div>
+                <div v-if="$route.name == 'notes'">
+                    <div class="card mb-3 shadow-sm p-0" v-for="(note, index) in clientNotes" :key="index">
+                        <div class="card-header text-left font-weight-bold">
+                            Note:
+                        </div>
+                        <div class="card-body text-left">
+                            <span v-html="note.note"></span>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <router-link :to="'/contact/' + client.id + '/notes/edit-note/' +note.id " class="btn btn-sm btn-primary ml-auto"><i class="far fa-edit mr-2"></i>Edit</router-link>
+                            <button class="btn btn-sm btn-outline-secondary ml-3" @click="modalShow = !modalShow">Delete</button>
+                        </div>
 
-                    <b-modal v-model="modalShow" id="myQuestion" ref="myQuestion" hide-footer title="Delete Question">
-                        <div class="d-block text-left">
-                            <h5>Are you sure you want to delete question?</h5>
-                            <br>
-                            <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
-                        </div>
-                        <div class="d-flex">
-                            <b-btn class="mt-3" variant="danger" @click="modalShow = false">Cancel</b-btn>
-                            <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteNote(client, note.id)">Confirm</b-btn>
-                        </div>
-                    </b-modal>
+                        <b-modal v-model="modalShow" id="myQuestion" ref="myQuestion" hide-footer title="Delete Question">
+                            <div class="d-block text-left">
+                                <h5>Are you sure you want to delete question?</h5>
+                                <br>
+                                <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
+                            </div>
+                            <div class="d-flex">
+                                <b-btn class="mt-3" variant="danger" @click="modalShow = false">Cancel</b-btn>
+                                <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteNote(client, note.id)">Confirm</b-btn>
+                            </div>
+                        </b-modal>
+                    </div>
                 </div>
             </div>
 

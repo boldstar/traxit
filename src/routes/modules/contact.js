@@ -16,7 +16,7 @@ export default [
         // this is the path to view the account of the client
         path: 'account',
         name: 'account',
-        component: () => import('@/contact/Account.vue'),
+        component: () => import('@/children/contact/Account.vue'),
             meta: {
             requiresAuth: true,
             layout: "default",
@@ -67,7 +67,7 @@ export default [
         // this is the path to view the engagements that belong to the client
         path: 'engagements',
         name: 'contact-engagements',
-        component: () => import('@/contact/ContactEngagements.vue'),
+        component: () => import('@/children/contact/ContactEngagements.vue'),
             meta: {
             requiresAuth: true,
             layout: "default",
@@ -94,7 +94,7 @@ export default [
         // this is the path to view the notes belonging to client
             path: 'notes',
             name: 'notes',
-            component: () => import('@/contact/Notes.vue'),
+            component: () => import('@/children/contact/Notes.vue'),
             meta: {
             requiresAuth: true,
             layout: "default",
@@ -130,7 +130,7 @@ export default [
         {
         // this is the path to view the pending belonging to the client
         path: 'pending',
-        component: () => import('@/contact/Pending.vue'),
+        component: () => import('@/children/contact/Pending.vue'),
             meta: {
             requiresAuth: true,
             layout: "default",
@@ -142,7 +142,7 @@ export default [
         {
             // this is the path to view the portal belonging to the client
             path: 'portal',
-            component: () => import('@/contact/Portal.vue'),
+            component: () => import('@/children/contact/Portal.vue'),
             meta: {
             requiresAuth: true,
             layout: "default",
@@ -151,18 +151,6 @@ export default [
             ]
             },
         },
-        // {
-        //     // this is the path to view the portal belonging to the client
-        //     path: 'files',
-        //     component: () => import('@/contact/Files.vue'),
-        //     meta: {
-        //     requiresAuth: true,
-        //     layout: "default",
-        //     breadCrumb: [
-        //         { name: 'Files' }
-        //     ]
-        //     },
-        // },
     ],
     },
 ]

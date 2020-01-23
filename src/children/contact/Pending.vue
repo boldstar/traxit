@@ -4,43 +4,49 @@
         <div class="header p-0 d-flex flex-row justify-content-between mt-2 mb-4 shadow-sm">
             <div class="ml-3 pr-2  h3 align-self-center m-0">
                 <span><i class="far fa-question-circle text-primary"></i></span> |
-                <span>{{ filteredQuestions.length }}</span>
+                <span>{{ pendingQuestions.length }}</span>
             </div>
         </div>
 
-        <div v-for="(engagement, index) in filteredQuestions" :key="index" v-if="!detailsLoaded"> 
-            <div class="card mb-3"  v-for="(question, index) in engagement.questions" :key="index" v-if="question.answered == 0">
-            <div class="card-header d-flex justify-content-between">
-                <div class="d-flex">
-                    <i class="far fa-folder-open align-self-center mr-2 text-primary"></i>
-                    <div class="font-weight-bold">
-                        <router-link :to="'/engagement/'+engagement.id">
-                            {{ engagement.return_type }}
-                        </router-link>
+        <div v-if="!loading">
+            <div v-for="(engagement, index) in engagementQuestions" :key="index"> 
+                <div class="card mb-3"  v-for="(question, index) in engagement.questions" :key="index" v-show="question.answered != true">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="d-flex">
+                            <i class="far fa-folder-open align-self-center mr-2 text-primary"></i>
+                            <div class="font-weight-bold">
+                                <router-link :to="'/engagement/'+engagement.id">
+                                    {{ engagement.return_type }}
+                                </router-link>
+                            </div>
+                            <div class="ml-3">
+                                <span class="email-sent-flag" v-if="question.email_sent == true"><i class="fas fa-check mr-2 text-primary"></i>Email Sent</span>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="font-weight-bold">
+                                Created On:
+                            </span>
+                            <span>
+                                {{ question.created_at | formatDate }}
+                            </span>
+                        </div>
                     </div>
-                    <div class="ml-3">
-                        <span class="email-sent-flag" v-if="question.email_sent == true"><i class="fas fa-check mr-2 text-primary"></i>Email Sent</span>
+                    <div class="card-body bg-light d-flex justify-content-between">
+                        <div class="h4 mr-5 text-left">
+                            <span v-html="question.question"></span>
+                        </div>
+                        <div class="ml-5 d-flex align-self-center">
+                            <button class="btn btn-sm btn-primary font-weight-bold" @click="answerQuestion(question.id)">Answer</button>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <span class="font-weight-bold">
-                        Created On:
-                    </span>
-                    <span>
-                        {{ question.created_at | formatDate }}
-                    </span>
-                </div>
-            </div>
-            <div class="card-body bg-light d-flex justify-content-between">
-                <div class="h4 mr-5 text-left">
-                    <span v-html="question.question"></span>
-                </div>
-                <div class="ml-5 d-flex align-self-center">
-                    <button class="btn btn-sm btn-primary font-weight-bold" @click="answerQuestion(question.id)">Answer</button>
                 </div>
             </div>
         </div>
-   </div>
+
+        <div v-if="!loading && pendingQuestions.length < 1">
+            <p class="font-weight-bold">There are currently<br> no pending questions</p>
+        </div>
 
    <!-- this is the modal to update the question -->
             <b-modal ref="modal" hide-footer title="Answer Question" size="lg">
@@ -60,7 +66,7 @@
             </b-modal>
 
 
-        <spinner v-if="detailsLoaded"></spinner>
+        <spinner v-if="loading"></spinner>
     </div>
 </template>
 
@@ -75,7 +81,7 @@ export default {
 name: 'Pending',
 data() {
     return {
-        detailsLoaded: false,
+        loading: false,
         questionToAnswer: null,
         question: {
             answer: '',
@@ -97,12 +103,13 @@ directives: {
 },
 computed: {
     ...mapGetters(['engagementQuestions',]),
-    filteredQuestions () {
-        const engagement =  this.engagementQuestions.filter((engagement) => {
-            return engagement.questions.filter((question) => question.answered === 0).length
-        })
-        return engagement
+    questions () {
+        var questions = this.engagementQuestions.map(e => e.questions)
+        return questions.flat()
     },
+    pendingQuestions() {
+            return this.questions.filter(q => q ? q.answered == false : null)
+    }
 },
 methods: {
     showModal() {
@@ -132,10 +139,10 @@ methods: {
 },
 created: function(){
     this.$store.dispatch('getEngagementQuestions', this.$route.params.id);
-    this.detailsLoaded = true;
+    this.loading = true;
     var self = this;
     setTimeout(() => {
-        self.detailsLoaded = false;
+        self.loading = false;
     }, 3000)
 },
     

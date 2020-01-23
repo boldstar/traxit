@@ -38,10 +38,10 @@
 <script>
 import {mapGetters} from 'vuex'
 import FileShareSvg from '@/components/placeholders/FileShareSvg.vue'
-import PortalTable from './portal/PortalTable.vue'
-import PortalUploader from './portal/PortalUploader.vue'
-import PortalModal from './portal/PortalModal.vue'
-import PortalOptions from './portal/PortalOptions.vue'
+import PortalTable from '@/components/portal/PortalTable.vue'
+import PortalUploader from '@/components/portal/PortalUploader.vue'
+import PortalModal from '@/components/portal/PortalModal.vue'
+import PortalOptions from '@/components/portal/PortalOptions.vue'
 import DeleteModal from '@/components/modals/DeleteModal.vue'
 export default {
     name: 'Portal',

@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import {daysTotal, weeksTotal, currentTotal, distance, isEmpty} from '../plugins/tsheets'
+import {daysTotal, weeksTotal, currentTotal, distance, isEmpty} from '../../plugins/tsheets'
 import {mapGetters} from 'vuex'
 export default {
     name: 'TimesheetTotals',

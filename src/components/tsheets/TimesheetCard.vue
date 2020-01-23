@@ -21,20 +21,20 @@
             </div>
         </div>
 
-         <img src="../assets/tsheets_logo.png" alt="tsheets_logo" class="mt-3" />
+         <img src="../../assets/tsheets_logo.png" alt="tsheets_logo" class="mt-3" />
     </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
-import Spinner from '../components/loaders/Spinner.vue'
-import CurrentJob from './CurrentJob.vue'
-import CustomerList from './CustomerList.vue'
-import TimesheetTotals from './TimesheetTotals.vue'
-import TeamTimesheet from './TeamTimesheet.vue'
-import TimesheetSelects from './TimesheetSelects.vue'
-import TimesheetAlert from './TimesheetAlert.vue'
-import {requiredFields, validateFields, compressItems} from '../plugins/tsheets'
+import Spinner from '@/components/loaders/Spinner.vue'
+import CurrentJob from '@/components/tsheets/CurrentJob.vue'
+import CustomerList from '@/components/tsheets/CustomerList.vue'
+import TimesheetTotals from '@/components/tsheets/TimesheetTotals.vue'
+import TeamTimesheet from '@/components/tsheets/TeamTimesheet.vue'
+import TimesheetSelects from '@/components/tsheets/TimesheetSelects.vue'
+import TimesheetAlert from '@/components/tsheets/TimesheetAlert.vue'
+import {requiredFields, validateFields, compressItems} from '../../plugins/tsheets'
 export default {
     name: 'TimesheetCard',
     data() {

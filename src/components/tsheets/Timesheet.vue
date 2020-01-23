@@ -22,8 +22,8 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import TimesheetCard from '@/tsheets/TimesheetCard.vue'
-import ConnectButton from '@/tsheets/ConnectButton.vue'
+import TimesheetCard from '@/components/tsheets/TimesheetCard.vue'
+import ConnectButton from '@/components/tsheets/ConnectButton.vue'
 
 export default {
     name: 'Timesheet',

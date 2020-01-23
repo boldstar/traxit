@@ -18,7 +18,7 @@
                 <span v-else>Clock Out</span>
             </button>
         </li>
-        <li class="d-flex justify-content-between p-2 border previous-job-li" v-if="previousTimesheets && job.id != currentJob.id" v-for="job in previousTimesheets" :key="job.id" @mouseover="showClockIn(job.id)" @mouseout="hideClockIn">
+        <li class="d-flex justify-content-between p-2 border previous-job-li" v-for="job in previousTimesheets" :key="job.id" @mouseover="showClockIn(job.id)" @mouseout="hideClockIn">
           <span class="align-self-center" :class="{'py-1': job.id != hoveredId}">
             <i class="fas fa-history mr-2"></i>{{ job.name }}
           </span>
@@ -54,9 +54,9 @@
 </template>
 
 <script>
-import {compressItems} from '../plugins/tsheets'
+import {compressItems} from '../../plugins/tsheets'
 import {mapGetters} from 'vuex'
-import Spinner from '../components/loaders/Spinner.vue'
+import Spinner from '@/components/loaders/Spinner.vue'
 export default {
     name: 'CustomerList',
     props: ['customers', 'clock', 'current', 'previous'],
@@ -77,7 +77,7 @@ export default {
             return this.current && this.current.jobcode_id ? compressItems(this.customers).filter(code => code.id == this.current.jobcode_id)[0] : false
         },
         previousTimesheets() {
-            return this.previous && this.previous.supplemental_data ? this.previous.supplemental_data.jobcodes : null
+            return this.previous && this.previous.supplemental_data ? this.previous.supplemental_data.jobcodes.filter(j => j.id != this.currentJob) : null
         }
     },
     methods: {

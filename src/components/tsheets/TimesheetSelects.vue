@@ -17,15 +17,15 @@
             >
                <option disabled value="">{{ option }} <span v-if="!field.required">(Optional)</span> </option>
                <option :selected="customFields[field.id]" v-if="customFields[field.id]">{{customFields[field.id]}}</option>
-                <option :value="[item.id, item.customfield_id]" v-for="(item, index) in serviceItems" :key="index" v-if="item.customfield_id === field.id &&item.name != customFields[field.id]">{{ item.name }}</option>
+                <option :value="[item.id, item.customfield_id]" v-for="(item, index) in serviceItems" :key="index" v-show="item.customfield_id === field.id &&item.name != customFields[field.id]">{{ item.name }}</option>
             </select>
         </div>
     </div>
 </template>
 
 <script>
-import {compressItems} from '../plugins/tsheets'
-import Spinner from '../components/loaders/Spinner.vue'
+import {compressItems} from '../../plugins/tsheets'
+import Spinner from '@/components/loaders/Spinner.vue'
 export default {
     name: 'TimesheetSelects',
     props: ['cfields', 'items', 'current-fields', 'missing-fields', 'updating'],
@@ -33,7 +33,7 @@ export default {
     computed: {
         serviceItems() {
             return compressItems(this.items)
-        }
+        },
     },
     data() {
         return {

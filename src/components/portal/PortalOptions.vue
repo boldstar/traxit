@@ -1,5 +1,5 @@
 <template>
-    <b-modal v-model="showOptions" centered hide-footer :title="file.document_name" class="options-modal">
+    <b-modal v-model="showOptions" centered hide-footer :title="file ? file.document_name : 'Document'" class="options-modal">
         <div class="card-header p-3 text-left">
             <span class="font-weight-bold">Update Document Options or Status</span>
         </div>
@@ -8,7 +8,7 @@
                 <pdf :src="fileUrl" v-if="portalFile"></pdf>
                 <div v-else><Spinner /></div>
             </div>
-            <div class="d-flex flex-column text-left file-body">
+            <div class="d-flex flex-column text-left file-body" v-if="file">
                 <div class="file-options">
                     <p>Options</p>
                     <PortalInput v-model="file.payment_required" :data="file.payment_required" :label="'Payment Required'"/>
@@ -27,7 +27,7 @@
         <div class="card-header p-3 text-left">
             <span class="font-weight-bold">Update Tax Year</span>
         </div>
-        <div class="p-3">
+        <div class="p-3" v-if="file">
             <select name="tax_year" id="tax_year" v-model="file.tax_year" class="form-control">
                 <option v-for="(year, index) in years" :key="index" :value="year">{{year}}</option>
             </select>

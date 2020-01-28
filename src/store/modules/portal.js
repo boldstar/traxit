@@ -5,15 +5,20 @@ import router from '../../routes/router'
 export default {
     state: {
         portal_modal: false,
+        portal_modal_remove_contact: false,
         invite_status: false,
         portal_upload: false,
         portal_files: null,
         file_options: false,
-        portal_file: null
+        portal_file: null,
+        portal_upload_error_msg: null
     },
     getters: {
         portalModal(state) {
             return state.portal_modal
+        },
+        portalModalRemoveContact(state) {
+            return state.portal_modal_remove_contact
         },
         portalUpload(state) {
             return state.portal_upload
@@ -29,11 +34,17 @@ export default {
         },
         portalFile(state) {
             return state.portal_file
+        },
+        portalUploadErrorMsg(state) {
+            return state.portal_upload_error_msg
         }
     },
     mutations: {
         portal_modal(state) {
             state.portal_modal = !state.portal_modal
+        },
+        portal_modal_remove_contact(state) {
+            state.portal_modal_remove_contact = !state.portal_modal_remove_contact
         },
         invite_status(state, status) {
             if(status.length > 0) {
@@ -67,6 +78,9 @@ export default {
         },
         remove_portal(state, portal) {
 
+        },
+        portal_upload_error_msg(state, msg) {
+            state.portal_upload_error_msg = msg
         }
     },
     actions: {
@@ -114,6 +128,7 @@ export default {
                 context.commit('successAlert', response.data.message)
             }).catch(error => {
                 console.log(error.response.data)
+                context.commit('portal_upload_error_msg', error.response.data)
                 context.commit('stopProcessing')
             })
         },
@@ -127,7 +142,7 @@ export default {
         },
         getPortalFile(context, id) {
             context.commit('portal_file', null)
-            axios.get('/portal-file/' +id,  {responseType: 'blob'})
+            axios.get('/portal-file/' +id)
             .then(response => {
                 context.commit('portal_file', response.data)
             }).catch(error => {
@@ -177,6 +192,18 @@ export default {
                 context.commit('stopProcessing')
                 context.commit('toggleDeleteModal', null)
                 context.commit('errorMsgAlert', 'Oops, Something went wrong')
+                console.log(error.response.data)
+            })
+        },
+        removeContact(context, contacts) {
+            context.commit('startProcessing')
+            axios.post('remove-contact', {contacts: contacts})
+            .then(response => {
+                console.log(response.data)
+                context.commit('stopProcessing')
+                context.commit('portal_modal_remove_contact')
+            }).catch(error => {
+                context.commit('stopProcessing')
                 console.log(error.response.data)
             })
         }

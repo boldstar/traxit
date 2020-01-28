@@ -5,7 +5,7 @@
                 <span class="h5 mb-0 align-self-center">File Manager</span>
             </div>
             <div class="d-flex">
-                <button class="btn btn-sm btn-outline-primary refresh"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
+                <button class="btn btn-sm btn-outline-primary refresh" @click="refreshInbox"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
             </div>
         </div>
         <processing-bar v-if="processing"></processing-bar>
@@ -76,6 +76,10 @@ export default {
         resetIndex() {
             this.index = 0
             this.reset = !this.reset
+        },
+        refreshInbox() {
+            this.$store.dispatch('getFiles')
+            this.$store.dispatch('getAccountDetails')
         }
     },
     watch: {

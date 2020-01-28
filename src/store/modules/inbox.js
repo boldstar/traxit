@@ -52,13 +52,15 @@ export default {
                console.log(error.response.data)
            })
        },
-       downloadClientFiles(context, id) {
-           axios.get('/download-client-files/' + id, {responseType: 'arraybuffer'})
+       downloadClientFiles(context, data) {
+           axios.get('/download-client-files/' + data.id, {responseType: 'arraybuffer'})
            .then(response => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');
+                const random_num = JSON.stringify(Math.random()).replace('.', '')
+                const file_name = random_num+'_'+data.name.replace(' ', '_')+'_files.zip'
                 link.href = url;
-                link.setAttribute('download', 'files.zip');
+                link.setAttribute('download', file_name);
                 document.body.appendChild(link);
                 link.click();
            }).catch(error => {

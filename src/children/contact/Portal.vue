@@ -11,23 +11,27 @@
                     <div class="dropdown-divider"></div>
                     <button class="btn dropdown-item font-weight-bold" type="button" @click="inviteContact"><i class="fas fa-user-plus mr-2 text-success"></i>Invite Contact</button>
                     <div class="dropdown-divider"></div>
-                    <button class="btn dropdown-item font-weight-bold " type="button" @click="removeContact"><i class="fas fa-user-times mr-2 text-danger"></i>Remove Contact</button>
+                    <button class="btn dropdown-item font-weight-bold " type="button" @click="$store.commit('portal_modal_remove_contact')"><i class="fas fa-user-times mr-2 text-danger"></i>Remove Contact</button>
                     <div class="dropdown-divider"></div>
-                    <button class="btn dropdown-item font-weight-bold " type="button" @click="removePortal()"><i class="fas fa-trash mr-2 text-danger"></i>Remove Portal</button>
+                    <button class="btn dropdown-item font-weight-bold " type="button" @click="removePortal"><i class="fas fa-trash mr-2 text-danger"></i>Remove Portal</button>
                 </div>
             </div>
         </div>
         <div class="portal-body">
-            <div v-if="!inviteStatus">
+            <div v-if="!inviteStatus && !loading">
                 <FileShareSvg class="mt-5 mb-3" />
                 <button class="btn btn-primary font-weight-bold" @click="inviteContact">Invite Contact</button>
             </div>
             <div v-else>
                 <PortalUploader v-if="portalUpload" @close-uploader="$store.commit('portal_upload')" />
-                <PortalTable @view-file-options="setFile"/>
+                <PortalTable v-if="!loading" @view-file-options="setFile"/>
             </div>
+            
+            <Spinner v-if="loading" />
         </div>
 
+
+        <PortalRemoveContact v-if="remove" :client="clientDetails" @approve-remove="removeContact" :alert="nothingSelected" @clear-alert="nothingSelected = false"/>
         <PortalModal v-if="modal" :client="clientDetails" @approve-invite="submitInvite" :alert="nothingSelected" @clear-alert="nothingSelected = false"/>
         <PortalOptions  :file="viewFileOptions" />
         <delete-modal ></delete-modal>
@@ -41,8 +45,10 @@ import FileShareSvg from '@/components/placeholders/FileShareSvg.vue'
 import PortalTable from '@/components/portal/PortalTable.vue'
 import PortalUploader from '@/components/portal/PortalUploader.vue'
 import PortalModal from '@/components/portal/PortalModal.vue'
+import PortalRemoveContact from '@/components/portal/PortalRemoveContact.vue'
 import PortalOptions from '@/components/portal/PortalOptions.vue'
 import DeleteModal from '@/components/modals/DeleteModal.vue'
+import Spinner from '@/components/loaders/Spinner.vue'
 export default {
     name: 'Portal',
     props: ['clientDetails'],
@@ -51,21 +57,32 @@ export default {
         PortalTable,
         PortalUploader,
         PortalModal,
+        PortalRemoveContact,
         PortalOptions,
-        DeleteModal
+        DeleteModal,
+        Spinner
     },
     data() {
         return {
             showUploader: false,
             viewFileOptions: null,
-            nothingSelected: false
+            nothingSelected: false,
+            loading: false
         }
     },
     computed: {
-        ...mapGetters(['processing','portalModal', 'inviteStatus', 'portalUpload', 'fileOptions', 'portalFile']),
+        ...mapGetters(['processing','portalModal', 'inviteStatus', 'portalUpload', 'fileOptions', 'portalFile', 'portalModalRemoveContact']),
          modal: {
              get() {
                  return this.portalModal
+             },
+             set(newState) {
+                 return newState
+             }
+         },
+         remove: {
+             get() {
+                 return this.portalModalRemoveContact
              },
              set(newState) {
                  return newState
@@ -96,12 +113,17 @@ export default {
                     name: 'Portal'
                 })
         },
-        removeContact() {
-
+        removeContact(contacts) {
+            this.$store.dispatch('removeContact', contacts)
         }
     },
     created() {
         this.$store.dispatch('checkInvitations', this.clientDetails.id)
+        this.loading = true
+        var self = this
+        setTimeout(() => {
+            self.loading = false
+        }, 3000)
     }
 }
 </script>

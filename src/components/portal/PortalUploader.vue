@@ -4,8 +4,9 @@
             <div class="card-header">
                 <p class="m-0 font-weight-bold">Upload document to share with contact</p>
             </div>
-            <div class="portal-body">
-                <div class="portal-body-left">
+            <div class="card-header bg-danger" v-if="portalUploadErrorMsg">
+                <p class="m-0 font-weight-bold text-white">{{portalUploadErrorMsg}}</p>
+            </div>
                 <div class="py-2 bg-light file-title"><p class="m-0 font-weight-bold">File</p></div>
                     <div class="vue-drop-wrapper">
                 <vue-dropzone 
@@ -22,6 +23,8 @@
                     </div>
                 </vue-dropzone>
                 </div>
+            <div class="portal-body">
+                <div class="portal-body-left">
                 <div class="py-2 bg-light"><p class="m-0 font-weight-bold">Options</p></div>
                 <div class="d-flex flex-column align-items-start pl-3 my-3">
                     <div class="custom-control custom-checkbox">
@@ -116,7 +119,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['processing']),
+        ...mapGetters(['processing', 'portalUploadErrorMsg']),
         years() {
             var currentYear = new Date().getFullYear(), years = [];
             var startYear = currentYear - 10;  
@@ -128,10 +131,12 @@ export default {
     },
     methods: {
         addFile(event) {
+            this.$store.commit('portal_upload_error_msg', null)
             this.files.push(event)
             this.docPreview = URL.createObjectURL(event)
         },
         removeFile(event) {
+            this.$store.commit('portal_upload_error_msg', null)
             const index = this.files.findIndex(file => file.upload.uuid == event.upload.uuid)
             this.files.splice(index, 1)
             this.docPreview = ''
@@ -194,14 +199,14 @@ export default {
             .portal-body-right {
                 width: 50%;
                 height: 100%;
-                min-height: 548px;
+                min-height: 428px;
 
                 .doc-preview {
                     height: 100%;
-                    min-height: 548px;
+                    min-height: 428px;
 
                     .doc-preview-content {
-                        min-height: 548px;
+                        min-height: 428px;
                         height: 100%;
                     }
                 }

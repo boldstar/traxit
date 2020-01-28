@@ -45,10 +45,10 @@
                                 <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-paperclip"></i>Attachments
                                 </button>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <span v-if="current_file.attachments" v-for="(name, index) in JSON.parse(current_file.attachments)" :key="index" class="dropdown-item file-item" @click="downloadFile(name)"><i class="fas fa-download"></i>{{ getFileName(name) }}</span>
+                                <div class="dropdown-menu dropdown-menu-right" v-if="current_file.attachments">
+                                    <span v-for="(name, index) in JSON.parse(current_file.attachments)" :key="index" class="dropdown-item file-item" @click="downloadFile(name)"><i class="fas fa-download"></i>{{ getFileName(name) }}</span>
                                     <div class="dropdown-divider" v-if="JSON.parse(current_file.attachments).length > 1"></div>
-                                    <button class="dropdown-item font-weight-bold btn" @click="downloadAll"  v-if="JSON.parse(current_file.attachments).length > 1">Download All</button>
+                                    <button class="dropdown-item font-weight-bold btn" @click="downloadAll(current_file.name)"  v-if="JSON.parse(current_file.attachments).length > 1">Download All</button>
                                 </div>
                             </div>
                         </div>
@@ -124,8 +124,8 @@ export default {
         downloadFile(name) {
             this.$store.dispatch('downloadClientFile',{id: this.current_file.id, name: name})
         },
-        downloadAll() {
-            this.$store.dispatch('downloadClientFiles', this.current_file.id)
+        downloadAll(name) {
+            this.$store.dispatch('downloadClientFiles', {name: name, id: this.current_file.id})
         },
         archive() {
             this.$store.dispatch('archiveClientFiles', this.current_file.id)

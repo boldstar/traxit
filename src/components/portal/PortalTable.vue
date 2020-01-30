@@ -13,7 +13,7 @@
                 </tr>
             </thead>
             <tbody class="table-bordered" v-if="portalFiles && portalFiles.length > 0">
-                <tr v-for="file in portalFiles" :key="file.id">
+                <tr v-for="file in docs" :key="file.id">
                     <th><i class="far fa-file-pdf text-danger"></i></th>
                     <th>{{ file.tax_year }}</th>
                     <th>{{ file.document_name }}</th>
@@ -41,6 +41,7 @@
 import {mapGetters} from 'vuex'
 export default {
     name: 'PortalTable',
+    props: ['docs'],
     data() {
         return {
             fileToDelete: null
@@ -67,9 +68,6 @@ export default {
             })
         }
     },
-    created() {
-        this.$store.dispatch('getPortalFiles', this.$route.params.id)
-    }
 }
 </script>
 

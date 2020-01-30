@@ -18,20 +18,19 @@
             </div>
         </div>
         <div class="portal-body">
-            <div v-if="!inviteStatus && !loading">
+            <div v-if="!inviteStatus && !loading && portalFiles.length < 1">
                 <FileShareSvg class="mt-5 mb-3" />
                 <button class="btn btn-primary font-weight-bold" @click="inviteContact">Invite Contact</button>
             </div>
-            <div v-else>
+            <div v-else-if="portalFiles && portalFiles.length > 0 && !loading">
                 <PortalUploader v-if="portalUpload" @close-uploader="$store.commit('portal_upload')" />
-                <PortalTable v-if="!loading" @view-file-options="setFile"/>
+                <PortalTable v-if="!loading" :docs="portalFiles" @view-file-options="setFile"/>
             </div>
-            
             <Spinner v-if="loading" />
         </div>
 
 
-        <PortalRemoveContact v-if="remove" :client="clientDetails" @approve-remove="removeContact" :alert="nothingSelected" @clear-alert="nothingSelected = false"/>
+        <PortalRemoveContact v-if="remove" :users="portalUsers" :client="clientDetails" @approve-removal="removeContact" :alert="nothingSelected" @clear-alert="nothingSelected = false"/>
         <PortalModal v-if="modal" :client="clientDetails" @approve-invite="submitInvite" :alert="nothingSelected" @clear-alert="nothingSelected = false"/>
         <PortalOptions  :file="viewFileOptions" />
         <delete-modal ></delete-modal>
@@ -71,7 +70,17 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['processing','portalModal', 'inviteStatus', 'portalUpload', 'fileOptions', 'portalFile', 'portalModalRemoveContact']),
+        ...mapGetters([
+                'processing',
+                'portalModal', 
+                'inviteStatus', 
+                'portalUpload', 
+                'fileOptions', 
+                'portalFile', 
+                'portalModalRemoveContact', 
+                'portalUsers', 
+                'portalFiles'
+            ]),
          modal: {
              get() {
                  return this.portalModal
@@ -114,11 +123,13 @@ export default {
                 })
         },
         removeContact(contacts) {
-            this.$store.dispatch('removeContact', contacts)
+            this.$store.dispatch('removePortalUser', contacts)
         }
     },
     created() {
         this.$store.dispatch('checkInvitations', this.clientDetails.id)
+        this.$store.dispatch('getPortalUsers', this.clientDetails.id)
+        this.$store.dispatch('getPortalFiles', this.$route.params.id)
         this.loading = true
         var self = this
         setTimeout(() => {

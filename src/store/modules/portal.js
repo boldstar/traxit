@@ -4,6 +4,7 @@ import router from '../../routes/router'
 
 export default {
     state: {
+        portal_users: null,
         portal_modal: false,
         portal_modal_remove_contact: false,
         invite_status: false,
@@ -16,6 +17,9 @@ export default {
     getters: {
         portalModal(state) {
             return state.portal_modal
+        },
+        portalUsers(state) {
+            return state.portal_users
         },
         portalModalRemoveContact(state) {
             return state.portal_modal_remove_contact
@@ -42,6 +46,9 @@ export default {
     mutations: {
         portal_modal(state) {
             state.portal_modal = !state.portal_modal
+        },
+        portal_users(state, users) {
+            state.portal_users = users
         },
         portal_modal_remove_contact(state) {
             state.portal_modal_remove_contact = !state.portal_modal_remove_contact
@@ -88,6 +95,14 @@ export default {
             axios.get('/invite-status/'+id)
             .then(response => {
                 context.commit('invite_status', response.data)
+            }).catch(error => {
+                console.log(error.response.data)
+            })
+        },
+        getPortalUsers(context, id) {
+            axios.get('/portal-users/'+id)
+            .then(response => {
+                context.commit('portal_users', response.data)
             }).catch(error => {
                 console.log(error.response.data)
             })
@@ -142,7 +157,7 @@ export default {
         },
         getPortalFile(context, id) {
             context.commit('portal_file', null)
-            axios.get('/portal-file/' +id)
+            axios.get('/portal-file/' +id, {responseType: 'blob'})
             .then(response => {
                 context.commit('portal_file', response.data)
             }).catch(error => {
@@ -195,9 +210,9 @@ export default {
                 console.log(error.response.data)
             })
         },
-        removeContact(context, contacts) {
+        removePortalUser(context, contacts) {
             context.commit('startProcessing')
-            axios.post('remove-contact', {contacts: contacts})
+            axios.post('/remove-portal-user', {contacts: contacts})
             .then(response => {
                 console.log(response.data)
                 context.commit('stopProcessing')

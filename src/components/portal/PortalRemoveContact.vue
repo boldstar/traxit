@@ -3,25 +3,19 @@
           <div class="d-flex flex-column text-left">
               <div class="invite-alert" v-if="alert">Please select who to remove.</div>
             <h5 class="mb-4">Who would you like to remove?</h5>
-            <p class="invite-info">Only showing contacts available.</p>
-             <div class="custom-control custom-radio" v-if="client && client.email">
-                <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" v-model="remove.taxpayer" value="taxpayer" @click="remove.spouse = '', remove.both = '', $emit('clear-alert')">
-                <label class="custom-control-label" for="customRadio1">Taxpayer</label>
-            </div>
-            <div class="custom-control custom-radio" v-if="client && client.spouse_email">
-                <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" v-model="remove.spouse" value="spouse" @click="remove.taxpayer = '', remove.both = '', $emit('clear-alert')">
-                <label class="custom-control-label" for="customRadio2">Spouse</label>
-            </div>
-            <div class="custom-control custom-radio" v-if="client && client.email && client.spouse_email">
-                <input type="radio" id="customRadio3" name="customRadio" class="custom-control-input" v-model="remove.both" value="both" @click="remove.spouse = '', remove.taxpayer = '', $emit('clear-alert')">
-                <label class="custom-control-label" for="customRadio3">Both</label>
+            <p class="invite-info">Only showing contacts available to remove.</p>
+            <div class="form-group">
+                <label for="exampleFormControlSelect2">Select Users</label>
+                <select multiple class="form-control" id="exampleFormControlSelect2">
+                    <option v-for="user in users" :key="user.id" @click="toBeRemoved(user.id)">{{user.name}}</option>
+                </select>
             </div>
           
           </div>
         <div class="d-flex justify-content-between mt-4">
             <button class="btn btn-primary btn-sm font-weight-bold" @click="removeContact" :disabled="processing">
               <span v-if="processing">Removing...</span>
-              <span v-else>Remove Contact</span>
+              <span v-else>Remove Contact(s)</span>
             </button>
             <button type="button" class="btn btn-secondary btn-sm font-weight-bold" @click="$store.commit('portal_modal_remove_contact')">Cancel</button>
         </div>
@@ -34,14 +28,10 @@ import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 import {mapGetters} from 'vuex'
 export default {
     name: 'PortalRemoveContact',
-    props: ['alert', 'client'],
+    props: ['alert', 'client', 'users'],
     data() {
         return {
-            remove: {
-                taxpayer: '',
-                spouse: '',
-                both: '',
-            },
+            remove: [],
             nothingSelected: false,
         }
     },
@@ -65,6 +55,20 @@ export default {
     methods: {
         removeContact() {
             this.$emit('approve-removal', this.remove)
+        },
+        toBeRemoved(id) {
+            console.log(this.remove.includes(id))
+            if(this.remove.includes(id)) {
+                var index = this.remove.indexOf(id)
+                this.remove.splice(index, 1)
+            } else {
+                this.remove.push(id)
+            }
+        }
+    },
+    watch: {
+        'guest_user': function(value) {
+            this.toBeRemoved(value)
         }
     }
 }

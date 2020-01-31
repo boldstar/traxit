@@ -1,186 +1,104 @@
 <template>
     <div>
 
-         <div class="d-flex mb-3">
+         <div class="d-flex">
+            <div class="d-flex px-3 engagement-list-header">
+                <span class="font-weight-bold align-self-center">Viewing:
+                    <span v-if="engagementFilter == 'All'">All Engagements</span>
+                    <span v-if="engagementFilter == 'Past Due'">Past Due Engagements</span>
+                    <span v-if="engagementFilter == 'Priority'">Priority Engagements Of Level 4 & Higher</span>
+                    <span v-if="engagementFilter == 'Pending'">Pending Engagements</span>
+                    <span v-if="engagementFilter == 'Complete'">Complete Engagements</span>
+                    <span v-if="engagementFilter == 'In Progress'">Currently In Progress Engagements</span>
+                    <span class="text-primary"> | {{sortedEngagements.length}} of {{engagements.length}}</span>
+                </span>
+            </div>
 
-             <div class="d-flex">
-                 <span class="font-weight-bold align-self-center">Viewing:
-                     <span v-if="engagementFilter == 'All'">All Engagements</span>
-                     <span v-if="engagementFilter == 'Past Due'">Past Due Engagements</span>
-                     <span v-if="engagementFilter == 'Priority'">Priority Engagements Of Level 4 & Higher</span>
-                     <span v-if="engagementFilter == 'Pending'">Pending Engagements</span>
-                     <span v-if="engagementFilter == 'Complete'">Complete Engagements</span>
-                     <span v-if="engagementFilter == 'In Progress'">Currently In Progress Engagements</span>
-                     <span class="text-primary"> | {{sortedEngagements.length}} of {{engagements.length}}</span>
-                 </span>
-             </div>
-
-            <div class="d-flex">
-                <div class="mx-2" v-if="returnChecked">
-                    <div class="input-group">
-                    <div class="input-group-prepend">
-                    <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Return Type</label>
-                    </div>
-                    <select class="custom-select" id="client_id" v-model="filterType">
-                        <option> {{ type }}</option>
-                        <option v-for="(returntype, index) in filterReturnTypes" :key="index">
-                        {{ returntype }}
-                        </option>
-                    </select>
-                    </div>
-                </div>  
-                <div class="mx-2" v-if="categoryChecked">
-                    <div class="input-group">
-                    <div class="input-group-prepend">
-                    <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Category</label>
-                    </div>
-                    <select class="custom-select text-capitalize" id="category" v-model="filterCategory">
-                        <option> {{ type }}</option>
-                        <option v-for="(category, index) in filterCategories" :key="index">
-                        {{ category }}
-                        </option>
-                    </select>
-                    </div>
-                </div>
-                <div class="mx-2" v-if="assignedChecked">
-                    <div class="input-group">
-                    <div class="input-group-prepend">
-                    <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Assigned To</label>
-                    </div>
-                    <select class="custom-select text-capitalize" id="category" v-model="filterAssigned">
-                        <option> {{ type }}</option>
-                        <option v-for="(name, index) in filterAssignedTo" :key="index">
-                        {{ name }}
-                        </option>
-                    </select>
-                    </div>
-                </div>
-                <div class="mx-2" v-if="yearChecked">
-                    <div class="input-group">
-                    <div class="input-group-prepend">
-                    <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Year</label>
-                    </div>
-                    <select class="custom-select text-capitalize" id="category" v-model="filterYear">
-                        <option> {{ type }}</option>
-                        <option v-for="(year, index) in filterYears" :key="index">
-                        {{ year }}
-                        </option>
-                    </select>
-                    </div>
-                </div>
-                <div class="mx-2" v-if="workflowChecked">
-                    <div class="input-group">
-                    <div class="input-group-prepend">
-                    <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Workflows</label>
-                    </div>
-                    <select class="custom-select text-capitalize" id="category" v-model="filterWorkflow">
-                        <option> {{ type }}</option>
-                        <option v-for="(workflow, index) in allWorkflows" :key="index" :value="workflow.id">
-                        {{ workflow.workflow }}
-                        </option>
-                    </select>
-                    </div>
-                </div>
-                <div class="mx-2" v-if="typeChecked">
-                    <div class="input-group">
-                    <div class="input-group-prepend">
-                    <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Type</label>
-                    </div>
-                    <select class="custom-select text-capitalize" id="category" v-model="filterEngageType">
-                        <option> {{ type }}</option>
-                        <option v-for="(engagetype, index) in filterTypes" :key="index">
-                        {{ engagetype }}
-                        </option>
-                    </select>
-                    </div>
-                </div>
-                <div class="mx-2" v-if="statusChecked">
-                    <div class="input-group">
-                    <div class="input-group-prepend">
-                    <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Status</label>
-                    </div>
-                    <select class="custom-select text-capitalize" id="category" v-model="filterStatusType">
-                        <option> {{ type }}</option>
-                        <option v-for="(status, index) in filterStatuses" :key="index">
-                        {{ status }}
-                        </option>
-                    </select>
-                    </div>
-                </div>
+            <div class="flex-fill">
+                <input class="engagement-search-input" placeholder="Filter By First or Last Name..." v-model="searchEngagement" type="search">
             </div>
 
             <div class="btn-group ml-auto">
-                <div class="btn-group">
-                    <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-secondary btn-sm font-weight-bold dropdown-toggle dropdown-toggle-split mobile-hide-row">
-                        Filter Options
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-cog mr-2"></i>
+                        Settings
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                        <div class="dropdown-item d-flex justify-content-between py-0 px-1">
-                            <span class="pb-1 font-weight-bold">Type</span>
-                            <input type="checkbox" class="align-self-center" v-model="typeChecked">
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <div class="dropdown-item d-flex justify-content-between py-0 px-1">
-                            <span class="pb-1 font-weight-bold">Status</span>
-                            <input type="checkbox" class="align-self-center" v-model="statusChecked">
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <div class="dropdown-item d-flex justify-content-between py-0 px-1">
-                            <span class="pb-1 font-weight-bold">Category</span>
-                            <input type="checkbox" class="align-self-center" v-model="categoryChecked">
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <div class="dropdown-item d-flex justify-content-between py-0 px-1">
-                            <span class="pb-1 font-weight-bold">Return Type</span>
-                            <input type="checkbox" class="align-self-center" v-model="returnChecked">
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <div class="dropdown-item d-flex justify-content-between py-0 px-1">
-                            <span class="pb-1 font-weight-bold">Assigned To</span>
-                            <input type="checkbox" class="align-self-center" v-model="assignedChecked">
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <div class="dropdown-item d-flex justify-content-between py-0 px-1">
-                            <span class="pb-1 font-weight-bold">Year</span>
-                            <input type="checkbox" class="align-self-center" v-model="yearChecked">
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <div class="dropdown-item d-flex justify-content-between py-0 px-1">
-                            <span class="pb-1 font-weight-bold">Workflows</span>
-                            <input type="checkbox" class="align-self-center" v-model="workflowChecked">
-                        </div>
-                        <div class="dropdown-divider"></div>
+                    <div class="dropdown-menu dropdown-menu-left mr-2 p-1 settings-dropdown" aria-labelledby="dropdownMenu3">
+                        <button class="dropdown-item d-flex justify-content-between font-weight-bold px-1" @click="clearFilters" data-toggle="tooltip" data-placement="top" title="Clear Filters">Clear Filters<i class="fas fa-filter align-self-center text-secondary"></i></button>
+                        <button class="dropdown-item d-flex justify-content-between font-weight-bold px-1" @click="confirmEngagementsDownload" data-toggle="tooltip" data-placement="top" title="Download Engagements" :disabled="processing"><span v-if="!processing">Download</span><i class="far fa-file-excel align-self-center text-success"></i><span v-if="processing" class="mx-2">Downloading...</span></button>
+                        <router-link to="/add" class="dropdown-item d-flex justify-content-between font-weight-bold px-1" data-toggle="tooltip" data-placement="top" title="Add New Engagement">Add Engagement<i class="far fa-plus-square font-weight-bold align-self-center ml-3"></i></router-link>
                     </div>
                 </div>
-                 <button type="button" class="btn btn-outline-primary btn-sm" @click="showSearchInput">
-                    <i class="fas fa-search"></i>
-                </button>
-                <button class="btn btn-outline-primary btn-sm" @click="clearFilters" data-toggle="tooltip" data-placement="top" title="Clear Filters"><i class="fas fa-filter"></i></button>
-                <button class="btn btn-outline-secondary  mobile-hide-row btn-sm" @click="confirmEngagementsDownload" data-toggle="tooltip" data-placement="top" title="Download Engagements" :disabled="processing"><i class="far fa-file-excel"></i><span v-if="processing" class="mx-2">Downloading...</span></button>
-                <router-link to="/add" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Add New Engagement"><i class="far fa-plus-square font-weight-bold"></i></router-link>
             </div>
-
         </div>
 
         <div class="d-flex flex-column">
-            <input v-if="showInput" class="form-control mb-3" placeholder="Filter By Last Name" v-model="searchEngagement" type="search">
             <table class="table border table-light table-hover text-left ">
                 <thead class="text-primary hover">
                     <tr>
                         <th scope="col">Client</th>
-                        <th scope="col" @click="sort('category')" class="hide-row">Category</th>
-                        <th scope="col" class="hide-row">Engagement Type</th>
-                        <th scope="col" @click="sort('return_type')" class="hide-row">Return Type</th>
-                        <th scope="col" @click="sort('year')" class="mobile-hide-row">Year</th>
-                        <th scope="col" @click="sort('assigned_to')">Assigned To</th>
-                        <th scope="col" @click="sort('status')" class="mobile-hide-row">Status</th>
-                        <th scope="col" class="text-center">Details</th>
+                        <th scope="col" class="hide-row">
+                            <div class="d-flex">
+                                <label class="font-weight-bold align-self-center table-label" for="option">Type:</label>
+                                <select class="custom-select text-capitalize ml-2" id="category" v-model="filterEngageType">
+                                    <option> {{ type }}</option>
+                                    <option v-for="(engagetype, index) in filterTypes" :key="index">
+                                    {{ engagetype }}
+                                    </option>
+                                </select>
+                            </div>
+                        </th>
+                        <th scope="col" @click="sort('return_type')" class="hide-row">
+                            <div class="d-flex">
+                                <label class="font-weight-bold align-self-center table-label" for="option">Return Type:</label>
+                                <select class="custom-select ml-2" id="client_id" v-model="filterType">
+                                    <option> {{ type }}</option>
+                                    <option v-for="(returntype, index) in filterReturnTypes" :key="index">
+                                    {{ returntype }}
+                                    </option>
+                                </select>
+                            </div>
+                        </th>
+                        <th scope="col" @click="sort('year')" class="mobile-hide-row">
+                            <div class="d-flex">
+                                <label class="font-weight-bold align-self-center table-label" for="option">Year:</label>
+                                <select class="custom-select text-capitalize ml-2" id="category" v-model="filterYear">
+                                    <option> {{ type }}</option>
+                                    <option v-for="(year, index) in filterYears" :key="index">
+                                    {{ year }}
+                                    </option>
+                                </select>
+                            </div>
+                        </th>
+                        <th scope="col" @click="sort('assigned_to')">
+                            <div class="d-flex">
+                                <label class="font-weight-bold align-self-center table-label" for="option">Assigned To:</label>
+                                <select class="custom-select text-capitalize ml-2" id="category" v-model="filterAssigned">
+                                    <option> {{ type }}</option>
+                                    <option v-for="(name, index) in filterAssignedTo" :key="index">
+                                    {{ name }}
+                                    </option>
+                                </select>
+                            </div>
+                        </th>
+                        <th scope="col" @click="sort('status')" class="mobile-hide-row">
+                            <div class="d-flex">
+                                <label class="font-weight-bold align-self-center table-label" for="option">Status:</label>
+                                <select class="custom-select text-capitalize ml-2" id="category" v-model="filterStatusType">
+                                    <option> {{ type }}</option>
+                                    <option v-for="(status, index) in filterStatuses" :key="index">
+                                    {{ status }}
+                                    </option>
+                                </select>
+                            </div>
+                        </th>
+                        <th scope="col" class="text-center table-label">Details</th>
                     </tr>
                 </thead> 
                 <tbody class="client-info table-bordered" v-if="!tableLoaded">
                     <tr v-for="(engagement, index) in sortedEngagements"  :key="index" @click="viewDetails(engagement.id)">
                         <td class="text-capitalize">{{ engagement.name }}</td>
-                        <td class="text-capitalize hide-row">{{ engagement.category }}</td>
                         <td class="text-capitalize hide-row" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</td>
                         <td class="text-capitalize hide-row" v-else>{{ engagement.type }}</td>
                         <td v-if="engagement.return_type != null" class="hide-row">{{ engagement.return_type }}</td>
@@ -466,11 +384,36 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.engagement-search-input {
+    width: 100%;
+    border: 1px solid lightgray;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.engagement-list-header {
+    background: lightgray;
+    border-radius: 5px 0 0 0;
+}
+
+.dropdown .dropdown-toggle {
+    border-radius: 0 5px 0 0;
+    height: 100%;
+}
+
+.table thead th {
+    vertical-align: middle;
+    padding: 10px 15px;
+
+    .table-label {
+        white-space: nowrap;
+        margin-bottom: 0;
+    }
+}
+
 .dropdown-item {
     cursor: pointer;
-}
-.search-input {
-    width: 200px;
 }
 
 .engagement-table {

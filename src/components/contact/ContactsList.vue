@@ -2,41 +2,14 @@
 <div class="contact-table">
 
     <!-- this is the row of buttons above the clients list -->
-    <div class="d-flex mb-3">
-        <div class="w-25 search-div">
-            <input class="form-control" placeholder="Filter By Last Name" v-model="searchClient" type="search">
-        </div>
-        <div class="mr-auto d-flex mobile-hide-row">
-            <div class="mx-2">      
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Category</label>
-                    </div>
-                    <select class="form-control" id="client_id" v-model="filterType">
-                        <option>{{ type }}</option>
-                        <option v-for="(category, index) in filterCategories" :key="index">
-                        {{ category }}
-                        </option>
-                    </select>
-                </div> 
-            </div>
-            <div>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Activity</label>
-                    </div>
-                    <select class="form-control" id="client_id" v-model.number="filterActive">
-                        <option>{{ type }}</option>
-                        <option value=1>Active</option>
-                        <option value=0>Inactive</option>
-                    </select>
-                </div> 
-            </div>
-        </div>  
+    <div class="d-flex">
+    <div class="search-div flex-fill">
+        <input class="contact-search-input" placeholder="Filter By Last Name" v-model="searchClient" type="search">
+    </div> 
 
     <div class="d-flex mobile-hide-row">
          <div class="dropdown">
-          <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-cog mr-2"></i>
             Settings
           </button>
@@ -54,10 +27,20 @@
         
     <!-- this is the table for the list of clients -->
     <table class="table border table-light table-hover">
-        <thead class="text-primary hover">
+        <thead class="text-dark hover">
             <tr>
                 <th scope="col">Client</th>
-                <th scope="col" @click="sort('category')" class="hide-row">Category</th>
+                <th scope="col" @click="sort('category')" class="hide-row">
+                    <div class="d-flex">
+                        <label class="align-self-center m-0" for="category">Category:</label>
+                        <select class="form-control ml-2" id="category" v-model="filterType">
+                            <option>{{ type }}</option>
+                            <option v-for="(category, index) in filterCategories" :key="index">
+                            {{ category }}
+                            </option>
+                        </select>
+                    </div>
+                </th>
                 <th scope="col" class="hide-row">Taxpayer Email</th>
                 <th scope="col" class="mobile-hide-table-row">Taxpayer Phone</th>
                 <th scope="col" class="hide-row">Spouse Email</th>
@@ -85,7 +68,7 @@
     <nav aria-label="pagination" class="d-flex" v-if="!tableLoaded">
         <ul class="pagination">
             <li class="page-item">
-                <button class="page-link" @click="prevPage">Previous</button>            
+                <button class="page-link font-weight-bold" @click="prevPage">Previous</button>            
             </li>
             <li class="page-item">
                 <a class="page-link">
@@ -93,13 +76,13 @@
                 </a>            
             </li>
             <li class="page-item">
-                <button class="page-link" @click="nextPage">Next</button>           
+                <button class="page-link font-weight-bold" @click="nextPage">Next</button>           
             </li>
         </ul>
         <div class="pl-3 mobile-hide-row">
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <label class="input-group-text" for="option">Per Page:</label>
+                    <label class="input-group-text font-weight-bold" for="option">Per Page:</label>
                 </div>
                 <select class="custom-select" id="option" v-model="pageSize">
                     <option v-for="option in options" :key="option.id" :value="option">{{ option }}</option>
@@ -225,6 +208,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.contact-search-input {
+    width: 100%;
+    border: 1px solid lightgray;
+    padding: 10px;
+    border-radius: 5px 0 0 0;
+    box-sizing: border-box;
+}
+
+.dropdown .dropdown-toggle {
+    border-radius: 0 5px 0 0;
+    height: 100%;
+}
+
+.table thead th {
+    vertical-align: middle;
+    padding: .5rem;
+}
 
 .hover {
 

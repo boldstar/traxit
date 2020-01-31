@@ -1,5 +1,5 @@
 import axios from 'axios'
-import router from '../../router'
+import router from '../../routes/router'
 
 export default {
     state: {
@@ -129,8 +129,8 @@ export default {
             state.engagement.questions.splice(index, 1, question)
         },
         updateAnswer(state, question) {
-            const index = state.engagement.questions.findIndex(item => item.id == question.id);
-            state.engagement.questions.splice(index, 1, question)
+            const index = state.engagementquestions.findIndex(item => item.id == question.id);
+            state.engagementquestions.splice(index, 1, question)
         },
         showNoteModal(state, id) {
             state.noteModal = !state.noteModal
@@ -407,7 +407,7 @@ export default {
                 context.commit('showUpdateStatusModal')
             })
             .catch(error => {
-                console.log(error)
+                console.log(error.response.data)
                 context.commit('errorMsgAlert', error.response.data.message)
             })           
         },

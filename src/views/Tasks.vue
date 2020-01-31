@@ -48,7 +48,7 @@
         </div>
         <table class="table text-center table-hover mb-0" >
           <tbody class="table-bordered">
-            <tr v-for="(task, index) in inProgressTasks"  :key="index" v-if="task.engagements[0].in_progress">
+            <tr v-for="(task, index) in inProgressTasks"  :key="index">
               <th  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].name }}</th>
               <th  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].status }}</th>
               <th>
@@ -136,7 +136,7 @@
             </div>
             <select class="custom-select" id="client_id" v-model.number="task.user_id">
               <option  selected disabled>{{ option }}</option>
-              <option v-for="user in users" :key="user.id" :value="user.id" v-if="user.name != 'Admin'">
+              <option v-for="user in filteredUsers" :key="user.id" :value="user.id">
                 {{ user.name }}
               </option>
             </select>
@@ -145,7 +145,7 @@
             <div class="input-group-prepend">
               <label class="input-group-text font-weight-bold bg-primary text-light" for="option">Status</label>
             </div>
-            <div v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id == selectedWorkflow" class="flex-fill d-flex">
+            <div v-for="workflow in filteredWorkflow" :key="workflow.id" class="flex-fill d-flex">
             <select class="custom-select" id="status" v-model="task.status">
               <option  selected disabled>{{ option }}</option>
               <option v-for="status in workflow.statuses" :key="status.id" :value="status.status">
@@ -176,7 +176,7 @@
           <form class="d-flex flex-column" @change="clearAlerts()">
             <div class="mt-3 text-left">
               <h4>Tasks</h4>
-              <div class="card-body bg-light p-1" v-for="(task, index) in tasks" :key="index" v-if="checkedTasks.includes(task.id)">
+              <div class="card-body bg-light p-1" v-for="(task, index) in filteredTasks" :key="index">
                 <span class="mr-3">{{ index }}.</span>
                 <span class="font-weight-bold">{{ task.engagements[0].name }}</span>
               </div>
@@ -189,7 +189,7 @@
                 </div>
                 <select class="custom-select" id="client_id" v-model.number="task.user_id" :class="{ 'border-danger' : userError}">
                   <option  selected disabled>{{ option }}</option>
-                  <option v-for="user in users" :key="user.id" :value="user.id" v-if="user.name != 'Admin'">
+                  <option v-for="user in filteredUsers" :key="user.id" :value="user.id">
                     {{ user.name }}
                   </option>
                 </select>
@@ -198,10 +198,10 @@
                 <div class="input-group-prepend">
                   <label class="input-group-text font-weight-bold bg-primary text-light" for="option">Status</label>
                 </div>
-                <div v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id == selectedWorkflow" class="flex-fill d-flex">
+                <div v-for="workflow in filteredWorkflow" :key="workflow.id" class="flex-fill d-flex">
                 <select class="custom-select" id="status" v-model="task.status" :class="{ 'border-danger' : statusError}">
                   <option  selected disabled>{{ option }}</option>
-                  <option v-for="status in workflow.statuses" :key="status.id" :value="status.status" v-if="status.status != 'Complete'">
+                  <option v-for="status in workflow.statuses" :key="status.id" :value="status.status" v-show="status.status != 'Complete'">
                     {{ status.status }}
                   </option>
                 </select>
@@ -221,9 +221,9 @@
 import { mapGetters, mapActions } from 'vuex'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
-import Spinner from '@/components/Spinner.vue'
-import ProcessingBar from '@/components/ProcessingBar.vue'
-import NoTask from '@/components/NoTask.vue'
+import Spinner from '@/components/loaders/Spinner.vue'
+import ProcessingBar from '@/components/loaders/ProcessingBar.vue'
+import NoTask from '@/components/placeholders/NoTask.vue'
 
 export default {
   name: 'UserTasks',
@@ -274,6 +274,15 @@ export default {
       'processing',
       'timesheet'
     ]),
+    filteredUsers() {
+      return this.users.filter(u => u.name != 'Admin')
+    },
+    filteredWorkflow() {
+      return this.allWorkflows.filter(w => w.id == this.selectedWorkflow)
+    },
+    filteredTasks() {
+      return this.tasks.filter(t => this.checkedTasks.includes(t.id))
+    },
     sortedTasksCustom() {
       return this.tasks.reduce((acc, task) => {
         acc.push({

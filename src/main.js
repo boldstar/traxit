@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import App from './App.vue';
-import router from './router';
+import router from './routes/router';
 import store from './store/store';
 import VeeValidate from 'vee-validate';
 import VueCharts from 'vue-chartjs';
@@ -8,6 +8,7 @@ import jQuery from 'jquery';
 import Popper from 'popper.js';
 import VueCarousel from 'vue-carousel';
 import VCalendar from 'v-calendar';
+import vueDropzone from 'vue2-dropzone';
 import 'v-calendar/lib/v-calendar.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
@@ -18,6 +19,7 @@ import { Button } from 'bootstrap-vue/es/components';
 import { abilitiesPlugin } from '@casl/vue';
 import { ability } from './store/store';
 import { beforeEachCustom } from './plugins/guards.js'
+import DeleteModal from './components/modals/DeleteModal'
 global.jQuery = jQuery;
 global.Popper = Popper;
 
@@ -26,7 +28,7 @@ import Default from './layouts/Default.vue';
 import Landing from "./layouts/Landing.vue";
 import Admin from "./layouts/Admin.vue";
 import ResetPassword from "./layouts/ResetPassword.vue";
-import Breadcrumb from "./components/Breadcrumb.vue";
+import Breadcrumb from "./components/layout/Breadcrumb.vue";
 
 //these are global layout components and global breadcrumb
 Vue.component('default-layout', Default);
@@ -34,6 +36,8 @@ Vue.component('landing-layout', Landing);
 Vue.component('admin-layout', Admin);
 Vue.component('reset-layout', ResetPassword);
 Vue.component('breadcrumb', Breadcrumb);
+Vue.component('vue-dropzone', vueDropzone);
+Vue.component('delete-modal', DeleteModal)
 
 Vue.prototype.$setUp = setUp
 

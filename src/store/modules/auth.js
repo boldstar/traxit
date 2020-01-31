@@ -1,6 +1,6 @@
 import axios from 'axios'
 import moment from 'moment';
-import router from '../../router'
+import router from '../../routes/router'
 import {destroySession} from '../../plugins/session'
 import {startSession} from '../../plugins/session'
 

@@ -83,13 +83,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Alert from '@/components/Alert.vue'
+import Alert from '@/components/alerts/Alert.vue'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
-import Spinner from '@/components/Spinner.vue'
-import NoteModal from '@/components/NoteModal.vue'
-import EditNoteModal from '@/components/EditNoteModal.vue'
-import UpdateStatusModal from '@/components/UpdateStatusModal.vue'
+import UpdateStatusModal from '@/components/modals/UpdateStatusModal.vue'
+import Spinner from '@/components/loaders/Spinner.vue'
+import NoteModal from '@/components/engagement/NoteModal.vue'
+import EditNoteModal from '@/components/engagement/EditNoteModal.vue'
 
 export default {
   name: 'EngagementDetails',

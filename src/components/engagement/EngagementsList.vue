@@ -22,7 +22,7 @@
                 <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-cog mr-2"></i>
-                        Settings
+                        Options
                     </button>
                     <div class="dropdown-menu dropdown-menu-left mr-2 p-1 settings-dropdown" aria-labelledby="dropdownMenu3">
                         <button class="dropdown-item d-flex justify-content-between font-weight-bold px-1" @click="clearFilters" data-toggle="tooltip" data-placement="top" title="Clear Filters">Clear Filters<i class="fas fa-filter align-self-center text-secondary"></i></button>
@@ -121,7 +121,7 @@
         <nav aria-label="pagination" class="d-flex" v-if="!tableLoaded && sortedEngagements.length >= 1" :class="{'mb-5': sortedEngagements.length < 8}">
         <ul class="pagination">
             <li class="page-item">
-                <button class="page-link" @click="prevPage" :disabled="currentPage <= 1">Previous</button>            
+                <button class="page-link font-weight-bold" @click="prevPage" :disabled="currentPage <= 1">Previous</button>            
             </li>
             <li class="page-item">
                 <a class="page-link">
@@ -129,13 +129,13 @@
                 </a>            
             </li>
             <li class="page-item">
-                <button class="page-link" @click="nextPage">Next</button>           
+                <button class="page-link font-weight-bold" @click="nextPage">Next</button>           
             </li>
         </ul>
         <div class="pl-3 mobile-hide-row">
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <label class="input-group-text" for="option">Per Page:</label>
+                    <label class="input-group-text font-weight-bold" for="option">Per Page:</label>
                 </div>
                 <select class="custom-select" id="option" v-model="pageSize">
                     <option v-for="option in options" :key="option.id" :value="option">{{ option }}</option>

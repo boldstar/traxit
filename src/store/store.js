@@ -18,6 +18,7 @@ import tsheets from './modules/tsheets'
 import invoice from './modules/invoice'
 import inbox from './modules/inbox'
 import portal from './modules/portal'
+import business from './modules/business'
 
 // this is for the abilities plug in.
 import { abilityPlugin, ability as appAbility } from './ability'
@@ -56,7 +57,8 @@ export default new Vuex.Store({
     tsheets,
     invoice,
     inbox,
-    portal
+    portal,
+    business
   },
   state: {
     processing: false,
@@ -75,6 +77,7 @@ export default new Vuex.Store({
     links: false,
     averagedays: '',
     engagementFilter: 'All',
+    contactFilter: 'All',
     timesheet: false,
     show_update_status_modal: false,
     delete_modal: false,
@@ -125,6 +128,9 @@ export default new Vuex.Store({
     },
     engagementFilter(state) {
       return state.engagementFilter
+    },
+    contactFilter(state) {
+      return state.contactFilter
     },
     timesheet(state) {
       return state.timesheet
@@ -195,6 +201,9 @@ export default new Vuex.Store({
     },
     changeEngagementFilter(state, filter) {
       state.engagementFilter = filter
+    },
+    changeContactFilter(state, filter) {
+      state.contactFilter = filter
     },
     toggleTimesheet(state) {
       state.timesheet = !state.timesheet

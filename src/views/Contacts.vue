@@ -4,7 +4,8 @@
       <Alert v-if="successAlert" v-bind:message="successAlert" />
 
       <div class="page-wrapper mt-1"> 
-          <contacts-list :clients="allClients"></contacts-list>
+          <BusinessList :businesses="businessList" v-if="contactFilter == 'Business'" />
+          <ContactsList :clients="allClients" v-else />
       </div>
   </div>
 
@@ -13,6 +14,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import ContactsList from '@/components/contact/ContactsList'
+import BusinessList from '@/components/contact/BusinessList'
 import Alert from '@/components/alerts/Alert'
 
 
@@ -20,6 +22,7 @@ export default {
 name: 'Contacts',
   components: {
     ContactsList,
+    BusinessList,
     Alert,
   },
   data() {
@@ -28,12 +31,13 @@ name: 'Contacts',
     }
   },
   computed: {
-    ...mapGetters(['allClients', 'successAlert']),
+    ...mapGetters(['allClients', 'businessList', 'contactFilter', 'successAlert']),
   },
   created: function() {
     if(this.$route.query.alert) {
       this.alert  = this.$route.query.alert;
     }
+    this.$store.dispatch('retrieveBusinessList')
     this.$router.replace({ path: '/contacts'})
     var self = this;
     setTimeout(() => {

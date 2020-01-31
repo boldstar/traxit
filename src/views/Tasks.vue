@@ -37,12 +37,12 @@
       <div v-if="batchAlert" class="p-2 bg-danger font-weight-bold text-light">{{ batchAlert }}</div>
 
 <!-- this is the list of the assigned user tasks -->
-    <div class="text-left card-body mb-3 tasks d-flex flex-column">
+    <div class="text-left card-body mb-3 tasks d-flex flex-column p-0">
     <processing-bar v-if="processing && !timesheet"></processing-bar>
-    <input v-if="searchInput" class="form-control mb-3" placeholder="Filter Task By Client Name" v-model="searchTasks" type="search">
+    <input class="task-search-input" placeholder="Filter Task By Client Name..." v-model="searchTasks" type="search">
     <spinner v-if="tasksLoaded" class="mx-auto"></spinner>
 
-      <div class="card mb-3" v-if="inProgressTasks.length > 0 && !tasksLoaded && taskData">
+      <div class="card my-3" v-if="inProgressTasks.length > 0 && !tasksLoaded && taskData">
         <div class="card-header">
           <span class="font-weight-bold">In Progress | <span class="text-primary">{{ inProgressTasks.length }}</span></span>
         </div>
@@ -516,6 +516,11 @@ export default {
 
 
 <style scoped lang="scss">
+
+  .task-search-input {
+    padding: 10px;
+    border: 1px solid lightgray;
+  }
 
   tr {
     cursor: pointer;

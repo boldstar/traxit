@@ -43,8 +43,15 @@
             </li>
             <li class="nav-item w-100" id="contacts" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive && sidebarOpen }"> 
                 <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">            
-                    <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/contacts"><i class="fas fa-users align-self-center"></i><span :class="sidebarOpen ? 'show-link' : 'hide-link'">Contacts</span></router-link>
+                    <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/contacts"  @click.native="filterContacts('All')"><i class="fas fa-users align-self-center"></i><span :class="sidebarOpen ? 'show-link' : 'hide-link'">Contacts</span></router-link>
                 </transition>  
+                <transition name="list">
+                    <ul v-if="$route.path == '/contacts' && sidebarOpen" class="sublist" :class="{'show-sublist': $route.path == '/contacts'}">
+                        <li @click="filterContacts('Business')" :class="{'sublist-link' : contactFilter == 'Business'}">
+                            Businesses
+                        </li>
+                    </ul> 
+                </transition> 
             </li>
             <li class="nav-item w-100" id="add-new" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive && sidebarOpen }">
                 <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
@@ -87,11 +94,14 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert', 'engagementFilter', 'sidebarOpen', 'files_length'])
+        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert', 'engagementFilter', 'contactFilter', 'sidebarOpen', 'files_length'])
     },
     methods: {
         filterEngagements(filter) {
             this.$store.commit('changeEngagementFilter', filter)
+        },
+        filterContacts(filter) {
+            this.$store.commit('changeContactFilter', filter)
         }
     },
     created() {

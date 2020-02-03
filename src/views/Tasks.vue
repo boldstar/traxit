@@ -39,7 +39,7 @@
 <!-- this is the list of the assigned user tasks -->
     <div class="text-left card-body mb-3 tasks d-flex flex-column p-0">
     <processing-bar v-if="processing && !timesheet"></processing-bar>
-    <input class="task-search-input" placeholder="Filter Task By Client Name..." v-model="searchTasks" type="search">
+    <input class="task-search-input" placeholder="Filter Task By Name..." v-model="searchTasks" type="search">
     <spinner v-if="tasksLoaded" class="mx-auto"></spinner>
 
       <div class="card my-3" v-if="inProgressTasks.length > 0 && !tasksLoaded && taskData">
@@ -71,7 +71,7 @@
             <th scope="col" v-if="batchUpdateColumn" @click="sort('workflow')">Workflow</th>
             <th scope="col">Task</th>
             <th scope="col" class="mobile-hide-row">Type</th>
-            <th scope="col" @click="sort('name')">Client</th>
+            <th scope="col" @click="sort('name')">Name</th>
             <th scope="col" class="hide-row">Time Period</th>
             <th scope="col" class="hide-row">Return Type</th>
             <th scope="col" class="hide-row">Year</th>

@@ -4,7 +4,7 @@
           <div class="input-group-prepend">
             <label class="input-group-text text-primary font-weight-bold" for="option">{{label}}<span class="text-danger" v-if="required">*</span></label>
           </div>
-          <select class="form-control" id="client_id" v-model="model" v-validate="{ is_not: selected }" name="Category" @change="handleSelect($event)" v-if="value_type === 'array'" :class="{'input-error': formError.length > 0 && formError.includes(prop)}">
+          <select class="form-control" :id="label" v-model="model" v-validate="{ is_not: selected }" name="Category" @change="handleSelect($event)" v-if="value_type === 'array'" :class="{'input-error': formError.length > 0 && formError.includes(prop)}">
             <option disabled>{{ selected }}</option>
             <option v-for="(option, index) in options" :key="index" :value="option">
               {{ option }}
@@ -12,7 +12,7 @@
           </select>
           <select :class="{'input-error': formError.length > 0 && formError.includes(prop)}" class="form-control" id="client_id" v-model="model" v-validate="{ is_not: selected }" name="Category" @change="handleSelect($event)" v-if="value_type === 'objects'">
             <option disabled>{{ selected }}</option>
-            <option v-for="(option, index) in options" :key="index" :value="option.id" v-if="option.name != 'Admin'">
+            <option v-for="(option, index) in options" :key="index" :value="option.id">
                 <span v-if="prop === 'client_id'">{{ option.value }}</span>
                 <span v-if="prop === 'assigned_to'">{{ option.name }}</span>
                 <span v-if="prop === 'status'">{{ option.status }}</span>

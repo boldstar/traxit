@@ -158,14 +158,14 @@
               </div>
               <select :class="{'input-error': errors.has('Assigned To')}" v-validate="{is_not: option}" name="Assigned To" class="form-control" id="user_id" v-model="engagement.assigned_to">
                 <option  selected disabled>{{ option }}</option>
-                <option v-for="user in users" :key="user.id" :value="user.id" v-if="user.name != 'Admin'">
+                <option v-for="user in filteredUsers" :key="user.id" :value="user.id">
                   {{ user.name }}
                 </option>
               </select>
             </div>
             <span class="form-error" v-show="errors.has('Assigned To')">{{ errors.first('Assigned To') }}</span>
 
-            <div v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id === engagement.workflow_id">
+            <div v-for="workflow in filteredWorkflows" :key="workflow.id">
             <div class="input-group" :class="{'mb-3': !errors.has('Status')}">
               <div class="input-group-prepend">
                 <label class="input-group-text text-primary font-weight-bold" for="option">Status<span class="text-danger">*</span></label>
@@ -259,6 +259,12 @@ export default {
         } 
         return years.reverse();
     },
+     filteredUsers() {
+        return this.users.filter(user => user.name != 'Admin')
+    },
+    filteredWorkflows() {
+      return this.allWorkflows.filter(w => w.id === this.engagement.workflow_id)
+    }
   },
   methods: {
     ...mapActions(['addEngagement']),

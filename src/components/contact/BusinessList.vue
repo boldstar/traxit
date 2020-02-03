@@ -30,7 +30,7 @@
                 </tr>
             </thead> 
             <tbody class="client-info table-bordered"  v-if="!tableLoading">
-                <tr v-for="(business, index) in sortedBusinessList"  :key="index" @click="viewDetails(business.id)">
+                <tr v-for="(business, index) in sortedBusinessList"  :key="index" @click="viewDetails(business.id)" class="business-list-row">
                     <th>{{business.business_name}}</th>
                     <td class="text-capitalize">{{ business.client.last_name }}, {{business.client.first_name}} <span v-if="business.client.has_spouse == true">&</span> <span v-if="business.client.last_name != business.client.spouse_last_name && business.client.has_spouse == true && business.client.spouse_last_name != null"> {{business.client.spouse_last_name}},</span> {{ business.client.spouse_first_name }}</td>
                     <th>{{business.email}}</th>
@@ -117,7 +117,7 @@ export default {
 
         },
         viewDetails(id) {
-
+            this.$router.push('/business/' + id + '/details')
         }
     },
     created() {
@@ -143,5 +143,9 @@ export default {
 .table thead th {
     vertical-align: middle;
     padding: .5rem;
+}
+
+.business-list-row {
+    cursor: pointer;
 }
 </style>

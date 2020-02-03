@@ -45,7 +45,7 @@
                 <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">            
                     <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/contacts"  @click.native="filterContacts('All')"><i class="fas fa-users align-self-center"></i><span :class="sidebarOpen ? 'show-link' : 'hide-link'">Contacts</span></router-link>
                 </transition>  
-                <transition name="list">
+                <transition name="sublist">
                     <ul v-if="$route.path == '/contacts' && sidebarOpen" class="sublist" :class="{'show-sublist': $route.path == '/contacts'}">
                         <li @click="filterContacts('Business')" :class="{'sublist-link' : contactFilter == 'Business'}">
                             Businesses
@@ -118,6 +118,16 @@ export default {
         height: 100%;
     }
     .list-enter, .list-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        opacity: 0;
+        height: 0;
+    }
+
+    .sublist-enter-active, .sublist-leave-active {
+        transition: opacity 1s;
+        min-height: 75px;
+        height: 100%;
+    }
+    .sublist-enter, .sublist-leave-to /* .fade-leave-active below version 2.1.8 */ {
         opacity: 0;
         height: 0;
     }

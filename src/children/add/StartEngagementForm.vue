@@ -58,7 +58,7 @@
         <form-select :options="monthly" :value_type="'array'" :selected="option" :label="'Month of'" :prop="'title'" @select-change="selectedValue" v-if="monthRange" :required="true" :formError="errorsList"></form-select>
         <form-select :options="quarterly" :value_type="'array'" :selected="option" :label="'Quarter'" :prop="'title'" @select-change="selectedValue" v-if="quarterRange" :required="true" :formError="errorsList"></form-select>
         <form-select :options="reducedReturnTypes" :value_type="'array'" :selected="option" :label="'Return Type'" :prop="'return_type'" @select-change="selectedValue" v-if="workflow.engagement_type != 'Bookkeeping'" :required="true" :formError="errorsList"></form-select>
-        <form-select :options="users" :value_type="'objects'" :selected="option" :label="'Assign To'" :prop="'assigned_to'" @select-change="selectedValue" :required="true" :formError="errorsList"></form-select>
+        <form-select :options="filteredUsers" :value_type="'objects'" :selected="option" :label="'Assign To'" :prop="'assigned_to'" @select-change="selectedValue" :required="true" :formError="errorsList"></form-select>
         <form-select :options="statuses" :value_type="'array'" :selected="option" :label="'Status'" :prop="'status'" @select-change="selectedValue" :required="true" :formError="errorsList"></form-select>
 
 
@@ -172,6 +172,9 @@ export default {
         acc.push(status.status)
         return acc
       }, [])
+    },
+    filteredUsers() {
+        return this.users.filter(user => user.name != 'Admin')
     }
   },
   methods: {

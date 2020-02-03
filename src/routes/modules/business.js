@@ -14,9 +14,9 @@ export default [
         children: [          
             {
             // this is the path to view the account of the client
-            path: 'account',
-            name: 'account',
-            component: () => import('@/children/business/Account.vue'),
+            path: 'details',
+            name: 'account-details',
+            component: () => import('@/children/business/BusinessAccount.vue'),
                 meta: {
                 requiresAuth: true,
                 layout: "default",
@@ -28,13 +28,14 @@ export default [
                     {
                     // this is the path to edit contact
                     path: 'edit',
-                    component: () => import('@/children/business/EditBusiness.vue'),
-                        meta: {
-                        requiresAuth: true,
-                        layout: "default",
-                        breadCrumb: [
-                            { name: 'Edit Contact' }
-                        ]
+                    name: 'edit-business',
+                    component: () => import('@/children/business/BusinessDetailsCrud.vue'),
+                    meta: {
+                            requiresAuth: true,
+                            layout: "default",
+                            breadCrumb: [
+                                { name: 'Edit Business' }
+                            ]
                         },
                     },
                 ]
@@ -54,7 +55,8 @@ export default [
                 children: [
                 {
                     // this is the path to add an engagement to singel client
-                    path: 'add-business-engagement',
+                    path: 'add',
+                    name: 'add-business-engagement',
                     component: () => import('@/children/business/AddBusinessEngagement.vue'),
                     meta: {
                         requiresAuth: true,

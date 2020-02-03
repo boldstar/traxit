@@ -11,26 +11,26 @@
     </div>
 
     <!-- this is the tab links for the different views -->
-      <div class="d-flex justify-content-center business-nav-links">
+      <div class="d-flex justify-content-center business-nav-links" v-if="businessDetails">
         <ul class="nav mb-3" id="myTab" role="tablist">
           <li class="nav-item" v-bind:class="{ 'is-active' : isClicked }" >
-            <router-link :to="{ path: '/business/' + business.id + '/account' }" class="nav-link mx-3" data-toggle="tab" role="tab"><i class="pr-2 far fa-address-card"></i>Account</router-link>
+            <router-link :to="{ path: '/business/' + businessDetails.id + '/details' }" class="nav-link mx-3" data-toggle="tab" role="tab"><i class="pr-2 far fa-address-card"></i>Account</router-link>
           </li>
           <li class="nav-item" v-bind:class="{ 'is-active' : isClicked }">
-            <router-link  :to="{ path: '/business/' + business.id +'/engagements' }" class="nav-link mx-3" data-toggle="tab" role="tab" ><i class="pr-2 far fa-folder-open"></i>Engagements</router-link>
+            <router-link  :to="{ path: '/business/' + businessDetails.id +'/engagements' }" class="nav-link mx-3" data-toggle="tab" role="tab" ><i class="pr-2 far fa-folder-open"></i>Engagements</router-link>
           </li>
         </ul>
       </div>
 
-      <div class="float-right mt-3 settings-dropdown">
+      <div class="float-right mt-3 settings-dropdown" v-if="businessDetails">
         <div class="dropdown">
           <button class="btn btn-sm btn-outline-primary dropdown-toggle settings-btn" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-cog mr-2"></i>
             Settings
           </button>
           <div class="dropdown-menu dropdown-menu-right mr-0" aria-labelledby="dropdownMenu2">
-            <router-link :to="'/business/' + business.id + '/account/' + 'edit'" class="dropdown-item"><i class="fas fa-pencil-alt"></i><span class="ml-2 pl-4">Edit Business</span></router-link>
-            <router-link :to="'/business/' + business.id + '/account/business/' + 0" class="dropdown-item"><i class="far fa-building"></i><span class="ml-2 pl-4">Add Business</span></router-link>
+            <router-link :to="'/business/' + businessDetails.id + '/details/' + 'edit'" class="dropdown-item"><i class="fas fa-pencil-alt"></i><span class="ml-2 pl-4">Edit Business</span></router-link>
+            <router-link :to="'/business/' + businessDetails.id + '/engagements/add'" class="dropdown-item"><i class="fas fa-plus-square"></i><span class="ml-2 pl-4">Add Engagement</span></router-link>
           </div>
         </div>
       </div>
@@ -40,8 +40,8 @@
 
     <div class="tab-content" id="myTabContent">   
       <!-- these are the panes for the different tab views -->
-      <div class="tab-pane fade show active" role="tabpanel" v-if="business">
-        <router-view  :businessDetails="business"></router-view>
+      <div class="tab-pane fade show active" role="tabpanel" v-if="businessDetails">
+        <router-view  :business="businessDetails" :engagements="businessEngagements"></router-view>
       </div>
     </div>
   </div>
@@ -56,7 +56,7 @@ import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 
 export default {
-  name: 'ContactDetails',
+  name: 'BusinessDetails',
   data () {
     return {
       isClicked: false,
@@ -74,7 +74,8 @@ export default {
   computed: {
     ...mapGetters(
         [
-          'business',
+          'businessDetails',
+          'businessEngagements',
           'successAlert'
         ]
       )
@@ -86,7 +87,8 @@ export default {
   },
   created: function(){
     this.$store.dispatch('getBusinessDetails', this.$route.params.id)
-    }
+    this.$store.dispatch('getBusinessEngagements', this.$route.params.id)
+  }
 }
 </script>
 

@@ -18,33 +18,23 @@
                 <button class="btn btn-sm btn-outline-primary refresh" @click="refresh"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
             </div>
         </div>
-        <div class="d-flex justify-content-center w-100 mb-3 pt-3 body dashboard">
+        <div class="d-flex flex-column align-items-center pt-3 w-100 mb-3 body dashboard">
 
             <spinner v-if="loading && !noData" class="mx-auto"></spinner>
-            <welcome v-if="noData && !loading" class="align-self-center"></welcome>
-
-             <DashboardProfile 
+            <welcome v-if="noData && !loading" class="align-self-center mt-5"></welcome>
+            
+            <DashboardDoughnuts
+                :details="accountDetails" 
                 :workflows="allWorkflows" 
                 :tasks="tasks" 
                 :engagements="allEngagements" 
-                :created_engagements="createdEngagements"
-                :completed_engagements="completedEngagements"
                 :tax_year="currentYear" 
                 :current_workflow="workflowKey"
-                :details="accountDetails"
-                v-if="!loading && !noData" 
+                v-if="!loading && !noData"
+                @change-workflow="changeKey"
             />
-            
-            <div class="d-flex flex-column col-8 doughnut-charts" v-if="!loading && !noData">
-                <DashboardDoughnuts 
-                    :workflows="allWorkflows" 
-                    :tasks="tasks" 
-                    :engagements="allEngagements" 
-                    :tax_year="currentYear" 
-                    :current_workflow="workflowKey"
-                    v-if="!loading && !noData" 
-                />
 
+            <div class="dashboard-bottom-grid mt-2">
                 <DashboardCompleted 
                     :workflows="allWorkflows" 
                     :tasks="tasks" 
@@ -52,6 +42,14 @@
                     :tax_year="currentYear" 
                     :current_workflow="workflowKey"
                     :average_days="averageDays" 
+                    v-if="!loading && !noData"
+                />
+
+                <DashboardComparison
+                    :engagements="allEngagements" 
+                    :created_engagements="createdEngagements"
+                    :completed_engagements="completedEngagements"
+                    :tax_year="currentYear" 
                     v-if="!loading && !noData"
                 />
             </div>
@@ -63,6 +61,7 @@
 import DashboardDoughnuts from '@/components/dashboard/DashboardDoughnuts.vue'
 import DashboardProfile from '@/components/dashboard/DashboardProfile.vue'
 import DashboardCompleted from '@/components/dashboard/DashboardCompleted.vue'
+import DashboardComparison from '@/components/dashboard/DashboardComparison.vue'
 import Welcome from '@/components/onboard/Welcome.vue'
 import Spinner from '@/components/loaders/Spinner.vue'
 import moment from 'moment'
@@ -74,6 +73,7 @@ export default {
         DashboardDoughnuts,
         DashboardProfile,
         DashboardCompleted,
+        DashboardComparison,
         Welcome,
         Spinner
     },
@@ -268,6 +268,17 @@ a .fa-question-circle {
     font-size: 1.25rem!important;
 }
 
+.dashboard-bottom-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+}
+
+.dashboard-bg {
+    background: lightgray;
+}
+
 @media screen and (max-width: 1300px) {
     .dashboard {
         display: flex;
@@ -326,54 +337,3 @@ a .fa-question-circle {
 }
 
 </style>
-
- resolvingData(data) {
-            this.loaded.push(data)
-        },
-        dataResolved(incoming) {
-            // Check if the arrays are the same length
-            if (incoming.length !== this.required.length) return false;
-
-            // Check if all items exist and are in the same order
-            for (var i = 0; incoming.length < i; i++) {
-                if (incoming[i] !== this.required[i]) return false;
-            }
-
-            if(this.allWorkflows.length >= 1) {
-                this.workflowKey = this.allWorkflows[0].id
-            } else (
-                this.workflowKey = 1
-            )
-
-            return true
-        }
-    },
-    watch: {
-        'allWorkflows': function(value) {
-            this.resolvingData('allWorkflows')
-        }, 
-        'tasks': function(value) {
-            this.resolvingData('tasks')
-        }, 
-        'allEngagements': function(value) {
-            this.resolvingData('allEngagements')
-        }, 
-        'accountDetails': function(value) {
-            this.resolvingData('accountDetails')
-        }, 
-        'completedEngagements': function(value) {
-            this.resolvingData('completedEngagements')
-        }, 
-        'createdEngagements': function(value) {
-            this.resolvingData('createdEngagements')
-        }, 
-        'averageDays': function(value) {
-            this.resolvingData('averageDays')
-        }, 
-        'loaded': function(value) {
-            if(this.dataResolved(value)) {
-                this.loading = false
-                this.noData = false
-            }
-        }
-    },

@@ -1,7 +1,13 @@
 <template>          
-    <div class="d-flex justify-content-between doughnuts">
-        <div class="doughnut card p-0">
-            <div class="h5 card-header mb-0 p-2">
+    <div class="d-flex justify-content-around doughnuts bg-white">
+        <DashboardProfile
+            :details="details"
+            :tax_year="tax_year"
+            :engagements="engagements"
+        />
+
+        <div class="doughnut p-0">
+            <div class="h5 mb-0 p-2">
                 <i class="fas fa-home mr-2 text-primary"></i>
                 <span class="font-weight-bold">Active</span>
             </div>
@@ -10,8 +16,8 @@
             </div>
         </div>
         <!-- this is the doughnut chart for the overview of the firm -->
-        <div class="doughnut card p-0 mx-5">
-            <div class="carousel card-header h5 mb-0 p-0">
+        <div class="doughnut p-0 mx-5">
+            <div class="carousel h5 mb-0 p-0">
                 <carousel ref="carousel" :per-page="1"  :mouse-drag="false" :loop="true" :navigationEnabled="true" :paginationEnabled="false" @pageChange="handleClick" :navigationNextLabel='`<i class="fas fa-arrow-alt-circle-right text-primary"></i>`' :navigationPrevLabel='`<i class="fas fa-arrow-alt-circle-left text-primary"></i>`'>
                     <slide class="font-weight-bold p-2" ref="slide" v-for="workflow in mapWorkflowsWithIds" :key="workflow.workflow_id" :title="`${workflow.workflow_id}`">
                         <i class="fas fa-route mr-2 text-primary"></i>{{workflow.workflow}}
@@ -23,8 +29,8 @@
             </div>
         </div>
         <!-- this is the dougnut chart for the tasks -->
-        <div class="doughnut card p-0">
-            <div class="h5 card-header mb-0 p-2">
+        <div class="doughnut p-0">
+            <div class="h5 mb-0 p-2">
                 <i class="fas fa-list-ul mr-2 text-primary"></i>
                 <span class="font-weight-bold">Tasks</span>
             </div>
@@ -40,14 +46,16 @@
 
 <script>
 import DoughnutChart from '@/components/charts/DoughnutChart.vue'
+import DashboardProfile from '@/components/dashboard/DashboardProfile.vue'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
 
 export default {
     name: 'DashboardDoughnuts',
-    props: ['workflows', 'tasks', 'engagements', 'tax_year', 'current_workflow'],
+    props: ['workflows', 'tasks', 'engagements', 'tax_year', 'current_workflow', 'details'],
     components: {
-        DoughnutChart
+        DoughnutChart,
+        DashboardProfile
     },
     data () {
         return {
@@ -271,7 +279,7 @@ export default {
         handleClick() {
             const index = this.$refs.slide[0].$parent.currentPage
             const id = this.$refs.slide[index].title
-            this.selectedWorkflow = JSON.parse(id)
+            this.$emit('change-workflow', JSON.parse(id))
         },
         getUnique(arr, comp) {
             const unique = arr.map(e => e[comp]).map((e, i, final) => final.indexOf(e) === i && i).filter(e => arr[e]).map(e => arr[e]);
@@ -282,8 +290,13 @@ export default {
 </script>
 
 <style lang="scss">
+.doughnuts {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
 .doughnut {
-    width: 30%;
+    width: 20%;
 }
 </style>
 

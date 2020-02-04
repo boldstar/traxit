@@ -1,7 +1,7 @@
 <template>
-  <div class="my-3 mt-auto completed">
-        <div class="card w-100">
-            <div class="d-flex justify-content-between card-header p-2">
+  <div class="completed bg-white">
+        <div class="w-100">
+            <div class="d-flex justify-content-between p-2">
                 <div class="h5 mb-0 ml-3">
                     <i class="fas fa-folder mr-2 text-primary"></i>
                     <span class="font-weight-bold">Completed </span>
@@ -125,4 +125,10 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+    .completed {
+        width: 100%;
+    }
+</style>
                     

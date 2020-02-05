@@ -13,7 +13,7 @@
 
 <!-- this section is controling the main content section -->
     <div class="d-flex main-wrapper page-wrapper" :class="{'main-wrapper-collapsed': !sidebarOpen }">
-      <main role="main" class="flex-fill px-3 main">
+      <main role="main" class="flex-fill" :class="{'px-3 main': $route.name != 'dashboard'}">
 
         <!-- this is if they have not done a setup tour -->
         <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">

@@ -1,40 +1,32 @@
 <template>
-    <div class="chart d-flex flex-column align-items-center justify-content-center">
-        <div class="card-header bg-white shadow w-100 d-flex justify-content-between border">
-            <div class="d-flex">
-                <span class="h5 mb-0 align-self-center">Dashboard</span>
-                <span class="h5 mb-0 align-self-center mx-2">|</span>
-                <div class="input-group input-group-sm">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text text-secondary bg-white font-weight-bold" for="option">Tax Year</label>
-                    </div>
-                    <select name="year" id="year" class="form-control form-control-sm" v-model="currentYear">
-                        <option selected>{{option}}</option>
-                        <option v-for="(year, index) in filterYears" :value="year" :key="index">{{year}}</option>
-                    </select>
-                 </div>
-            </div>
-            <div class="d-flex">
-                <button class="btn btn-sm btn-outline-primary refresh" @click="refresh"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
-            </div>
-        </div>
-        <div class="d-flex flex-column align-items-center pt-3 w-100 mb-3 body dashboard">
+    <div class="dashboard" :class="{'dashboard-bg': !loading && !noData}">
 
-            <spinner v-if="loading && !noData" class="mx-auto"></spinner>
-            <welcome v-if="noData && !loading" class="align-self-center mt-5"></welcome>
-            
-            <DashboardDoughnuts
-                :details="accountDetails" 
-                :workflows="allWorkflows" 
-                :tasks="tasks" 
-                :engagements="allEngagements" 
-                :tax_year="currentYear" 
-                :current_workflow="workflowKey"
-                v-if="!loading && !noData"
-                @change-workflow="changeKey"
-            />
+        <spinner v-if="loading && !noData" class="mx-auto"></spinner>
+        <welcome v-if="noData && !loading" class="align-self-center mt-5"></welcome>
 
-            <div class="dashboard-bottom-grid mt-2">
+        <div class="dashboard-grids" v-if="!loading && !noData">
+            <div class="dashboard-section">
+                <DashboardProfile
+                    :details="accountDetails"
+                    :tax_year="currentYear"
+                    :engagements="allEngagements"
+                    v-if="!loading && !noData"
+                    @change-year="setYear"
+                />
+            </div>
+            <div class="dashboard-section">
+                <DashboardDoughnuts
+                    :details="accountDetails" 
+                    :workflows="allWorkflows" 
+                    :tasks="tasks" 
+                    :engagements="allEngagements" 
+                    :tax_year="currentYear" 
+                    :current_workflow="workflowKey"
+                    v-if="!loading && !noData"
+                    @change-workflow="changeKey"
+                />
+            </div>
+            <div class="dashboard-section">
                 <DashboardCompleted 
                     :workflows="allWorkflows" 
                     :tasks="tasks" 
@@ -44,7 +36,8 @@
                     :average_days="averageDays" 
                     v-if="!loading && !noData"
                 />
-
+            </div>
+            <div class="dashboard-section">
                 <DashboardComparison
                     :engagements="allEngagements" 
                     :created_engagements="createdEngagements"
@@ -54,7 +47,7 @@
                 />
             </div>
         </div>
-    </div>       
+    </div>      
 </template>
 
 <script>
@@ -143,6 +136,9 @@ export default {
                 }
             }, 3000);
         },
+        setYear(year) {
+            this.currentYear = year
+        },
          resolvingData(data) {
             this.loaded.push(data)
         },
@@ -212,7 +208,7 @@ export default {
                 this.noData = true
                 this.loading = false
             }
-        }, 8000)
+        }, 10000)
     },
 }
 </script>
@@ -223,6 +219,40 @@ export default {
     height: 100%;
     min-height: calc(100vh - 190px);
   }
+
+.selected {
+    background-color: #0044ff3d;
+    color: #0044ff;
+    border: 1px solid #0044ff;
+}
+
+.dashboard {
+    height: 100%;
+    min-height: calc(100vh - 35px);
+    padding-top: 58px;
+}
+  
+.dashboard-bg {
+    background: lightgray;
+}  
+    
+
+.dashboard-grids {
+    height: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 1px;
+}
+
+.dashboard-section {
+    background: white;
+    max-width: 100%;
+}
+
+.dashboard-chart-wrapper {
+    border-bottom: 1px solid lightgray;
+}
 
 .no-tasks-img {
     height: 23em;
@@ -235,48 +265,6 @@ export default {
     &:hover {
         background-color: #0044ff3d;
     }
-}
-
-.selected {
-    background-color: #0044ff3d;
-    color: #0044ff;
-    border: 1px solid #0044ff;
-}
-
-.completed {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.data-card {
-    background: #f8f8f8;
-    padding: 5px 10px;
-    border-radius: 5px;
-    box-shadow: 0 0 5px 0 rgba(0,0,0,.150);
-    font-size: 1.1rem;
-    font-weight: bold;
-}
-
-.data-card-header {
-    font-size: .8rem;
-    color: #0077ff;
-    text-align: left;
-}
-
-a .fa-question-circle {
-    font-size: 1.25rem!important;
-}
-
-.dashboard-bottom-grid {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 20px;
-}
-
-.dashboard-bg {
-    background: lightgray;
 }
 
 @media screen and (max-width: 1300px) {

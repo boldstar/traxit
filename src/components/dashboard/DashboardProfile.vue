@@ -1,12 +1,26 @@
 <template>
-    <div class="d-flex flex-column profile-card bg-white" v-if="!loading && !noData">
+    <div class="profile-card">
         <div class="h-100 mb-3" >
-            <div class="p-2 text-left">
-                <span class="h5 ml-3 mb-0 font-weight-bold align-self-center" v-if="details && details.business_name">{{ businessName }}</span>
-                <router-link :disabled="role != 'Admin'" to="/administrator/account" class="btn btn-secondary btn-sm font-weight-bold align-self-center" v-else>Add Bussiness Name</router-link>
+            <div class="p-2 text-left d-flex justify-content-between">
+                <div>
+                    <div  v-if="details && details.business_name" class="h5 mb-0">
+                        <i class="fas fa-building mr-2 text-primary"></i>
+                        <span class="font-weight-bold" >{{ businessName }}</span>
+                    </div>
+                    <router-link :disabled="role != 'Admin'" to="/administrator/account" class="btn btn-secondary btn-sm font-weight-bold align-self-center" v-else>Add Bussiness Name</router-link>
+                </div>
+                <div class="input-group input-group-sm ml-2 w-25">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text text-secondary bg-white font-weight-bold" for="option">Tax Year</label>
+                    </div>
+                    <select name="year" id="year" class="form-control form-control-sm" v-model="current">
+                        <option selected>{{option}}</option>
+                        <option v-for="(year, index) in filterYears" :value="year" :key="index">{{year}}</option>
+                    </select>
+                </div>
             </div>
-            <div class="card-body px-0 pb-0">
-                <img class="ml-5 profile-logo" v-if="details && details.logo && logo" v-bind:src="logo" />
+            <div class="card-body px-0 pb-0 d-flex justify-content-center">
+                <img class="profile-logo" v-if="details && details.logo && logo" v-bind:src="logo" />
                 <router-link :disabled="role != 'Admin'" to="/administrator/account" class="btn btn-primary font-weight-bold my-5" v-else>Add Logo</router-link>
             </div>
         </div>
@@ -14,27 +28,29 @@
 </template>
 
 <script>
+import DashboardTotal from '@/components/dashboard/DashboardTotal.vue'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
 
 export default {
    name: 'DashboardProfile',
    props: ['workflows', 'engagements', 'tax_year', 'details'],
+   components: {DashboardTotal},
     data () {
         return {
-            barHeight: 250,
-            workflowKey: null,
-            chartData: false,
-            taskData: false,
-            loading: false,
-            noData: false,
             selected: false,
             option: 'All',
-            averageCalc: false,
-           
         }
     },
     computed: {
+        current: {
+            get: function() {
+                return this.tax_year
+            },
+            set: function(value) {
+                this.$emit('change-year', value)
+            }
+        },
         businessName() {
             return this.details.business_name
         },
@@ -49,6 +65,14 @@ export default {
         },
         totalBookkeeping() {
             return this.engagements.filter(engagement => engagement.type == 'bookkeeping').filter(eng => this.tax_year === 'All' ? eng : eng.year === this.tax_year).length
+        },
+        filterYears() {
+            //map year
+            const years = this.engagements.map(engagement => engagement.year)
+            //filter duplicates
+            const result = years.filter((v, i) => years.indexOf(v) === i)
+
+            return result
         },
     },
     methods: {
@@ -73,7 +97,7 @@ export default {
             }
 
             return a;
-        },
+        }
     },
 }
 </script>
@@ -87,6 +111,10 @@ export default {
 
     .profile-card {
         width: 100%;
-        max-width: 300px;
+        flex-grow: 1;
+    }
+
+    .profile-header {
+        white-space: nowrap;
     }
 </style>

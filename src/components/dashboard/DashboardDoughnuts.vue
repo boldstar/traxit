@@ -1,43 +1,45 @@
 <template>          
-    <div class="d-flex justify-content-around doughnuts bg-white">
-        <DashboardProfile
-            :details="details"
-            :tax_year="tax_year"
-            :engagements="engagements"
-        />
-
-        <div class="doughnut p-0">
-            <div class="h5 mb-0 p-2">
-                <i class="fas fa-home mr-2 text-primary"></i>
-                <span class="font-weight-bold">Active</span>
-            </div>
-            <div class="card-body">
-                <doughnut-chart :chart-data="firmsetsfull"></doughnut-chart>
+    <div class="doughnuts">
+        <div class="d-flex justify-content-between p-2">
+            <div class="h5 mb-0">
+                <i class="fas fa-chart-pie mr-2 text-primary"></i>
+                <span class="font-weight-bold">Overview</span>
             </div>
         </div>
-        <!-- this is the doughnut chart for the overview of the firm -->
-        <div class="doughnut p-0 mx-5">
-            <div class="carousel h5 mb-0 p-0">
-                <carousel ref="carousel" :per-page="1"  :mouse-drag="false" :loop="true" :navigationEnabled="true" :paginationEnabled="false" @pageChange="handleClick" :navigationNextLabel='`<i class="fas fa-arrow-alt-circle-right text-primary"></i>`' :navigationPrevLabel='`<i class="fas fa-arrow-alt-circle-left text-primary"></i>`'>
-                    <slide class="font-weight-bold p-2" ref="slide" v-for="workflow in mapWorkflowsWithIds" :key="workflow.workflow_id" :title="`${workflow.workflow_id}`">
-                        <i class="fas fa-route mr-2 text-primary"></i>{{workflow.workflow}}
-                    </slide>
-                </carousel>
+        <div class="doughnuts-body">
+            <div class="doughnut p-0">
+                <div class="h6 mb-0 p-2">
+                    <i class="fas fa-home mr-2 text-primary"></i>
+                    <span class="font-weight-bold">Active</span>
+                </div>
+                <div>
+                    <doughnut-chart :chart-data="firmsetsfull"></doughnut-chart>
+                </div>
             </div>
-            <div class="card-body">
-                <doughnut-chart :chart-data="workflowsetsfull"></doughnut-chart>
+            <!-- this is the doughnut chart for the overview of the firm -->
+            <div class="doughnut p-0">
+                <div class="carousel h6 mb-0 p-0">
+                    <carousel ref="carousel" :per-page="1"  :mouse-drag="false" :loop="true" :navigationEnabled="true" :paginationEnabled="false" @pageChange="handleClick" :navigationNextLabel='`<i class="fas fa-arrow-alt-circle-right text-primary"></i>`' :navigationPrevLabel='`<i class="fas fa-arrow-alt-circle-left text-primary"></i>`'>
+                        <slide class="font-weight-bold p-2 slide" ref="slide" v-for="workflow in mapWorkflowsWithIds" :key="workflow.workflow_id" :title="`${workflow.workflow_id}`">
+                            <i class="fas fa-route mr-2 text-primary"></i>{{workflow.workflow}}
+                        </slide>
+                    </carousel>
+                </div>
+                <div>
+                    <doughnut-chart :chart-data="workflowsetsfull"></doughnut-chart>
+                </div>
             </div>
-        </div>
-        <!-- this is the dougnut chart for the tasks -->
-        <div class="doughnut p-0">
-            <div class="h5 mb-0 p-2">
-                <i class="fas fa-list-ul mr-2 text-primary"></i>
-                <span class="font-weight-bold">Tasks</span>
-            </div>
-            <div class="card-body">
-                <doughnut-chart v-if="tasks && tasks.length > 0" :chart-data="tasksetsfull"></doughnut-chart>
-                <div class="mt-3" v-else>
-                <span class="font-weight-bold">You currently have zero tasks</span>
+            <!-- this is the dougnut chart for the tasks -->
+            <div class="doughnut p-0">
+                <div class="h6 mb-0 p-2">
+                    <i class="fas fa-list-ul mr-2 text-primary"></i>
+                    <span class="font-weight-bold">Tasks</span>
+                </div>
+                <div>
+                    <doughnut-chart v-if="tasks && tasks.length > 0" :chart-data="tasksetsfull"></doughnut-chart>
+                    <div class="mt-3" v-else>
+                    <span class="font-weight-bold">You currently have zero tasks</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -285,18 +287,27 @@ export default {
             const unique = arr.map(e => e[comp]).map((e, i, final) => final.indexOf(e) === i && i).filter(e => arr[e]).map(e => arr[e]);
             return unique
         },
+        setYear(year) {
+            this.$emit('change-year', year)
+        }
     },
 }
 </script>
 
 <style lang="scss">
-.doughnuts {
-    width: 100%;
-    margin-bottom: 10px;
+.doughnuts-body {
+    display: flex;
+    justify-content: space-around;
+    height: 100%;
 }
 
 .doughnut {
     width: 20%;
+    margin-top: 50px;
+}
+
+.slide {
+    white-space: nowrap;
 }
 </style>
 

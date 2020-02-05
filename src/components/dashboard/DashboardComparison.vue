@@ -1,11 +1,12 @@
 <template>
-    <div class="dashboard-comparison bg-white">
+    <div class="comparison bg-white">
         <div class="text-left p-2">
             <div class="d-flex h5 mb-0">
+                <i class="fas fa-chart-area mr-2 text-primary"></i>
                 <span class="font-weight-bold">Comparison</span>
             </div>
         </div>
-        <line-chart class="w-100 line-chart" :height="barHeight" :chart-data="lineData" v-if="completedDates && createdDates"></line-chart>
+        <line-chart class="w-100 line-chart mt-2 card-body" :height="barHeight" :chart-data="lineData" v-if="completedDates && createdDates"></line-chart>
     </div>
 </template>
 
@@ -20,7 +21,7 @@ export default {
     },
     data () {
         return {
-            barHeight: 250,
+            barHeight: 260,
            
         }
     },
@@ -96,5 +97,7 @@ export default {
 </script>
 
 <style lang="scss">
-
+    .comparison {
+        width: 100%;
+    }
 </style>

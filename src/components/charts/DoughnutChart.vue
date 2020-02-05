@@ -10,6 +10,7 @@ export default {
     data() {
         return {
               options: {
+                    onClick: this.handle,
                     responsive: true, 
                     maintainAspectRatio: true,
                     cutoutPercentage: 70,
@@ -29,6 +30,15 @@ export default {
                         }
                     }       
             },
+        }
+    },
+    methods: {
+        handle(point, event) {
+            const item = event[0]
+            this.$emit('click-section', {
+                index: item._index,
+                value: this.chartData
+            })
         }
     },
     watch: {
@@ -61,7 +71,7 @@ export default {
             var elementHeight = (chart.innerRadius * 2);
 
             // Pick a new font size so it will not be larger than the height of label.
-            var fontSizeToUse = Math.min(30, elementHeight);
+            var fontSizeToUse = Math.min(25, elementHeight);
 
             //Set font settings to draw it correctly.
             ctx.textAlign = 'center';
@@ -108,7 +118,7 @@ export default {
                     var elementHeight = (chart.innerRadius * 2);
 
                     // Pick a new font size so it will not be larger than the height of label.
-                    var fontSizeToUse = Math.min(30, elementHeight);
+                    var fontSizeToUse = Math.min(25, elementHeight);
 
                     //Set font settings to draw it correctly.
                     ctx.textAlign = 'center';

@@ -3,7 +3,7 @@
 <!-- this is the user tasks header -->
       <div class="card-header bg-white shadow w-100 d-flex justify-content-between border">
           <div class="d-flex">
-          <span class="mb-0 align-self-center h5">Tasks | <span class="text-primary">{{ tasks.length }}</span></span>
+          <span class="mb-0 align-self-center h5">Tasks | <span class="text-primary">{{ sortedTasksCustom.length }}</span></span>
 
           <div class="d-flex ml-5">
             <span class="font-weight-bold mt-1 mr-2">Priority Level: </span>
@@ -19,18 +19,9 @@
 
           </div>
           <div class="align-self-center d-flex">
-            <div class="batch-btn">
-
             <button class="btn btn-sm btn-outline-dark mr-2 font-weight-bold batch-btn" @click="showBatchColumn" v-if="!noTasks"><i class="fas fa-tasks mr-2"></i>Batch</button>
-            </div>
-            <div>
-
             <button class="btn btn-sm btn-outline-secondary mr-2 font-weight-bold" @click="searchInputMethod" v-if="!noTasks"><i class="fas fa-search mr-2"></i>Filter</button>
-            </div>
-            <div>
-
             <button class="btn btn-sm btn-outline-primary font-weight-bold" @click="refreshTask"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
-            </div>
           </div>
       </div>
 
@@ -242,6 +233,7 @@ export default {
       batchModal: false,
       userError: false,
       statusError: false,
+      filterTask: 'All',
       task: {
         user_id: 0,
         status: null,
@@ -303,6 +295,8 @@ export default {
         return acc
       }, []).sort((a,b) => {
         return b[this.firstSort] - a[this.firstSort] || new Date(b[this.secondSort]) - new Date(a[this.secondSort])
+      }).filter(task => {
+        if(this.filterTask === 'All'){ return task } else{ return task.task === this.filterTask} 
       }).filter( task => {
       return !this.searchTasks || task.name.toLowerCase().indexOf(this.searchTasks.toLowerCase()) >= 0 })
     },
@@ -445,6 +439,8 @@ export default {
         this.$refs.modal.show()
     },
     refreshTask() {
+      this.$router.replace('/tasks')
+      this.filterTask = 'All'
       this.tasksLoaded = true
       this.checkedTasks = []
       this.batchUpdate = false
@@ -508,6 +504,9 @@ export default {
         } else {
           self.taskData = true
           self.noTasks = false
+          if(self.$route.query.data) {
+            this.filterTask = this.$route.query.data.label
+          }
         }
     }, 3000);
   }

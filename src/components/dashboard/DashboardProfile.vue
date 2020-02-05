@@ -5,7 +5,7 @@
                 <div>
                     <div  v-if="details && details.business_name" class="h5 mb-0">
                         <i class="fas fa-building mr-2 text-primary"></i>
-                        <span class="font-weight-bold" >{{ businessName }}</span>
+                        <span class="font-weight-bold">{{ businessName }}</span>
                     </div>
                     <router-link :disabled="role != 'Admin'" to="/administrator/account" class="btn btn-secondary btn-sm font-weight-bold align-self-center" v-else>Add Bussiness Name</router-link>
                 </div>

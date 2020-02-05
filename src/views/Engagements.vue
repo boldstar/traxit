@@ -5,7 +5,7 @@
   
         <div class="page-wrapper mt-1">
 
-            <engagements-list :engagements="engagements"></engagements-list>
+            <engagements-list :engagements="engagements" :filters="listFilters"></engagements-list>
         </div>
     </div>
 
@@ -26,6 +26,7 @@ export default {
     data() {
         return {
             alert: '',
+            listFilters: null
         }
     },
     computed: {
@@ -58,14 +59,16 @@ export default {
                     }
                 } 
             })
-        }   
+        }, 
     },
     created() {
         if(this.$route.query.alert) {
             this.alert  = this.$route.query.alert;
+            this.$router.replace({ path: '/engagements'})
+        } if (this.$route.query.data) {
+            this.listFilters = this.$route.query.data
         }
         this.$store.dispatch('retrieveWorkflows')
-        this.$router.replace({ path: '/engagements'})
         var self = this;
         setTimeout(() => {
         self.alert = '';

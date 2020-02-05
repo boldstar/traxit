@@ -13,7 +13,7 @@
                     <span class="font-weight-bold">Active</span>
                 </div>
                 <div>
-                    <doughnut-chart :chart-data="firmsetsfull"></doughnut-chart>
+                    <doughnut-chart :chart-data="firmsetsfull" @click-section="viewList"></doughnut-chart>
                 </div>
             </div>
             <!-- this is the doughnut chart for the overview of the firm -->
@@ -26,7 +26,7 @@
                     </carousel>
                 </div>
                 <div>
-                    <doughnut-chart :chart-data="workflowsetsfull"></doughnut-chart>
+                    <doughnut-chart :chart-data="workflowsetsfull" @click-section="viewList"></doughnut-chart>
                 </div>
             </div>
             <!-- this is the dougnut chart for the tasks -->
@@ -36,7 +36,7 @@
                     <span class="font-weight-bold">Tasks</span>
                 </div>
                 <div>
-                    <doughnut-chart v-if="tasks && tasks.length > 0" :chart-data="tasksetsfull"></doughnut-chart>
+                    <doughnut-chart v-if="tasks && tasks.length > 0" :chart-data="tasksetsfull" @click-section="viewList"></doughnut-chart>
                     <div class="mt-3" v-else>
                     <span class="font-weight-bold">You currently have zero tasks</span>
                     </div>
@@ -226,7 +226,8 @@ export default {
                 labels: this.mapWorkflows,
                 datasets: [
                 {
-                    label: 'Data One',
+                    workflow: null,
+                    label: 'Firm',
                     borderColor: 'black',
                     pointBackgroundColor: 'white',
                     borderWidth: 1,
@@ -242,8 +243,9 @@ export default {
             return {
                 labels: this.mapStatuses[0].statuses,
                 datasets: [
-                {
-                    label: 'Data One',
+                {   
+                    workflow: this.workflows.filter(w => w.id == this.current_workflow)[0],
+                    label: 'Workflow',
                     borderColor: 'black',
                     pointBackgroundColor: 'white',
                     borderWidth: 1,
@@ -260,7 +262,8 @@ export default {
                 labels: this.getTaskLabels,
                 datasets: [
                 {
-                    label: 'Data One',
+                    workflow: null,
+                    label: 'Task',
                     borderColor: 'black',
                     pointBackgroundColor: 'white',
                     borderWidth: 1,
@@ -287,8 +290,19 @@ export default {
             const unique = arr.map(e => e[comp]).map((e, i, final) => final.indexOf(e) === i && i).filter(e => arr[e]).map(e => arr[e]);
             return unique
         },
-        setYear(year) {
-            this.$emit('change-year', year)
+        viewList(data) {
+            var workflow = null
+            const label = data.value.labels[data.index]
+            const chart = data.value.datasets[0].label
+            if(chart == 'Workflow') {
+                workflow = data.value.datasets[0].workflow
+            }
+
+            if(chart == 'Workflow' || chart == 'Firm') {
+                this.$router.push({path: '/engagements', query: {data: {workflow: workflow, label: label, chart: chart}}})
+            } else {
+                this.$router.push({path: '/tasks', query: {data: {label: label, chart: chart}}})
+            }
         }
     },
 }
@@ -304,6 +318,7 @@ export default {
 .doughnut {
     width: 20%;
     margin-top: 50px;
+    padding: 20px;
 }
 
 .slide {

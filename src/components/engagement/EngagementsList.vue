@@ -49,17 +49,6 @@
                                 </select>
                             </div>
                         </th>
-                        <th scope="col" @click="sort('return_type')" class="hide-row">
-                            <div class="d-flex">
-                                <label class="font-weight-bold align-self-center table-label" for="option">Return Type:</label>
-                                <select class="custom-select ml-2" id="client_id" v-model="filterType">
-                                    <option> {{ type }}</option>
-                                    <option v-for="(returntype, index) in filterReturnTypes" :key="index">
-                                    {{ returntype }}
-                                    </option>
-                                </select>
-                            </div>
-                        </th>
                         <th scope="col" @click="sort('year')" class="mobile-hide-row">
                             <div class="d-flex">
                                 <label class="font-weight-bold align-self-center table-label" for="option">Year:</label>
@@ -82,6 +71,17 @@
                                 </select>
                             </div>
                         </th>
+                        <th scope="col" @click="sort('return_type')" class="hide-row">
+                            <div class="d-flex">
+                                <label class="font-weight-bold align-self-center table-label" for="option">Workflow:</label>
+                                <select class="custom-select ml-2" id="client_id" v-model="filterWorkflow">
+                                    <option> {{ type }}</option>
+                                    <option v-for="(workflow, index) in allWorkflows" :value="workflow.id" :key="index">
+                                    {{ workflow.workflow }}
+                                    </option>
+                                </select>
+                            </div>
+                        </th>
                         <th scope="col" @click="sort('status')" class="mobile-hide-row">
                             <div class="d-flex">
                                 <label class="font-weight-bold align-self-center table-label" for="option">Status:</label>
@@ -99,12 +99,11 @@
                 <tbody class="client-info table-bordered" v-if="!tableLoaded">
                     <tr v-for="(engagement, index) in sortedEngagements"  :key="index" @click="viewDetails(engagement.id)">
                         <td class="text-capitalize">{{ engagement.name }}</td>
-                        <td class="text-capitalize hide-row" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</td>
-                        <td class="text-capitalize hide-row" v-else>{{ engagement.type }}</td>
                         <td v-if="engagement.return_type != null" class="hide-row">{{ engagement.return_type }}</td>
                         <td v-else class="hide-row">None</td>
                         <td class="mobile-hide-row">{{ engagement.year }}</td>
                         <td>{{ engagement.assigned_to }}</td>
+                        <td class="mobile-hide-row">{{ workflowName(engagement.workflow_id) }}</td>
                         <td class="mobile-hide-row">{{ engagement.status }}</td>
                         <td class="text-center"><router-link v-bind:to="'/engagement/' + engagement.id+ '/details'"><i class="far fa-eye"></i></router-link></td>
                     </tr>
@@ -164,12 +163,7 @@ import ConfirmModal from '@/components/modals/ConfirmModal.vue'
 
 export default {
     name: 'EngagementsList',
-    props: {
-        engagements: {
-            type: Array,
-            default: () => []
-        }
-    },
+    props: ['engagements', 'filters'],
     components: {
         Spinner,
         NoFirm,
@@ -329,6 +323,7 @@ export default {
             this.$router.push({path: '/engagement/' + id + '/details'})
         },
         clearFilters() {
+            this.$router.replace('/engagements')
             this.typeChecked = false
             this.statusChecked = false
             this.categoryChecked = false
@@ -362,6 +357,9 @@ export default {
         cancelDownload() {
             this.$store.commit('confirmDownloadState')
         },
+        workflowName(id) {
+            return this.allWorkflows.filter(w => w.id == id)[0].workflow
+        }
     },
     created() {
         this.$store.dispatch('retrieveEngagements')
@@ -378,6 +376,14 @@ export default {
         var self = this;
         setTimeout(() => {
             self.tableLoaded = false;
+            if(self.filters) {
+                if(self.filters.chart == 'Workflow') {
+                    self.filterWorkflow = this.filters.workflow.id
+                    self.filterStatusType = this.filters.label
+                } else if (this.filters.chart == 'Firm') {
+                    self.filterWorkflow = this.allWorkflows.filter(w => w.workflow == this.filters.label)[0].id
+                }
+            }
         }, 3000)
     },
 }

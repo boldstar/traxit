@@ -2,7 +2,7 @@
     <div class="comparison bg-white">
         <div class="text-left p-2">
             <div class="d-flex h5 mb-0">
-                <i class="fas fa-chart-area mr-2 text-primary"></i>
+                <i class="fas fa-chart-area mr-2 text-primary align-self-center"></i>
                 <span class="font-weight-bold">Comparison</span>
             </div>
         </div>

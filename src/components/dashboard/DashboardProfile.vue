@@ -19,9 +19,14 @@
                     </select>
                 </div>
             </div>
-            <div class="card-body px-0 pb-0 d-flex justify-content-center">
-                <img class="profile-logo" v-if="details && details.logo && logo" v-bind:src="logo" />
-                <router-link :disabled="role != 'Admin'" to="/administrator/account" class="btn btn-primary font-weight-bold my-5" v-else>Add Logo</router-link>
+            <div class="profile-card-body d-flex justify-content-center align-items-center">
+                <div class="dashboard-logo-wrapper">
+                    <img src="../../assets/traxit_logo_official.png" class="dashboard-logo"/>
+                </div>
+                <div class="profile-logo-wrapper">
+                    <img class="profile-logo" v-if="details && details.logo && logo" v-bind:src="logo" />
+                    <router-link :disabled="role != 'Admin'" to="/administrator/account" class="btn btn-primary font-weight-bold my-5" v-else>Add Logo</router-link>
+                </div>
             </div>
         </div>
     </div>
@@ -103,10 +108,36 @@ export default {
 </script>
 
 <style lang="scss">
+
+    .profile-card {
+        height: 100%;
+    }
+
+    .profile-card-body {
+        height: calc(100% - 100px);
+    }
+
     .profile-logo {
         max-height: 150px;
         width: auto;
-        margin-top: 50px;
+    }
+
+    .profile-logo-wrapper {
+        display: flex;
+        align-items: center;
+    }
+
+    .dashboard-logo-wrapper {
+        border-right: 2px solid lightgray;
+        padding-right: 20px;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .dashboard-logo {
+        max-height: 150px;
+        width: auto;
     }
 
     .profile-card {

@@ -2,7 +2,7 @@
     <div class="dashboard" :class="{'dashboard-bg': !loading && !noData}">
 
         <spinner v-if="loading && !noData" class="mx-auto"></spinner>
-        <welcome v-if="noData && !loading" class="align-self-center mt-5"></welcome>
+        <welcome v-if="noData && !loading" class="mx-auto mt-5"></welcome>
 
         <div class="dashboard-grids" v-if="!loading && !noData">
             <div class="dashboard-section">
@@ -241,7 +241,7 @@ export default {
     height: 100%;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
     grid-gap: 1px;
 }
 

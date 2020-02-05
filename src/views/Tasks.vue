@@ -30,7 +30,12 @@
 <!-- this is the list of the assigned user tasks -->
     <div class="text-left card-body mb-3 tasks d-flex flex-column p-0">
     <processing-bar v-if="processing && !timesheet"></processing-bar>
-    <input class="task-search-input" placeholder="Filter Task By Name..." v-model="searchTasks" type="search">
+    <div class="d-flex">
+      <button type="button" class="filter-task-btn" @click="filterStatusState = 'All'" :class="{'bg-primary text-white': filterStatusState == 'All'}">All</button>
+      <button type="button" class="filter-task-btn" @click="filterStatusState = 'Active'" :class="{'bg-primary text-white': filterStatusState == 'Active'}">Active</button>
+      <button type="button" class="filter-task-btn" @click="filterStatusState = 'Pending'" :class="{'bg-primary text-white': filterStatusState == 'Pending'}">Pending</button>
+      <input class="task-search-input flex-fill" placeholder="Filter Task By Name..." v-model="searchTasks" type="search">
+    </div>
     <spinner v-if="tasksLoaded" class="mx-auto"></spinner>
 
       <div class="card my-3" v-if="inProgressTasks.length > 0 && !tasksLoaded && taskData">
@@ -234,6 +239,7 @@ export default {
       userError: false,
       statusError: false,
       filterTask: 'All',
+      filterStatusState: 'All',
       task: {
         user_id: 0,
         status: null,
@@ -277,11 +283,13 @@ export default {
     },
     sortedTasksCustom() {
       return this.tasks.reduce((acc, task) => {
+        const workflow_id = task.engagements[0].workflow_id
+        const task_status = task.engagements[0].status
         acc.push({
           id: task.id,
-          workflow_id: task.engagements[0].workflow_id,
+          workflow_id: workflow_id,
           engagement_id: task.engagements[0].id,
-          task: task.engagements[0].status,
+          task: task_status,
           due_date: task.engagements[0].estimated_date,
           updated_at: task.engagements[0].updated_at,
           name: task.engagements[0].name,
@@ -291,12 +299,15 @@ export default {
           in_progress: task.engagements[0].in_progress,
           year: task.engagements[0].year,
           priority: task.engagements[0].priority,
+          state: this.allWorkflows.filter(w => w.id == workflow_id)[0].statuses.filter(s => s.status == task_status)[0].state
         })
         return acc
       }, []).sort((a,b) => {
         return b[this.firstSort] - a[this.firstSort] || new Date(b[this.secondSort]) - new Date(a[this.secondSort])
       }).filter(task => {
         if(this.filterTask === 'All'){ return task } else{ return task.task === this.filterTask} 
+      }).filter(task => {
+        if(this.filterStatusState === 'All'){ return task } else { return task.state === this.filterStatusState} 
       }).filter( task => {
       return !this.searchTasks || task.name.toLowerCase().indexOf(this.searchTasks.toLowerCase()) >= 0 })
     },
@@ -515,6 +526,15 @@ export default {
 
 
 <style scoped lang="scss">
+
+  .filter-task-btn {
+    border: none;
+    font-weight: bold;
+    color: #0077ff;
+    width: 150px;
+    cursor: pointer;
+    outline: none;
+  }
 
   .task-search-input {
     padding: 10px;

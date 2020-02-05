@@ -51,7 +51,8 @@ export default {
 
 <style lang="scss">
     .file-sidebar {
-        width: 200px;
+        width: 100%;
+        max-width: 350px;
         min-height: 80vh;
         z-index: 100;
         margin-left: 2px;

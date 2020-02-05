@@ -303,7 +303,7 @@ export default {
             }
 
             if(chart == 'Workflow' || chart == 'Firm') {
-                this.$router.push({path: '/engagements', query: {data: {workflow: workflow, label: label, chart: chart}}})
+                this.$router.push({path: '/engagements', query: {data: {workflow: workflow, label: label, chart: chart, year: this.tax_year}}})
             } else {
                 this.$router.push({path: '/tasks', query: {data: {label: label, chart: chart}}})
             }

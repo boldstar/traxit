@@ -380,7 +380,9 @@ export default {
                 if(self.filters.chart == 'Workflow') {
                     self.filterWorkflow = this.filters.workflow.id
                     self.filterStatusType = this.filters.label
+                    self.filterYear = this.filters.year
                 } else if (this.filters.chart == 'Firm') {
+                    self.filterYear = this.filters.year
                     self.filterWorkflow = this.allWorkflows.filter(w => w.workflow == this.filters.label)[0].id
                 }
             }

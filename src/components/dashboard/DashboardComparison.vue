@@ -1,12 +1,15 @@
 <template>
     <div class="comparison bg-white">
         <div class="text-left p-2">
-            <div class="d-flex h5 mb-0">
-                <i class="fas fa-chart-area mr-2 text-primary align-self-center"></i>
-                <span class="font-weight-bold">Comparison</span>
+            <div class="d-flex flex-column">
+                <div class="d-flex h5 mb-0">
+                    <i class="fas fa-chart-area mr-2 text-primary align-self-center"></i>
+                    <span class="font-weight-bold">Comparison</span>
+                </div>
+                <p class="mb-0 font-weight-bold text-secondary">A comparison between created and completed engagements</p>
             </div>
         </div>
-        <line-chart class="w-100 line-chart mt-2 card-body" :height="barHeight" :chart-data="lineData" v-if="completedDates && createdDates"></line-chart>
+        <line-chart class="w-100 mt-3 card-body" :height="barHeight" :chart-data="lineData" v-if="completedDates && createdDates"></line-chart>
     </div>
 </template>
 

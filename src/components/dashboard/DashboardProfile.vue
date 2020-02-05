@@ -2,12 +2,13 @@
     <div class="profile-card">
         <div class="h-100 mb-3" >
             <div class="p-2 text-left d-flex justify-content-between">
-                <div>
+                <div class="d-flex flex-column align-items-start">
                     <div  v-if="details && details.business_name" class="h5 mb-0">
                         <i class="fas fa-building mr-2 text-primary"></i>
                         <span class="font-weight-bold">{{ businessName }}</span>
                     </div>
                     <router-link :disabled="role != 'Admin'" to="/administrator/account" class="btn btn-secondary btn-sm font-weight-bold align-self-center" v-else>Add Bussiness Name</router-link>
+                    <p class="mb-0 font-weight-bold text-secondary">A overview of engagements filtered by tax year</p>
                 </div>
                 <div class="input-group input-group-sm ml-2 w-25">
                     <div class="input-group-prepend">
@@ -20,12 +21,14 @@
                 </div>
             </div>
             <div class="profile-card-body d-flex justify-content-center align-items-center">
-                <div class="dashboard-logo-wrapper">
-                    <img src="../../assets/traxit_logo_official.png" class="dashboard-logo"/>
-                </div>
-                <div class="profile-logo-wrapper">
-                    <img class="profile-logo" v-if="details && details.logo && logo" v-bind:src="logo" />
-                    <router-link :disabled="role != 'Admin'" to="/administrator/account" class="btn btn-primary font-weight-bold my-5" v-else>Add Logo</router-link>
+                <div class="profile-logo-body-wrapper align-items-center">
+                    <div class="dashboard-logo-wrapper">
+                        <img src="../../assets/traxit_logo_official.png" class="dashboard-logo"/>
+                    </div>
+                    <div class="profile-logo-wrapper">
+                        <img class="profile-logo" v-if="details && details.logo && logo" v-bind:src="logo" />
+                        <router-link :disabled="role != 'Admin'" to="/administrator/account" class="btn btn-primary font-weight-bold my-5" v-else>Add Logo</router-link>
+                    </div>
                 </div>
             </div>
         </div>
@@ -117,6 +120,13 @@ export default {
         height: calc(100% - 100px);
     }
 
+    .profile-logo-body-wrapper {
+        height: calc(100% - 70px);
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
     .profile-logo {
         max-height: 150px;
         width: auto;
@@ -125,14 +135,21 @@ export default {
     .profile-logo-wrapper {
         display: flex;
         align-items: center;
+        border: 2px solid lightgray;
+        border-radius: 0 5px 5px 0;
+        border-left: none;
+        height: inherit;
+        padding: 20px;
     }
 
     .dashboard-logo-wrapper {
-        border-right: 2px solid lightgray;
-        padding-right: 20px;
-        margin-right: 10px;
+        border: 2px solid lightgray;
+        background: rgb(240, 240, 240);
+        border-radius: 5px 0 0 5px;
+        padding: 20px;
         display: flex;
         align-items: center;
+        height: inherit;
     }
 
     .dashboard-logo {

@@ -1,19 +1,18 @@
 <template>
   <div class="completed bg-white">
-        <div class="w-100">
-            <div class="d-flex justify-content-between p-2">
+        <div class="d-flex justify-content-between p-2">
+            <div class="d-flex flex-column align-items-start">
                 <div class="h5 mb-0">
                     <i class="fas fa-folder mr-2 text-primary"></i>
                     <span class="font-weight-bold">Completed </span>
                 </div>
-                <div class="h5 mb-0">
-                    <span v-if="average && averageCalc" class="font-weight-bold">Average | <span class="text-primary">{{ average }} days</span></span>
-                </div>
+                <p class="mb-0 font-weight-bold text-secondary">A chart of completed engagements in each workflow</p>
             </div>
-            <div class="card-body">
-                <bar-chart class="w-100" :height="barHeight" v-if="engagements && engagements.length > 0" :chart-data="barData"></bar-chart>
+            <div class="h5 mb-0">
+                <span v-if="average && averageCalc" class="font-weight-bold">Average | <span class="text-primary">{{ average }} days</span></span>
             </div>
         </div>
+        <bar-chart class="w-100 mt-5" :height="barHeight" v-if="engagements && engagements.length > 0" :chart-data="barData"></bar-chart>
     </div>
 </template>
 

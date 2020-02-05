@@ -1,9 +1,12 @@
 <template>          
     <div class="doughnuts">
         <div class="d-flex justify-content-between p-2">
-            <div class="h5 mb-0">
-                <i class="fas fa-chart-pie mr-2 text-primary"></i>
-                <span class="font-weight-bold">Overview</span>
+            <div class="d-flex flex-column align-items-start">         
+                <div class="h5 mb-0">
+                    <i class="fas fa-chart-pie mr-2 text-primary"></i>
+                    <span class="font-weight-bold">Overview</span>
+                </div>
+                <p class="mb-0 font-weight-bold text-secondary">A break down of all workflows and your assigned tasks</p>
             </div>
         </div>
         <div class="doughnuts-body">
@@ -43,6 +46,7 @@
                 </div>
             </div>
         </div>
+        <p class="font-weight-bold mt-4 hint">Hint: Click a section of any doughnut chart to view<br> a filtered list of the engagements or tasks</p>
     </div>  
 </template>
 
@@ -323,6 +327,11 @@ export default {
 
 .slide {
     white-space: nowrap;
+}
+
+.hint {
+    color: rgb(168, 168, 168);
+    font-size: .8rem;
 }
 </style>
 

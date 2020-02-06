@@ -80,7 +80,7 @@ export default {
             //filter duplicates
             const result = years.filter((v, i) => years.indexOf(v) === i)
 
-            return result
+            return result.sort((a,b) => b - a)
         },
     },
     methods: {

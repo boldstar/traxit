@@ -20,7 +20,6 @@
           </div>
           <div class="align-self-center d-flex">
             <button class="btn btn-sm btn-outline-dark mr-2 font-weight-bold batch-btn" @click="showBatchColumn" v-if="!noTasks"><i class="fas fa-tasks mr-2"></i>Batch</button>
-            <button class="btn btn-sm btn-outline-secondary mr-2 font-weight-bold" @click="searchInputMethod" v-if="!noTasks"><i class="fas fa-search mr-2"></i>Filter</button>
             <button class="btn btn-sm btn-outline-primary font-weight-bold" @click="refreshTask"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
           </div>
       </div>
@@ -32,6 +31,7 @@
     <processing-bar v-if="processing && !timesheet"></processing-bar>
     <div class="d-flex">
       <button type="button" class="filter-task-btn" @click="filterStatusState = 'All'" :class="{'bg-primary text-white': filterStatusState == 'All'}">All</button>
+      <button type="button" class="filter-task-btn" @click="filterStatusState = 'Staging'" :class="{'bg-primary text-white': filterStatusState == 'Staging'}">Staging</button>
       <button type="button" class="filter-task-btn" @click="filterStatusState = 'Active'" :class="{'bg-primary text-white': filterStatusState == 'Active'}">Active</button>
       <button type="button" class="filter-task-btn" @click="filterStatusState = 'Pending'" :class="{'bg-primary text-white': filterStatusState == 'Pending'}">Pending</button>
       <input class="task-search-input flex-fill" placeholder="Filter Task By Name..." v-model="searchTasks" type="search">
@@ -60,7 +60,7 @@
         </table>
       </div>
 
-      <table class="table table-hover text-center" v-if="!tasksLoaded && taskData">
+      <table class="table table-hover text-center"  v-if="!tasksLoaded && taskData">
         <thead class="bg-primary text-light">
           <tr>
             <th scope="col" v-if="batchUpdateColumn">Batch</th>

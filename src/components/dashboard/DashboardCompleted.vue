@@ -12,7 +12,8 @@
                 <span v-if="average && averageCalc" class="font-weight-bold">Average | <span class="text-primary">{{ average }} days</span></span>
             </div>
         </div>
-        <bar-chart class="w-100 mt-5" :height="barHeight" v-if="engagements && engagements.length > 0" :chart-data="barData"></bar-chart>
+        <bar-chart class="w-100 mt-4" :height="barHeight" v-if="engagements && engagements.length > 0" :chart-data="barData"></bar-chart>
+        <p class="font-weight-bold total">Total Complete: {{completeEngagements}}</p>
     </div>
 </template>
 
@@ -104,6 +105,9 @@ export default {
                 ]
             }
         },
+        completeEngagements() {
+            return this.engagements.filter(engagement => engagement.done == true).filter(eng => this.tax_year === 'All' ? eng : eng.year === this.tax_year).length
+        },
     },
     methods: {
         compareArrays(cre, com) {
@@ -128,6 +132,15 @@ export default {
 <style lang="scss">
     .completed {
         width: 100%;
+    }
+
+    .total {
+        font-size: .8rem;
+        background: rgb(231, 231, 231);
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 4px;
+        margin-top: 5px;
     }
 </style>
                     

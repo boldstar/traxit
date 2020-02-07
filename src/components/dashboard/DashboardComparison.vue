@@ -9,7 +9,7 @@
                 <p class="mb-0 font-weight-bold text-secondary">A comparison between created and completed engagements</p>
             </div>
         </div>
-        <line-chart class="w-100 mt-3 card-body" :height="barHeight" :chart-data="lineData" v-if="completedDates && createdDates"></line-chart>
+        <line-chart class="w-100 mt-4 pl-2" :height="barHeight" :chart-data="lineData" v-if="completedDates && createdDates"></line-chart>
     </div>
 </template>
 
@@ -24,7 +24,7 @@ export default {
     },
     data () {
         return {
-            barHeight: 260,
+            barHeight: 280,
            
         }
     },

@@ -20,7 +20,8 @@ export default {
 					duration: 750,
 				},
 				legend: {
-					display: true
+					display: true,
+					position: 'bottom'
 				},
 				tooltips: {
 					enabled: true,

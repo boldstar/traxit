@@ -171,6 +171,7 @@ export default {
     },
     data() {
         return {
+            engagementComplete: true,
             typeChecked: false,
             statusChecked: false,
             returnChecked: false,
@@ -219,6 +220,8 @@ export default {
               if(this.filterEngageType === 'All'){ return engagement } else{ return engagement.type === this.filterEngageType} 
             }).filter(engagement => {
               if(this.filterStatusType === 'All'){ return engagement } else{ return engagement.status === this.filterStatusType} 
+            }).filter(engagement => {
+              if(this.engagementComplete){ return engagement } else{ return engagement.done == false} 
             }).filter( engagement => {
             return !this.searchEngagement || engagement.name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 })
             .filter((row, index) => {
@@ -382,6 +385,7 @@ export default {
                     self.filterStatusType = this.filters.label
                     self.filterYear = this.filters.year
                 } else if (this.filters.chart == 'Firm') {
+                    self.engagementComplete = false
                     self.filterYear = this.filters.year
                     self.filterWorkflow = this.allWorkflows.filter(w => w.workflow == this.filters.label)[0].id
                 }

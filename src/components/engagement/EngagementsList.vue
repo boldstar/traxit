@@ -327,6 +327,7 @@ export default {
         },
         clearFilters() {
             this.$router.replace('/engagements')
+            this.engagementComplete = true
             this.typeChecked = false
             this.statusChecked = false
             this.categoryChecked = false

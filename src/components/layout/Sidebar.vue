@@ -58,7 +58,7 @@
                     <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/add"><i class="far fa-plus-square align-self-center pl-1"></i><span class="add-new" :class="sidebarOpen ? 'show-link' : 'hide-link'">Add New</span></router-link>  
                 </transition>
             </li>
-            <li class="nav-item w-100" id="files" v-if="role != 'Outsource' && localStorage.getItem('fqdn_api_url') == 'aewcpa.traxit.io'"  v-bind:class="{ 'is-active': isActive && sidebarOpen }">
+            <li class="nav-item w-100" id="files" v-if="role != 'Outsource' && localStorage.getItem('fqdn_api_url') == 'aewcpa.traxit.pro'"  v-bind:class="{ 'is-active': isActive && sidebarOpen }">
                 <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
                     <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/inbox"><i class="fas fa-inbox align-self-center"></i><span class="add-new" :class="sidebarOpen ? 'show-link' : 'hide-link'">Inbox</span>
                     <span class="badge badge-danger" :class="sidebarOpen ? 'file-badge' : 'collapsed-badge'" v-if="files_length > 0">{{files_length}}</span>

@@ -25,8 +25,8 @@
                 <tr>
                     <th scope="col">Business</th>
                     <th scope="col">Owner</th>
-                    <th scope="col">Phone Number</th>
                     <th scope="col">Email</th>
+                    <th scope="col">Phone Number</th>
                 </tr>
             </thead> 
             <tbody class="client-info table-bordered"  v-if="!tableLoading">

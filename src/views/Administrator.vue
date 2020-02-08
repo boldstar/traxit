@@ -13,7 +13,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import AdminSidebar from '@/components/AdminSidebar'
+import AdminSidebar from '@/components/layout/AdminSidebar'
 
 export default {
     name: 'administrator',

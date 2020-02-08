@@ -3,7 +3,7 @@
 <!-- this is the user tasks header -->
       <div class="card-header bg-white shadow w-100 d-flex justify-content-between border">
           <div class="d-flex">
-          <span class="mb-0 align-self-center h5">Tasks | <span class="text-primary">{{ tasks.length }}</span></span>
+          <span class="mb-0 align-self-center h5">Tasks | <span class="text-primary">{{ sortedTasksCustom.length }}</span></span>
 
           <div class="d-flex ml-5">
             <span class="font-weight-bold mt-1 mr-2">Priority Level: </span>
@@ -19,36 +19,32 @@
 
           </div>
           <div class="align-self-center d-flex">
-            <div class="batch-btn">
-
             <button class="btn btn-sm btn-outline-dark mr-2 font-weight-bold batch-btn" @click="showBatchColumn" v-if="!noTasks"><i class="fas fa-tasks mr-2"></i>Batch</button>
-            </div>
-            <div>
-
-            <button class="btn btn-sm btn-outline-secondary mr-2 font-weight-bold" @click="searchInputMethod" v-if="!noTasks"><i class="fas fa-search mr-2"></i>Filter</button>
-            </div>
-            <div>
-
             <button class="btn btn-sm btn-outline-primary font-weight-bold" @click="refreshTask"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
-            </div>
           </div>
       </div>
 
       <div v-if="batchAlert" class="p-2 bg-danger font-weight-bold text-light">{{ batchAlert }}</div>
 
 <!-- this is the list of the assigned user tasks -->
-    <div class="text-left card-body mb-3 tasks d-flex flex-column">
+    <div class="text-left card-body mb-3 tasks d-flex flex-column p-0">
     <processing-bar v-if="processing && !timesheet"></processing-bar>
-    <input v-if="searchInput" class="form-control mb-3" placeholder="Filter Task By Client Name" v-model="searchTasks" type="search">
+    <div class="d-flex">
+      <button type="button" class="filter-task-btn" @click="filterStatusState = 'All'" :class="{'bg-primary text-white': filterStatusState == 'All'}">All</button>
+      <button type="button" class="filter-task-btn" @click="filterStatusState = 'Staging'" :class="{'bg-primary text-white': filterStatusState == 'Staging'}">Staging</button>
+      <button type="button" class="filter-task-btn" @click="filterStatusState = 'Active'" :class="{'bg-primary text-white': filterStatusState == 'Active'}">Active</button>
+      <button type="button" class="filter-task-btn" @click="filterStatusState = 'Pending'" :class="{'bg-primary text-white': filterStatusState == 'Pending'}">Pending</button>
+      <input class="task-search-input flex-fill" placeholder="Filter Task By Name..." v-model="searchTasks" type="search">
+    </div>
     <spinner v-if="tasksLoaded" class="mx-auto"></spinner>
 
-      <div class="card mb-3" v-if="inProgressTasks.length > 0 && !tasksLoaded && taskData">
+      <div class="card my-3" v-if="inProgressTasks.length > 0 && !tasksLoaded && taskData">
         <div class="card-header">
           <span class="font-weight-bold">In Progress | <span class="text-primary">{{ inProgressTasks.length }}</span></span>
         </div>
         <table class="table text-center table-hover mb-0" >
           <tbody class="table-bordered">
-            <tr v-for="(task, index) in inProgressTasks"  :key="index" v-if="task.engagements[0].in_progress">
+            <tr v-for="(task, index) in inProgressTasks"  :key="index">
               <th  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].name }}</th>
               <th  @click="viewDetails(task.engagements[0].id)">{{ task.engagements[0].status }}</th>
               <th>
@@ -64,14 +60,14 @@
         </table>
       </div>
 
-      <table class="table table-hover text-center" v-if="!tasksLoaded && taskData">
+      <table class="table table-hover text-center"  v-if="!tasksLoaded && taskData">
         <thead class="bg-primary text-light">
           <tr>
             <th scope="col" v-if="batchUpdateColumn">Batch</th>
             <th scope="col" v-if="batchUpdateColumn" @click="sort('workflow')">Workflow</th>
             <th scope="col">Task</th>
             <th scope="col" class="mobile-hide-row">Type</th>
-            <th scope="col" @click="sort('name')">Client</th>
+            <th scope="col" @click="sort('name')">Name</th>
             <th scope="col" class="hide-row">Time Period</th>
             <th scope="col" class="hide-row">Return Type</th>
             <th scope="col" class="hide-row">Year</th>
@@ -136,7 +132,7 @@
             </div>
             <select class="custom-select" id="client_id" v-model.number="task.user_id">
               <option  selected disabled>{{ option }}</option>
-              <option v-for="user in users" :key="user.id" :value="user.id" v-if="user.name != 'Admin'">
+              <option v-for="user in filteredUsers" :key="user.id" :value="user.id">
                 {{ user.name }}
               </option>
             </select>
@@ -145,7 +141,7 @@
             <div class="input-group-prepend">
               <label class="input-group-text font-weight-bold bg-primary text-light" for="option">Status</label>
             </div>
-            <div v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id == selectedWorkflow" class="flex-fill d-flex">
+            <div v-for="workflow in filteredWorkflow" :key="workflow.id" class="flex-fill d-flex">
             <select class="custom-select" id="status" v-model="task.status">
               <option  selected disabled>{{ option }}</option>
               <option v-for="status in workflow.statuses" :key="status.id" :value="status.status">
@@ -176,7 +172,7 @@
           <form class="d-flex flex-column" @change="clearAlerts()">
             <div class="mt-3 text-left">
               <h4>Tasks</h4>
-              <div class="card-body bg-light p-1" v-for="(task, index) in tasks" :key="index" v-if="checkedTasks.includes(task.id)">
+              <div class="card-body bg-light p-1" v-for="(task, index) in filteredTasks" :key="index">
                 <span class="mr-3">{{ index }}.</span>
                 <span class="font-weight-bold">{{ task.engagements[0].name }}</span>
               </div>
@@ -189,7 +185,7 @@
                 </div>
                 <select class="custom-select" id="client_id" v-model.number="task.user_id" :class="{ 'border-danger' : userError}">
                   <option  selected disabled>{{ option }}</option>
-                  <option v-for="user in users" :key="user.id" :value="user.id" v-if="user.name != 'Admin'">
+                  <option v-for="user in filteredUsers" :key="user.id" :value="user.id">
                     {{ user.name }}
                   </option>
                 </select>
@@ -198,10 +194,10 @@
                 <div class="input-group-prepend">
                   <label class="input-group-text font-weight-bold bg-primary text-light" for="option">Status</label>
                 </div>
-                <div v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id == selectedWorkflow" class="flex-fill d-flex">
+                <div v-for="workflow in filteredWorkflow" :key="workflow.id" class="flex-fill d-flex">
                 <select class="custom-select" id="status" v-model="task.status" :class="{ 'border-danger' : statusError}">
                   <option  selected disabled>{{ option }}</option>
-                  <option v-for="status in workflow.statuses" :key="status.id" :value="status.status" v-if="status.status != 'Complete'">
+                  <option v-for="status in workflow.statuses" :key="status.id" :value="status.status" v-show="status.status != 'Complete'">
                     {{ status.status }}
                   </option>
                 </select>
@@ -221,9 +217,9 @@
 import { mapGetters, mapActions } from 'vuex'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
-import Spinner from '@/components/Spinner.vue'
-import ProcessingBar from '@/components/ProcessingBar.vue'
-import NoTask from '@/components/NoTask.vue'
+import Spinner from '@/components/loaders/Spinner.vue'
+import ProcessingBar from '@/components/loaders/ProcessingBar.vue'
+import NoTask from '@/components/placeholders/NoTask.vue'
 
 export default {
   name: 'UserTasks',
@@ -242,6 +238,8 @@ export default {
       batchModal: false,
       userError: false,
       statusError: false,
+      filterTask: 'All',
+      filterStatusState: 'All',
       task: {
         user_id: 0,
         status: null,
@@ -274,13 +272,24 @@ export default {
       'processing',
       'timesheet'
     ]),
+    filteredUsers() {
+      return this.users.filter(u => u.name != 'Admin')
+    },
+    filteredWorkflow() {
+      return this.allWorkflows.filter(w => w.id == this.selectedWorkflow)
+    },
+    filteredTasks() {
+      return this.tasks.filter(t => this.checkedTasks.includes(t.id))
+    },
     sortedTasksCustom() {
       return this.tasks.reduce((acc, task) => {
+        const workflow_id = task.engagements[0].workflow_id
+        const task_status = task.engagements[0].status
         acc.push({
           id: task.id,
-          workflow_id: task.engagements[0].workflow_id,
+          workflow_id: workflow_id,
           engagement_id: task.engagements[0].id,
-          task: task.engagements[0].status,
+          task: task_status,
           due_date: task.engagements[0].estimated_date,
           updated_at: task.engagements[0].updated_at,
           name: task.engagements[0].name,
@@ -290,10 +299,15 @@ export default {
           in_progress: task.engagements[0].in_progress,
           year: task.engagements[0].year,
           priority: task.engagements[0].priority,
+          state: this.allWorkflows.filter(w => w.id == workflow_id)[0].statuses.filter(s => s.status == task_status)[0].state
         })
         return acc
       }, []).sort((a,b) => {
         return b[this.firstSort] - a[this.firstSort] || new Date(b[this.secondSort]) - new Date(a[this.secondSort])
+      }).filter(task => {
+        if(this.filterTask === 'All'){ return task } else{ return task.task === this.filterTask} 
+      }).filter(task => {
+        if(this.filterStatusState === 'All'){ return task } else { return task.state === this.filterStatusState} 
       }).filter( task => {
       return !this.searchTasks || task.name.toLowerCase().indexOf(this.searchTasks.toLowerCase()) >= 0 })
     },
@@ -436,6 +450,8 @@ export default {
         this.$refs.modal.show()
     },
     refreshTask() {
+      this.$router.replace('/tasks')
+      this.filterTask = 'All'
       this.tasksLoaded = true
       this.checkedTasks = []
       this.batchUpdate = false
@@ -499,6 +515,9 @@ export default {
         } else {
           self.taskData = true
           self.noTasks = false
+          if(self.$route.query.data) {
+            this.filterTask = this.$route.query.data.label
+          }
         }
     }, 3000);
   }
@@ -507,6 +526,20 @@ export default {
 
 
 <style scoped lang="scss">
+
+  .filter-task-btn {
+    border: none;
+    font-weight: bold;
+    color: #0077ff;
+    width: 150px;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .task-search-input {
+    padding: 10px;
+    border: 1px solid lightgray;
+  }
 
   tr {
     cursor: pointer;

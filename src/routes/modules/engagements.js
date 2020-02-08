@@ -15,7 +15,7 @@ export default [
           {
             path: 'details',
             name: 'details',
-            component: () => import('@/children/EngageDetails.vue'),
+            component: () => import('@/children/engagement/EngageDetails.vue'),
               meta: {
                 requiresAuth: true,
                 layout: "default",
@@ -27,7 +27,7 @@ export default [
           {
             path: 'notes',
             name: 'enotes',
-            component: () => import('@/children/EngageNotes.vue'),
+            component: () => import('@/children/engagement/EngageNotes.vue'),
               meta: {
                 requiresAuth: true,
                 layout: "default",
@@ -39,7 +39,7 @@ export default [
           {
             path: 'questions',
             name: 'questions',
-            component: () => import('@/children/EngageQuestions.vue'),
+            component: () => import('@/children/engagement/EngageQuestions.vue'),
               meta: {
                 requiresAuth: true,
                 layout: "default",
@@ -51,7 +51,7 @@ export default [
           {
             path: 'invoice',
             name: 'invoice',
-            component: () => import('@/children/EngageInvoice.vue'),
+            component: () => import('@/children/engagement/EngageInvoice.vue'),
               meta: {
                 requiresAuth: true,
                 layout: "default",
@@ -62,7 +62,7 @@ export default [
           },
           {
             path: 'edit',
-            component: () => import('@/children/EditEngage.vue'),
+            component: () => import('@/children/engagement/EditEngage.vue'),
               meta: {
                 requiresAuth: true,
                 layout: "default",
@@ -74,7 +74,7 @@ export default [
           {
             path: 'history',
             name: 'history',
-            component: () => import('@/children/EngageHistory.vue'),
+            component: () => import('@/children/engagement/EngageHistory.vue'),
               meta: {
                 requiresAuth: true,
                 layout: "default",
@@ -85,7 +85,7 @@ export default [
           },
           {
             path: 'add-question',
-            component: () => import('@/children/AddQuestion.vue'),
+            component: () => import('@/children/question/AddQuestion.vue'),
               meta: {
                 requiresAuth: true,
                 layout: "default",
@@ -96,7 +96,7 @@ export default [
           },
           {
             path: 'edit-question/:question',
-            component: () => import('@/children/EditQuest.vue'),
+            component: () => import('@/children/question/EditQuest.vue'),
               meta: {
                 requiresAuth: true,
                 layout: "default",
@@ -107,7 +107,7 @@ export default [
           },
           {
             path: 'answer-question/:question',
-            component: () => import('@/children/AnswerQuest.vue'),
+            component: () => import('@/children/question/AnswerQuest.vue'),
               meta: {
                 requiresAuth: true,
                 layout: "default",
@@ -118,7 +118,7 @@ export default [
           },
           {
             path: 'edit-answer-question/:question',
-            component: () => import('@/children/EditAnswer.vue'),
+            component: () => import('@/children/question/EditAnswer.vue'),
               meta: {
                 requiresAuth: true,
                 layout: "default",

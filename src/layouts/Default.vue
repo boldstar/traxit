@@ -13,7 +13,7 @@
 
 <!-- this section is controling the main content section -->
     <div class="d-flex main-wrapper page-wrapper" :class="{'main-wrapper-collapsed': !sidebarOpen }">
-      <main role="main" class="flex-fill px-3 main">
+      <main role="main" class="flex-fill" :class="{'px-3 main': $route.name != 'dashboard'}">
 
         <!-- this is if they have not done a setup tour -->
         <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
@@ -40,13 +40,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Navbar from '@/components/Navbar.vue'
-import Toolbar from '@/components/Toolbar.vue'
-import Sidebar from '@/components/Sidebar.vue'
-import NotifyModal from '@/components/NotifyModal.vue'
-import MobileLinks from '@/components/MobileLinks.vue'
-import Setup from '@/components/Setup.vue'
-import Timesheet from '@/components/Timesheet.vue'
+import Navbar from '@/components/layout/Navbar.vue'
+import Toolbar from '@/components/layout/Toolbar.vue'
+import Sidebar from '@/components/layout/Sidebar.vue'
+import NotifyModal from '@/components/modals/NotifyModal.vue'
+import MobileLinks from '@/components/layout/MobileLinks.vue'
+import Setup from '@/components/onboard/Setup.vue'
+import Timesheet from '@/components/tsheets/Timesheet.vue'
 
 export default {
   props: ['admin'],

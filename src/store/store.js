@@ -16,6 +16,9 @@ import downloads from './modules/downloads'
 import setup from './modules/setup'
 import tsheets from './modules/tsheets'
 import invoice from './modules/invoice'
+import inbox from './modules/inbox'
+import portal from './modules/portal'
+import business from './modules/business'
 
 // this is for the abilities plug in.
 import { abilityPlugin, ability as appAbility } from './ability'
@@ -54,7 +57,10 @@ export default new Vuex.Store({
     downloads,
     setup,
     tsheets,
-    invoice
+    invoice,
+    inbox,
+    portal,
+    business
   },
   state: {
     processing: false,
@@ -73,8 +79,11 @@ export default new Vuex.Store({
     links: false,
     averagedays: '',
     engagementFilter: 'All',
+    contactFilter: 'All',
     timesheet: false,
-    show_update_status_modal: false
+    show_update_status_modal: false,
+    delete_modal: false,
+    delete_modal_details: null
   },
   getters: {
     chartDataLength(state) {
@@ -122,11 +131,20 @@ export default new Vuex.Store({
     engagementFilter(state) {
       return state.engagementFilter
     },
+    contactFilter(state) {
+      return state.contactFilter
+    },
     timesheet(state) {
       return state.timesheet
     },
     showUpdateStatusModal(state) {
       return state.show_update_status_modal
+    },
+    deleteModal(state) {
+      return state.delete_modal
+    },
+    deleteModalDetails(state) {
+      return state.delete_modal_details
     }
   },
   mutations: {
@@ -186,11 +204,18 @@ export default new Vuex.Store({
     changeEngagementFilter(state, filter) {
       state.engagementFilter = filter
     },
+    changeContactFilter(state, filter) {
+      state.contactFilter = filter
+    },
     toggleTimesheet(state) {
       state.timesheet = !state.timesheet
     },
     showUpdateStatusModal(state) {
       state.show_update_status_modal = !state.show_update_status_modal
+    },
+    toggleDeleteModal(state, data) {
+      state.delete_modal = !state.delete_modal
+      state.delete_modal_details = data
     }
   },
   actions: {

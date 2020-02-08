@@ -1,6 +1,6 @@
 import axios from 'axios'
 import moment from 'moment';
-import router from '../../router'
+import router from '../../routes/router'
 import {notLastItem, getMonday} from '../../plugins/tsheets'
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('tsheets_access_token')
 

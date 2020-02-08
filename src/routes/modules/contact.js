@@ -16,7 +16,7 @@ export default [
         // this is the path to view the account of the client
         path: 'account',
         name: 'account',
-        component: () => import('@/contact/Account.vue'),
+        component: () => import('@/children/contact/Account.vue'),
             meta: {
             requiresAuth: true,
             layout: "default",
@@ -28,7 +28,7 @@ export default [
             {
             // this is the path to edit contact
             path: 'edit',
-            component: () => import('@/children/EditContact.vue'),
+            component: () => import('@/children/contact/EditContact.vue'),
                 meta: {
                 requiresAuth: true,
                 layout: "default",
@@ -40,7 +40,7 @@ export default [
             {
             // this is the path to edit dependent
             path: 'dependent/:dependent',
-            component: () => import('@/children/DependentCrud.vue'),
+            component: () => import('@/children/contact/DependentCrud.vue'),
                 meta: {
                 requiresAuth: true,
                 layout: "default",
@@ -52,7 +52,7 @@ export default [
             {
             // this is the path to add dependent
             path: 'business/:business',
-            component: () => import('@/children/BusinessCrud.vue'),
+            component: () => import('@/children/contact/BusinessCrud.vue'),
                 meta: {
                 requiresAuth: true,
                 layout: "default",
@@ -67,7 +67,7 @@ export default [
         // this is the path to view the engagements that belong to the client
         path: 'engagements',
         name: 'contact-engagements',
-        component: () => import('@/contact/ContactEngagements.vue'),
+        component: () => import('@/children/contact/ContactEngagements.vue'),
             meta: {
             requiresAuth: true,
             layout: "default",
@@ -79,7 +79,7 @@ export default [
             {
                 // this is the path to add an engagement to singel client
                 path: 'add-engagement',
-                component: () => import('@/children/AddEngagement.vue'),
+                component: () => import('@/children/engagement/AddEngagement.vue'),
                 meta: {
                     requiresAuth: true,
                     layout: "default",
@@ -94,7 +94,7 @@ export default [
         // this is the path to view the notes belonging to client
             path: 'notes',
             name: 'notes',
-            component: () => import('@/contact/Notes.vue'),
+            component: () => import('@/children/contact/Notes.vue'),
             meta: {
             requiresAuth: true,
             layout: "default",
@@ -105,7 +105,7 @@ export default [
             children: [
                 {
                 path: 'add-note',
-                component: () => import('@/children/AddNote.vue'),
+                component: () => import('@/children/note/AddNote.vue'),
                     meta: {
                     requiresAuth: true,
                     layout: "default",
@@ -116,7 +116,7 @@ export default [
                 },
                 {
                 path: 'edit-note/:note',
-                component: () => import('@/children/EditNote.vue'),
+                component: () => import('@/children/note/EditNote.vue'),
                     meta: {
                     requiresAuth: true,
                     layout: "default",
@@ -130,7 +130,7 @@ export default [
         {
         // this is the path to view the pending belonging to the client
         path: 'pending',
-        component: () => import('@/contact/Pending.vue'),
+        component: () => import('@/children/contact/Pending.vue'),
             meta: {
             requiresAuth: true,
             layout: "default",
@@ -141,16 +141,16 @@ export default [
         },
         {
             // this is the path to view the portal belonging to the client
-            path: 'files',
-            component: () => import('@/contact/Files.vue'),
+            path: 'portal',
+            component: () => import('@/children/contact/Portal.vue'),
             meta: {
             requiresAuth: true,
             layout: "default",
             breadCrumb: [
-                { name: 'Files' }
+                { name: 'Portal' }
             ]
             },
-        }
+        },
     ],
     },
 ]

@@ -18,7 +18,7 @@ export default [
         {
         // this is the children route for adding a new contact
         path: 'contact',
-        component: () => import('@/children/ContactForm.vue'),
+        component: () => import('@/children/add/ContactForm.vue'),
             meta: {
             layout: "default",
             requiresAuth: true,
@@ -30,7 +30,7 @@ export default [
         {
         // this is the children route for adding a new contact
         path: 'business',
-        component: () => import('@/children/BusinessForm.vue'),
+        component: () => import('@/children/add/BusinessForm.vue'),
             meta: {
             layout: "default",
             requiresAuth: true,
@@ -42,7 +42,7 @@ export default [
         {
         // this is the children route for adding a new engagement
         path: 'engagement/form',
-        component: () => import('@/children/StartEngagementForm.vue'),
+        component: () => import('@/children/add/StartEngagementForm.vue'),
             meta: {
             layout: "default",
             requiresAuth: true,
@@ -54,7 +54,7 @@ export default [
         {
         // this is the children route for adding a new engagement
         path: 'engagement/taxform',
-        component: () => import('@/children/TaxForm.vue'),
+        component: () => import('@/children/add/TaxForm.vue'),
             meta: {
             layout: "default",
             requiresAuth: true,
@@ -66,7 +66,7 @@ export default [
         {
         // this is the children route for adding a new engagement
         path: 'engagement/bookkeepingform',
-        component: () => import('@/children/BookForm.vue'),
+        component: () => import('@/children/add/BookForm.vue'),
             meta: {
             layout: "default",
             requiresAuth: true,
@@ -78,7 +78,7 @@ export default [
         {
         // this is the children route for adding a new engagement
         path: 'engagement/customform',
-        component: () => import('@/children/CustomForm.vue'),
+        component: () => import('@/children/add/CustomForm.vue'),
             meta: {
             layout: "default",
             requiresAuth: true,

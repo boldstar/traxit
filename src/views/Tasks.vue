@@ -3,7 +3,7 @@
 <!-- this is the user tasks header -->
       <div class="card-header bg-white shadow w-100 d-flex justify-content-between border">
           <div class="d-flex">
-          <span class="mb-0 align-self-center h5">Tasks | <span class="text-primary">{{ sortedTasksCustom.length }}</span></span>
+          <span class="mb-0 align-self-center h5">Tasks | <span class="text-primary">{{ sortedTasks.length }}</span></span>
 
           <div class="d-flex ml-5">
             <span class="font-weight-bold mt-1 mr-2">Priority Level: </span>
@@ -36,9 +36,9 @@
       <button type="button" class="filter-task-btn" @click="filterStatusState = 'Pending'" :class="{'bg-primary text-white': filterStatusState == 'Pending'}">Pending</button>
       <input class="task-search-input flex-fill" placeholder="Filter Task By Name..." v-model="searchTasks" type="search">
     </div>
-    <spinner v-if="tasksLoaded" class="mx-auto"></spinner>
+    <spinner v-if="tasksLoading" class="mx-auto"></spinner>
 
-      <div class="card my-3" v-if="inProgressTasks.length > 0 && !tasksLoaded && taskData">
+      <div class="card my-3" v-if="inProgressTasks.length > 0 && !tasksLoading && taskData">
         <div class="card-header">
           <span class="font-weight-bold">In Progress | <span class="text-primary">{{ inProgressTasks.length }}</span></span>
         </div>
@@ -60,7 +60,7 @@
         </table>
       </div>
 
-      <table class="table table-hover text-center"  v-if="!tasksLoaded && taskData">
+      <table class="table table-hover text-center"  v-if="!tasksLoading && taskData">
         <thead class="bg-primary text-light">
           <tr>
             <th scope="col" v-if="batchUpdateColumn">Batch</th>
@@ -77,7 +77,7 @@
           </tr>
         </thead>
         <tbody class="table-bordered">
-          <tr v-for="(task, index) in sortedTasksCustom"  :key="index" :class="{'highlight-row': checkedTasks.includes(task.id), 'high-priority': task.priority >= 4, 'medium-priority': task.priority <= 3 && task.priority >= 2, 'low-priority': task.priority === 1, 'no-priority': task.priority < 1}">
+          <tr v-for="(task, index) in sortedTasks"  :key="index" :class="{'highlight-row': checkedTasks.includes(task.id), 'high-priority': task.priority >= 4, 'medium-priority': task.priority <= 3 && task.priority >= 2, 'low-priority': task.priority === 1, 'no-priority': task.priority < 1}">
             <th v-if="batchUpdateColumn" class="task-border" data-toggle="tooltip" data-placement="left" title="Click To Batch Update" @click="checkTask(task.id, task.workflow_id)" :class="{'checkedtasks': checkedTasks.includes(task.id)}"><i v-if="checkedTasks.includes(task.id)" class="fas fa-check"></i></th>
             <th v-if="batchUpdateColumn"  @click="viewDetails(task.engagement_id)">{{ workflowName(task.workflow_id) }}</th>
             <th  @click="viewDetails(task.engagement_id)">{{ task.task }}</th>
@@ -226,7 +226,7 @@ export default {
   data() {
     return {
       noTasks: false,
-      tasksLoaded: false,
+      tasksLoading: true,
       taskToUpdate: null,
       selectedWorkflow: null,
       dropDowns: false,
@@ -281,7 +281,7 @@ export default {
     filteredTasks() {
       return this.tasks.filter(t => this.checkedTasks.includes(t.id))
     },
-    sortedTasksCustom() {
+    sortedTasks() {
       return this.tasks.reduce((acc, task) => {
         const workflow_id = task.engagements[0].workflow_id
         const task_status = task.engagements[0].status
@@ -452,14 +452,14 @@ export default {
     refreshTask() {
       this.$router.replace('/tasks')
       this.filterTask = 'All'
-      this.tasksLoaded = true
+      this.tasksLoading = true
       this.checkedTasks = []
       this.batchUpdate = false
       this.noTasks = false
       this.$store.dispatch('retrieveTasks');
       var self = this;
       setTimeout(() => {
-        self.tasksLoaded = false;
+        self.tasksLoading = false;
         if(self.tasks.length == 0){
               self.noTasks = true
         } else {
@@ -501,25 +501,30 @@ export default {
     },
     inProgress(id) {
       this.$store.dispatch('engagementProgress', id)
+    },
+    showTasks(tasks) {
+      if(tasks.length > 0) {
+        this.tasksLoading = false
+        this.noTasks = false
+        this.taskData = true
+      } else {
+        this.tasksLoading = false
+        this.noTasks = true
+        this.taskData = false
+      }
+    }
+  },
+  watch: {
+    'sortedTasks': function(value) {
+      this.showTasks(value)
     }
   },
   created() {
   this.$store.dispatch('retrieveTasks');
   this.$store.dispatch('retrieveWorkflows');
-  this.tasksLoaded = true;
-  var self = this;
-    setTimeout(() => {
-        self.tasksLoaded = false;
-        if(self.tasks.length == 0){
-              self.noTasks = true
-        } else {
-          self.taskData = true
-          self.noTasks = false
-          if(self.$route.query.data) {
-            this.filterTask = this.$route.query.data.label
-          }
-        }
-    }, 3000);
+    if(this.$route.query.data) {
+      this.filterTask = this.$route.query.data.label
+    }
   }
 }
 </script>

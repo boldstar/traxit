@@ -516,7 +516,9 @@ export default {
   },
   watch: {
     'sortedTasks': function(value) {
-      this.showTasks(value)
+      setTimeout(() => {
+        this.showTasks(value)
+      }, 3000)
     }
   },
   created() {

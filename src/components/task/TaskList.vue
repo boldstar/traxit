@@ -298,7 +298,7 @@ export default {
           in_progress: task.engagements[0].in_progress,
           year: task.engagements[0].year,
           priority: task.engagements[0].priority,
-          state: this.workflows.filter(w => w.id == workflow_id)[0].statuses.filter(s => s.status == task_status)[0].state
+          state: task.state
         })
         return acc
       }, []).sort((a,b) => {

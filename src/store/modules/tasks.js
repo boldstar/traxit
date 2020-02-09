@@ -38,7 +38,7 @@ export default {
               context.commit('retrieveTasks', response.data)
             })
             .catch(error => {
-              console.log(error)
+              console.log(error.response.data)
             })
         },
         updateTask(context, task) {

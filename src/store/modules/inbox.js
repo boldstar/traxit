@@ -54,7 +54,7 @@ export default {
        },
        downloadClientFiles(context, data) {
            axios.get('/download-client-files/' + data.id, {responseType: 'arraybuffer'})
-           .then(response => {
+            .then(response => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');
                 const random_num = JSON.stringify(Math.random()).replace('.', '')

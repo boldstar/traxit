@@ -304,9 +304,9 @@ export default {
       }, []).sort((a,b) => {
         return b[this.firstSort] - a[this.firstSort] || new Date(b[this.secondSort]) - new Date(a[this.secondSort])
       }).filter(task => {
-        if(this.filterTask === 'All'){ return task } else{ return task.task === this.filterTask} 
+        if(this.filterTask === 'All'){ return task } else{ return task.task == this.filterTask} 
       }).filter(task => {
-        if(this.filterStatusState === 'All'){ return task } else { return task.state === this.filterStatusState} 
+        if(this.filterStatusState === 'All'){ return task } else { return task.state == this.filterStatusState} 
       }).filter( task => {
       return !this.searchTasks || task.name.toLowerCase().indexOf(this.searchTasks.toLowerCase()) >= 0 })
     },

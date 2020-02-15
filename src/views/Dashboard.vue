@@ -34,7 +34,7 @@
                     :tax_year="currentYear" 
                     :current_workflow="workflowKey"
                     :average_days="averageDays" 
-                    v-if="!loading && !noData"
+                    v-if="!loading && !noData && averageDays"
                 />
             </div>
             <div class="dashboard-section">

@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar fixed-top bg-light flex-md-nowrap shadow-sm justify-content-between toolbar" :class="{'toolbar-collapsed': !sidebarOpen}">
+    <nav class="navbar fixed-top bg-white flex-md-nowrap shadow-sm justify-content-between toolbar" :class="{'toolbar-collapsed': !sidebarOpen}">
         <div class="d-flex">
             <div class="align-self-center left-sidebar-button">
                 <button class="bg-light" @click="toggleSidebar" data-toggle="tooltip" data-placement="bottom" title="Toggle Sidebar">

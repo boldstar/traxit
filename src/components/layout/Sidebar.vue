@@ -1,10 +1,10 @@
 <template>
-    <nav class="bg-light sidebar" :class="{'sidebar-collapsed': !sidebarOpen}">
+    <nav class="bg-white sidebar" :class="{'sidebar-collapsed': !sidebarOpen}">
         <div class="sidebar-sticky d-flex flex-column">
         <ul class="nav nav-fill flex-column align-items-start">
             <li class="nav-item w-100" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive && sidebarOpen }" id="dashboard">
                 <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
-                    <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/"><i class="fas fa-tachometer-alt align-self-center"></i><span :class="sidebarOpen ? 'show-link' : 'hide-link'">Dashboard</span></router-link>  
+                    <router-link class="nav-link border-right text-left pl-4 d-flex dashboard-active" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/"><i class="fas fa-tachometer-alt align-self-center"></i><span :class="sidebarOpen ? 'show-link' : 'hide-link'">Dashboard</span></router-link>  
                 </transition> 
             </li>
             <li class="nav-item w-100" v-if="role != 'Outsource'" id="firm" v-bind:class="{ 'is-active': isActive && sidebarOpen }">
@@ -233,12 +233,18 @@ export default {
             width: 0;
             border-bottom: 15px solid transparent;
             border-top: 15px solid transparent;
-            border-right: 15px solid white;
+            border-right: 15px solid #f8f9fa;
             margin-top: 0;
             left: 200px;
             transition: 1s;
         }
 
+    }
+
+    .dashboard-active {
+        &:after {
+            border-right: 15px solid white!important;
+        }
     }
 
 

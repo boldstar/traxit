@@ -1,5 +1,5 @@
 <template>
-    <div class="col-9 ">
+    <div class="col-9 pr-0">
         <div class="card shadow-sm p-0 file-manager">
             <div class="card-header bg-primary d-flex justify-content-between">
                 <span class="text-white font-weight-bold align-self-center h5 mb-0">File Manager</span>
@@ -27,7 +27,7 @@
                     <div class="file-detail-buttons p-2 d-flex">
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <button type="button" class="btn btn-sm btn-outline-secondary" @click="verify('delete')"><i class="fas fa-trash"></i></button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="verify('archive')"><i class="fas fa-archive"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="verify('archive')" v-if="selected == 'Inbox'"><i class="fas fa-archive"></i></button>
                         </div>
                     </div>
                     <div class="file-details-header p-2" >
@@ -62,7 +62,7 @@
                     <h3 class="mt-3">No File Selected</h3>
                 </div>
             </div>
-            <div v-else-if="noData" class="mt-5"><p class="font-weight-bold h3">There are no files.</p><i class="far fa-folder-open fa-7x mt-3 text-primary"></i></div>
+            <div v-else-if="noData" class="mt-5"><p class="font-weight-bold h3">There are no {{selected}} files.</p><i class="far fa-folder-open fa-7x mt-3 text-primary"></i></div>
             <div v-else><Spinner /></div>
         </div>
 

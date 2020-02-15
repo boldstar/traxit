@@ -7,7 +7,7 @@
       <div class="d-flex flex-row justify-content-around mt-5 col-sm-12 col-md-10 col-lg-10 flex-sm-wrap card-content" v-if="$route.name == 'add'">
         <!-- contact card -->
         <div class="col-sm-6 col-md-4">
-          <div class="card-style card-body bg-light border shadow-sm">
+          <div class="card-style card-body bg-light border shadow-sm bg-white">
             <div class="h3 mb-4 font-weight-bold">
               <span class="span-title">Contact</span>
             </div>
@@ -19,7 +19,7 @@
         </div>
         <!-- business card -->
         <div class="col-sm-6 col-md-4">
-          <div class="card-style card-body bg-light border shadow-sm">
+          <div class="card-style card-body bg-light border shadow-sm bg-white">
             <div class="h3 mb-4 font-weight-bold">
               <span class="span-title">Business</span>
             </div>
@@ -31,7 +31,7 @@
         </div>
         <!-- engagement card -->
         <div class="col-sm-6 col-md-4 mt-sm-3 mt-md-0">
-          <div class="card-style card-body bg-light border shadow-sm">
+          <div class="card-style card-body bg-light border shadow-sm bg-white">
             <div class="h3 mb-4 font-weight-bold">
               <span class="span-title">Engagement</span>
             </div>
@@ -89,7 +89,7 @@ export default {
 }
  
 .btn-style {
-  border: 2px solid black;
+  box-shadow: 0 0 8px 0 rgba(0,0,0,.5);
   border-radius: 15px;
   padding: 10px 30px;
   font-weight: bold;

@@ -75,7 +75,7 @@ export default new Vuex.Store({
     status: '',
     role: localStorage.getItem('role'),
     links: false,
-    averagedays: '',
+    averagedays: null,
     engagementFilter: 'All',
     contactFilter: 'All',
     timesheet: false,

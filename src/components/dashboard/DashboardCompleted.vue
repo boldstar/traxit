@@ -12,7 +12,9 @@
                 <span v-if="average && averageCalc" class="font-weight-bold">Average | <span class="text-primary">{{ average }} days</span></span>
             </div>
         </div>
+        <div v-if="average_days">
         <bar-chart class="w-100 mt-4" :height="barHeight" v-if="engagements && engagements.length > 0" :chart-data="barData"></bar-chart>
+        </div>
         <p class="font-weight-bold total">Total Complete: {{completeEngagements}}</p>
     </div>
 </template>

@@ -35,6 +35,7 @@ export default {
            axios.get('/files')
            .then(response => {
                context.commit('ALL_FILES', response.data)
+               context.dispatch('filesLength')
            }).catch(error => {
                console.log(error.response.data)
            })
@@ -74,6 +75,7 @@ export default {
                 context.commit('UPDATE_FILES', id)
                 context.commit('stopProcessing')
                 context.commit('successAlert', 'Files Archived')
+                context.dispatch('filesLength')
             }).catch(error => {
                 context.commit('stopProcessing')
                 context.commit('errorMsgAlert', error.response.data.message)
@@ -87,6 +89,7 @@ export default {
                 context.commit('DELETE_FILE', id)
                 context.commit('stopProcessing')
                 context.commit('successAlert', 'Files Deleted')
+                context.dispatch('filesLength')
             }).catch(error => {
                 console.log(error.response.data)
                 context.commit('errorMsgAlert', error.response.data.message)

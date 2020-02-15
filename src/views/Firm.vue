@@ -23,12 +23,12 @@
 
       <Alert v-if="successAlert" :message="successAlert" class="my-2" />
 
-      <div class="row d-flex justify-content-between card-body col-12 mx-auto mb-3 firm" >
+      <div class="row d-flex justify-content-between card-body col-12 mx-auto mb-3 firm px-0" >
         <processing-bar v-if="processing && !timesheet"></processing-bar>
         <NoFirm v-if="noEngagements &&!listLoaded" class="mx-auto align-self-center"/>
         <spinner v-if="listLoaded" class="mx-auto"></spinner>
 
-        <div class="col-2 col-sm-3 list" v-if="!listLoaded && Object.keys(allEngagements).length">
+        <div class="col-2 col-sm-3 list pl-0" v-if="!listLoaded && Object.keys(allEngagements).length">
           <div class="card shadow-sm p-2">
             <div class="input-group mt-2 mb-3">
               <div class="input-group-prepend">
@@ -56,7 +56,7 @@
           </div>
         </div>
 
-        <div class="col-10 col-sm-9 table-body" v-if="!listLoaded && Object.keys(allEngagements).length">
+        <div class="col-10 col-sm-9 table-body pr-0" v-if="!listLoaded && Object.keys(allEngagements).length">
           <div class="p-0 search-input-body">
             <div class="d-flex">
                 <div class="flex-fill search-engagements-body">

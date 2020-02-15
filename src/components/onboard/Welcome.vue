@@ -59,6 +59,7 @@ export default {
     border-radius: 10px;
     width: 429px;
     height: 274px;
+    background: white;
 }
 
 .welcome-btns {

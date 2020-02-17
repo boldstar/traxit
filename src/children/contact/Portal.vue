@@ -1,6 +1,6 @@
 <template>
     <div class="portal">
-        <div class="header p-0 d-flex flex-row justify-content-between mt-2 shadow-sm mb-3">
+        <div class="header p-0 d-flex flex-row justify-content-between mt-2 shadow-sm mb-3 bg-white">
             <div class="ml-3 pr-2  h3 align-self-center m-0">
                 <span>Portal</span>
             </div>

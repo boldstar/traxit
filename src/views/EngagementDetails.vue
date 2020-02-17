@@ -5,7 +5,7 @@
       <div class="sending-mail" v-if="processing && !noteModal && !timesheet"><i class="far fa-envelope mr-3"></i>Sending Mail...</div>
 
       <!-- this is the header section of the engagement details -->
-      <div class="flex-row justify-content-between d-flex mt-0 card-body shadow-sm py-2 px-3">
+      <div class="flex-row justify-content-between d-flex mt-0 card-body shadow-sm py-2 px-3 bg-white">
         <span class="h5 align-self-center m-0 text-left engagement-name">Engagement | <strong class="text-primary"><router-link :to="'/contact/' +engagement.client.id + '/account'">{{engagement.name}}</router-link></strong></span>
 
         <div>

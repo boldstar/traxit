@@ -1,7 +1,7 @@
 <template>
    <div>
         <!-- this is the header for the contact notes with the add note button -->
-        <div class="header p-0 d-flex flex-row justify-content-between mt-2 mb-4 shadow-sm">
+        <div class="header p-0 d-flex flex-row justify-content-between mt-2 mb-4 shadow-sm bg-white">
             <div class="ml-3 pr-2  h3 align-self-center m-0">
                 <i class=" far fa-clipboard text-primary"></i> |
                 <span>{{ clientNotes.length }}</span>

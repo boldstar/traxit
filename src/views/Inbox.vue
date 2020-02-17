@@ -107,6 +107,6 @@ export default {
 
     .files-body {
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
     }
 </style>

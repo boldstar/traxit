@@ -1,8 +1,8 @@
 <template>
   <div class="page-wrapper d-flex justify-content-center align-items-center col-12">
-    <div class="d-flex flex-column align-items-center col-md-6 shadow mb-5 edit-engagement-form">
+    <div class="d-flex flex-column align-items-center col-md-6 shadow mb-5 edit-engagement-form bg-white">
 
-    <form class="w-100 text-left py-2">
+    <form class="w-100 text-left py-2 bg-white">
       <div class="form-group">
 
         <label for="name">Name<span class="text-danger">*</span></label>

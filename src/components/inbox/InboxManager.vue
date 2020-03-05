@@ -26,8 +26,8 @@
                 <div class="file-details" v-if="current_file">
                     <div class="file-detail-buttons p-2 d-flex">
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="verify('delete')"><i class="fas fa-trash"></i></button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="verify('archive')" v-if="selected == 'Inbox'"><i class="fas fa-archive"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="verify('delete')">Delete <i class="fas fa-trash"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="verify('archive')" v-if="selected == 'Inbox'">Archive <i class="fas fa-archive"></i></button>
                         </div>
                     </div>
                     <div class="file-details-header p-2" >
@@ -102,7 +102,8 @@ export default {
     methods: {
         getTime(date) {
             const time =  new Date(date)
-            var hours = time.getHours();
+            const offset = time.getTimezoneOffset() / 60
+            var hours = time.getHours() - offset;
             var minutes = time.getMinutes();
             var ampm = hours >= 12 ? 'pm' : 'am';
             hours = hours % 12;
@@ -178,32 +179,34 @@ export default {
 
     .file-manager {
         min-height: 80vh;
+        max-height: 80vh;
         height: 100%;
-    }
-
-    .inbox-list {
-        list-style: none;
-        width: 100%;
-        max-width: 300px;
-        min-width: 200px;
-        padding: 0;
-        margin: 0;
-        border-right: 1px solid gray;
-        overflow-y: scroll;
-        height: 100%;
-
-        li {
-            padding: 5px 20px;
-            border-bottom: 1px solid gray;
+        
+        .inbox-list {
+            list-style: none;
             width: 100%;
-            cursor: pointer;
+            max-width: 300px;
+            min-width: 200px;
+            padding: 0;
+            margin: 0;
+            border-right: 1px solid gray;
+            overflow-y: scroll;
+
+
+            li {
+                padding: 5px 20px;
+                border-bottom: 1px solid gray;
+                width: 100%;
+                cursor: pointer;
+            }
+        }
+
+        .file-details-body {
+            height: calc(100% - 50px);
+            width: 100%;
         }
     }
 
-    .file-details-body {
-        height: 100%;
-        width: 100%;
-    }
 
     .active-file {
         background: rgb(236, 236, 236);

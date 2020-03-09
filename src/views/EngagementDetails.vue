@@ -5,28 +5,8 @@
       <div class="sending-mail" v-if="processing && !noteModal && !timesheet"><i class="far fa-envelope mr-3"></i>Sending Mail...</div>
 
       <!-- this is the header section of the engagement details -->
-      <div class="flex-row justify-content-between d-flex mt-0 card-body shadow-sm py-2 px-3 bg-white">
+      <div class="flex-row justify-content-between d-flex mt-0 card-body py-2 px-0">
         <span class="h5 align-self-center m-0 text-left engagement-name">Engagement | <strong class="text-primary"><router-link :to="'/contact/' +engagement.client.id + '/account'">{{engagement.name}}</router-link></strong></span>
-
-        <div>
-          <ul class="d-flex engagement-links">
-            <li class="engagement-link-wrapper">
-              <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'details'}" :to="{path: '/engagement/' + engagement.id + '/details'}">Details</router-link>
-            </li>
-            <li class="engagement-link-wrapper">
-              <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'enotes'}" :to="{path: '/engagement/' + engagement.id + '/notes'}">Notes</router-link>
-            </li>
-            <li class="engagement-link-wrapper">
-              <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'questions'}" :to="{path: '/engagement/' + engagement.id + '/questions'}">Q & A</router-link>
-            </li>
-            <li class="engagement-link-wrapper">
-              <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'history'}" :to="{path: '/engagement/' + engagement.id + '/history'}">History</router-link>
-            </li>
-            <li class="engagement-link-wrapper">
-              <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'invoice'}" :to="{path: '/engagement/' + engagement.id + '/invoice'}">Invoice</router-link>
-            </li>
-          </ul>
-        </div>
 
         <div class="d-flex">
         <div v-if="engagement.type == 'taxreturn' && engagement.balance != null" class="mr-3 d-flex engagement-balance">
@@ -38,7 +18,7 @@
         <span v-if="archiving && engagement.archive" class="bg-light p-1 mr-3 font-weight-bold">Unarchiving..</span>
         <div class="btn-group">
           <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-cogs mr-2"></i>  Action
+            <i class="fas fa-cogs mr-2"></i>  Options
           </button>
           <div class="dropdown-menu mr-4">
             <router-link class="dropdown-item" :to="'/engagement/' +engagement.id+ '/edit'" v-if="engagement.done == false"><i class="far fa-edit mr-2" ></i>Edit</router-link>
@@ -70,7 +50,27 @@
         </div>
       </b-modal>
 
-      <div class="row px-3 my-3"  v-if="!detailsLoaded">
+      <div class="d-flex my-3"  v-if="!detailsLoaded">
+         <div class="mr-3 col-2">
+          <ul class="d-flex flex-column list-group engage-sidebar" >
+            <li class="list-group-item" :class="{'active-list-group-item': $route.name == 'details'}" @click="goTo('details')">
+              <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'details'}" :to="{path: '/engagement/' + engagement.id + '/details'}">Details</router-link>
+            </li>
+            <li class="list-group-item" :class="{'active-list-group-item': $route.name == 'enotes'}" @click="goTo('notes')">
+              <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'enotes'}" :to="{path: '/engagement/' + engagement.id + '/notes'}">Notes</router-link>
+            </li>
+            <li class="list-group-item" :class="{'active-list-group-item': $route.name == 'questions'}" @click="goTo('questions')">
+              <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'questions'}" :to="{path: '/engagement/' + engagement.id + '/questions'}">Q & A</router-link>
+            </li>
+            <li class="list-group-item" :class="{'active-list-group-item': $route.name == 'history'}" @click="goTo('history')">
+              <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'history'}" :to="{path: '/engagement/' + engagement.id + '/history'}">History</router-link>
+            </li>
+            <li class="list-group-item" :class="{'active-list-group-item': $route.name == 'invoice'}" @click="goTo('invoice')">
+              <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'invoice'}" :to="{path: '/engagement/' + engagement.id + '/invoice'}">Invoice</router-link>
+            </li>
+          </ul>
+        </div>
+
         <router-view :engagement="engagement" :engagement-notes="engagementNotes" ></router-view>
       </div>
 
@@ -151,15 +151,18 @@ export default {
       this.$store.dispatch('engagementViewProgress', this.engagement.id)
     },
     modifyAmount(fee) {
-          if(fee == '' || fee == null) return;
-          const amount =  parseFloat(fee.replace(/,/g, ''));
-          if(amount < 0) {
-              return 'Tax Refunded: $' + (-amount)
-          } else {
-              return 'Tax Owed: $' + amount
-          }
-          return;
-      },
+        if(fee == '' || fee == null) return;
+        const amount =  parseFloat(fee.replace(/,/g, ''));
+        if(amount < 0) {
+            return 'Tax Refunded: $' + (-amount)
+        } else {
+            return 'Tax Owed: $' + amount
+        }
+        return;
+    },
+    goTo(path) {
+      this.$router.push({'path': '/engagement/' + this.engagement.id + '/' + path})
+    }
   },
   created: function(){
     this.$store.dispatch('getEngagement', this.$route.params.id);
@@ -176,6 +179,12 @@ export default {
 
 
 <style  lang="scss">
+  .engage-sidebar {
+     position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+  }
+
   .mail-sent-flag {
     border: 1px solid #0077ff;
     padding: 4px;
@@ -248,23 +257,29 @@ export default {
     cursor: pointer!important;
   }
 
-  .engagement-links {
-    list-style: none;
-    align-self: center;
-    margin: 0;
-    padding: 0;
+  .list-group {
 
-    .engagement-link-wrapper {
-      align-self: center;
-      padding: 5px 30px;
-      border-bottom: none;
-      font-weight: bold;
+    .active-list-group-item {
+      border-left: 3px solid #0077ff;
+    }
+
+    .list-group-item {
+      padding: 10px 0;
+      cursor: pointer;
+
+      &:hover {
+        background: rgb(245, 245, 245);
+        box-shadow: 0 0 3px 0 rgba(0,0,0,.1);
+      }
 
       .engagement-link {
         color: black;
+        font-size: .9rem;
+        text-decoration: none!important;
       }
 
       .active-engagement-link {
+        font-weight: bold;
         color: #0077ff;
       }
     }

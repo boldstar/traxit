@@ -17,7 +17,7 @@
         <span v-if="archiving && !engagement.archive" class="bg-light p-1 mr-3 font-weight-bold">Archiving..</span>
         <span v-if="archiving && engagement.archive" class="bg-light p-1 mr-3 font-weight-bold">Unarchiving..</span>
         <div class="btn-group">
-          <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button type="button" class="btn btn-sm btn-primary dropdown-toggle font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-cogs mr-2"></i>  Options
           </button>
           <div class="dropdown-menu mr-4">
@@ -231,18 +231,8 @@ export default {
   }
 
   .note-span {
-    font-size: .6rem;
     font-weight: bold;
-    margin-right: 8px;
-  }
-
-  .note {
-    padding-bottom: 5px;
-
-     &:hover {
-       background-color: rgba(0, 0, 0, 0.110);
-       padding: 5px;
-     }
+    margin: 0 8px;
   }
 
   .note-date {
@@ -283,6 +273,11 @@ export default {
         color: #0077ff;
       }
     }
+  }
+
+  .title-description {
+      font-weight: bold;
+      font-size: .95rem;
   }
 
 

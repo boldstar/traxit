@@ -1,35 +1,43 @@
 <template>
-    <div class="w-100 mb-3">
-        <div class="card px-0 shadow-sm align-self-start note-div">
-            <div class="card-header d-flex justify-content-between py-2">
-                <div class="font-weight-bold align-self-center">
-                <span class="align-self-center">Notes | <span class="text-primary">{{engagementNotes.length}}</span></span>
-                </div>
-                <button class="btn btn-primary btn-sm" @click="addNoteModal"><i class="far fa-plus-square"></i></button>
+    <div class="w-100 text-left engage-notes">
+        <div class="d-flex justify-content-between">
+            <div>
+                <h4 class="mb-0">Engagement Notes</h4>
+                <span class="title-description text-secondary">A list of notes for the engagement</span>
             </div>
-            <div v-if="engagementNotes.length <= 0" class="card-body shadow-sm note-div">
+            <button class="btn btn-secondary font-weight-bold align-self-start" type="button" @click="addNoteModal">Add Note</button>
+        </div>
+
+        <div class="px-0 align-self-start note-div my-3">
+            <div v-if="engagementNotes.length <= 0" class="card-body shadow-sm bg-white">
                 <span class="font-weight-bold">There are currrently no notes</span>
             </div>
             <div v-if="engagementNotes.length > 0">
-                <div class="card-body border-bottom py-0 text-left note-div" v-for="(note, index) in engagementNotes" :key="index">
+                <div class="card shadow-sm p-2 text-left note-div mb-3" v-for="(note, index) in engagementNotes" :key="index">
                     <div class="note p-1">
-                    <div v-html="note.note"></div>
-                    <div class="d-flex justify-content-between">
-                        <div class="d-flex">
-                        <span class="note-date mr-1" v-if="note.username != null">Created By: {{ note.username }} | </span>
-                        <span class="note-date">{{ note.created_at | formatDate }}</span>
+                        <div class="mb-2">
+                            <h5 class="mb-0" v-if="note.username != null">Created By: {{ note.username }}</h5>
+                            <span class="font-weight-bold text-secondary">Created Date: {{ note.created_at | formatDate }}</span>
+                        </div>  
+                        <div v-html="note.note"></div>
+                        <div class="d-flex mt-2">     
+                            <button type="button" class="btn btn-primary btn-sm font-weight-bold" @click="editNote(note)">Edit</button>  
+                            <span v-if="deleteNote && note.id == selectedNote" class="note-span">Are you sure?</span>
+                            <button type="button" class="btn btn-secondary btn-sm ml-3 font-weight-bold">
+                                <span v-if="!deleteNote" @click="confirmDelete(note.id)">Delete</span>
+                                <span v-if="deleteNote && note.id == selectedNote" @click="deleteENote(note.id)">Yes</span>
+                            </button>
+                            <button class="btn btn-sm btn-secondary ml-2 font-weight-bold" v-if="deleteNote && note.id == selectedNote" @click="deleteNote = false">Cancel</button>
                         </div>
-                        <div class="d-flex">     
-                        <button type="button" class="edit-btn" @click="editNote(note)">Edit</button>  
-                        <span v-if="deleteNote && note.id == selectedNote" class="note-span">Are you sure?</span>
-                        <button type="button" class="note-btn">
-                            <span v-if="!deleteNote" @click="confirmDelete(note.id)">Delete</span>
-                            <span v-if="deleteNote && note.id == selectedNote" @click="deleteENote(note.id)">Yes</span>
-                        </button>
-                        <button class="note-btn ml-2" v-if="deleteNote && note.id == selectedNote" @click="deleteNote = false">Cancel</button>
-                        </div>
-                    </div>  
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="card add-note" @click="addNoteModal">
+            <div class="card-body d-flex justify-content-center">
+                <div class="d-flex flex-column align-items-center add-note-btn-border">
+                    <i class="fas fa-edit fa-3x mb-2"></i>
+                    <span class="font-weight-bold">Add Note</span>
                 </div>
             </div>
         </div>
@@ -90,3 +98,28 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+    .add-note {
+        border: 2px dashed lightgray;
+        background: transparent!important;
+        cursor: pointer;
+        transition: all .5s;
+
+        &:hover {
+            background: white!important;
+            box-shadow: 0 0 8px 0 rgba(0,0,0,.3);
+        }
+
+        .add-note-btn-border {
+
+            i {
+                color: lightgray!important;
+            }
+
+            span {
+                color: lightgray!important;
+            }
+        }
+    }
+</style>

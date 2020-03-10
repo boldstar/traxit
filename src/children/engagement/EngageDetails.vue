@@ -159,11 +159,6 @@ export default {
 
 <style lang="scss">
 
-    .title-description {
-        font-weight: bold;
-        font-size: .95rem;
-    }
-
     .details-list-item {
         max-width: 400px;
         width: 100%;

@@ -1,11 +1,18 @@
 <template>
-  <div class="page-wrapper w-100">
-  <div class="d-flex justify-content-between mb-5 history-body" v-if="dataReceived">
-    <div class="card-body radius shadow text-left p-0" v-if="engagementHistory">
+  <div class="page-wrapper w-100 text-left">
+    <div class="d-flex justify-content-between mb-3">
+        <div>
+            <h4 class="mb-0">Engagement History</h4>
+            <span class="title-description text-secondary">A history of the engagement along with the time since it was created</span>
+        </div>
+    </div> 
+
+  <div class="d-flex justify-content-between mb-5 history-body card" v-if="dataReceived">
+    <div class="card-body radius shadow-sm text-left p-0" v-if="engagementHistory">
       <div class="d-flex justify-content-between">
-        <h2 class="p-3"><i class="fas fa-history mr-2"></i>History</h2>
+        <h3 class="p-3 mb-0"><i class="fas fa-history mr-2"></i>Timelapse | {{ calculateDifference }} Day(s)</h3>
         <div class="align-self-center mr-3">
-          <button type="button" class="btn btn-sm btn-primary" @click="editReceivedDate">Edit Created Date</button>    
+          <button type="button" class="btn btn-sm btn-primary font-weight-bold" @click="editReceivedDate">Edit Created Date</button>    
         </div>
       </div>
       <table class="table table-light table-hover text-left mb-0">
@@ -13,7 +20,7 @@
             <tr>
                 <th scope="col">Event</th>
                 <th scope="col">Moved By</th>
-                <th scope="col">Status</th>
+                <th scope="col">To Status</th>
                 <th scope="col">Date</th>
             </tr>
         </thead> 
@@ -32,17 +39,6 @@
         </span>
       </div>
     </div>
-    <div class="card-body timespan shadow ml-3 text-left align-self-start">
-      <h2><i class="far fa-clock mr-2"></i>
-        <span v-if="engagementComplete">Completed In</span>
-        <span v-else>Timelapse</span>
-      </h2>
-      <div v-if="engagementHistory" class="day">
-        <span class="d-flex justify-content-center">
-          {{ calculateDifference }} Day(s)
-        </span>
-      </div>
-    </div>
 
     <b-modal v-model="dateModal" hide-footer title="Edit Created Date">
       <div class="d-block text-left">
@@ -58,11 +54,9 @@
         <b-btn class="mt-3" variant="secondary" size="sm" @click="dateModal = false">Cancel</b-btn>
       </div>
     </b-modal>
-
-
   </div>
 
-    <div v-if="!dataReceived" class="lds-dual-ring justify-content-center"></div>
+  <div v-if="!dataReceived" class="lds-dual-ring justify-content-center"></div>
 
   </div>
 </template>

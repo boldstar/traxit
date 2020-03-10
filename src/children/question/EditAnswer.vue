@@ -23,7 +23,7 @@
 
             <div class="d-flex justify-content-between mb-3">
               <button class="btn btn-primary d-flex justify-content-start font-weight-bold" type="button" @click="acceptAnswer">Save</button>
-              <router-link v-bind:to="'/engagement/' +engagement.id " class="btn btn-secondary font-weight-bold">Cancel</router-link>
+              <router-link v-bind:to="'/engagement/' +engagement.id+ '/questions' " class="btn btn-secondary font-weight-bold">Cancel</router-link>
             </div>
 
             </form>

@@ -15,7 +15,7 @@
 
             <div class="d-flex justify-content-between">
               <button type="submit" class="btn btn-primary d-flex justify-content-start">Save Changes</button>
-              <router-link v-bind:to="'/engagement/' +engagement.id " class="btn btn-secondary float-right">Cancel</router-link>
+              <router-link v-bind:to="'/engagement/' +engagement.id+ '/questions' " class="btn btn-secondary float-right">Cancel</router-link>
             </div>
       
         </form>

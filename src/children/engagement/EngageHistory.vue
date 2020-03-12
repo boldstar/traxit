@@ -1,6 +1,6 @@
 <template>
-  <div class="page-wrapper w-100 text-left">
-    <div class="d-flex justify-content-between mb-3">
+  <div class="page-wrapper w-100 ">
+    <div class="d-flex text-left mb-3">
         <div>
             <h4 class="mb-0">Engagement History</h4>
             <span class="title-description text-secondary">A history of the engagement along with the time since it was created</span>

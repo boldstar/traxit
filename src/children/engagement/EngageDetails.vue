@@ -48,7 +48,7 @@
                     </li>
                 </ul>
                 <div class="d-flex mt-3 ml-2 mb-1">
-                    <button class="btn btn-sm btn-secondary font-weight-bold mr-3" type="button">Edit Details</button>
+                    <router-link class="btn btn-sm btn-secondary font-weight-bold mr-3" :to="'/engagement/' +engagement.id+ '/edit'">Edit Details</router-link>
                 </div>
             </div>
         </div>
@@ -60,7 +60,7 @@
                 <div class="p-2">
                     <h5 class="mb-0">Current Status: {{engagement.status}}</h5>
                     <span class="font-weight-bold text-secondary">Last updated: {{engagement.updated_at | formatDate}}</span>
-                    <EngagementDoughnut class="mt-3" :percentage="percentage" />
+                    <EngagementDoughnut class="mt-3" :percentage="currentWidth" />
                 </div>
                 <div class="d-flex mt-3 ml-2 mb-1">
                     <button class="btn btn-sm btn-secondary font-weight-bold" type="button">Update Status</button>
@@ -120,7 +120,7 @@ export default {
             const statuses = this.engagementWorkflow.statuses
             const index = statuses.findIndex(s => s.status == status)
 
-            return (index + 1) * this.percentage
+            return Math.round((index + 1) * this.percentage)
         }
     },
     methods: {

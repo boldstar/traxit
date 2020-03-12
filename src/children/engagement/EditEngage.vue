@@ -1,8 +1,15 @@
 <template>
-  <div class="page-wrapper d-flex justify-content-center align-items-center col-12">
-    <div class="d-flex flex-column align-items-center col-md-6 shadow mb-5 edit-engagement-form bg-white">
+  <div class="page-wrapper  w-100">
+    <div class="d-flex text-left mb-3">
+        <div>
+            <h4 class="mb-0">Engagement Form</h4>
+            <span class="title-description text-secondary">Update the information about the engagement</span>
+        </div>
+    </div>
 
-    <form class="w-100 text-left py-2 bg-white">
+    <div class="d-flex flex-column align-items-center w-50 shadow-sm mb-2 edit-engagement-form bg-white p-3 card">
+
+    <form class="w-100 text-left bg-white">
       <div class="form-group">
 
         <label for="name">Name<span class="text-danger">*</span></label>

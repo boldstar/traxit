@@ -22,7 +22,8 @@ export default {
         completedEngagements: [],
         editNoteModal: false,
         returntypes: '',
-        engagement_workflow: ''
+        engagement_workflow: '',
+        status_modal: false
     },
     getters: {
         allEngagements(state) {
@@ -72,6 +73,9 @@ export default {
         },
         engagementWorkflow(state) {
             return state.engagement_workflow
+        },
+        engagementStatusModal(state) {
+            return state.status_modal
         }
     },
     mutations: {
@@ -172,6 +176,9 @@ export default {
         engagementWorkflow(state, workflow) {
             state.engagement_workflow = workflow
         },
+        showStatusModal(state, bool) {
+            state.status_modal = bool
+        }
     },
     actions: {
         retrieveEngagements(context) {
@@ -263,38 +270,43 @@ export default {
         },
         updateEngagement(context, engagement) {
             context.commit('startProcessing')
-            axios.patch('/engagements/' + engagement.id, {
-                name: engagement.name,
-                client_id: engagement.client_id,
-                workflow_id: engagement.workflow_id,
-                type: engagement.type,
-                title: engagement.title,
-                description: engagement.description,
-                return_type: engagement.return_type,
-                year: engagement.year,
-                assigned_to: engagement.assigned_to,
-                status: engagement.status,
-                difficulty: engagement.difficulty,
-                fee: engagement.fee,
-                balance: engagement.balance,
-                owed: engagement.owed,
-                done: engagement.done,
-                in_progress: false,
-                paid: engagement.paid,
-                estimated_date: engagement.estimated_date,
-                priority: engagement.priority
+
+            return new Promise((resolve, reject) => {
+                axios.patch('/engagements/' + engagement.id, {
+                    name: engagement.name,
+                    client_id: engagement.client_id,
+                    workflow_id: engagement.workflow_id,
+                    type: engagement.type,
+                    title: engagement.title,
+                    description: engagement.description,
+                    return_type: engagement.return_type,
+                    year: engagement.year,
+                    assigned_to: engagement.assigned_to,
+                    status: engagement.status,
+                    difficulty: engagement.difficulty,
+                    fee: engagement.fee,
+                    balance: engagement.balance,
+                    owed: engagement.owed,
+                    done: engagement.done,
+                    in_progress: false,
+                    paid: engagement.paid,
+                    estimated_date: engagement.estimated_date,
+                    priority: engagement.priority
+                })
+                .then(response => {
+                    context.commit('updateEngagement', response.data.engagement)
+                    context.commit('successAlert', response.data.message)
+                    context.commit('stopProcessing')
+                    router.push({ path: '/engagement/' + response.data.engagement.id + '/details'})
+                    resolve(response)
+                })
+                .catch(error => {
+                    console.log(error.response.data)
+                    context.commit('errorMsgAlert', error.response.data.message)
+                    context.commit('stopProcessing')
+                    reject(error)
+                })           
             })
-            .then(response => {
-                context.commit('updateEngagement', response.data.engagement)
-                context.commit('successAlert', response.data.message)
-                context.commit('stopProcessing')
-                router.push({ path: '/engagement/' + response.data.engagement.id + '/details'})
-            })
-            .catch(error => {
-                console.log(error.response.data)
-                context.commit('errorMsgAlert', error.response.data.message)
-                context.commit('stopProcessing')
-            })           
         },
         updateCheckedEngagements(context, checkedEngagements) {
             context.commit('startProcessing')

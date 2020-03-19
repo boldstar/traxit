@@ -7,134 +7,140 @@
         </div>
     </div>
 
-    <div class="d-flex flex-column align-items-center w-50 shadow-sm mb-2 edit-engagement-form bg-white p-3 card">
-
-    <form class="w-100 text-left bg-white">
-      <div class="form-group">
-
-        <label for="name">Name<span class="text-danger">*</span></label>
-        <input type="text" id="name" class="form-control mb-2" placeholder="Engagement Name" v-model="engagement.name">
-
-        <label for="timespan" v-if="engagement.type == 'bookkeeping'">Timespan</label>
-        <div class="d-flex justify-content-between mb-2 p-2 custom-control custom-checkbox bg-white form-control" id="timespan" v-bind:class="{'input-error' : nothingChecked}" v-if="engagement.type == 'bookkeeping'">
-          <div class="d-flex">
-            <span class="mr-3 font-weight-bold h6">Monthly</span>
-            <input type="checkbox" v-model="monthChecked" class="custom-control-input ml-3" id="customCheck1" @change="selectedMonthRange">
-            <label class="custom-control-label ml-3" for="customCheck1"></label>
+    <div class="d-flex flex-column align-items-center mb-2 edit-engagement-form">
+      <form class="w-100">
+        <div class="text-left card p-3 shadow-sm mb-3">
+          <h5>General</h5>
+          <div class="input-group-grid">
+            <div class="input-group-grid-section">
+              <div class="custom-input-group">
+                <label for="name">Name<span class="text-danger">*</span></label>
+                <input type="text" id="name" v-model="engagement.name">
+              </div>
+              <div class="custom-input-group">
+                <label for="due_date">Due Date</label>
+                <v-date-picker
+                  mode='single'
+                  v-model='dueDate'
+                  id="due_date"
+                >
+                </v-date-picker>
+              </div>
+            </div>
+            <div class="input-group-grid-section">
+              <div class="custom-input-group">
+                <label for="priority">Priority</label>
+                <select id="priority" v-model="engagement.priority">
+                  <option v-for="(level, index) in priority_levels" :key="index" :value="level.level">
+                    {{ level.value }}
+                  </option>
+                </select>
+              </div>
+              <div class="custom-input-group">
+                <label for="difficulty">Difficulty</label>
+                <select id="difficulty" v-model="engagement.difficulty">
+                  <option v-for="(level, index) in difficulty_levels" :key="index" :value="level.level">
+                    {{ level.value }}
+                  </option>
+                </select>
+              </div>
+            </div>
           </div>
-          <div class="d-flex">
-            <span class="mr-3 font-weight-bold h6">Quarterly</span>
-            <input type="checkbox" v-model="quarterChecked" class="custom-control-input ml-3" id="customCheck2" @change="selectedQuarterRange">
-            <label class="custom-control-label ml-3" for="customCheck2"></label>
+        </div>
+
+        
+        <div class="text-left card p-3 shadow-sm mb-3">
+          <h5>Details</h5>
+          <div class="custom-input-group">
+            <label for="time">Tax Year<span class="text-danger">*</span></label>
+            <select id="time" v-model="engagement.year" name="Title">
+                <option v-for="(year, index) in years" :key="index" :value="year">{{ year }}</option>
+            </select>
           </div>
-          <div class="d-flex">
-            <span class="mr-3 font-weight-bold h6">Annual</span>
-            <input type="checkbox" v-model="annualChecked" class="custom-control-input ml-3" id="customCheck3" @change="selectedAnnualRange">
-            <label class="custom-control-label ml-3" for="customCheck3"></label>
+          <div class="custom-input-group" v-if="engagement.type == 'bookkeeping'">
+            <label for="timespan">Timespan</label>
+             <select  id="timespan" v-model="timespan" name="timespan" @change="setTimespan($event)">
+                <option v-for="(option, index) in timespans" :key="index" :value="option">{{ option }}</option>
+            </select>
+          </div>
+          <div class="custom-input-group" v-if="monthRange">
+            <label for="time">Month Of<span class="text-danger">*</span></label>
+            <select  id="time" v-model="engagement.title" name="Title">
+                <option v-for="(month, index) in monthly" :key="index" :value="month">{{ month }}</option>
+            </select>
+          </div>
+          <div class="custom-input-group" v-if="quarterRange">
+            <label for="option">Quarter Of<span class="text-danger">*</span></label>
+            <select id="type" v-model="engagement.title" name="Title">
+                <option v-for="(quarter, index) in quarterly" :key="index" :value="quarter">{{ quarter }}</option>
+            </select>
+          </div>
+          <div class="custom-input-group" v-if="engagement.type == 'taxreturn'">
+            <label for="type">Return Type<span class="text-danger">*</span></label>
+            <select id="type" v-model="engagement.return_type">
+                <option v-for="type in returnTypes" :key="type.id" :value="type.return_type">{{ type.return_type }}</option>
+            </select>
           </div>
         </div>
 
-        <div class="mb-2">
-          <label for="time">Tax Year<span class="text-danger">*</span></label>
-          <select class="form-control" id="time" v-model="engagement.year" name="Title">
-              <option v-for="(year, index) in years" :key="index" :value="year">{{ year }}</option>
-          </select>
-        </div>
-
-        <label for="due_date">Due Date</label>
-        <v-date-picker
-          mode='single'
-          v-model='dueDate'
-          :input-props='{class: "form-control mb-2"}'
-          id="due_date"
-        >
-        </v-date-picker>
-
-        <div class="mb-2" v-if="monthRange">
-          <label for="time">Month Of<span class="text-danger">*</span></label>
-          <select class="form-control" id="time" v-model="engagement.title" name="Title">
-              <option v-for="(month, index) in monthly" :key="index" :value="month">{{ month }}</option>
-          </select>
-        </div>
-
-        <div class="input-group my-3" v-if="quarterRange">
-          <div class="input-group-prepend">
-            <label class="input-group-text text-primary" for="option">Quarter Of<span class="text-danger">*</span></label>
+        <div class="text-left card shadow-sm p-3 mb-3">
+          <h5>Workflow</h5>
+          <div class="custom-input-group">
+            <label for="workflow">Workflow Type<span class="text-danger">*</span></label>
+            <select id="workflow" v-model.number="engagement.workflow_id">
+              <option v-for="workflow in allWorkflows" :key="workflow.id" :value="workflow.id">
+                {{ workflow.workflow }}
+              </option>
+            </select>
           </div>
-          <select class="form-control" id="type" v-model="engagement.title" name="Title">
-              <option v-for="(quarter, index) in quarterly" :key="index" :value="quarter">{{ quarter }}</option>
-          </select>
+          <div class="custom-input-group">
+            <label for="user" >Currently Assigned To<span class="text-danger">*</span></label>
+            <select id="user" v-model="engagement.assigned_to" :class="{'custom-input-error':assignAUser}" @change="clearAlarm">
+              <option v-for="user in computedUsers" :key="user.id" :value="user.name">
+                {{ user.name }}
+              </option>
+            </select>
+          </div>
+          <small class="text-danger" v-if="assignAUser">Please Assign Task To User</small>
+          <div class="custom-input-group" v-for="workflow in computedWorkflows" :key="workflow.id">
+              <label for="status">Status<span class="text-danger">*</span></label>
+              <select id="status" v-model="engagement.status">
+              <option v-for="status in workflow.statuses" :key="status.id" :value="status.status">
+                {{ status.status }}
+              </option>
+            </select>
+          </div>
         </div>
 
-        <label for="difficulty">Difficulty</label>
-        <select class="form-control mb-2" id="difficulty" v-model="engagement.difficulty">
-          <option v-for="(level, index) in levels" :key="index" :value="level">
-            {{ level }}
-          </option>
-        </select>
-
-        <label for="priority">Priority</label>
-        <select class="form-control mb-2" id="priority" v-model="engagement.priority">
-          <option v-for="(level, index) in levels" :key="index" :value="level">
-            {{ level }}
-          </option>
-        </select>
-  
-        <label for="workflow">Workflow Type<span class="text-danger">*</span></label>
-        <select class="form-control mb-2" id="workflow" v-model.number="engagement.workflow_id">
-          <option v-for="workflow in allWorkflows" :key="workflow.id" :value="workflow.id">
-            {{ workflow.workflow }}
-          </option>
-        </select>
-
-        <div class="mb-2" v-if="engagement.type == 'taxreturn'">
-          <label for="type">Return Type<span class="text-danger">*</span></label>
-          <select class="form-control" id="type" v-model="engagement.return_type">
-              <option v-for="type in returnTypes" :key="type.id" :value="type.return_type">{{ type.return_type }}</option>
-          </select>
-        </div>
-
-        <label for="user" class="w-100">Currently Assigned To<span class="text-danger">*</span></label>
-        <select class="form-control mb-2" id="user" v-model="engagement.assigned_to" :class="{'input-error':assignAUser}" @change="clearAlarm">
-          <option v-for="user in computedUsers" :key="user.id" :value="user.name">
-            {{ user.name }}
-          </option>
-        </select>
-        <small class="text-danger" v-if="assignAUser">Please Assign Task To User</small>
-
-        <div class="mb-2" v-for="workflow in computedWorkflows" :key="workflow.id">
-            <label for="status">Status<span class="text-danger">*</span></label>
-            <select class="form-control" id="status" v-model="engagement.status">
-            <option v-for="status in workflow.statuses" :key="status.id" :value="status.status">
-              {{ status.status }}
-            </option>
-          </select>
-        </div>
-
-
-        <div v-if="engagement.type == 'taxreturn'">
-        <label for="fee">Preparation Fee</label>
-        <currency-input id="fee" :placeholder="'Enter amount'"  v-model="engagement.fee" mask-type="currency" class="mb-2"></currency-input>
-
-        <label for="balance" class="w-100">Balance | {{ legend }}</label>
-        <div class="input-group mb-3" >
-        <input id="balance"  v-model="engagement.balance" :class="{'border-danger': balance}" class="form-control" placeholder="Enter Amount" type="text" />
-        </div>
+        <div v-if="engagement.type == 'taxreturn'" class="text-left card shadow-sm p-3 mb-3">
+          <h5>Fee & Balance Due</h5>
+          <div class="custom-input-group">
+            <label for="fee">Preparation Fee</label>
+            <currency-input id="fee" :placeholder="'Enter amount'"  v-model="engagement.fee" mask-type="currency" class="custom-currency-input"></currency-input>
+          </div>
+          <div class="custom-input-group mb-4" >
+            <label for="balance">Balance</label>
+            <input id="balance"  v-model="engagement.balance" :class="{'border-danger': balance}" placeholder="Enter Amount" type="text" />
+            <p class="input-legend">{{legend}}</p>
+          </div>
         </div>
         <small class="text-danger" v-if="balance">Balance must have an amount if "Owed" or "Refunded" is marked</small>
         <small class="text-danger" v-if="chooseOwed">Please select "Owed" or "Refunded" if balance has an amount entered</small>
 
 
-        <div class="d-flex my-3 bg-light p-2 custom-control custom-checkbox bg-white form-control">
-          <span class="mr-3 font-weight-bold mb-1 h6">Engagement Paid</span>
-          <input type="checkbox" v-model="engagement.paid" class="custom-control-input" id="customPaidCheck">
-          <label class="custom-control-label ml-3 align-self-start" for="customPaidCheck"></label>
-        </div>
-
-        <div class="d-flex my-3 bg-light p-2 custom-control custom-checkbox bg-white form-control">
-          <span class="mr-3 font-weight-bold mb-1 h6">Engagement Complete</span>
-          <input type="checkbox" v-model="engagement.done" class="custom-control-input" id="customCompleteCheck">
-          <label class="custom-control-label ml-3 align-self-start" for="customCompleteCheck"></label>
+        
+        <div class="text-left card shadow-sm p-3 mb-3">
+          <h5>Complete</h5>
+          <div class="d-flex p-2 custom-control custom-checkbox">
+            <input type="checkbox" v-model="engagement.paid" class="custom-control-input" id="customPaidCheck">
+            <label class="custom-control-label ml-3 align-self-start" for="customPaidCheck"></label>
+            <span class="mr-3 font-weight-bold mb-1">Engagement Paid</span>
+          </div>
+          <div class="d-flex p-2 custom-control custom-checkbox">
+            <input type="checkbox" v-model="engagement.done" class="custom-control-input" id="customCompleteCheck">
+            <label class="custom-control-label ml-3 align-self-start" for="customCompleteCheck"></label>
+            <span class="mr-3 font-weight-bold mb-1">Engagement Complete</span>
+          </div>
         </div>
         <div class="text-left mb-3 ml-1">
           <small class="text-danger" v-if="engagement.done == true">Warning: If Engagement Box Is Checked, Engagement Will Be Marked As Completed Or Has Already Been Complete</small>
@@ -147,7 +153,6 @@
           </button>
           <router-link v-bind:to="'/engagement/' + engagement.id + '/details'" class="btn btn-secondary font-weight-bold">Cancel</router-link>
         </div>
-        </div>
       </form>
     </div>
   </div>
@@ -157,7 +162,7 @@
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
 import CurrencyInput from '@/components/forms/CurrencyInput.vue'
-
+import levels from '../../plugins/levels'
 export default {
   name: 'EditEngagement',
   data() {
@@ -172,11 +177,14 @@ export default {
       assignAUser: false,
       balance: false,
       chooseOwed: false,
+      timespan: null,
+      timespans: ['Monthly', 'Quarterly', 'Annual'],
       monthly: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       quarterly: ['Jan-Mar', 'Apr-Jun', 'Jul-Sep', 'Oct-Dec'],
-      levels: [1,2,3,4,5],
+      difficulty_levels: levels.difficulty_levels,
+      priority_levels: levels.priority_levels,
       owed: null,
-      legend: '(Refund < 0 || Owed > 0)',
+      legend: 'Refund < 0 || Owed > 0',
       dueDate: null
     }
   },
@@ -283,6 +291,21 @@ export default {
     clearBalance() {
       this.owed = null
       this.engagement.balance = null
+    },
+    setTimespan(event) {
+      var timespan = event.target.value
+      if(timespan == 'Monthly') {
+          this.selectedMonthRange()
+          return
+      } else if(timespan == 'Quarterly') {
+          this.selectedQuarterRange()
+          return
+      } else if(timespan == 'Annual') {
+          this.selectedAnnualRange()
+          return
+      } else {
+        return
+      }
     }
   },
   created: function(){
@@ -292,16 +315,19 @@ export default {
     this.$store.dispatch('getReturnTypes')
     this.dueDate = this.engagement.estimated_date ? new Date(this.engagement.estimated_date) : null
     if(this.monthly.includes(this.engagement.title)) {
+      this.timespan = 'Monthly'
       this.monthChecked = true
       this.monthRange = true
       this.quarterRange = false
     }
     if(this.quarterly.includes(this.engagement.title)) {
+      this.timespan = 'Quarterly'
       this.quarterChecked = true
       this.quarterRange = true
       this.monthRange = false
     }
     if(this.engagement.title == 'Annual') {
+      this.timespan = 'Annual'
       this.annualChecked = true
     }
   }
@@ -342,5 +368,15 @@ export default {
     font-size: .9rem!important;
     align-self: center!important;
   }
+}
+
+.custom-currency-input {
+    padding: 10px !important;
+    padding-top: 10px !important;
+    border: 2px solid lightgray !important;
+    border-radius: 5px !important;
+    width: 100% !important;
+    z-index: 1 !important;
+    height: auto!important;
 }
 </style>

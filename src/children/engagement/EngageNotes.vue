@@ -5,7 +5,7 @@
                 <h4 class="mb-0">Engagement Notes</h4>
                 <span class="title-description text-secondary">A list of notes for the engagement</span>
             </div>
-            <button class="btn btn-secondary font-weight-bold align-self-start" type="button" @click="addNoteModal">Add Note</button>
+            <button class="btn btn-sm btn-secondary font-weight-bold align-self-start" type="button" @click="addNoteModal">Add Note</button>
         </div>
 
         <div class="px-0 align-self-start note-div my-3">
@@ -16,8 +16,8 @@
                 <div class="card shadow-sm p-2 text-left note-div mb-3" v-for="(note, index) in engagementNotes" :key="index">
                     <div class="note p-1">
                         <div class="mb-2">
-                            <h5 class="mb-0" v-if="note.username != null">Created By: {{ note.username }}</h5>
-                            <span class="font-weight-bold text-secondary">Created Date: {{ note.created_at | formatDate }}</span>
+                            <h6 class="mb-0 font-weight-bold" v-if="note.username != null">Created By: {{ note.username }}</h6>
+                            <span class="font-weight-bold text-secondary">Date: {{ note.created_at | formatDate }}</span>
                         </div>  
                         <div v-html="note.note"></div>
                         <div class="d-flex mt-2">     
@@ -119,6 +119,14 @@ export default {
 
             span {
                 color: lightgray!important;
+            }
+        }
+    }
+
+    .note {
+        div {
+            span {
+                font-size: .8rem;
             }
         }
     }

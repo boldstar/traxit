@@ -30,7 +30,7 @@
               <span v-if="engagement.in_progress"><i class="fas fa-sign-in-alt mr-2"></i>Check In</span>
               <span v-else><i class="fas fa-sign-out-alt mr-2"></i>Check Out</span>
             </button> 
-            <button type="button" class="dropdown-item"><i class="far fa-envelope mr-2"></i>Mail</button>
+            <!-- <button type="button" class="dropdown-item"><i class="far fa-envelope mr-2"></i>Mail</button> -->
             <div class="dropdown-divider"></div>
             <b-btn class="dropdown-item text-danger" @click="requestEngagementDelete()" v-if="$can('delete', engagement)"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn>
           </div>
@@ -58,9 +58,11 @@
             </li>
             <li class="list-group-item" :class="{'active-list-group-item': $route.name == 'enotes'}" @click="goTo('notes')">
               <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'enotes'}" :to="{path: '/engagement/' + engagement.id + '/notes'}">Notes</router-link>
+              <span class="engage-sidebar-badge" v-if="engagementNotes.length > 0">{{engagementNotes.length}}</span>
             </li>
             <li class="list-group-item" :class="{'active-list-group-item': $route.name == 'questions'}" @click="goTo('questions')">
               <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'questions'}" :to="{path: '/engagement/' + engagement.id + '/questions'}">Q & A</router-link>
+              <span class="engage-sidebar-badge" v-if="engagement.questions.length > 0">{{engagement.questions.length}}</span>
             </li>
             <li class="list-group-item" :class="{'active-list-group-item': $route.name == 'history'}" @click="goTo('history')">
               <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'history'}" :to="{path: '/engagement/' + engagement.id + '/history'}">History</router-link>
@@ -78,6 +80,7 @@
     </div>
 
     <UpdateStatusModal  :current_id="engagement.id" />
+    <EngagementStatusModal :engagement="engagement" :statuses="engagementWorkflow.statuses" :users="users" v-if="engagementStatusModal" />
   </div>
 </template>
 
@@ -87,6 +90,7 @@ import Alert from '@/components/alerts/Alert.vue'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 import UpdateStatusModal from '@/components/modals/UpdateStatusModal.vue'
+import EngagementStatusModal from '@/components/engagement/EngagementStatusModal.vue'
 import Spinner from '@/components/loaders/Spinner.vue'
 import NoteModal from '@/components/engagement/NoteModal.vue'
 import EditNoteModal from '@/components/engagement/EditNoteModal.vue'
@@ -113,13 +117,14 @@ export default {
     Spinner,
     NoteModal,
     EditNoteModal,
-    UpdateStatusModal
+    UpdateStatusModal,
+    EngagementStatusModal
   },
   directives: {
     'b-modal': bModalDirective
   },
   computed: {
-    ...mapGetters(['engagement','question', 'successAlert', 'processing', 'errorMsgAlert', 'engagementWorkflow','archiving', 'engagementNotes', 'noteModal', 'editNoteModal', 'timesheet']),
+    ...mapGetters(['engagement', 'successAlert', 'processing', 'errorMsgAlert', 'engagementWorkflow','archiving', 'engagementNotes', 'noteModal', 'editNoteModal', 'timesheet', 'users', 'engagementStatusModal']),
     percentage() {
       const statuses = this.engagementWorkflow.statuses
       const percentage = this.calcPercent(statuses.length)
@@ -164,9 +169,10 @@ export default {
       this.$router.push({'path': '/engagement/' + this.engagement.id + '/' + path})
     }
   },
-  created: function(){
+  created() {
     this.$store.dispatch('getEngagement', this.$route.params.id);
     this.$store.dispatch('getEngagementNotes', this.$route.params.id)
+    this.$store.dispatch('retrieveUsers');
     this.detailsLoaded = true;
     var self = this;
     setTimeout(() => {
@@ -256,6 +262,7 @@ export default {
     .list-group-item {
       padding: 10px 0;
       cursor: pointer;
+      position: relative;
 
       &:hover {
         background: rgb(245, 245, 245);
@@ -271,6 +278,18 @@ export default {
       .active-engagement-link {
         font-weight: bold;
         color: #0077ff;
+      }
+
+      .engage-sidebar-badge {
+        position: absolute;
+        background: #0077ff;
+        color: white;
+        font-weight: bold;
+        padding: 0 10px;
+        border-radius: 5px;
+        font-size: .8rem;
+        right: 5px;
+        top: 15px;
       }
     }
   }

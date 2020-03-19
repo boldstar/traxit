@@ -4,51 +4,75 @@
         <span class="title-description text-secondary">A general overview for the details of the engagement</span>
 
         <div class="card px-0 mt-3 mb-5 shadow-sm w-100">
-            <div class="card-body p-2">
-                <ul class="p-0 m-0">
-                    <li class="d-flex details-list-item p-2 pt-0">
-                        <span>Name:</span>
-                        <span class="font-weight-bold">{{ engagement.name}}</span>
+            <div class="card-body p-0 py-2">
+                <div class="px-3 pt-2 pb-3 border-bottom">
+                    <h5 class="mb-0">General Information</h5>
+                </div>
+                <ul class="m-0 p-0 details-list">
+                    <li class="details-list-item p-2 pt-0">
+                        <div>
+                            <span>Name:</span>
+                            <span class="font-weight-bold">{{ engagement.name}}</span>
+                        </div>
                     </li>
-                    <li class="d-flex details-list-item p-2" v-if="engagement.type != 'bookkeeping'">
-                        <span>Fee:</span>
-                        <span class="font-weight-bold">{{ amount(engagement.fee) }}</span>
+                    <li class="details-list-item p-2" v-if="engagement.type != 'bookkeeping'">
+                        <div>
+                            <span>Fee:</span>
+                            <span class="font-weight-bold">{{ amount(engagement.fee) }}</span>
+                        </div>
                     </li>
-                    <li class="d-flex details-list-item p-2" v-if="engagement.type == 'bookkeeping'">
-                        <span>Time Period:</span>
-                        <span class="font-weight-bold">{{ engagement.title}}</span>
+                    <li class="details-list-item p-2" v-if="engagement.type == 'bookkeeping'">
+                        <div>
+                            <span>Time Period:</span>
+                            <span class="font-weight-bold">{{ engagement.title}}</span>
+                        </div>
                     </li>
-                    <li class="d-flex details-list-item p-2">
-                        <span>Subject:</span>
-                        <span class="font-weight-bold">{{ engagement.description}}</span>
+                    <li class="details-list-item p-2">
+                        <div>
+                            <span>Subject:</span>
+                            <span class="font-weight-bold">{{ engagement.description}}</span>
+                        </div>
                     </li>
-                    <li class="d-flex details-list-item p-2" v-if="engagement.type == 'taxreturn'">
-                        <span>Return Type:</span>
-                        <span class="font-weight-bold">{{ engagement.return_type}}</span>
+                    <li class="details-list-item p-2" v-if="engagement.type == 'taxreturn'">
+                        <div>
+                            <span>Return Type:</span>
+                            <span class="font-weight-bold">{{ engagement.return_type}}</span>
+                        </div>
                     </li>
-                    <li class="d-flex details-list-item p-2">
-                        <span>Year:</span>
-                        <span class="font-weight-bold">{{ engagement.year}}</span>
+                    <li class="details-list-item p-2">
+                        <div>
+                            <span>Year:</span>
+                            <span class="font-weight-bold">{{ engagement.year}}</span>
+                        </div>
                     </li>
-                    <li class="d-flex details-list-item p-2" v-if="engagement.done == false">
-                        <span>Currently Assigned:</span>
-                        <span class="font-weight-bold">{{ engagement.assigned_to}}</span>
+                    <li class="details-list-item p-2" v-if="engagement.done == false">
+                        <div>
+                            <span>Currently Assigned:</span>
+                            <span class="font-weight-bold">{{ engagement.assigned_to}}</span>
+                        </div>
                     </li>
-                    <li class="d-flex details-list-item p-2">
-                        <span>Status:</span>
-                        <span class="font-weight-bold">{{ engagement.status}}</span>
+                    <li class="details-list-item p-2">
+                        <div>
+                            <span>Status:</span>
+                            <span class="font-weight-bold">{{ engagement.status}}</span>
+                        </div>
                     </li>
-                    <li class="d-flex details-list-item p-2">
-                        <span>Due Date:</span>
-                        <span class="font-weight-bold">{{ engagement.estimated_date | formatDate }}</span>
+                    <li class="details-list-item p-2">
+                        <div>
+                            <span>Due Date:</span>
+                            <span class="font-weight-bold" v-if="engagement.estimated_date">{{ engagement.estimated_date | formatDate }}</span>
+                            <span class="font-weight-bold" v-else>N/A</span>
+                        </div>
                     </li>
-                    <li class="d-flex details-list-item p-2">
-                        <span>Paid:</span>
-                        <span class="font-weight-bold">{{ paid(engagement.paid) }}</span>
+                    <li class="details-list-item p-2">
+                        <div>
+                            <span>Paid:</span>
+                            <span class="font-weight-bold">{{ paid(engagement.paid) }}</span>
+                        </div>
                     </li>
                 </ul>
-                <div class="d-flex mt-3 ml-2 mb-1">
-                    <router-link class="btn btn-sm btn-secondary font-weight-bold mr-3" :to="'/engagement/' +engagement.id+ '/edit'">Edit Details</router-link>
+                <div class="d-flex mt-3 ml-3 mb-2">
+                    <router-link class="engage-edit-btn font-weight-bold mr-3" :to="'/engagement/' +engagement.id+ '/edit'">Edit Info</router-link>
                 </div>
             </div>
         </div>
@@ -63,7 +87,7 @@
                     <EngagementDoughnut class="mt-3" :percentage="currentWidth" />
                 </div>
                 <div class="d-flex mt-3 ml-2 mb-1">
-                    <button class="btn btn-sm btn-secondary font-weight-bold" type="button">Update Status</button>
+                    <button class="engage-edit-btn font-weight-bold" type="button" @click="showStatusModal">Update Status</button>
                 </div>
             </div>
         </div>
@@ -109,7 +133,7 @@ export default {
         'b-modal': bModalDirective
     },
     computed: {
-        ...mapGetters(['successAlert', 'processing', 'errorMsgAlert', 'engagementWorkflow']),
+        ...mapGetters(['successAlert', 'processing', 'errorMsgAlert', 'engagementWorkflow', 'engagementStatusModal']),
         percentage() {
             const statuses = this.engagementWorkflow.statuses
             const percentage = this.calcPercent(statuses.length)
@@ -152,6 +176,9 @@ export default {
             } else {
                 return 'No'
             }
+        },
+        showStatusModal() {
+            this.$store.commit('showStatusModal', true)
         }
     }
 }
@@ -159,9 +186,36 @@ export default {
 
 <style lang="scss">
 
-    .details-list-item {
-        max-width: 400px;
-        width: 100%;
-        justify-content: space-between;
+    .details-list {
+        list-style: none;
+        .details-list-item {
+            div {
+            padding: 5px 8px;
+                display: flex;
+                max-width: 400px;
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            &:nth-of-type(even) {
+                background: rgb(243, 243, 243);
+            }
+        }
+    }
+
+    .engage-edit-btn {
+        background: rgb(228, 228, 228);
+        border-radius: 5px;
+        border: none;
+        font-weight: bold;
+        padding: 5px 15px;
+        color: black;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: none;
+            background: rgb(218, 218, 218);
+            color: black;
+        }
     }
 </style>

@@ -105,6 +105,64 @@ export default {
         border-radius: 4px;
     }
 
+    .custom-input-group {
+        position: relative;
+        margin: 10px;
+        margin-bottom: 15px;
+
+        label {
+            position: absolute;
+            top: -15px;
+            left: 10px;
+            background: white;
+            padding: 5px 10px;
+            z-index: 2;
+        }
+
+        input {
+            outline: none;
+            padding: 10px;
+            padding-top: 10px;
+            border: 2px solid lightgray;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        select {
+            padding: 12px;
+            padding-top: 10px;
+            border: 2px solid lightgray;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .input-legend {
+            font-weight: bold;
+            background: rgb(231, 231, 231);
+            border-radius: 0 0 5px 5px;
+            padding-left: 12px;
+            position: absolute;
+            width: 100%;
+            top: 45px;
+            font-size: .8rem;
+            padding-bottom: 2px;
+            border: 2px solid lightgray;
+            border-top: transparent;
+        }
+
+        .custom-input-error {
+            border: 2px solid red;
+        }
+    }
+
+    .input-group-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        .input-group-grid-section {
+            width: 100%;
+        }
+    }
 </style>
 
 

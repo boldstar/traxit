@@ -114,6 +114,8 @@ export default {
 
     .profile-card {
         height: 100%;
+        width: 100%;
+        flex-grow: 1;
     }
 
     .profile-card-body {
@@ -157,12 +159,34 @@ export default {
         width: auto;
     }
 
-    .profile-card {
-        width: 100%;
-        flex-grow: 1;
-    }
-
     .profile-header {
         white-space: nowrap;
+    }
+
+    @media screen and (max-width: 1400px) {
+        .profile-logo-body-wrapper {
+            margin: 50px 0;
+        }
+
+        .dashboard-logo-wrapper {
+            height: 100%;
+        }
+
+        .profile-logo-wrapper {
+            height: inherit;
+            max-height: 150px;
+            padding: 20px;
+            border: none;
+        }
+
+        .dashboard-logo {
+            max-height: 100px;
+            height: 100%;
+            width: auto;
+        }
+
+        .profile-logo {
+            max-height: 80px;
+        }
     }
 </style>

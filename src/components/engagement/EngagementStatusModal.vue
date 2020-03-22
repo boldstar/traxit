@@ -1,7 +1,7 @@
 <template>
       <b-modal v-model="modal" centered hide-footer hide-header title="Update Engagement">
-          <div class="bg-light text-left p-3 mb-4">
-            <span class="h5">Update Status Modal</span>
+          <div class="bg-light text-left p-2 mb-4">
+            <span class="h5">Update Status</span>
           </div>
           <div class="custom-input-group">
             <label class="font-weight-bold" for="option">Assign To</label>

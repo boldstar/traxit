@@ -1,17 +1,17 @@
 const priority_levels = [
-    {level: 1, value: 'Low'},
-    {level: 2, value: 'Mild'},
-    {level: 3, value: 'Medium'},
-    {level: 4, value: 'High'},
-    {level: 5, value: 'Hot'}
+    {id: 1, level: 1, value: 'Low'},
+    {id: 2, level: 2, value: 'Mild'},
+    {id: 3, level: 3, value: 'Medium'},
+    {id: 4, level: 4, value: 'Hot'},
+    {id: 5, level: 5, value: 'Very Hot'}
 ]
 
 const difficulty_levels = [
-    {level: 1, value: 'Easy'},
-    {level: 2, value: 'Normal'},
-    {level: 3, value: 'Intermediate'},
-    {level: 4, value: 'Challenging'},
-    {level: 5, value: 'Hard'}
+    {id: 1, level: 1, value: 'Easy'},
+    {id: 2, level: 2, value: 'Normal'},
+    {id: 3, level: 3, value: 'Hard'},
+    {id: 4, level: 4, value: 'Challenging'},
+    {id: 5, level: 5, value: 'Very Hard'}
 ]
 
 

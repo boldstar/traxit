@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div class="m-auto">
       <DoughnutChart class="engagement-doughnut" :chart-data="dataSet" />
   </div>
 </template>
@@ -43,6 +43,6 @@ export default {
 
 <style lang="scss">
     .engagement-doughnut {
-        max-width: 350px;
+        max-width: 300px;
     }
 </style>

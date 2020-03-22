@@ -76,8 +76,8 @@
               </div>
               <select class="form-control" id="difficulty" v-model="engagement.priority">
                 <option disabled>{{ option }}</option>
-                <option v-for="(level, index) in levels" :key="index" :value="level">
-                  {{ level }}
+                <option v-for="(level, index) in priority_levels" :key="index" :value="level.id">
+                  {{ level.value }}
                 </option>
               </select>
             </div>
@@ -88,8 +88,8 @@
               </div>
               <select class="form-control" id="difficulty" v-model="engagement.difficulty">
                 <option disabled>{{ option }}</option>
-                <option v-for="(level, index) in levels" :key="index" :value="level">
-                  {{ level }}
+                <option v-for="(level, index) in difficulty_levels" :key="index" :value="level.id">
+                  {{ level.value }}
                 </option>
               </select>
             </div>
@@ -196,6 +196,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import levels from '../../plugins/levels'
 
 export default {
   name: 'add-engagement',
@@ -226,13 +227,14 @@ export default {
         status: null,
         estimated_date: null
       },
+      difficulty_levels: levels.difficulty_levels,
+      priority_levels: levels.priority_levels,
       option: 'Choose..',
       return_option: 'Choose..(Optional)',
       empty: 'Please select workflow first...',
       categories: ['Personal', 'Business'],
       monthly: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       quarterly: ['Jan-Mar', 'Apr-Jun', 'Jul-Sep', 'Oct-Dec'],
-      levels: [1,2,3,4,5]
     }
   },
   computed: {

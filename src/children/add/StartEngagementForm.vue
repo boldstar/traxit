@@ -50,8 +50,8 @@
           </v-date-picker>
         </div>
 
-        <form-select :options="numbers" :value_type="'array'" :selected="option" :label="'Difficulty'" :prop="'difficulty'" @select-change="selectedValue" :required="false" :formError="errorsList"></form-select>
-        <form-select :options="numbers" :value_type="'array'" :selected="option" :label="'Priority'" :prop="'priority'" @select-change="selectedValue" :required="false" :formError="errorsList"></form-select>
+        <form-select :options="difficulty_levels" :value_type="'objects'" :selected="option" :label="'Difficulty'" :prop="'difficulty'" @select-change="selectedValue" :required="false" :formError="errorsList"></form-select>
+        <form-select :options="priority_levels" :value_type="'objects'" :selected="option" :label="'Priority'" :prop="'priority'" @select-change="selectedValue" :required="false" :formError="errorsList"></form-select>
         <form-select :options="categories" :value_type="'array'" :selected="option" :label="'Category'" :prop="'category'" @select-change="selectedValue" :required="true" :formError="errorsList"></form-select>
         <form-select :options="sortClients" :value_type="'objects'" :selected="option" :label="'Client'" :prop="'client_id'" @select-change="selectedValue" :required="true" :formError="errorsList"></form-select>
         <form-select :options="clientBusinesses" :value_type="'array'" :selected="option" :label="'Business'" :prop="'name'" @select-change="selectedValue" v-if="engagement.category == 'Business'" :required="true" :formError="errorsList"></form-select>
@@ -77,6 +77,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import FormSelect from '@/components/forms/FormSelect.vue'
 import Spinner from '@/components/loaders/Spinner.vue'
+import levels from '../../plugins/levels'
 export default {
   name: 'StartEngagementForm',
   props: ['workflow'],
@@ -106,12 +107,13 @@ export default {
         priority: null,
         estimated_date: null
       },
+      difficulty_levels: levels.difficulty_levels,
+      priority_levels: levels.priority_levels,
       option: 'Choose...',
       empty: 'Please select workflow first...',
       categories:['Personal', 'Business'],
       monthly: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       quarterly: ['Jan-Mar', 'Apr-Jun', 'Jul-Sep', 'Oct-Dec'],
-      numbers: [1,2,3,4,5],
       requiredTax: ['year', 'category', 'client_id', 'return_type', 'assigned_to', 'status'],
       requiredBook: ['year', 'category', 'client_id', 'title', 'assigned_to', 'status'],
       requiredOther: ['year', 'category', 'client_id', 'assigned_to', 'status'],

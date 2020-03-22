@@ -26,7 +26,7 @@
               <span v-if="!engagement.archive">Archive</span>
               <span v-else>Unarchive</span>
             </span></button> 
-            <button type="button" class="dropdown-item" @click="inProgress">
+            <button type="button" class="dropdown-item" @click="inProgress" v-if="!engagement.done">
               <span v-if="engagement.in_progress"><i class="fas fa-sign-in-alt mr-2"></i>Check In</span>
               <span v-else><i class="fas fa-sign-out-alt mr-2"></i>Check Out</span>
             </button> 
@@ -73,7 +73,7 @@
           </ul>
         </div>
 
-        <router-view :engagement="engagement" :engagement-notes="engagementNotes" ></router-view>
+        <router-view :engagement="engagement" :engagement-notes="engagementNotes" :workflow="engagementWorkflow" @delete-engagement="requestEngagementDelete"></router-view>
       </div>
 
       <spinner v-if="detailsLoaded"></spinner>

@@ -17,7 +17,7 @@
                     </li>
                     <li class="details-list-item p-2" v-if="engagement.type != 'bookkeeping'">
                         <div>
-                            <span>Fee:</span>
+                            <span>Prep Fee:</span>
                             <span class="font-weight-bold">{{ amount(engagement.fee) }}</span>
                         </div>
                     </li>
@@ -72,23 +72,55 @@
                     </li>
                 </ul>
                 <div class="d-flex mt-3 ml-3 mb-2">
-                    <router-link class="engage-edit-btn font-weight-bold mr-3" :to="'/engagement/' +engagement.id+ '/edit'">Edit Info</router-link>
+                    <router-link v-if="!engagement.done" class="engage-edit-btn font-weight-bold mr-3" :to="'/engagement/' +engagement.id+ '/edit'">Edit Info</router-link>
                 </div>
             </div>
         </div>
 
         <h4 class="mb-0">Engagement Status</h4>
         <span class="title-description text-secondary">The current status of the engagement</span>
-        <div class="card px-0 mt-3 mb-5 shadow-sm w-100">
-            <div class="card-body p-2">
-                <div class="p-2">
-                    <h5 class="mb-0">Current Status: {{engagement.status}}</h5>
-                    <span class="font-weight-bold text-secondary">Last updated: {{engagement.updated_at | formatDate}}</span>
-                    <EngagementDoughnut class="mt-3" :percentage="currentWidth" />
+
+        <div class="d-flex">
+            <div class="card px-0 mt-3 mb-5 shadow-sm w-100">
+                <div class="card-body p-0 py-2">
+                    <div class="px-3 pt-2 pb-3 border-bottom">
+                        <h5 class="mb-0">Current Status: {{engagement.status}}</h5>
+                        <span class="font-weight-bold text-secondary">Last updated: {{engagement.updated_at | formatDate}}</span>
+                    </div>
+                    <ul class="m-0 p-0 details-list">
+                        <li class="details-list-item p-2">
+                            <div>
+                                <span>Workflow:</span>
+                                <span class="font-weight-bold">{{ workflow.workflow }}</span>
+                            </div>
+                        </li>
+                        <li class="details-list-item p-2 pt-0">
+                            <div>
+                                <span>Current Status:</span>
+                                <span class="font-weight-bold">{{ engagement.status}}</span>
+                            </div>
+                        </li>
+                        <li class="details-list-item p-2">
+                            <div>
+                                <span>Currently Assigned To:</span>
+                                <span class="font-weight-bold">{{ engagement.assigned_to }}</span>
+                            </div>
+                        </li>
+                        <li class="details-list-item p-2">
+                            <div>
+                                <span>Last Updated:</span>
+                                <span class="font-weight-bold">{{ engagement.updated_at | formatDate }}</span>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="d-flex mt-3 ml-3 mb-2">
+                        <button class="engage-edit-btn font-weight-bold" type="button" @click="showStatusModal" v-if="!engagement.done">Update Status</button>
+                    </div>
                 </div>
-                <div class="d-flex mt-3 ml-2 mb-1">
-                    <button class="engage-edit-btn font-weight-bold" type="button" @click="showStatusModal">Update Status</button>
-                </div>
+            </div>
+
+            <div class="card px-0 mt-3 mb-5 shadow-sm w-100 ml-5">
+                <EngagementDoughnut :percentage="currentWidth" />
             </div>
         </div>
 
@@ -100,8 +132,11 @@
                     <h5 class="mb-0">Delete Engagement</h5>
                     <span class="font-weight-bold text-secondary">Once deleted it cannot be undone</span>
                 </div>
-                <div class="d-flex mt-3 ml-2 mb-1">
-                    <button class="btn btn-sm btn-danger font-weight-bold" type="button">Delete Engagement</button>
+                <div class="d-flex mt-3 ml-2 mb-1" v-if="$can('delete', engagement)">
+                    <button class="btn btn-sm btn-danger font-weight-bold" type="button" @click="deleteEngagement">Delete Engagement</button>
+                </div>
+                <div v-else>
+                    <span class="font-weight-bold m-3 text-danger">Only Admins can delete this engagement.</span>
                 </div>
             </div>
         </div>
@@ -120,7 +155,7 @@ import EngagementDoughnut from '@/components/engagement/EngagementDoughnut.vue'
 
 export default {
     name: 'EngageDetails',
-    props: ['engagement'],
+    props: ['engagement', 'workflow'],
     components:{
         'b-modal': bModal,
         Alert,
@@ -148,6 +183,9 @@ export default {
         }
     },
     methods: {
+        deleteEngagement() {
+            this.$emit('delete-engagement')
+        },
         fixCasing(string) {
             if(string == 'taxreturn') {
                 const newString = string.replace("taxreturn", "Tax Return")
@@ -179,7 +217,7 @@ export default {
         },
         showStatusModal() {
             this.$store.commit('showStatusModal', true)
-        }
+        },
     }
 }
 </script>

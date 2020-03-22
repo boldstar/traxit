@@ -143,7 +143,7 @@
           </div>
         </div>
         <div class="text-left mb-3 ml-1">
-          <small class="text-danger" v-if="engagement.done == true">Warning: If Engagement Box Is Checked, Engagement Will Be Marked As Completed Or Has Already Been Complete</small>
+          <small class="text-danger" v-if="engagement.done == true">Warning: If Engagement Complete Box Is Checked, Engagement Will Be Completed Or Has Already Been Complete</small>
         </div>
 
         <div class="d-flex justify-content-between">

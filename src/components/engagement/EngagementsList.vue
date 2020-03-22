@@ -99,8 +99,7 @@
                 <tbody class="client-info table-bordered" v-if="!tableLoaded">
                     <tr v-for="(engagement, index) in sortedEngagements"  :key="index" @click="viewDetails(engagement.id)">
                         <td class="text-capitalize">{{ engagement.name }}</td>
-                        <td v-if="engagement.return_type != null" class="hide-row">{{ engagement.return_type }}</td>
-                        <td v-else class="hide-row">None</td>
+                        <td class="hide-row text-capitalize">{{ fixCasing(engagement.type) }}</td>
                         <td class="mobile-hide-row">{{ engagement.year }}</td>
                         <td>{{ engagement.assigned_to }}</td>
                         <td class="mobile-hide-row">{{ workflowName(engagement.workflow_id) }}</td>
@@ -295,7 +294,7 @@ export default {
             return result
         },
         filterTypes() {
-            const type = this.engagements.map(engagement => engagement.type)
+            const type = this.engagements.map(engagement => this.fixCasing(engagement.type))
 
             const result = type.filter((v, i) => type.indexOf(v) === i)
 
@@ -345,12 +344,13 @@ export default {
             this.filterWorkflow = this.type
             this.searchEngagement = ''
         },
-        fixCasing(string) {
-            if(string == 'taxreturn') {
-                const newString = string.replace("taxreturn", "Tax Return")
-
+        fixCasing(type) {
+            if(type == 'taxreturn') {
+                const newString = type.replace("taxreturn", "Tax Return")
                 return newString
             }
+
+            return type
         },
         showSearchInput() {
             this.showInput = !this.showInput

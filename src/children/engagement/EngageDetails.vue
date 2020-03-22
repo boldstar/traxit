@@ -1,69 +1,144 @@
 <template>
-    <div class="card px-0 mb-3 shadow-sm w-100">
-        <div class="card-header d-flex justify-content-between">
-            <div class="text-primary font-weight-bold">
-            <span v-if="engagement.done == true"><i class="far fa-folder" v-if="engagement.done == true"></i> | Completed</span>
-            <span v-else><i class="far fa-folder-open"></i> | Active</span>
-            </div>
-            <span class="font-weight-bold text-capitalize" v-if="engagement.type != 'custom'">{{ fixCasing(engagement.type) }}</span>
-            <span class="font-weight-bold text-capitalize" v-else>{{ engagement.description }}</span>
-        </div>
-        <div class="card-body">
-            <div class="mt-2">
-                <div class="progress" v-if="engagementWorkflow != ''">
-                <div class="progress-bar progress-bar-striped" :class="{'progress-bar-animated': currentWidth < 100}" role="progressbar" :aria-valuenow="`${currentWidth}`" aria-valuemin="0" aria-valuemax="100" :style='`width:${ currentWidth }%;`'></div>
+    <div class="w-100 text-left engage-details">
+        <h4 class="mb-0">Engagement Details</h4>
+        <span class="title-description text-secondary">A general overview for the details of the engagement</span>
+
+        <div class="card px-0 mt-3 mb-5 shadow-sm w-100">
+            <div class="card-body p-0 py-2">
+                <div class="px-3 pt-2 pb-3 border-bottom">
+                    <h5 class="mb-0">General Information</h5>
+                </div>
+                <ul class="m-0 p-0 details-list">
+                    <li class="details-list-item p-2 pt-0">
+                        <div>
+                            <span>Name:</span>
+                            <span class="font-weight-bold">{{ engagement.name}}</span>
+                        </div>
+                    </li>
+                    <li class="details-list-item p-2" v-if="engagement.type != 'bookkeeping'">
+                        <div>
+                            <span>Prep Fee:</span>
+                            <span class="font-weight-bold">{{ amount(engagement.fee) }}</span>
+                        </div>
+                    </li>
+                    <li class="details-list-item p-2" v-if="engagement.type == 'bookkeeping'">
+                        <div>
+                            <span>Time Period:</span>
+                            <span class="font-weight-bold">{{ engagement.title}}</span>
+                        </div>
+                    </li>
+                    <li class="details-list-item p-2">
+                        <div>
+                            <span>Subject:</span>
+                            <span class="font-weight-bold">{{ engagement.description}}</span>
+                        </div>
+                    </li>
+                    <li class="details-list-item p-2" v-if="engagement.type == 'taxreturn'">
+                        <div>
+                            <span>Return Type:</span>
+                            <span class="font-weight-bold">{{ engagement.return_type}}</span>
+                        </div>
+                    </li>
+                    <li class="details-list-item p-2">
+                        <div>
+                            <span>Year:</span>
+                            <span class="font-weight-bold">{{ engagement.year}}</span>
+                        </div>
+                    </li>
+                    <li class="details-list-item p-2" v-if="engagement.done == false">
+                        <div>
+                            <span>Currently Assigned:</span>
+                            <span class="font-weight-bold">{{ engagement.assigned_to}}</span>
+                        </div>
+                    </li>
+                    <li class="details-list-item p-2">
+                        <div>
+                            <span>Status:</span>
+                            <span class="font-weight-bold">{{ engagement.status}}</span>
+                        </div>
+                    </li>
+                    <li class="details-list-item p-2">
+                        <div>
+                            <span>Due Date:</span>
+                            <span class="font-weight-bold" v-if="engagement.estimated_date">{{ engagement.estimated_date | formatDate }}</span>
+                            <span class="font-weight-bold" v-else>N/A</span>
+                        </div>
+                    </li>
+                    <li class="details-list-item p-2">
+                        <div>
+                            <span>Paid:</span>
+                            <span class="font-weight-bold">{{ paid(engagement.paid) }}</span>
+                        </div>
+                    </li>
+                </ul>
+                <div class="d-flex mt-3 ml-3 mb-2">
+                    <router-link v-if="!engagement.done" class="engage-edit-btn font-weight-bold mr-3" :to="'/engagement/' +engagement.id+ '/edit'">Edit Info</router-link>
                 </div>
             </div>
-            <div class="d-flex justify-content-between">
-            <div>
-                <i class="far fa-flag text-secondary"></i>
+        </div>
+
+        <h4 class="mb-0">Engagement Status</h4>
+        <span class="title-description text-secondary">The current status of the engagement</span>
+
+        <div class="d-flex">
+            <div class="card px-0 mt-3 mb-5 shadow-sm w-100">
+                <div class="card-body p-0 py-2">
+                    <div class="px-3 pt-2 pb-3 border-bottom">
+                        <h5 class="mb-0">Current Status: {{engagement.status}}</h5>
+                        <span class="font-weight-bold text-secondary">Last updated: {{engagement.updated_at | formatDate}}</span>
+                    </div>
+                    <ul class="m-0 p-0 details-list">
+                        <li class="details-list-item p-2">
+                            <div>
+                                <span>Workflow:</span>
+                                <span class="font-weight-bold">{{ workflow.workflow }}</span>
+                            </div>
+                        </li>
+                        <li class="details-list-item p-2 pt-0">
+                            <div>
+                                <span>Current Status:</span>
+                                <span class="font-weight-bold">{{ engagement.status}}</span>
+                            </div>
+                        </li>
+                        <li class="details-list-item p-2">
+                            <div>
+                                <span>Currently Assigned To:</span>
+                                <span class="font-weight-bold">{{ engagement.assigned_to }}</span>
+                            </div>
+                        </li>
+                        <li class="details-list-item p-2">
+                            <div>
+                                <span>Last Updated:</span>
+                                <span class="font-weight-bold">{{ engagement.updated_at | formatDate }}</span>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="d-flex mt-3 ml-3 mb-2">
+                        <button class="engage-edit-btn font-weight-bold" type="button" @click="showStatusModal" v-if="!engagement.done">Update Status</button>
+                    </div>
+                </div>
             </div>
-            <div>
-                <i class="fas fa-flag-checkered text-primary"></i>
+
+            <div class="card px-0 mt-3 mb-5 shadow-sm w-100 ml-5">
+                <EngagementDoughnut :percentage="currentWidth" />
             </div>
+        </div>
+
+        <h4 class="mb-0">Danger Zone</h4>
+        <span class="title-description text-secondary">Action taken past this point is irreversable</span>
+        <div class="card px-0 mt-3 mb-5 shadow-sm w-100">
+            <div class="card-body p-2">
+                <div class="p-2">
+                    <h5 class="mb-0">Delete Engagement</h5>
+                    <span class="font-weight-bold text-secondary">Once deleted it cannot be undone</span>
+                </div>
+                <div class="d-flex mt-3 ml-2 mb-1" v-if="$can('delete', engagement)">
+                    <button class="btn btn-sm btn-danger font-weight-bold" type="button" @click="deleteEngagement">Delete Engagement</button>
+                </div>
+                <div v-else>
+                    <span class="font-weight-bold m-3 text-danger">Only Admins can delete this engagement.</span>
+                </div>
             </div>
-            <ul class="p-0 m-0 mt-2">
-            <li class="d-flex justify-content-between p-2">
-                <span class="font-weight-bold">Name</span>
-                <span>{{ engagement.name}}</span>
-            </li>
-            <li class="d-flex justify-content-between p-2" v-if="engagement.type != 'bookkeeping'">
-                <span class="font-weight-bold">Fee</span>
-                <span>{{ amount(engagement.fee) }}</span>
-            </li>
-            <li class="d-flex justify-content-between p-2" v-if="engagement.type == 'bookkeeping'">
-                <span class="font-weight-bold">Time Period</span>
-                <span>{{ engagement.title}}</span>
-            </li>
-            <li class="d-flex justify-content-between p-2">
-                <span class="font-weight-bold">Subject</span>
-                <span>{{ engagement.description}}</span>
-            </li>
-            <li class="d-flex justify-content-between p-2" v-if="engagement.type == 'taxreturn'">
-                <span class="font-weight-bold">Return Type</span>
-                <span>{{ engagement.return_type}}</span>
-            </li>
-            <li class="d-flex justify-content-between p-2">
-                <span class="font-weight-bold">Year</span>
-                <span>{{ engagement.year}}</span>
-            </li>
-            <li class="d-flex justify-content-between p-2" v-if="engagement.done == false">
-                <span class="font-weight-bold">Currently Assigned</span>
-                <span>{{ engagement.assigned_to}}</span>
-            </li>
-            <li class="d-flex justify-content-between p-2">
-                <span class="font-weight-bold">Status</span>
-                <span>{{ engagement.status}}</span>
-            </li>
-            <li class="d-flex justify-content-between p-2">
-                <span class="font-weight-bold">Due Date</span>
-                <span>{{ engagement.estimated_date | formatDate }}</span>
-            </li>
-            <li class="d-flex justify-content-between p-2">
-                <span class="font-weight-bold">Paid</span>
-                <span>{{ paid(engagement.paid) }}</span>
-            </li>
-            </ul>
         </div>
     </div>
 </template>
@@ -76,27 +151,24 @@ import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 import Spinner from '@/components/loaders/Spinner.vue'
 import NoteModal from '@/components/engagement/NoteModal.vue'
 import EditNoteModal from '@/components/engagement/EditNoteModal.vue'
+import EngagementDoughnut from '@/components/engagement/EngagementDoughnut.vue'
 
 export default {
     name: 'EngageDetails',
-    props: ['engagement'],
+    props: ['engagement', 'workflow'],
     components:{
         'b-modal': bModal,
         Alert,
         Spinner,
         NoteModal,
-        EditNoteModal
+        EditNoteModal,
+        EngagementDoughnut
     },
     directives: {
         'b-modal': bModalDirective
     },
-    data() {
-        return {
-           
-        }
-    },
     computed: {
-        ...mapGetters(['successAlert', 'processing', 'errorMsgAlert', 'engagementWorkflow']),
+        ...mapGetters(['successAlert', 'processing', 'errorMsgAlert', 'engagementWorkflow', 'engagementStatusModal']),
         percentage() {
             const statuses = this.engagementWorkflow.statuses
             const percentage = this.calcPercent(statuses.length)
@@ -107,10 +179,13 @@ export default {
             const statuses = this.engagementWorkflow.statuses
             const index = statuses.findIndex(s => s.status == status)
 
-            return (index + 1) * this.percentage
+            return Math.round((index + 1) * this.percentage)
         }
     },
     methods: {
+        deleteEngagement() {
+            this.$emit('delete-engagement')
+        },
         fixCasing(string) {
             if(string == 'taxreturn') {
                 const newString = string.replace("taxreturn", "Tax Return")
@@ -139,7 +214,46 @@ export default {
             } else {
                 return 'No'
             }
-        }
+        },
+        showStatusModal() {
+            this.$store.commit('showStatusModal', true)
+        },
     }
 }
 </script>
+
+<style lang="scss">
+
+    .details-list {
+        list-style: none;
+        .details-list-item {
+            div {
+            padding: 5px 8px;
+                display: flex;
+                max-width: 400px;
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            &:nth-of-type(even) {
+                background: rgb(243, 243, 243);
+            }
+        }
+    }
+
+    .engage-edit-btn {
+        background: rgb(228, 228, 228);
+        border-radius: 5px;
+        border: none;
+        font-weight: bold;
+        padding: 5px 15px;
+        color: black;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: none;
+            background: rgb(218, 218, 218);
+            color: black;
+        }
+    }
+</style>

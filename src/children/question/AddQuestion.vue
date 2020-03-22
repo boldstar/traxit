@@ -151,7 +151,7 @@ export default {
         this.verify = false
         this.question = "" 
         this.idForQuestion++
-        this.$router.push('/engagement/' + this.engagement.id  + '/details')
+        this.$router.push('/engagement/' + this.engagement.id  + '/questions')
       })
     },
     addNewQuestionWithEmail(to) {
@@ -175,7 +175,7 @@ export default {
       .then(response => {
         this.question = "" 
         this.idForQuestion++
-        this.$router.push('/engagement/' + this.engagement.id + '/details')
+        this.$router.push('/engagement/' + this.engagement.id + '/questions')
       })
     },
     validateEmail(to) {

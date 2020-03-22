@@ -16,6 +16,8 @@
                 <span v-if="prop === 'client_id'">{{ option.value }}</span>
                 <span v-if="prop === 'assigned_to'">{{ option.name }}</span>
                 <span v-if="prop === 'status'">{{ option.status }}</span>
+                <span v-if="prop === 'difficulty'">{{ option.value }}</span>
+                <span v-if="prop === 'priority'">{{ option.value }}</span>
             </option>
           </select>
         </div>

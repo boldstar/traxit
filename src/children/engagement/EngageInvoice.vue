@@ -1,6 +1,6 @@
 <template>
     <div class="mx-auto w-100">
-        <div class="card mt-5 w-25 mx-auto shadow" v-if="!data">
+        <div class="card mt-5 w-50 mx-auto shadow-sm" v-if="!data">
             <div class="card-body">
                 <InvoiceSvg />
             </div>

@@ -2,7 +2,7 @@
     <div class="files">
         <div class="card-header bg-white shadow w-100 d-flex justify-content-between border files-header mb-3">
             <div class="d-flex">
-                <span class="h5 mb-0 align-self-center">File Manager</span>
+                <span class="h5 mb-0 align-self-center">Inbox Manager</span>
             </div>
             <div class="d-flex">
                 <button class="btn btn-sm btn-outline-primary refresh" @click="refreshInbox"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>

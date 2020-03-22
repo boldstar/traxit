@@ -50,7 +50,7 @@ Vue.use(VueCharts);
 Vue.use(VueCarousel);
 Vue.use(abilitiesPlugin, ability);
 Vue.use(VCalendar, {
-  firstDayOfWeek: 2,  // 2 = Monday
+  firstDayOfWeek: 2, // 2 = Monday
   //defaults go here
 });
 

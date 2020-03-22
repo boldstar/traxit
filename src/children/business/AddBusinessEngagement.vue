@@ -51,8 +51,8 @@
           </v-date-picker>
         </div>
 
-        <form-select :options="numbers" :value_type="'array'" :selected="option" :label="'Difficulty'" :prop="'difficulty'" @select-change="selectedValue" :required="false" :formError="errorsList"></form-select>
-        <form-select :options="numbers" :value_type="'array'" :selected="option" :label="'Priority'" :prop="'priority'" @select-change="selectedValue" :required="false" :formError="errorsList"></form-select>
+        <form-select :options="difficulty_levels" :value_type="'objects'" :selected="option" :label="'Difficulty'" :prop="'difficulty'" @select-change="selectedValue" :required="false" :formError="errorsList"></form-select>
+        <form-select :options="priority_levels" :value_type="'objects'" :selected="option" :label="'Priority'" :prop="'priority'" @select-change="selectedValue" :required="false" :formError="errorsList"></form-select>
         <form-select :options="monthly" :value_type="'array'" :selected="option" :label="'Month of'" :prop="'title'" @select-change="selectedValue" v-if="monthRange" :required="true" :formError="errorsList"></form-select>
         <form-select :options="quarterly" :value_type="'array'" :selected="option" :label="'Quarter'" :prop="'title'" @select-change="selectedValue" v-if="quarterRange" :required="true" :formError="errorsList"></form-select>
         <form-select :options="reducedReturnTypes" :value_type="'array'" :selected="option" :label="'Return Type'" :prop="'return_type'" @select-change="selectedValue" v-if="returnTypes && workflow && workflow.engagement_type != 'Bookkeeping'" :required="true" :formError="errorsList"></form-select>
@@ -73,6 +73,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import FormSelect from '@/components/forms/FormSelect.vue'
 import Spinner from '@/components/loaders/Spinner.vue'
+import levels from '../../plugins/levels'
 export default {
   name: 'AddBusinessEngagement',
   props: ['business'],
@@ -100,11 +101,12 @@ export default {
         priority: null,
         estimated_date: null
       },
+      difficulty_levels: levels.difficulty_levels,
+      priority_levels: levels.priority_levels,
       option: 'Choose...',
       empty: 'Please select workflow first...',
       monthly: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       quarterly: ['Jan-Mar', 'Apr-Jun', 'Jul-Sep', 'Oct-Dec'],
-      numbers: [1,2,3,4,5],
       requiredTax: ['year', 'return_type', 'assigned_to', 'status'],
       requiredBook: ['year', 'title', 'assigned_to', 'status'],
       requiredOther: ['year', 'assigned_to', 'status'],

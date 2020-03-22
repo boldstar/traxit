@@ -243,11 +243,24 @@ export default {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
     grid-gap: 1px;
+    
+    .dashboard-section {
+        background: white;
+        max-width: 100%;
+    }
 }
 
-.dashboard-section {
-    background: white;
-    max-width: 100%;
+
+@media screen and (max-width: 1400px) {
+    .dashboard-grids {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+        height: auto;
+
+        .dashboard-section {
+            width: 100%;
+        }
+    }
 }
 
 .dashboard-chart-wrapper {

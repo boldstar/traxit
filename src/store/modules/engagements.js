@@ -301,7 +301,7 @@ export default {
                     resolve(response)
                 })
                 .catch(error => {
-                    console.log(error.response.data)
+                    console.log(error)
                     context.commit('errorMsgAlert', error.response.data.message)
                     context.commit('stopProcessing')
                     reject(error)
@@ -313,7 +313,8 @@ export default {
             axios.patch('/engagementsarray', {
                 engagements: checkedEngagements.engagements,
                 assigned_to: checkedEngagements.assigned_to,
-                status: checkedEngagements.status
+                status: checkedEngagements.status,
+                due_date: checkedEngagements.due_date
             })
             .then(response => {
                 context.commit('updateCheckedEngagements', response.data.engagements)
@@ -339,7 +340,7 @@ export default {
             .catch(error => {
                 context.commit('archivingEngagement')
                 context.commit('errorMsgAlert', error.response.data.message)
-                console.log(error.response.data)
+                console.log(error)
             })
         },
         deleteEngagement(context, id) {
@@ -380,7 +381,7 @@ export default {
               context.commit('showUpdateStatusModal')
             })
             .catch(error => {
-              console.log(error.response.data)
+              console.log(error)
               context.commit('errorMsgAlert', error.response.data.message)
               context.commit('stopProcessing')
             })
@@ -420,7 +421,7 @@ export default {
                 context.commit('showUpdateStatusModal')
             })
             .catch(error => {
-                console.log(error.response.data)
+                console.log(error)
                 context.commit('errorMsgAlert', error.response.data.message)
             })           
         },
@@ -434,7 +435,7 @@ export default {
                 context.commit('showUpdateStatusModal')
             })
             .catch(error => {
-                console.log(error.response.data)
+                console.log(error)
                 context.commit('errorMsgAlert', error.response.data.message)
             })           
         },
@@ -455,7 +456,7 @@ export default {
             })
             .catch(error => {
               context.commit('stopProcessing')
-              console.log(error.response.data)
+              console.log(error)
             })
         },
         getEngagementNotes(context, id) {
@@ -464,7 +465,7 @@ export default {
               context.commit('engagementNotes', response.data)
             })
             .catch(error => {
-              console.log(error.response.data)
+              console.log(error)
             })
         },
         deleteEngagementNote(context, id) {
@@ -474,7 +475,7 @@ export default {
               context.commit('successAlert', response.data)
             })
             .catch(error => {
-              console.log(error.response.data)
+              console.log(error)
             })
         },
         editEngagementNote(context, note) {
@@ -492,7 +493,7 @@ export default {
             })
             .catch(error => {
               context.commit('stopProcessing')
-              console.log(error.response.data)
+              console.log(error)
             })
         },
         showEngagementNote(context, id) {
@@ -501,7 +502,7 @@ export default {
               context.commit('engagementNoteToEdit', response.data)
             })
             .catch(error => {
-              console.log(error.response.data)
+              console.log(error)
             })
         },
         getReturnTypes(context) {
@@ -520,7 +521,7 @@ export default {
                 context.commit('successAlert', response.data.message)
             })
             .catch(error => {
-                console.log(error.response.data)
+                console.log(error)
                 context.commit('errorMsgAlert', error.response.data.message)
             })
         },

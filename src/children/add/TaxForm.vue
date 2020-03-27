@@ -101,7 +101,7 @@
         </div>
         <select :class="{ 'input-error': errors.has('Assigned User') }" class="form-control" id="user_id" v-model="engagement.assigned_to" v-validate="{ is_not: option }" name="Assigned User">
           <option  selected disabled>{{ option }}</option>
-          <option v-for="user in users" :key="user.id" :value="user.id" v-if="user.name != 'Admin'">
+          <option v-for="user in users" :key="user.id" :value="user.id" v-show="user.name != 'Admin'">
             {{ user.name }}
           </option>
         </select>
@@ -110,7 +110,7 @@
 
      
 
-      <div v-for="workflow in allWorkflows" :key="workflow.id" v-if="workflow.id === engagement.workflow_id">
+      <div v-for="workflow in allWorkflows" :key="workflow.id" v-show="workflow.id === engagement.workflow_id">
       <div class="input-group my-3">
         <div class="input-group-prepend">
           <label class="input-group-text text-primary" for="option">Status</label>
@@ -247,10 +247,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-  label {
-    width: 8em;
-  }
 
   .input-error {
       border: 1px solid red;

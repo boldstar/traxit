@@ -71,7 +71,7 @@
           </div>
 
           <div class="table-responsive">
-            <table class="table border table-hover">
+            <table class="table border table-hover" ref="engagement-table">
               <thead class="text-primary text-left">
                 <tr>
                   <th scope="col">Batch</th>
@@ -81,11 +81,12 @@
                   <th scope="col" class="hide-row">Status</th>
                   <th scope="col">Assigned To</th>
                   <th scope="col" class="hide-row">Year</th>
+                  <th class="hide-row" v-if="$can('delete', admin)">Edit</th>
                 </tr>
               </thead>
               <tbody class="text-left">
-                <tr v-for="(engagement, index) in filteredEngagements" :key="index">
-                  <th scope="row" class="custom-control custom-checkbox"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements.engagements" class="custom-control-input" :id="`${engagement.id}`"><label class="custom-control-label pb-3 ml-4" :for="`${engagement.id}`"></label></th>
+                <tr v-for="(engagement, index) in filteredEngagements" :key="index" class="engagement-row" :ref="'engagement-row' + `${index}`">
+                  <th scope="row" class="custom-control custom-checkbox"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements.engagements" class="custom-control-input" :id="`${engagement.id}`"><label class="custom-control-label pb-2 ml-5" :for="`${engagement.id}`"></label></th>
                   <th @click="viewDetails(engagement.id)">{{ engagement.name}}</th>
                   <td @click="viewDetails(engagement.id)" class="hide-row">{{ engagement.created_at | formatDate }}</td>
                   <td @click="viewDetails(engagement.id)" class="hide-row" v-if="engagement.estimated_date">{{ engagement.estimated_date | formatDate }}</td>
@@ -93,14 +94,66 @@
                   <td @click="viewDetails(engagement.id)" class="hide-row">{{ engagement.status }}</td>
                   <td @click="viewDetails(engagement.id)">{{ engagement.assigned_to }}</td>
                   <td @click="viewDetails(engagement.id)" class="hide-row">{{ engagement.year }}</td>
+                  <td v-if="$can('delete', admin)"><button @click="editEngagementRow(index, engagement.id)" class="btn btn-link"><i class="fas fa-edit"></i></button></td>
+                </tr>
+                <tr class="edit-engagement-row" ref="edit-engagement-row" v-show="showEditRow" :key="showEditRow">
+                  <td :class="{'edit-engagement-row-body': showEditRow}" colspan=8 v-if="selectedEngagement">
+                    <div class="edit-engagement-row-body-content">
+                      <div class="d-flex justify-content-between">
+                        <div class="custom-input-group m-0 ml-4">
+                          <span>Due Date</span>
+                          <v-date-picker
+                            mode='single'
+                            v-model='dueDate'
+                            id="due_date"
+                          >
+                          </v-date-picker>
+                        </div>
+                        <div class="custom-input-group m-0 mx-3">
+                          <span>Status</span>
+                          <select name="status" id="status" v-model="selectedEngagement.status">
+                            <option v-for="(status, index) in filteredStatuses" :value="status.status" :key="index">{{status.status}}</option>
+                          </select>
+                        </div>
+                        <div class="custom-input-group m-0">
+                          <span>Assigned To</span>
+                          <select name="assigned_to" id="assigned_to" v-model="selectedEngagement.assigned_to">
+                            <option v-for="(user, index) in users" :key="index" :value="user.name" v-show="user.name != 'Admin'">{{user.name}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="edit-row-btns">
+                        <button @click="hideEditRow" class="btn btn-sm edit-row-btn text-danger">Cancel</button>
+                        <button @click="saveEditChanges" class="btn btn-sm edit-row-btn text-primary">Save Changes</button>
+                        <router-link  :to="'/engagement/' + selectedEngagement.id +'/details'" class="btn btn-sm edit-row-btn">View More</router-link>
+                      </div>
+                    </div>
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-            <form @submit.prevent="updateChecked" class="d-flex mb-5" v-if="$can('delete', admin)">
+          <div class="mb-3" v-if="nothingSelected">
+            <span  class="font-weight-bold text-danger">Please select Due Date, Status or Assign To before submitting changes.</span>
+          </div>
+
+            <form @submit.prevent="updateChecked" class="d-flex justify-content-between mb-5" v-if="$can('delete', admin)">
               
-              <div class="input-group mr-3" v-for="workflow in filteredWorkflow" :key="workflow.id">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <label class="input-group-text bg-light font-weight-bold text-primary" for="due_date">Due Date</label>
+                </div>
+                <v-date-picker
+                  mode='single'
+                  v-model='checkedEngagements.due_date'
+                  id="due_date"
+                  :input-props='{class: "form-control"}'
+                >
+                </v-date-picker>
+              </div>
+              
+              <div class="input-group mr-5" v-for="workflow in filteredWorkflow" :key="workflow.id">
                 <div class="input-group-prepend">
                   <label class="input-group-text bg-light font-weight-bold text-primary" for="option">Status</label>
                 </div>
@@ -110,10 +163,10 @@
                     {{ status.status }}
                   </option>
                 </select>
-                </div>
+              </div>
               
 
-              <div class="input-group mr-3">
+              <div class="input-group mr-2">
                 <div class="input-group-prepend">
                   <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Assign To</label>
                 </div>
@@ -125,8 +178,8 @@
                 </select>
               </div>
 
-              <div class="d-flex align-self-center">
-                <button type="submit" class="btn btn-sm btn-primary" :disabled="checkedEngagements.assigned_to == option || checkedEngagements.status == option || checkedEngagements.engagements.length === 0">Submit</button>
+              <div class="align-self-center">
+                <button type="submit" class="btn btn-sm btn-primary font-weight-bold" :disabled="checkedEngagements.engagements.length === 0">Submit</button>
               </div>
             </form>
           
@@ -144,7 +197,8 @@ import Spinner from '@/components/loaders/Spinner.vue'
 import ProcessingBar from '@/components/loaders/ProcessingBar.vue'
 import NoFirm from '@/components/placeholders/NoFirm.vue'
 import ConfirmModal from '@/components/modals/ConfirmModal.vue'
-
+import {detach, move, moveRow, children, row} from '../plugins/insert_row'
+import moment from 'moment'
 export default {
   name: 'FirmView',
   props: ['admin'],
@@ -157,15 +211,20 @@ export default {
   },
   data() {
     return {
+      engagementId: null,
       currentYear: 'All',
       allYears: 'All',
       selectedWorkflowID: 1,
       alert: '',
       searchEngagement: '',
+      showEditRow: false,
+      editRowIndex: null,
+      rowPrevouslyInserted: true,
       checkedEngagements: {
         engagements: [],
         status: null,
         assigned_to: null,
+        due_date: null
       },
       noEngagements: false,
       listLoaded: false,
@@ -173,7 +232,9 @@ export default {
       option: 'Choose...',
       currentSort: 'created_at',
       currentSortDir: 'asc',
-      showList: false
+      showList: false,
+      dueDate: null,
+      nothingSelected: false
     }
   },
   computed: {
@@ -184,6 +245,9 @@ export default {
     filteredWorkflow() {
       return this.allWorkflows.filter(w => w.id == this.selectedWorkflowID)
     },
+    filteredStatuses() {
+      return this.filteredWorkflow[0].statuses
+    },
     filteredEngagements () {
       return this.allEngagements.sort((a,b) => {
       let modifier = 1;
@@ -191,8 +255,10 @@ export default {
       if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
       if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
       return 0;
-      }).filter(eng => eng.workflow_id === this.selectedWorkflowID).filter((engagement) => engagement.status === this.engagementFilterKey).filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear).filter( engagement => {
-      return !this.searchEngagement || engagement.name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 });
+      }).filter(eng => eng.workflow_id === this.selectedWorkflowID)
+      .filter((engagement) => engagement.status === this.engagementFilterKey || engagement.id == this.engagementId)
+      .filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear)
+      .filter( engagement => {return !this.searchEngagement || engagement.name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 });
     },
     countEngagementsByStatus () {
        const res = this.allWorkflows.filter(w =>w.id == this.selectedWorkflowID).map(({statuses, id}) => ({
@@ -217,21 +283,37 @@ export default {
 
         return result.sort((a, b) => b - a)
     },
+    selectedEngagement() {
+      return this.allEngagements.filter(eng => eng.id === this.engagementId)[0]
+    }
   },
   methods: {
     ...mapActions(['updateCheckedEngagements']),
     updateChecked() {
-      this.updateCheckedEngagements({
-        engagements: this.checkedEngagements.engagements,
-        assigned_to: this.checkedEngagements.assigned_to,
-        status: this.checkedEngagements.status
-      }).then(() => {
-        this.checkedEngagements.engagements = [];
-        this.checkedEngagements.assigned_to = this.option;
-        this.checkedEngagements.status = this.option;
-      }) 
+      if(this.checkedEngagements.due_date || this.checkedEngagements.status != this.option || this.checkedEngagements.assigned_to != this.option) {
+        this.nothingSelected = false
+        this.updateCheckedEngagements({
+          engagements: this.checkedEngagements.engagements,
+          assigned_to: this.checkedEngagements.assigned_to != this.option ? this.checkedEngagements.assigned_to : 0,
+          status: this.checkedEngagements.status != this.option ? this.checkedEngagements.status : null,
+          due_date: this.checkedEngagements.due_date ? this.checkedEngagements.due_date : null
+        }).then(() => {
+          this.checkedEngagements.engagements = [];
+          this.checkedEngagements.assigned_to = this.option;
+          this.checkedEngagements.status = this.option;
+          this.checkedEngagements.due_date = null
+        }) 
+      } else {
+        this.nothingSelected = true
+        return
+      }
     },
     changeEngagementKey (key) {
+      if(this.engagementId) {
+        this.selectedEngagement.status = this.engagementFilterKey
+        this.showEditRow = false
+        this.engagementId = null
+      }
       this.engagementFilterKey = key
       this.showList = false
     },
@@ -296,7 +378,34 @@ export default {
     },
     cancelDownload() {
       this.$store.commit('confirmDownloadState')
-    }
+    },
+    editEngagementRow(index, id) {
+      this.engagementId ? this.selectedEngagement.status = this.engagementFilterKey : null
+      this.showEditRow = true
+      this.engagementId = id
+      const toIndex = this.$refs['engagement-row' + index][0].rowIndex
+      const fromIndex = document.getElementsByClassName('edit-engagement-row')[0].rowIndex
+      this.editRowIndex = fromIndex
+      const table = this.$refs['engagement-table']
+      this.dueDate = this.selectedEngagement.estimated_date ? new Date(this.selectedEngagement.estimated_date) : null
+      moveRow(table, fromIndex, toIndex, false);
+    },
+    hideEditRow() {
+      this.selectedEngagement.status = this.engagementFilterKey
+      this.showEditRow = false
+      this.engagementId = null
+    },
+    saveEditChanges() {
+       this.updateCheckedEngagements({
+          engagements: [this.engagementId],
+          assigned_to: this.users.filter(user => user.name == this.selectedEngagement.assigned_to)[0].id,
+          status: this.selectedEngagement.status,
+          due_date: this.dueDate
+      }).then(() => {
+          this.showEditRow = false
+          this.engagementId = null
+      }) 
+    },
   },
   destroy() {
     document.removeEventListener("keyup", this.switchStatus)
@@ -330,6 +439,7 @@ export default {
  tr {
    cursor: pointer;
  }
+
 
   li {
     list-style: none;
@@ -398,6 +508,49 @@ export default {
     font-weight: bold;
   }
 
+  .table {
+
+    tbody {
+      tr {
+        th {
+          vertical-align: middle;
+        }
+        td {
+          vertical-align: middle;
+        }
+      }
+      .edit-engagement-row {
+        background: rgb(241, 241, 241);
+        width: 100%;
+        box-sizing: border-box;
+
+        .edit-engagement-row-body {
+          width: 100%;
+          box-sizing: border-box;
+          
+          .edit-engagement-row-body-content {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+
+            .edit-row-btns {
+              align-self: center;
+
+              .edit-row-btn {
+                text-decoration: none;
+                margin: 0 8px;
+                background: white;
+                color: black;
+                font-weight: bold;
+                box-shadow: 0 0 5px 0 rgba(0,0,0,.250);
+                cursor: pointer;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
   @media screen and (max-width: 1300px) {
     .input-group-prepend {

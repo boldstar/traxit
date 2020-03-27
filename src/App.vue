@@ -117,6 +117,11 @@ export default {
             background: white;
             padding: 5px 10px;
             z-index: 2;
+            white-space: nowrap!important;
+        }
+
+        span {
+            font-weight: bold;
         }
 
         input {

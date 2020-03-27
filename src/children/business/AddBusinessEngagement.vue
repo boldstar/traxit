@@ -268,10 +268,6 @@ export default {
 
 <style lang="scss" scoped>
 
-  label {
-    width: 8em;
-  }
-
   .input-error {
       border: 1px solid red;
   }

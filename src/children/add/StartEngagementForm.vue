@@ -39,7 +39,7 @@
         
         <div class="input-group mb-3 d-flex">
           <div class="input-group-prepend">
-            <label class="input-group-text text-primary font-weight-bold" for="due_date">Due Date</label>
+            <label class="input-group-text text-primary font-weight-bold custom-input-label" for="due_date">Due Date</label>
           </div>
           <v-date-picker
             mode='single'
@@ -301,11 +301,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-  label {
+  .custom-input-label {
     width: 8em;
   }
-
+  
   .input-error {
       border: 1px solid red;
   }

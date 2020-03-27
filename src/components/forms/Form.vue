@@ -4,11 +4,11 @@
             <span>{{title}}</span>
             <button type="button" class="cancel-btn" @click="goBack">Cancel</button>
         </div>
-        <div v-for="(input, index) in inputFields" :key="index" class="input" v-if="crudRules(index)">
+        <div v-for="(input, index) in inputFields" :key="index" class="input" v-show="crudRules(index)">
             <label :for="input.placeholder">{{input.placeholder}}</label>
             <input type="text" :value="model[property(index)]"  :placeholder="input.placeholder" @change="handleChange" @input="handleInput(index, $event)" :class="{'input-error': errs.length >= 1 && errs.includes(property(index)[0])}">
         </div>
-        <div v-for="(select, index) in selectFields" :key="select.label" class="select" v-if="selectFields.length >= 1">
+        <div v-for="(select, index) in selectFields" :key="select.label" class="select" v-show="selectFields.length >= 1">
             <label :for="select">{{select.label}}</label>
             <select :name="select" :id="select" @change="handleSelect(index, $event)" v-model="model[selectValue(values)]" :class="{'input-error': errs.length >= 1 && errs.includes(values[index])}">
                 <option disabled value="">{{ selected }}</option>
@@ -129,9 +129,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
-form {
+#dynamicForm {
     display: flex;
     flex-direction: column;
     max-width: 600px;
@@ -141,77 +141,77 @@ form {
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.250);
     text-align: left;
     margin-bottom: 30px;
-}
 
-input {
-    height: 40px;
-    padding-left: 10px;
-    border-radius: 5px;
-    border: 1px solid lightgray;
-}
+    input {
+        height: 40px;
+        padding-left: 10px;
+        border-radius: 5px;
+        border: 1px solid lightgray;
+    }
 
-select {
-    height: 40px;
-    padding-left: 10px;
-    border-radius: 5px;
-    border: 1px solid lightgray;
-}
+    select {
+        height: 40px;
+        padding-left: 10px;
+        border-radius: 5px;
+        border: 1px solid lightgray;
+    }
 
-.input {
-    display: flex;
-    flex-direction: column;
-    width: 95%;
-    margin: 5px auto;
-}
+    .input {
+        display: flex;
+        flex-direction: column;
+        width: 95%;
+        margin: 5px auto;
+    }
 
-.input-error {
-    border: 1px solid red;
-}
+    .input-error {
+        border: 1px solid red;
+    }
 
-.select {
-    display: flex;
-    flex-direction: column;
-    width: 95%;
-    margin: 10px auto;
-}
+    .select {
+        display: flex;
+        flex-direction: column;
+        width: 95%;
+        margin: 10px auto;
+    }
 
-.form-header {
-    display: flex;
-    justify-content: space-between;
-    background: rgb(240, 240, 240);
-    color: black;
-    font-weight: bold;
-    font-size: 1.25rem;
-    padding: 8px 15px;
-}
+    .form-header {
+        display: flex;
+        justify-content: space-between;
+        background: rgb(240, 240, 240);
+        color: black;
+        font-weight: bold;
+        font-size: 1.25rem;
+        padding: 8px 15px;
+    }
 
-.cancel-btn {
-    background: #a9a9a9;
-    font-weight: bold;
-    border: none;
-    border-radius: 3px;
-    font-size: 1rem;
-    color: white;
-    padding: 2px 5px;
-    cursor: pointer;
-    text-decoration: none;
-    width: auto;
-    height: auto;
-    margin: 0;
-}
+    .cancel-btn {
+        background: #a9a9a9;
+        font-weight: bold;
+        border: none;
+        border-radius: 3px;
+        font-size: 1rem;
+        color: white;
+        padding: 2px 5px;
+        cursor: pointer;
+        text-decoration: none;
+        width: auto;
+        height: auto;
+        margin: 0;
+    }
 
-.submit-btn {
-    height: 40px;
-    width: 95%;
-    margin: 10px auto;
-    background: #0077ff;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: white;
-    cursor: pointer;
-}
+    .submit-btn {
+        height: 40px;
+        width: 95%;
+        margin: 10px auto;
+        background: #0077ff;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: white;
+        cursor: pointer;
+    }
 
+}
 
 </style>

@@ -21,7 +21,7 @@
                 <label for="due_date">Due Date</label>
                 <v-date-picker
                   mode='single'
-                  v-model='dueDate'
+                  v-model='engagement.estimated_date'
                   id="due_date"
                 >
                 </v-date-picker>
@@ -248,7 +248,7 @@ export default {
           owed: this.engagement.owed,
           done: this.engagement.done,
           paid: this.engagement.paid,
-          estimated_date: this.dueDate,
+          estimated_date: this.engagement.estimated_date,
           priority: this.engagement.priority
         })  
     },

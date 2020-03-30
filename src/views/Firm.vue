@@ -77,11 +77,11 @@
                 <tr>
                   <th scope="col">Batch</th>
                   <th scope="col">Name</th>
-                  <th scope="col" @click="sort('created_at')" class="hide-row sort-btn">Created On<i class="fas fa-sort text-dark ml-3"></i></th>
-                  <th scope="col" @click="sort('estimated_date')" class="hide-row sort-btn">Due Date<i class="fas fa-sort text-dark ml-3"></i></th>
-                  <th scope="col" @click="sort('priority')" class="sort-btn">Priority <i class="fas fa-sort text-dark ml-3"></i></th>
-                  <th scope="col" @click="sort('assigned_to')" class="sort-btn">Assigned To<i class="fas fa-sort text-dark ml-3"></i></th>
-                  <th scope="col" class="hide-row sort-btn" @click="sort('year')">Tax Year<i class="fas fa-sort text-dark ml-3"></i></th>
+                  <th scope="col" @click="sort('created_at')" class="hide-row sort-btn" :class="{'sorted-row': !this.currentSort}">Created On<i class="fas fa-sort text-dark ml-3"></i></th>
+                  <th scope="col" @click="sort('estimated_date')" class="hide-row sort-btn" :class="{'sorted-row': this.currentSort == 'estimated_date'}">Due Date<i class="fas fa-sort text-dark ml-3"></i></th>
+                  <th scope="col" @click="sort('priority')" class="sort-btn" :class="{'sorted-row': this.currentSort == 'priority'}">Priority <i class="fas fa-sort text-dark ml-3"></i></th>
+                  <th scope="col" @click="sort('assigned_to')" class="sort-btn" :class="{'sorted-row': this.currentSort == 'assigned_to'}">Assigned To<i class="fas fa-sort text-dark ml-3"></i></th>
+                  <th scope="col" @click="sort('year')" class="hide-row sort-btn"  :class="{'sorted-row': this.currentSort == 'year'}">Tax Year<i class="fas fa-sort text-dark ml-3"></i></th>
                   <th scope="col" class="hide-row">Status</th>
                   <th class="hide-row" v-if="$can('delete', admin)">Edit</th>
                 </tr>
@@ -650,6 +650,10 @@ export default {
     &:hover {
       background: lightgray;
     }
+  }
+
+  .sorted-row {
+    background: rgb(238, 238, 238);
   }
 
   @media screen and (max-width: 1300px) {

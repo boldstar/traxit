@@ -6,6 +6,7 @@ import administrator from './modules/administrator'
 import contact from './modules/contact'
 import inbox from './modules/inbox'
 import business from './modules/business'
+import firm from './modules/firm'
 import { routeOutsourceGuard } from '../plugins/guards.js'
 
 Vue.use(Router)
@@ -57,20 +58,6 @@ const baseRoutes = [
         { name: 'Dashboard' }
       ]
     }
-  },
-  {
-    // this is the firm overview view
-    path: '/firm',
-    name: 'firm',
-    component: () => import(/* webpackChunkName: "firm" */ '../views/Firm.vue'),
-    beforeEnter: routeOutsourceGuard,
-    meta: {
-      requiresAuth: true,
-      layout: "default",
-      breadCrumb: [
-        { name: 'Firm' }
-      ]
-    },
   },
   {
     // this is the list of all clients view
@@ -152,7 +139,7 @@ const baseRoutes = [
   }
 ]
 
-const routes = baseRoutes.concat(engagements, addnew, administrator, contact, inbox, business)
+const routes = baseRoutes.concat(engagements, addnew, administrator, contact, inbox, business, firm)
 
 
 export default new Router({

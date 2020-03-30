@@ -7,9 +7,25 @@
                     <router-link class="nav-link border-right text-left pl-4 d-flex dashboard-active" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/"><i class="fas fa-tachometer-alt align-self-center"></i><span :class="sidebarOpen ? 'show-link' : 'hide-link'">Dashboard</span></router-link>  
                 </transition> 
             </li>
-            <li class="nav-item w-100" v-if="role != 'Outsource'" id="firm" v-bind:class="{ 'is-active': isActive && sidebarOpen }">
+            <li class="nav-item w-100" v-if="role != 'Outsource'" id="firm" v-bind:class="{ 'is-active': $route.path.includes('/firm') && sidebarOpen }">
                 <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">         
-                    <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/firm"><i class="fas fa-home align-self-center"></i><span :class="sidebarOpen ? 'show-link' : 'hide-link'">Firm</span></router-link>
+                    <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/firm/workflow-overview"><i class="fas fa-home align-self-center"></i><span :class="sidebarOpen ? 'show-link' : 'hide-link'">Firm</span></router-link>
+                </transition>
+                <transition name="list">
+                    <ul v-if="$route.path.includes('/firm') && sidebarOpen" class="sublist" :class="{'show-sublist': $route.path == '/firm'}">
+                        <li :class="{'sublist-link' : $route.name == 'workflow-overview'}" @click="$router.push({path: '/firm/workflow-overview'})">
+                            Workflows
+                        </li>
+                        <li :class="{'sublist-link' : $route.name == 'bookkeeping-overview'}" @click="$router.push({path: '/firm/bookkeeping-overview'})">
+                            Bookkeeping
+                        </li>
+                        <li :class="{'sublist-link' : $route.name == 'taxreturns-overview'}" @click="$router.push({path: '/firm/taxreturns-overview'})">
+                            Tax Returns
+                        </li>
+                        <li :class="{'sublist-link' : $route.name == 'team-overview'}" @click="$router.push({path: '/firm/team-overview'})">
+                            Team Overview
+                        </li>
+                    </ul> 
                 </transition>  
             </li>
             <li class="nav-item w-100" id="tasks" v-bind:class="{ 'is-active': isActive && sidebarOpen }">

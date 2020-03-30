@@ -99,6 +99,14 @@
                   <td @click="viewDetails(engagement.id)" class="hide-row">{{ engagement.status }}</td>
                   <td v-if="$can('delete', admin)"><button @click="editEngagementRow(index, engagement.id)" class="btn btn-link"><i class="fas fa-edit"></i></button></td>
                 </tr>
+                <tr v-if="filteredEngagements.length > 8">
+                  <td colspan=9>
+                  <div class="d-flex flex-column align-items-center justify-content-center">
+                    <span class="font-weight-bold">You Have Reached The End</span>
+                    <!-- <button class="btn btn-sm btn-primary mt-2 font-weight-bold" @click="scrollToTop()">Back To Top</button> -->
+                  </div>
+                  </td>
+                </tr>
                 <tr class="edit-engagement-row" ref="edit-engagement-row" v-show="showEditRow" :key="showEditRow">
                   <td :class="{'edit-engagement-row-body': showEditRow}" colspan=9 v-if="selectedEngagement">
                     <div class="edit-engagement-row-body-content">
@@ -145,57 +153,58 @@
         </div>      
       </div>
 
-      <div class="mb-3" v-if="nothingSelected">
-        <span  class="font-weight-bold text-danger">Please select Due Date, Status or Assign To before submitting changes.</span>
-      </div>
-
-      <form @submit.prevent="updateChecked" class="d-flex justify-content-between update-engagements-form col-8" v-if="$can('delete', admin) && filteredEngagements.length > 0">
-        
-        <div class="custom-input-group">
-          <label  for="due_date">Due Date</label>
-          <v-date-picker
-            mode='single'
-            v-model='checkedEngagements.due_date'
-            id="due_date"
-            :popover-direction="'top'"
-          >
-          </v-date-picker>
+      <form @submit.prevent="updateChecked" class="update-engagements-form col-8" v-if="$can('delete', admin) && filteredEngagements.length > 0">
+        <div class="mb-1" v-if="nothingSelected">
+          <span  class="font-weight-bold text-danger">Please select Due Date, Status, Priority or Assign To before submitting changes.</span>
         </div>
         
-        <div class="custom-input-group">
-            <label for="option">Priority</label>
-            <select id="status" v-model="checkedEngagements.priority">
-            <option  selected disabled>{{ option }}</option>
-            <option v-for="(level, index) in priority_levels" :key="index" :value="level.level">
-              {{ level.value }}
-            </option>
-          </select>
-        </div>
+        <div class="d-flex justify-content-between">
+          <div class="custom-input-group">
+            <label  for="due_date">Due Date</label>
+            <v-date-picker
+              mode='single'
+              v-model='checkedEngagements.due_date'
+              id="due_date"
+              :popover-direction="'top'"
+            >
+            </v-date-picker>
+          </div>
+          
+          <div class="custom-input-group">
+              <label for="option">Priority</label>
+              <select id="status" v-model="checkedEngagements.priority">
+              <option  selected disabled>{{ option }}</option>
+              <option v-for="(level, index) in priority_levels" :key="index" :value="level.level">
+                {{ level.value }}
+              </option>
+            </select>
+          </div>
 
-        <div class="custom-input-group" v-for="workflow in filteredWorkflow" :key="workflow.id">
-            <label for="option">Status</label>
-            <select id="status" v-model="checkedEngagements.status">
-            <option  selected disabled>{{ option }}</option>
-            <option v-for="status in workflow.statuses" :key="status.id" :value="status.status">
-              {{ status.status }}
-            </option>
-          </select>
-        </div>
-        
+          <div class="custom-input-group" v-for="workflow in filteredWorkflow" :key="workflow.id">
+              <label for="option">Status</label>
+              <select id="status" v-model="checkedEngagements.status">
+              <option  selected disabled>{{ option }}</option>
+              <option v-for="status in workflow.statuses" :key="status.id" :value="status.status">
+                {{ status.status }}
+              </option>
+            </select>
+          </div>
+          
 
-        <div class="custom-input-group">
-          <label for="option">Assign To</label>
-          <select id="client_id" v-model="checkedEngagements.assigned_to">
-            <option  selected disabled>{{ option }}</option>
-            <option v-for="user in filteredUsers" :key="user.id" :value="user.id">
-              {{ user.name }}
-            </option>
-          </select>
-        </div>
+          <div class="custom-input-group">
+            <label for="option">Assign To</label>
+            <select id="client_id" v-model="checkedEngagements.assigned_to">
+              <option  selected disabled>{{ option }}</option>
+              <option v-for="user in filteredUsers" :key="user.id" :value="user.id">
+                {{ user.name }}
+              </option>
+            </select>
+          </div>
 
-        <div class="align-self-center">
-          <button type="submit" class="btn btn-sm btn-primary font-weight-bold" :disabled="checkedEngagements.engagements.length === 0">Submit</button>
-        </div>
+          <div class="align-self-center">
+            <button type="submit" class="btn btn-sm btn-primary font-weight-bold" :disabled="checkedEngagements.engagements.length === 0">Submit</button>
+          </div>
+        </div> 
       </form>
 
       <ConfirmModal v-if="confirmDownload" @submit-download="downloadEngagementsList" @close-modal="cancelDownload" />
@@ -319,7 +328,7 @@ export default {
   methods: {
     ...mapActions(['updateCheckedEngagements']),
     updateChecked() {
-      if(this.checkedEngagements.due_date || this.checkedEngagements.status != this.option || this.checkedEngagements.assigned_to != this.option) {
+      if(this.checkedEngagements.due_date || this.checkedEngagements.status != this.option || this.checkedEngagements.assigned_to != this.option || this.checkedEngagements.priority != this.option) {
         this.nothingSelected = false
         this.updateCheckedEngagements({
           engagements: this.checkedEngagements.engagements,
@@ -347,6 +356,7 @@ export default {
       }
       this.engagementFilterKey = key
       this.showList = false
+      this.nothingSelected = false
     },
     capitalize(string) {
     	return string.charAt(0).toUpperCase() + string.slice(1)
@@ -445,6 +455,13 @@ export default {
         return 'None'
       }
     },
+    scrollToTop() {
+      window.scrollTo({
+        top: 100,
+        left: 0,
+        behavior: 'smooth'
+      })
+    }
   },
   destroy() {
     document.removeEventListener("keyup", this.switchStatus)
@@ -476,6 +493,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  
+  .firm-wrapper {
+    height: 100%;
+    min-height: calc(100vh - 190px);
+  }
 
   .update-engagements-form {
     position: fixed;
@@ -519,11 +541,6 @@ export default {
       font-weight: bold;
       color: black!important;
     }
-  }
-
-  .firm {
-    height: 100%;
-    min-height: calc(100vh - 190px);
   }
 
   .search-input-nav {

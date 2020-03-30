@@ -139,6 +139,8 @@ export default {
 
 .main {
   padding-top: 110px;
+  overflow-y: auto;
+  height: 100%;
 }
 
 .timesheet-bg {

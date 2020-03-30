@@ -66,6 +66,8 @@ export default {
     box-sizing: border-box;
     }
 
+    html { height: 100%; overflow:auto; }
+
     body {
         font-size: .875rem;
         height: 100%;

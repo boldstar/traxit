@@ -107,6 +107,13 @@
                   </div>
                   </td>
                 </tr>
+                <tr v-if="filteredEngagements.length < 1">
+                  <td colspan=9>
+                  <div class="d-flex flex-column align-items-center justify-content-center">
+                    <span class="font-weight-bold">There Are Zero Engagements For This Status.</span>
+                  </div>
+                  </td>
+                </tr>
                 <tr class="edit-engagement-row" ref="edit-engagement-row" v-show="showEditRow" :key="showEditRow">
                   <td :class="{'edit-engagement-row-body': showEditRow}" colspan=9 v-if="selectedEngagement">
                     <div class="edit-engagement-row-body-content">

@@ -118,6 +118,7 @@ export default {
             padding: 5px 10px;
             z-index: 2;
             white-space: nowrap!important;
+            font-weight: bold;
         }
 
         span {
@@ -131,6 +132,7 @@ export default {
             border: 2px solid lightgray;
             border-radius: 5px;
             width: 100%;
+            min-width: 200px;
         }
 
         select {
@@ -139,6 +141,7 @@ export default {
             border: 2px solid lightgray;
             border-radius: 5px;
             width: 100%;
+            min-width: 200px;
         }
 
         .input-legend {

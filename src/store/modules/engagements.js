@@ -314,7 +314,8 @@ export default {
                 engagements: checkedEngagements.engagements,
                 assigned_to: checkedEngagements.assigned_to,
                 status: checkedEngagements.status,
-                due_date: checkedEngagements.due_date
+                due_date: checkedEngagements.due_date,
+                priority: checkedEngagements.priority
             })
             .then(response => {
                 context.commit('updateCheckedEngagements', response.data.engagements)

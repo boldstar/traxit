@@ -66,6 +66,8 @@ export default {
     box-sizing: border-box;
     }
 
+    html { height: 100%; overflow:auto; }
+
     body {
         font-size: .875rem;
         height: 100%;
@@ -118,6 +120,7 @@ export default {
             padding: 5px 10px;
             z-index: 2;
             white-space: nowrap!important;
+            font-weight: bold;
         }
 
         span {
@@ -131,6 +134,7 @@ export default {
             border: 2px solid lightgray;
             border-radius: 5px;
             width: 100%;
+            min-width: 200px;
         }
 
         select {
@@ -139,6 +143,7 @@ export default {
             border: 2px solid lightgray;
             border-radius: 5px;
             width: 100%;
+            min-width: 200px;
         }
 
         .input-legend {

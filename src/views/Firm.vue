@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrapper">
+  <div class="page-wrapper firm-wrapper">
     <!-- this is the header section of the firm overview -->
       <div class="card-header bg-white shadow w-100 d-flex justify-content-between border">
           <div class="d-flex">
@@ -60,8 +60,9 @@
           <div class="p-0 search-input-body">
             <div class="d-flex">
                 <div class="flex-fill search-engagements-body">
-                  <input class="search-engagement-input" placeholder="Start Typing..." v-model="searchEngagement">
-                  <button class="btn btn-sm btn-outline-primary export-btn" @click="confirmEngagementsDownload" v-if="filteredEngagements && filteredEngagements.length > 0" data-toggle="tooltip" data-placement="bottom" title="Export Engagements List"><i class="fas fa-file-export"></i></button>
+                  <input class="search-engagement-input" placeholder="Start Typing To Filter By Name..." v-model="searchEngagement">
+                  <button class="btn btn-sm btn-secondary clear-sort-btn" @click="currentSort = null" v-if="currentSort">Clear Sort</button>
+                  <button class="btn btn-sm btn-outline-primary export-btn" @click="confirmEngagementsDownload" v-if="filteredEngagements && filteredEngagements.length > 0" data-toggle="tooltip" data-placement="bottom" title="Export Engagements List">Export<i class="fas fa-file-export ml-2"></i></button>
                 </div>  
             </div>           
           </div>
@@ -75,12 +76,13 @@
               <thead class="text-primary text-left">
                 <tr>
                   <th scope="col">Batch</th>
-                  <th scope="col" @click="sort('name')">Client</th>
-                  <th scope="col" @click="sort('created_at')" class="hide-row">Created On</th>
-                  <th scope="col" @click="sort('estimated_date')" class="hide-row">Due Date</th>
+                  <th scope="col">Name</th>
+                  <th scope="col" @click="sort('created_at')" class="hide-row sort-btn">Created On<i class="fas fa-sort text-dark ml-3"></i></th>
+                  <th scope="col" @click="sort('estimated_date')" class="hide-row sort-btn">Due Date<i class="fas fa-sort text-dark ml-3"></i></th>
+                  <th scope="col" @click="sort('priority')" class="sort-btn">Priority <i class="fas fa-sort text-dark ml-3"></i></th>
+                  <th scope="col" @click="sort('assigned_to')" class="sort-btn">Assigned To<i class="fas fa-sort text-dark ml-3"></i></th>
+                  <th scope="col" class="hide-row sort-btn" @click="sort('year')">Tax Year<i class="fas fa-sort text-dark ml-3"></i></th>
                   <th scope="col" class="hide-row">Status</th>
-                  <th scope="col">Assigned To</th>
-                  <th scope="col" class="hide-row">Year</th>
                   <th class="hide-row" v-if="$can('delete', admin)">Edit</th>
                 </tr>
               </thead>
@@ -91,16 +93,32 @@
                   <td @click="viewDetails(engagement.id)" class="hide-row">{{ engagement.created_at | formatDate }}</td>
                   <td @click="viewDetails(engagement.id)" class="hide-row" v-if="engagement.estimated_date">{{ engagement.estimated_date | formatDate }}</td>
                   <td @click="viewDetails(engagement.id)" class="hide-row" v-else>None</td>
-                  <td @click="viewDetails(engagement.id)" class="hide-row">{{ engagement.status }}</td>
+                  <td @click="viewDetails(engagement.id)" :class="{'font-weight-bold': engagement.priority > 1, 'text-danger': engagement.priority > 3, 'text-warning': engagement.priority == 3}">{{ priorityDesc(engagement.priority) }}</td>
                   <td @click="viewDetails(engagement.id)">{{ engagement.assigned_to }}</td>
                   <td @click="viewDetails(engagement.id)" class="hide-row">{{ engagement.year }}</td>
+                  <td @click="viewDetails(engagement.id)" class="hide-row">{{ engagement.status }}</td>
                   <td v-if="$can('delete', admin)"><button @click="editEngagementRow(index, engagement.id)" class="btn btn-link"><i class="fas fa-edit"></i></button></td>
                 </tr>
+                <tr v-if="filteredEngagements.length > 8">
+                  <td colspan=9>
+                  <div class="d-flex flex-column align-items-center justify-content-center">
+                    <span class="font-weight-bold">You Have Reached The End</span>
+                    <!-- <button class="btn btn-sm btn-primary mt-2 font-weight-bold" @click="scrollToTop()">Back To Top</button> -->
+                  </div>
+                  </td>
+                </tr>
+                <tr v-if="filteredEngagements.length < 1">
+                  <td colspan=9>
+                  <div class="d-flex flex-column align-items-center justify-content-center">
+                    <span class="font-weight-bold">There Are Zero Engagements For This Status.</span>
+                  </div>
+                  </td>
+                </tr>
                 <tr class="edit-engagement-row" ref="edit-engagement-row" v-show="showEditRow" :key="showEditRow">
-                  <td :class="{'edit-engagement-row-body': showEditRow}" colspan=8 v-if="selectedEngagement">
+                  <td :class="{'edit-engagement-row-body': showEditRow}" colspan=9 v-if="selectedEngagement">
                     <div class="edit-engagement-row-body-content">
                       <div class="d-flex justify-content-between">
-                        <div class="custom-input-group m-0 ml-4">
+                        <div class="custom-input-group m-0 ml-1">
                           <span>Due Date</span>
                           <v-date-picker
                             mode='single'
@@ -113,6 +131,12 @@
                           <span>Status</span>
                           <select name="status" id="status" v-model="selectedEngagement.status">
                             <option v-for="(status, index) in filteredStatuses" :value="status.status" :key="index">{{status.status}}</option>
+                          </select>
+                        </div>
+                        <div class="custom-input-group m-0 mr-3">
+                          <span>Priority</span>
+                          <select name="assigned_to" id="assigned_to" v-model="selectedEngagement.priority">
+                            <option v-for="(level, index) in priority_levels" :key="index" :value="level.level">{{level.value}}</option>
                           </select>
                         </div>
                         <div class="custom-input-group m-0">
@@ -133,58 +157,62 @@
               </tbody>
             </table>
           </div>
-
-          <div class="mb-3" v-if="nothingSelected">
-            <span  class="font-weight-bold text-danger">Please select Due Date, Status or Assign To before submitting changes.</span>
-          </div>
-
-            <form @submit.prevent="updateChecked" class="d-flex justify-content-between mb-5" v-if="$can('delete', admin)">
-              
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <label class="input-group-text bg-light font-weight-bold text-primary" for="due_date">Due Date</label>
-                </div>
-                <v-date-picker
-                  mode='single'
-                  v-model='checkedEngagements.due_date'
-                  id="due_date"
-                  :input-props='{class: "form-control"}'
-                >
-                </v-date-picker>
-              </div>
-              
-              <div class="input-group mr-5" v-for="workflow in filteredWorkflow" :key="workflow.id">
-                <div class="input-group-prepend">
-                  <label class="input-group-text bg-light font-weight-bold text-primary" for="option">Status</label>
-                </div>
-                  <select class="custom-select" id="status" v-model="checkedEngagements.status">
-                  <option  selected disabled>{{ option }}</option>
-                  <option v-for="status in workflow.statuses" :key="status.id" :value="status.status">
-                    {{ status.status }}
-                  </option>
-                </select>
-              </div>
-              
-
-              <div class="input-group mr-2">
-                <div class="input-group-prepend">
-                  <label class="input-group-text font-weight-bold bg-light text-primary" for="option">Assign To</label>
-                </div>
-                <select class="custom-select" id="client_id" v-model="checkedEngagements.assigned_to">
-                  <option  selected disabled>{{ option }}</option>
-                  <option v-for="user in filteredUsers" :key="user.id" :value="user.id">
-                    {{ user.name }}
-                  </option>
-                </select>
-              </div>
-
-              <div class="align-self-center">
-                <button type="submit" class="btn btn-sm btn-primary font-weight-bold" :disabled="checkedEngagements.engagements.length === 0">Submit</button>
-              </div>
-            </form>
-          
         </div>      
       </div>
+
+      <form @submit.prevent="updateChecked" class="update-engagements-form col-8" v-if="$can('delete', admin) && filteredEngagements.length > 0">
+        <div class="mb-1" v-if="nothingSelected">
+          <span  class="font-weight-bold text-danger">Please select Due Date, Status, Priority or Assign To before submitting changes.</span>
+        </div>
+        
+        <div class="d-flex justify-content-between">
+          <div class="custom-input-group">
+            <label  for="due_date">Due Date</label>
+            <v-date-picker
+              mode='single'
+              v-model='checkedEngagements.due_date'
+              id="due_date"
+              :popover-direction="'top'"
+            >
+            </v-date-picker>
+          </div>
+          
+          <div class="custom-input-group">
+              <label for="option">Priority</label>
+              <select id="status" v-model="checkedEngagements.priority">
+              <option  selected disabled>{{ option }}</option>
+              <option v-for="(level, index) in priority_levels" :key="index" :value="level.level">
+                {{ level.value }}
+              </option>
+            </select>
+          </div>
+
+          <div class="custom-input-group" v-for="workflow in filteredWorkflow" :key="workflow.id">
+              <label for="option">Status</label>
+              <select id="status" v-model="checkedEngagements.status">
+              <option  selected disabled>{{ option }}</option>
+              <option v-for="status in workflow.statuses" :key="status.id" :value="status.status">
+                {{ status.status }}
+              </option>
+            </select>
+          </div>
+          
+
+          <div class="custom-input-group">
+            <label for="option">Assign To</label>
+            <select id="client_id" v-model="checkedEngagements.assigned_to">
+              <option  selected disabled>{{ option }}</option>
+              <option v-for="user in filteredUsers" :key="user.id" :value="user.id">
+                {{ user.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="align-self-center">
+            <button type="submit" class="btn btn-sm btn-primary font-weight-bold" :disabled="checkedEngagements.engagements.length === 0">Submit</button>
+          </div>
+        </div> 
+      </form>
 
       <ConfirmModal v-if="confirmDownload" @submit-download="downloadEngagementsList" @close-modal="cancelDownload" />
   </div>
@@ -198,6 +226,7 @@ import ProcessingBar from '@/components/loaders/ProcessingBar.vue'
 import NoFirm from '@/components/placeholders/NoFirm.vue'
 import ConfirmModal from '@/components/modals/ConfirmModal.vue'
 import {detach, move, moveRow, children, row} from '../plugins/insert_row'
+import levels from '../plugins/levels'
 import moment from 'moment'
 export default {
   name: 'FirmView',
@@ -224,17 +253,22 @@ export default {
         engagements: [],
         status: null,
         assigned_to: null,
-        due_date: null
+        due_date: null,
+        priority: null
       },
       noEngagements: false,
       listLoaded: false,
       engagementFilterKey: 'Received',
       option: 'Choose...',
-      currentSort: 'created_at',
+      firstSort: 'priority',
+      secondSort: 'estimated_date',
+      thirdSort: 'created_at',
+      currentSort: null,
       currentSortDir: 'asc',
       showList: false,
       dueDate: null,
-      nothingSelected: false
+      nothingSelected: false,
+      priority_levels: levels.priority_levels
     }
   },
   computed: {
@@ -249,16 +283,27 @@ export default {
       return this.filteredWorkflow[0].statuses
     },
     filteredEngagements () {
+      const distantFuture = new Date(8640000000000000)
       return this.allEngagements.sort((a,b) => {
-      let modifier = 1;
-      if(this.currentSortDir === 'desc') modifier = -1;
-      if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
-      if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
-      return 0;
-      }).filter(eng => eng.workflow_id === this.selectedWorkflowID)
-      .filter((engagement) => engagement.status === this.engagementFilterKey || engagement.id == this.engagementId)
+        if(this.currentSort) {
+          let modifier = 1;
+          if(this.currentSortDir === 'desc') modifier = -1;
+          if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+          if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+          return 0;
+        } else {
+          let dateA = a[this.secondSort] ? new Date(a[this.secondSort]) : distantFuture
+          let dateB = b[this.secondSort] ? new Date(b[this.secondSort]) : distantFuture
+          // the first and second sort options is if I want a more complex sort
+          // return b[this.firstSort] - a[this.firstSort] ||
+          // dateA.getTime() - dateB.getTime() ||
+          return new Date(a[this.thirdSort]) - new Date(b[this.thirdSort])
+        }
+      })
+      .filter(eng => eng.workflow_id === this.selectedWorkflowID)
+      .filter(eng => eng.status === this.engagementFilterKey || eng.id == this.engagementId)
       .filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear)
-      .filter( engagement => {return !this.searchEngagement || engagement.name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 });
+      .filter(eng => {return !this.searchEngagement || eng.name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 });
     },
     countEngagementsByStatus () {
        const res = this.allWorkflows.filter(w =>w.id == this.selectedWorkflowID).map(({statuses, id}) => ({
@@ -290,17 +335,19 @@ export default {
   methods: {
     ...mapActions(['updateCheckedEngagements']),
     updateChecked() {
-      if(this.checkedEngagements.due_date || this.checkedEngagements.status != this.option || this.checkedEngagements.assigned_to != this.option) {
+      if(this.checkedEngagements.due_date || this.checkedEngagements.status != this.option || this.checkedEngagements.assigned_to != this.option || this.checkedEngagements.priority != this.option) {
         this.nothingSelected = false
         this.updateCheckedEngagements({
           engagements: this.checkedEngagements.engagements,
           assigned_to: this.checkedEngagements.assigned_to != this.option ? this.checkedEngagements.assigned_to : 0,
           status: this.checkedEngagements.status != this.option ? this.checkedEngagements.status : null,
-          due_date: this.checkedEngagements.due_date ? this.checkedEngagements.due_date : null
+          due_date: this.checkedEngagements.due_date ? this.checkedEngagements.due_date : null,
+          priority: this.checkedEngagements.priority != this.option ? this.checkedEngagements.priority : null
         }).then(() => {
           this.checkedEngagements.engagements = [];
           this.checkedEngagements.assigned_to = this.option;
           this.checkedEngagements.status = this.option;
+          this.checkedEngagements.priority = this.option;
           this.checkedEngagements.due_date = null
         }) 
       } else {
@@ -316,6 +363,7 @@ export default {
       }
       this.engagementFilterKey = key
       this.showList = false
+      this.nothingSelected = false
     },
     capitalize(string) {
     	return string.charAt(0).toUpperCase() + string.slice(1)
@@ -400,12 +448,27 @@ export default {
           engagements: [this.engagementId],
           assigned_to: this.users.filter(user => user.name == this.selectedEngagement.assigned_to)[0].id,
           status: this.selectedEngagement.status,
-          due_date: this.dueDate
+          due_date: this.dueDate,
+          priority: this.selectedEngagement.priority
       }).then(() => {
           this.showEditRow = false
           this.engagementId = null
       }) 
     },
+    priorityDesc(priority) {
+      if(priority > 0) {
+        return levels.priority_levels.filter(lev => lev.level === priority)[0].value
+      } else {
+        return 'None'
+      }
+    },
+    scrollToTop() {
+      window.scrollTo({
+        top: 100,
+        left: 0,
+        behavior: 'smooth'
+      })
+    }
   },
   destroy() {
     document.removeEventListener("keyup", this.switchStatus)
@@ -420,6 +483,7 @@ export default {
     this.$store.dispatch('retrieveWorkflows')
     this.checkedEngagements.status = this.option
     this.checkedEngagements.assigned_to = this.option
+    this.checkedEngagements.priority = this.option
     this.currentYear = this.allYears
       var self = this;
         setTimeout(() => {
@@ -436,9 +500,25 @@ export default {
 </script>
 
 <style scoped lang="scss">
- tr {
-   cursor: pointer;
- }
+  
+  .firm-wrapper {
+    height: 100%;
+    min-height: calc(100vh - 190px);
+  }
+
+  .update-engagements-form {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    background: white;
+    padding-right: 20px;
+    padding-top: 12px;
+    box-shadow: 5px -5px 15px 0 rgba(0,0,0,.25px);
+  }
+
+  tr {
+    cursor: pointer;
+  }
 
 
   li {
@@ -470,11 +550,6 @@ export default {
     }
   }
 
-  .firm {
-    height: 100%;
-    min-height: calc(100vh - 190px);
-  }
-
   .search-input-nav {
     display: none;
   }
@@ -489,12 +564,20 @@ export default {
 
   .search-engagements-body {
     position: relative;
+    z-index: 0;
   }
 
   .export-btn {
     position: absolute;
     right: 10px;
     top: 8px;
+  }
+
+  .clear-sort-btn {
+    position: absolute;
+    right: 100px;
+    top: 8px;
+    font-weight: bold;
   }
 
   .search-engagement-input {
@@ -535,6 +618,8 @@ export default {
 
             .edit-row-btns {
               align-self: center;
+              display: flex;
+              margin-left: 10px;
 
               .edit-row-btn {
                 text-decoration: none;
@@ -549,6 +634,21 @@ export default {
           }
         }
       }
+    }
+  }
+
+  .date-picker-group {
+    flex-wrap: nowrap!important;
+  }
+
+  .table-responsive {
+    overflow: visible;
+    margin-bottom: 50px;
+  }
+
+  .sort-btn {
+    &:hover {
+      background: lightgray;
     }
   }
 

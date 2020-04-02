@@ -81,9 +81,6 @@ import Alert from '@/components/alerts/Alert.vue'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 
-
-
-
 export default {
   name: 'ContactDetails',
   data () {

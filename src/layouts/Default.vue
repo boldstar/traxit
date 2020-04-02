@@ -35,6 +35,7 @@
     </div>
         
     <notify-modal v-if="notify"></notify-modal>
+    <delete-modal></delete-modal>
   </div>
 </template>
 

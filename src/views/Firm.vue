@@ -4,8 +4,8 @@
       <div class="card-header bg-white shadow w-100 d-flex justify-content-between border">
           <div class="d-flex">
               <span class="h5 mb-0 align-self-center">Firm</span>
-              <span class="h5 mb-0 align-self-center mx-2">|</span>
-              <div class="input-group input-group-sm">
+              <span class="h5 mb-0 align-self-center mx-2" v-if="$route.name != 'bookkeeping-overview'">|</span>
+              <div class="input-group input-group-sm" v-if="$route.name != 'bookkeeping-overview'">
                 <div class="input-group-prepend">
                   <label class="input-group-text text-secondary bg-white font-weight-bold" for="option">Tax Year</label>
                 </div>
@@ -17,7 +17,7 @@
           </div>
           <button class="btn btn-sm btn-outline-primary" @click="refresh"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
       </div>
-
+      
       <Alert v-if="successAlert" :message="successAlert" class="my-2" />
 
       <router-view

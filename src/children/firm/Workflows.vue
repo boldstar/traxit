@@ -18,7 +18,7 @@
               </select>
             </div>
             <div class="card-body p-0 d-flex flex-column">
-                <ul class="p-0 text-left workflow-list" :class="{'show-workflow-list': showList}" v-for="workflows in countEngagementsByStatus" :key="workflows.workflow_id"  @keyup="switchStatus($event)">
+                <ul class="p-0 text-left workflow-list" :class="{'show-workflow-list': showList}" v-for="workflows in countEngagementsByStatus" :key="workflows.workflow_id">
                   <li class="m-0 px-3 d-flex justify-content-between workflow-item" v-for="(status, index) in workflows.statuses" :key="index" :value="status.status"  @click="changeEngagementKey(status.status)" :class="{ active: engagementFilterKey === status.status, 'show-workflow-item': showList }">
                     <span class="text-muted status-text">{{ capitalize(status.status) }}</span>
                     <span class="badge badge-primary align-self-center">{{ status.count }}</span>

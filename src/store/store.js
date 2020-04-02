@@ -19,6 +19,7 @@ import invoice from './modules/invoice'
 import inbox from './modules/inbox'
 import portal from './modules/portal'
 import business from './modules/business'
+import bookkeeping from './modules/bookkeeping'
 
 // this is for the abilities plug in.
 import { abilityPlugin, ability as appAbility } from './ability'
@@ -60,7 +61,8 @@ export default new Vuex.Store({
     invoice,
     inbox,
     portal,
-    business
+    business,
+    bookkeeping
   },
   state: {
     processing: false,

@@ -29,6 +29,15 @@
             <div class="custom-input-group">
                 <label for="account_name">Account Name</label>
                 <input type="text" placeholder="EX: Bank of America 1234" v-model="bookkeeping.account_name"  @input="error = false">
+            </div>
+            <div class="custom-input-group">
+                <label>Account Opening Date</label>
+                <v-date-picker
+                mode='single'
+                v-model='bookkeeping.account_start_date'
+                id="due_date"
+                :popover-direction="'top'"
+                ></v-date-picker>
             </div>    
         </form>        
 
@@ -56,7 +65,8 @@ export default {
         bookkeeping: {
             year: null,
             account_name: null,
-            account_type: null
+            account_type: null,
+            account_start_date: null
         }
       }
     },

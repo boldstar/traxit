@@ -35,6 +35,9 @@ export default {
             const index = state.bookkeeping_accounts.findIndex(acct => acct.id == id)
             state.bookkeeping_accounts.splice(index, 1)
         },
+        DELETE_ALL_BOOKKEEPING_ACCOUNTS(state, data) {
+
+        },
         TOGGLE_ACCOUNT_MODAL(state) {
             state.account_modal = !state.account_modal
         }
@@ -95,21 +98,6 @@ export default {
                 context.commit('errorMsgAlert', 'Error')
             })
         },
-        deleteBookkeepingAccount(context, id) {
-            context.commit('startProcessing')
-            axios.delete('/bookkeeping-account/' + id)
-            .then(response => {
-                context.commit('DELETE_BOOKKEEPING_ACCOUNT', id)
-                context.commit('stopProcessing')
-                context.commit('successAlert', 'Bookkeeping Account Deleted.')
-                context.commit('toggleDeleteModal', null)
-            }).catch(error => {
-                console.log(error.response.data)
-                context.commit('toggleDeleteModal', null)
-                context.commit('errorMsgAlert', 'Error')
-                context.commit('stopProcessing')
-            })
-        },
         startNewBookkeepingAccountYear(context, data) {
             context.commit('startProcessing')
             return new Promise((resolve, reject) => {
@@ -125,6 +113,50 @@ export default {
                     console.log(error.response.data)
                     reject(error)
                 })
+            })
+        },
+        deleteBookkeepingAccount(context, id) {
+            context.commit('startProcessing')
+            axios.delete('/bookkeeping-account/' + id)
+            .then(response => {
+                context.commit('DELETE_BOOKKEEPING_ACCOUNT', id)
+                context.commit('stopProcessing')
+                context.commit('successAlert', 'Bookkeeping Account Deleted.')
+                context.commit('toggleDeleteModal', null)
+            }).catch(error => {
+                console.log(error.response.data)
+                context.commit('toggleDeleteModal', null)
+                context.commit('errorMsgAlert', 'Error')
+                context.commit('stopProcessing')
+            })
+        },
+        deleteBookkeepingAccountYear(context, data) {
+            context.commit('startProcessing')
+            axios.post('/delete-bookkeeping-year',  data)
+            .then(response => {
+                context.commit('BOOKKEEPING_ACCOUNTS', response.data)
+                context.commit('stopProcessing')
+                context.commit('successAlert', 'Bookkeeping Year Deleted.')
+                context.commit('toggleDeleteModal', null)
+            }).catch(error => {
+                console.log(error.response.data)
+                context.commit('toggleDeleteModal', null)
+                context.commit('errorMsgAlert', 'Error')
+                context.commit('stopProcessing')
+            })
+        },
+        deleteAllBookkeepingAccounts(context, name) {
+            context.commit('startProcessing')
+            axios.delete('/all-bookkeeping-accounts/' + name)
+            .then(response => {
+                context.commit('BOOKKEEPING_ACCOUNTS', response.data)
+                context.commit('stopProcessing')
+                context.commit('successAlert', 'Accounts Deleted')
+                context.commit('toggleDeleteModal', null)
+            }).catch(error => {
+                console.log(error.response.data)
+                context.commit('stopProcessing')
+                context.commit('errorMsgAlert', 'Error')
             })
         }
     }

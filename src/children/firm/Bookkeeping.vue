@@ -29,6 +29,9 @@
                     <span class="text-secondary font-weight-bold">A list of accounts filtered by year for the selected contact or business.</span>
                     <small>Click the box for the month complete. A check mark will represent completion. <strong>To uncheck simply reclick the box.</strong></small>
                 </div>
+                <div class="text-left"  v-if="error && errorMsg">
+                    <p class="text-danger font-weight-bold">{{errorMsg}} <button class="error-close-btn" @click="error = false">X</button></p>
+                </div>
                 <div class="selected-bookkeeping-list-account-body">
                     <ProcessingBar v-if="processing && !timesheet" />
                     <div class="selected-account-header">
@@ -68,19 +71,70 @@
                             <tr v-for="(account, index) in accounts" :key="index" :ref="'account-row' + `${index}`">
                                 <th class="account-name">{{account.account_name}}</th>
                                 <td class="account-name">{{accountType(account.account_type)}}</td>
-                                <th @click="updateMonth(account.id, 'jan')" :class="{'checked': account.jan}"><i class="fas fa-check" v-if="account.jan"></i></th>
-                                <th @click="updateMonth(account.id, 'feb')" :class="{'checked': account.feb}"><i class="fas fa-check" v-if="account.feb"></i></th>
-                                <th @click="updateMonth(account.id, 'mar')" :class="{'checked': account.mar}"><i class="fas fa-check" v-if="account.mar"></i></th>
-                                <th @click="updateMonth(account.id, 'apr')" :class="{'checked': account.apr}"><i class="fas fa-check" v-if="account.apr"></i></th>
-                                <th @click="updateMonth(account.id, 'may')" :class="{'checked': account.may}"><i class="fas fa-check" v-if="account.may"></i></th>
-                                <th @click="updateMonth(account.id, 'jun')" :class="{'checked': account.jun}"><i class="fas fa-check" v-if="account.jun"></i></th>
-                                <th @click="updateMonth(account.id, 'jul')" :class="{'checked': account.jul}"><i class="fas fa-check" v-if="account.jul"></i></th>
-                                <th @click="updateMonth(account.id, 'aug')" :class="{'checked': account.aug}"><i class="fas fa-check" v-if="account.aug"></i></th>
-                                <th @click="updateMonth(account.id, 'sep')" :class="{'checked': account.sep}"><i class="fas fa-check" v-if="account.sep"></i></th>
-                                <th @click="updateMonth(account.id, 'oct')" :class="{'checked': account.oct}"><i class="fas fa-check" v-if="account.oct"></i></th>
-                                <th @click="updateMonth(account.id, 'nov')" :class="{'checked': account.nov}"><i class="fas fa-check" v-if="account.nov"></i></th>
-                                <th @click="updateMonth(account.id, 'dec')" :class="{'checked': account.dec}"><i class="fas fa-check" v-if="account.dec"></i></th>
-                                <td v-if="$can('delete', admin)"><button @click="editAccountRow(index, account.id)" class="btn btn-link p-0"><i class="fas fa-edit"></i></button></td>
+                                <th @click="updateMonth(account.id, 'jan')" :class="{'checked': account.jan}">
+                                    <i class="fas fa-check" v-if="account.jan"></i>
+                                    <i class="fas fa-times" v-else-if="dateStart('01/31/'+selectedYear, account.account_start_date)"></i>
+                                    <span class="account-closed" v-else-if="dateClose('01/31/'+selectedYear, account.account_close_date)">CLSD</span>
+                                </th>
+                                <th @click="updateMonth(account.id, 'feb')" :class="{'checked': account.feb}">
+                                    <i class="fas fa-check" v-if="account.feb"></i>
+                                    <i class="fas fa-times" v-else-if="dateStart('02/28/'+selectedYear, account.account_start_date)"></i>
+                                    <span class="account-closed" v-else-if="dateClose('02/28/'+selectedYear, account.account_close_date)">CLSD</span>
+                                </th>
+                                <th @click="updateMonth(account.id, 'mar')" :class="{'checked': account.mar}">
+                                    <i class="fas fa-check" v-if="account.mar"></i>
+                                    <i class="fas fa-times" v-else-if="dateStart('03/31/'+selectedYear, account.account_start_date)"></i>
+                                    <span class="account-closed" v-else-if="dateClose('03/31/'+selectedYear, account.account_close_date)">CLSD</span>
+                                </th>
+                                <th @click="updateMonth(account.id, 'apr')" :class="{'checked': account.apr}">
+                                    <i class="fas fa-check" v-if="account.apr"></i>
+                                    <i class="fas fa-times" v-else-if="dateStart('04/30/'+selectedYear, account.account_start_date)"></i>
+                                    <span class="account-closed" v-else-if="dateClose('04/30/'+selectedYear, account.account_close_date)">CLSD</span>
+                                </th>
+                                <th @click="updateMonth(account.id, 'may')" :class="{'checked': account.may}">
+                                    <i class="fas fa-check" v-if="account.may"></i>
+                                    <i class="fas fa-times" v-else-if="dateStart('05/31/'+selectedYear, account.account_start_date)"></i>
+                                    <span class="account-closed" v-else-if="dateClose('05/31/'+selectedYear, account.account_close_date)">CLSD</span>
+                                </th>
+                                <th @click="updateMonth(account.id, 'jun')" :class="{'checked': account.jun}">
+                                    <i class="fas fa-check" v-if="account.jun"></i>
+                                    <i class="fas fa-times" v-else-if="dateStart('06/30/'+selectedYear, account.account_start_date)"></i>
+                                    <span class="account-closed" v-else-if="dateClose('06/30/'+selectedYear, account.account_close_date)">CLSD</span>
+                                </th>
+                                <th @click="updateMonth(account.id, 'jul')" :class="{'checked': account.jul}">
+                                    <i class="fas fa-check" v-if="account.jul"></i>
+                                    <i class="fas fa-times" v-else-if="dateStart('07/31/'+selectedYear, account.account_start_date)"></i>
+                                    <span class="account-closed" v-else-if="dateClose('07/31/'+selectedYear, account.account_close_date)">CLSD</span>
+                                </th>
+                                <th @click="updateMonth(account.id, 'aug')" :class="{'checked': account.aug}">
+                                    <i class="fas fa-check" v-if="account.aug"></i>
+                                    <i class="fas fa-times" v-else-if="dateStart('08/31/'+selectedYear, account.account_start_date)"></i>
+                                    <span class="account-closed" v-else-if="dateClose('08/31/'+selectedYear, account.account_close_date)">CLSD</span>
+                                </th>
+                                <th @click="updateMonth(account.id, 'sep')" :class="{'checked': account.sep}">
+                                    <i class="fas fa-check" v-if="account.sep"></i>
+                                    <i class="fas fa-times" v-else-if="dateStart('09/30/'+selectedYear, account.account_start_date)"></i>
+                                    <span class="account-closed" v-else-if="dateClose('09/30/'+selectedYear, account.account_close_date)">CLSD</span>
+                                </th>
+                                <th @click="updateMonth(account.id, 'oct')" :class="{'checked': account.oct}">
+                                    <i class="fas fa-check" v-if="account.oct"></i>
+                                    <i class="fas fa-times" v-else-if="dateStart('10/31/'+selectedYear, account.account_start_date)"></i>
+                                    <span class="account-closed" v-else-if="dateClose('10/31/'+selectedYear, account.account_close_date)">CLSD</span>
+                                </th>
+                                <th @click="updateMonth(account.id, 'nov')" :class="{'checked': account.nov}">
+                                    <i class="fas fa-check" v-if="account.nov"></i>
+                                    <i class="fas fa-times" v-else-if="dateStart('11/30/'+selectedYear, account.account_start_date)"></i>
+                                    <span class="account-closed" v-else-if="dateClose('11/30/'+selectedYear, account.account_close_date)">CLSD</span>
+                                </th>
+                                <th @click="updateMonth(account.id, 'dec')" :class="{'checked': account.dec}">
+                                    <i class="fas fa-check" v-if="account.dec"></i>
+                                    <i class="fas fa-times" v-else-if="dateStart('12/31/'+selectedYear, account.account_start_date)"></i>
+                                    <span class="account-closed" v-else-if="dateClose('12/31/'+selectedYear, account.account_close_date)">CLSD</span>
+                                </th>
+                                <td v-if="$can('delete', admin)">
+                                    <button @click="editAccountRow(index, account.id)" class="btn btn-link p-0">
+                                    <i class="fas fa-edit"></i></button>
+                                </td>
                             </tr>
                             <tr class="edit-account-row" ref="edit-account-row" v-show="showEditRow" :key="showEditRow">
                                 <td :class="{'edit-account-row-body': showEditRow}" colspan="15" v-if="selectedAccount">
@@ -101,11 +155,53 @@
                                                 </select>
                                             </div>
 
+                                            <div class="custom-input-group text-left">
+                                                <span>Opening Date</span>
+                                                <v-date-picker
+                                                mode='single'
+                                                v-model='startDate'
+                                                id="start_date"
+                                                :popover-direction="'top'"
+                                                ></v-date-picker>
+                                            </div>
+
+                                            <div class="custom-input-group text-left">
+                                                <span>Close Date</span>
+                                                <v-date-picker
+                                                mode='single'
+                                                v-model='closeDate'
+                                                id="close_date"
+                                                :popover-direction="'top'"
+                                                ></v-date-picker>
+                                            </div>
+
                                             <div class="edit-row-btns">
                                                     <button @click="hideEditRow" class="btn btn-sm edit-row-btn text-danger">Cancel</button>
                                                     <button @click="saveEditChanges" class="btn btn-sm edit-row-btn text-primary">Save Changes</button>
                                                     <button @click="requestRemoval" class="btn btn-sm edit-row-btn">Remove Account</button>
                                             </div>
+                                        </div>
+                                        <div class="edit-row-instructions">
+                                            <ul>
+                                                <li>
+                                                    <div><strong>Account Name: </strong>Required</div>
+                                                    <small>The name of the account.</small>
+                                                </li>
+                                                <li>
+                                                    <div><strong>Account Type: </strong>Required</div>
+                                                    <small>The type of the account.</small>
+                                                </li>
+                                                <li>
+                                                    <div><strong>Opening Date: </strong>Not Required</div>
+                                                    <small>The date the account was open. If date is selected the fields before that date will be marked.</small>
+                                                    <small>To remove simply delete the date and save your changes.</small>
+                                                </li>
+                                                <li>
+                                                    <div><strong>Closing Date: </strong>Not Required</div>
+                                                    <small>The date the account was open. If date is selected the fields after that date will be marked.</small>
+                                                    <small>To remove simply delete the date and save your changes.</small>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </td>
@@ -119,6 +215,26 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div class="selected-account-footer">
+                        <div class="selected-account-legend">
+                            <div class="selected-account-legend-item">
+                                <span class="text">Completed: </span>
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="selected-account-legend">
+                                <span class="text">Before Opening Date: </span>
+                                <i class="fas fa-times"></i>
+                            </div>
+                            <div class="selected-account-legend-item">
+                                <span class="text">Account Closed:</span>
+                                <span>CLSD</span>
+                            </div>
+                        </div>
+                        <div class="selected-account-footer-btns">
+                            <button @click="requestDeleteYear">Remove {{selectedYear}}</button>
+                            <button @click="requestDeleteAllAccounts">Delete All Accounts<i class="fas fa-trash ml-2"></i></button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <AddAccountModal v-if="addAccountModal" @submit-form="addAccount" @close-modal="$store.commit('TOGGLE_ACCOUNT_MODAL')"/>
@@ -129,6 +245,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import {detach, move, moveRow, children, row} from '../../plugins/insert_row'
+import {getCloseDate, getStartDate} from '../../plugins/bookkeeping'
 import AddAccountModal from '@/components/firm/AddAccountModal.vue'
 import Spinner from '@/components/loaders/Spinner.vue'
 import ProcessingBar from '@/components/loaders/ProcessingBar.vue'
@@ -151,7 +268,11 @@ export default {
             belongsTo: null,
             belongsToActive: null,
             loaded: [],
-            search: ''
+            search: '',
+            startDate: null,
+            closeDate: null,
+            error: false,
+            errorMsg: ''
         }
     },
     computed: {
@@ -238,11 +359,46 @@ export default {
         addAccountRequest() {
             this.$store.commit('TOGGLE_ACCOUNT_MODAL')
         },
-        updateMonth(id, mth) {
-            this.$store.dispatch('updateBookkeepingMonth', {
-                id: id,
-                mth: mth
+        requestRemoval() {
+            this.$store.commit('toggleDeleteModal', {
+                action: 'deleteBookkeepingAccount',
+                id: this.selectedAccount.id
             })
+        },
+        requestDeleteAllAccounts() {
+            this.$store.commit('toggleDeleteModal', {
+                action: 'deleteAllBookkeepingAccounts',
+                id: this.filteredAccountName,
+                name: this.filteredAccountName,
+                warning: 'This will remove all bookkeeping accounts and years for the chosen Business or Contact.'
+            })
+        },
+        requestDeleteYear() {
+            this.$store.commit('toggleDeleteModal', {
+                action: 'deleteBookkeepingAccountYear',
+                id: {name: this.filteredAccountName, client_id: this.selectedID, year: this.selectedYear},
+                warning: 'This will delete the bookkeeping accounts for the year ' + this.selectedYear + ' on the selected contact or business.'
+            })
+        },
+        updateMonth(id, mth) {
+            this.error = false
+            this.errorMsg = null
+            if(this.validatedUpdate(id, mth)) {
+                this.$store.dispatch('updateBookkeepingMonth', {
+                    id: id,
+                    mth: mth
+                })
+            } else {
+                this.error = true
+                this.errorMsg = 'Update Not Allowed. Please Adjust Close or Open Date Before Updating.'
+            }
+        },
+        validatedUpdate(id, mth) {
+            const account = this.accounts.filter(acct => acct.id == id)[0]
+            if(account && account[mth]) return true;
+            if(account.account_closed && getCloseDate(mth, this.selectedYear, account.account_close_date)) return false;
+            else if(account.account_start_date && getStartDate(mth, this.selectedYear, account.account_start_date)) return false;
+            else return true;
         },
         contactName(client) {
             if(client.has_spouse) {
@@ -287,16 +443,19 @@ export default {
         addAccount(data) {
             this.$store.dispatch('addBookkeepingAccount', {
                 client_id: this.selectedID,
-                belongs_to: this.showContacts ? 'contact' : 'business',
+                belongs_to: this.belongsToActive ? this.belongsToActive : this.belongsTo,
                 business_name: this.filteredAccountName,
                 account_name: data.account_name,
                 account_type: data.account_type,
-                year:  JSON.stringify(data.year)
+                year:  JSON.stringify(data.year),
+                account_start_date: data.account_start_date
             }).then(response => {
                 this.selectedID = response.data.client_id
             })
         },
         changeSelectedItem(id, belongs_to, name) {
+            this.error = false
+            this.errorMsg = ''
             this.selectedID = id
             this.selectedName = name
             if(belongs_to) {
@@ -319,6 +478,8 @@ export default {
             const fromIndex = document.getElementsByClassName('edit-account-row')[0].rowIndex
             this.editRowIndex = fromIndex
             const table = this.$refs['account-table']
+            this.startDate = this.selectedAccount.account_start_date ? new Date(this.selectedAccount.account_start_date) : null
+            this.closeDate = this.selectedAccount.account_close_date ? new Date(this.selectedAccount.account_close_date) : null
             moveRow(table, fromIndex, toIndex, false);
         },
         hideEditRow() {
@@ -326,15 +487,11 @@ export default {
             this.accountID = null
         },
         saveEditChanges() {
+            this.startDate ? this.selectedAccount.account_start_date = this.startDate : null
+            this.closeDate ? this.selectedAccount.account_close_date = this.closeDate : null
             this.$store.dispatch('updateBookkeepingAccount', this.selectedAccount)
             this.showEditRow = false
             this.accountID = null
-        },
-        requestRemoval() {
-            this.$store.commit('toggleDeleteModal', {
-                action: 'deleteBookkeepingAccount',
-                id: this.selectedAccount.id
-            })
         },
         dataLoaded(key) {
             this.loaded.push(key)
@@ -363,7 +520,23 @@ export default {
         },
         goTo() {
             this.$router.push('/contact/' + this.selectedID + '/account')
-        }
+        },
+        dateStart(mth, start_date) {
+            if(start_date) {
+                if(new Date(mth) < new Date(start_date)) {
+                    return true
+                }
+            } return false
+        },
+        dateClose(mth, close_date) {
+            if(close_date) {
+                if(new Date(mth) < new Date(close_date)) {
+                    return false
+                } else {
+                    return true
+                }
+            } return false
+        },
     },
     watch: {
         'allClients': function(value) {
@@ -419,6 +592,7 @@ export default {
 
             .bookkeeping-list-tabs {
                 width: 100%;
+                box-shadow: 0 0 5px 0 rgba(0,0,0,.25px);
 
                 button {
                     border: none;
@@ -475,6 +649,18 @@ export default {
         .selected-bookkeeping-list-account {
             margin-left: 50px;
 
+            .error-close-btn {
+                color: red;
+                font-weight: bold;
+                background: none;
+                border: none;
+                cursor: pointer;
+
+                &:hover {
+                    color: black;
+                }
+            }
+
             .selected-bookkeeping-list-account-body {
                 position: relative;
 
@@ -527,7 +713,7 @@ export default {
 
                 .table {
                     background: white;
-                    
+                    margin-bottom: 0!important;
                     tbody {
 
                         tr {
@@ -545,9 +731,71 @@ export default {
                             th {
                                 cursor: pointer;
 
+                                .account-closed {
+                                    color: lightgray;
+                                    font-size: .8rem;
+                                }
+
                                 &:hover {
                                     background: lightgray;
                                 }
+                            }
+
+                        }
+                    }
+                }
+
+                .selected-account-footer {
+                    background: rgb(235, 235, 235);
+                    border-radius: 0 0 5px 5px;
+                    padding: 10px;
+                    display: flex;
+                    justify-content: space-between;
+
+                    .selected-account-legend {
+                        display: flex;
+                        align-self: center;
+
+                        .text {
+                            padding: 0 10px;
+                            color: rgb(156, 156, 156);
+
+                        }
+                        i {
+                            align-self: center;
+                        }
+
+                        span {
+                            font-weight: bold;
+                        }
+
+                        .fa-times {
+                            margin-top: 4px;
+                        }
+                    }
+
+                    .selected-account-footer-btns {
+
+                        button {
+                            border: none;
+                            font-weight: bold;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            padding: 5px 10px;
+                            margin: 0 10px;
+                            background: white;
+
+                            &:hover {
+                                box-shadow: 0 0 5px 0 rgba(0,0,0,.250);
+                                color: #0077ff;
+                            }
+
+                            &:hover:nth-of-type(even) {
+                                color: red;
+                            }
+
+                            &:hover:last-of-type {
+                                color: red;
                             }
                         }
                     }
@@ -568,8 +816,32 @@ box-sizing: border-box;
     
     .edit-account-row-body-content {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     width: 100%;
+
+    .edit-row-instructions {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        padding: 0 20px;
+
+        ul {
+            margin: 0;
+            padding: 0;
+
+            li {
+                display: flex;
+                flex-direction: column;
+                text-align: left;
+                margin-bottom: 5px;
+
+
+                small {
+                    padding-left: 8px;
+                }
+            }
+        }
+    }
 
     .edit-row-btns {
         align-self: center;

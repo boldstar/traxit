@@ -487,8 +487,8 @@ export default {
             this.accountID = null
         },
         saveEditChanges() {
-            this.startDate ? this.selectedAccount.account_start_date = this.startDate : null
-            this.closeDate ? this.selectedAccount.account_close_date = this.closeDate : null
+            this.startDate ? this.selectedAccount.account_start_date = this.startDate : this.selectedAccount.account_start_date = null
+            this.closeDate ? this.selectedAccount.account_close_date = this.closeDate : this.selectedAccount.account_close_date = null
             this.$store.dispatch('updateBookkeepingAccount', this.selectedAccount)
             this.showEditRow = false
             this.accountID = null

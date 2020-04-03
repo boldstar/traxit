@@ -1,7 +1,7 @@
 <template>
     <b-modal v-model="modal" centered hide-footer title="Confirm Delete Request">
         <span v-if="deleteModalDetails && deleteModalDetails.name">
-            Are you sure you would like to <strong>delete {{deleteModalDetails.name}}</strong>?
+            Are you sure you would like to <strong><br>delete {{deleteModalDetails.name}}</strong>?
         </span>
         <span v-else>
             Are you sure you would like to delete the resource?

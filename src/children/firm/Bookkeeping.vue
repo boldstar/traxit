@@ -10,7 +10,7 @@
                     <button :class="{'selected': showBusinessList}" @click="show('businesses')">Business</button>
                 </div>
                 <ul class="bookkeeping-list-body">
-                    <li v-if="activeAccounts && activeAccounts.length < 1 && showActive"><p class="font-weight-bold m-3">There are currently no accounts being tracked.</p><small>Start by selecting contact or business tab and choose the name of the account you would like to start tracking.</small></li>
+                    <li v-if="activeAccounts && activeAccounts.length < 1 && showActive"><p class="font-weight-bold m-3">There are currently no accounts being tracked.</p><small>Start by selecting contact or business tab and choose the name of the account you would like to start tracking. <br>Next click the "Add Account" button to start tracking.</small></li>
                     <li v-if="activeAccounts && activeAccounts.length >= 1 && showActive"><p class="font-weight-bold">A list of active accounts being tracked.</p></li>
                     <li class="bookkeeping-list-item" :class="{'selected-item': account.id == selectedID && account.belongs_to == belongsToActive && account.name == selectedName}" v-for="(account, index) in activeAccounts" :key="'current' + `${index}`" v-show="showActive && activeAccounts.length > 0" @click="changeSelectedItem(account.id, account.belongs_to, account.name)">
                         <span>{{ account.name }}</span>
@@ -40,7 +40,7 @@
                         <select name="tax_year" id="tax_year" v-model="selectedYear">
                             <option v-for="(year, index) in selectedAccountYears" :key="index" :value="year">{{year}}</option>
                         </select>
-                        <div class="selected-account-btns">
+                        <div class="selected-account-btns" v-if="filteredAccountName">
                             <button @click="addAccountRequest">Add Account</button>
                         </div>
                         <div class="selected-account-btns" v-if="mostRescentYear">
@@ -493,18 +493,6 @@ export default {
             this.showEditRow = false
             this.accountID = null
         },
-        dataLoaded(key) {
-            this.loaded.push(key)
-            if(this.loaded.includes('accounts') && this.loaded.includes('clients')) {
-                this.loadingData = false
-                this.belongsTo = 'active'
-                if(this.activeAccounts && this.activeAccounts.length > 0) {
-                    this.selectedID = this.activeAccounts[0].id
-                    this.belongsToActive = this.activeAccounts[0].belongs_to
-                    this.selectedName = this.activeAccounts[0].name
-                }
-            }
-        },
         startNewYear() {
             const id = this.selectedID
             const belongs_to = this.belongsTo
@@ -537,6 +525,18 @@ export default {
                 }
             } return false
         },
+        dataLoaded(key) {
+            this.loaded.push(key)
+            if(this.loaded.includes('accounts') && this.loaded.includes('clients') && this.loaded.includes('businesses')) {
+                this.loadingData = false
+                this.belongsTo = 'active'
+                if(this.activeAccounts && this.activeAccounts.length > 0) {
+                    this.selectedID = this.activeAccounts[0].id
+                    this.belongsToActive = this.activeAccounts[0].belongs_to
+                    this.selectedName = this.activeAccounts[0].name
+                }
+            }
+        },
     },
     watch: {
         'allClients': function(value) {
@@ -547,6 +547,11 @@ export default {
         'bookkeepingAccounts': function(value) {
             if(!this.loaded.includes('accounts') && value) {
                 this.dataLoaded('accounts')
+            }
+        },
+        'businessList': function(value) {
+            if(!this.loaded.includes('businesses') && value && value.length > 0) {
+                this.dataLoaded('businesses')
             }
         }
     },

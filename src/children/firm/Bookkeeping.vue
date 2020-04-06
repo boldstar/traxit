@@ -27,7 +27,6 @@
                 <div class="text-left mb-2 d-flex flex-column">
                     <h5 class="mb-0">Bookkeeping Accounts</h5>
                     <span class="text-secondary font-weight-bold">A list of accounts filtered by year for the selected contact or business.</span>
-                    <small>Click the box for the month complete. A check mark will represent completion. <strong>To uncheck simply reclick the box.</strong></small>
                 </div>
                 <div class="text-left"  v-if="error && errorMsg">
                     <p class="text-danger font-weight-bold">{{errorMsg}} <button class="error-close-btn" @click="error = false">X</button></p>
@@ -215,7 +214,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div class="selected-account-footer">
+                    <div class="selected-account-footer mb-3">
                         <div class="selected-account-legend">
                             <div class="selected-account-legend-item">
                                 <span class="text">Completed: </span>
@@ -230,14 +229,26 @@
                                 <span>CLSD</span>
                             </div>
                         </div>
-                        <div class="selected-account-footer-btns">
+                        <div class="selected-account-footer-btns" v-if="$can('delete', admin)">
                             <button @click="requestDeleteYear">Remove {{selectedYear}}</button>
                             <button @click="requestDeleteAllAccounts">Delete All Accounts<i class="fas fa-trash ml-2"></i></button>
                         </div>
                     </div>
                 </div>
+
+                <BookkeepingEngagements 
+                    :client_id="selectedID" 
+                    :business_name="selectedName" 
+                    :allEngagements="allEngagements"
+                    :selected_year="selectedYear"
+                    v-if="accounts && accounts.length > 0" 
+                />
             </div>
-            <AddAccountModal v-if="addAccountModal" @submit-form="addAccount" @close-modal="$store.commit('TOGGLE_ACCOUNT_MODAL')"/>
+            <AddAccountModal 
+                v-if="addAccountModal" 
+                @submit-form="addAccount" 
+                @close-modal="$store.commit('TOGGLE_ACCOUNT_MODAL')"
+            />
         </div>
   </div>
 </template>
@@ -249,10 +260,11 @@ import {getCloseDate, getStartDate} from '../../plugins/bookkeeping'
 import AddAccountModal from '@/components/firm/AddAccountModal.vue'
 import Spinner from '@/components/loaders/Spinner.vue'
 import ProcessingBar from '@/components/loaders/ProcessingBar.vue'
+import BookkeepingEngagements from '@/components/firm/BookkeepingEngagements.vue'
 export default {
     name: 'Bookkeeping',
-    props: ['admin'],
-    components: {AddAccountModal,Spinner,ProcessingBar},
+    props: ['admin', 'allEngagements'],
+    components: {AddAccountModal,Spinner,ProcessingBar,BookkeepingEngagements},
     data() {
         return {
             showActive: false,
@@ -402,7 +414,7 @@ export default {
         },
         contactName(client) {
             if(client.has_spouse) {
-                return client.spouse_last_name ? client.last_name + ' , ' + client.first_name + ' & ' +  client.spouse_last_name + ' , ' + client.spouse_first_name : client.last_name + ' , ' + client.first_name + ' & ' + client.spouse_first_name
+                return client.spouse_last_name != client.last_name ? client.last_name + ', ' + client.first_name + ' & ' +  client.spouse_last_name + ', ' + client.spouse_first_name : client.last_name + ', ' + client.first_name + ' & ' + client.spouse_first_name
             }
             return client.last_name + ' , ' + client.first_name 
         },

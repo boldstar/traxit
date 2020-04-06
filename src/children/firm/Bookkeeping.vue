@@ -10,7 +10,7 @@
                     <button :class="{'selected': showBusinessList}" @click="show('businesses')">Business</button>
                 </div>
                 <ul class="bookkeeping-list-body">
-                    <li v-if="activeAccounts && activeAccounts.length < 1 && showActive"><p class="font-weight-bold m-3">There are currently no accounts being tracked.</p><small>Start by selecting contact or business tab and choose the name of the account you would like to start tracking.</small></li>
+                    <li v-if="activeAccounts && activeAccounts.length < 1 && showActive"><p class="font-weight-bold m-3">There are currently no accounts being tracked.</p><small>Start by selecting contact or business tab and choose the name of the account you would like to start tracking. <br>Next click the "Add Account" button to start tracking.</small></li>
                     <li v-if="activeAccounts && activeAccounts.length >= 1 && showActive"><p class="font-weight-bold">A list of active accounts being tracked.</p></li>
                     <li class="bookkeeping-list-item" :class="{'selected-item': account.id == selectedID && account.belongs_to == belongsToActive && account.name == selectedName}" v-for="(account, index) in activeAccounts" :key="'current' + `${index}`" v-show="showActive && activeAccounts.length > 0" @click="changeSelectedItem(account.id, account.belongs_to, account.name)">
                         <span>{{ account.name }}</span>
@@ -27,7 +27,6 @@
                 <div class="text-left mb-2 d-flex flex-column">
                     <h5 class="mb-0">Bookkeeping Accounts</h5>
                     <span class="text-secondary font-weight-bold">A list of accounts filtered by year for the selected contact or business.</span>
-                    <small>Click the box for the month complete. A check mark will represent completion. <strong>To uncheck simply reclick the box.</strong></small>
                 </div>
                 <div class="text-left"  v-if="error && errorMsg">
                     <p class="text-danger font-weight-bold">{{errorMsg}} <button class="error-close-btn" @click="error = false">X</button></p>
@@ -40,7 +39,7 @@
                         <select name="tax_year" id="tax_year" v-model="selectedYear">
                             <option v-for="(year, index) in selectedAccountYears" :key="index" :value="year">{{year}}</option>
                         </select>
-                        <div class="selected-account-btns">
+                        <div class="selected-account-btns" v-if="filteredAccountName">
                             <button @click="addAccountRequest">Add Account</button>
                         </div>
                         <div class="selected-account-btns" v-if="mostRescentYear">
@@ -215,7 +214,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div class="selected-account-footer">
+                    <div class="selected-account-footer mb-3">
                         <div class="selected-account-legend">
                             <div class="selected-account-legend-item">
                                 <span class="text">Completed: </span>
@@ -230,14 +229,26 @@
                                 <span>CLSD</span>
                             </div>
                         </div>
-                        <div class="selected-account-footer-btns">
+                        <div class="selected-account-footer-btns" v-if="$can('delete', admin)">
                             <button @click="requestDeleteYear">Remove {{selectedYear}}</button>
                             <button @click="requestDeleteAllAccounts">Delete All Accounts<i class="fas fa-trash ml-2"></i></button>
                         </div>
                     </div>
                 </div>
+
+                <BookkeepingEngagements 
+                    :client_id="selectedID" 
+                    :business_name="selectedName" 
+                    :allEngagements="allEngagements"
+                    :selected_year="selectedYear"
+                    v-if="accounts && accounts.length > 0" 
+                />
             </div>
-            <AddAccountModal v-if="addAccountModal" @submit-form="addAccount" @close-modal="$store.commit('TOGGLE_ACCOUNT_MODAL')"/>
+            <AddAccountModal 
+                v-if="addAccountModal" 
+                @submit-form="addAccount" 
+                @close-modal="$store.commit('TOGGLE_ACCOUNT_MODAL')"
+            />
         </div>
   </div>
 </template>
@@ -249,10 +260,11 @@ import {getCloseDate, getStartDate} from '../../plugins/bookkeeping'
 import AddAccountModal from '@/components/firm/AddAccountModal.vue'
 import Spinner from '@/components/loaders/Spinner.vue'
 import ProcessingBar from '@/components/loaders/ProcessingBar.vue'
+import BookkeepingEngagements from '@/components/firm/BookkeepingEngagements.vue'
 export default {
     name: 'Bookkeeping',
-    props: ['admin'],
-    components: {AddAccountModal,Spinner,ProcessingBar},
+    props: ['admin', 'allEngagements'],
+    components: {AddAccountModal,Spinner,ProcessingBar,BookkeepingEngagements},
     data() {
         return {
             showActive: false,
@@ -402,7 +414,7 @@ export default {
         },
         contactName(client) {
             if(client.has_spouse) {
-                return client.spouse_last_name ? client.last_name + ' , ' + client.first_name + ' & ' +  client.spouse_last_name + ' , ' + client.spouse_first_name : client.last_name + ' , ' + client.first_name + ' & ' + client.spouse_first_name
+                return client.spouse_last_name != client.last_name ? client.last_name + ', ' + client.first_name + ' & ' +  client.spouse_last_name + ', ' + client.spouse_first_name : client.last_name + ', ' + client.first_name + ' & ' + client.spouse_first_name
             }
             return client.last_name + ' , ' + client.first_name 
         },
@@ -493,18 +505,6 @@ export default {
             this.showEditRow = false
             this.accountID = null
         },
-        dataLoaded(key) {
-            this.loaded.push(key)
-            if(this.loaded.includes('accounts') && this.loaded.includes('clients')) {
-                this.loadingData = false
-                this.belongsTo = 'active'
-                if(this.activeAccounts && this.activeAccounts.length > 0) {
-                    this.selectedID = this.activeAccounts[0].id
-                    this.belongsToActive = this.activeAccounts[0].belongs_to
-                    this.selectedName = this.activeAccounts[0].name
-                }
-            }
-        },
         startNewYear() {
             const id = this.selectedID
             const belongs_to = this.belongsTo
@@ -537,6 +537,18 @@ export default {
                 }
             } return false
         },
+        dataLoaded(key) {
+            this.loaded.push(key)
+            if(this.loaded.includes('accounts') && this.loaded.includes('clients') && this.loaded.includes('businesses')) {
+                this.loadingData = false
+                this.belongsTo = 'active'
+                if(this.activeAccounts && this.activeAccounts.length > 0) {
+                    this.selectedID = this.activeAccounts[0].id
+                    this.belongsToActive = this.activeAccounts[0].belongs_to
+                    this.selectedName = this.activeAccounts[0].name
+                }
+            }
+        },
     },
     watch: {
         'allClients': function(value) {
@@ -547,6 +559,11 @@ export default {
         'bookkeepingAccounts': function(value) {
             if(!this.loaded.includes('accounts') && value) {
                 this.dataLoaded('accounts')
+            }
+        },
+        'businessList': function(value) {
+            if(!this.loaded.includes('businesses') && value && value.length > 0) {
+                this.dataLoaded('businesses')
             }
         }
     },

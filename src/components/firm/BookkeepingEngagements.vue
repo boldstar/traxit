@@ -55,7 +55,7 @@
                 </tbody>
                 <tbody v-else>
                     <tr>
-                        <td class="font-weight-bold" colspan=9>There Are Currently No Active Engagements.</td>
+                        <td class="font-weight-bold" colspan=9>There are currently no active engagements.</td>
                     </tr>
                 </tbody>
             </table>

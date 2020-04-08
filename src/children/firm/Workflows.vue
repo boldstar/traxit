@@ -377,16 +377,16 @@ export default {
             this.engagementId = null
         },
         saveEditChanges() {
-        this.updateCheckedEngagements({
-            engagements: [this.engagementId],
-            assigned_to: this.users.filter(user => user.name == this.selectedEngagement.assigned_to)[0].id,
-            status: this.selectedEngagement.status,
-            due_date: this.dueDate,
-            priority: this.selectedEngagement.priority
-        }).then(() => {
-            this.showEditRow = false
-            this.engagementId = null
-        }) 
+          this.updateCheckedEngagements({
+              engagements: [this.engagementId],
+              assigned_to: this.users.filter(user => user.name == this.selectedEngagement.assigned_to)[0].id,
+              status: this.selectedEngagement.status,
+              due_date: this.dueDate,
+              priority: this.selectedEngagement.priority
+          }).then(() => {
+              this.showEditRow = false
+              this.engagementId = null
+          }) 
         },
         priorityDesc(priority) {
             if(priority > 0) {

@@ -114,13 +114,14 @@ export default {
 
         label {
             position: absolute;
-            top: -15px;
+            top: -13px;
             left: 10px;
             background: white;
-            padding: 5px 10px;
+            padding: 0 10px;
             z-index: 2;
             white-space: nowrap!important;
             font-weight: bold;
+            margin: 0;
         }
 
         span {

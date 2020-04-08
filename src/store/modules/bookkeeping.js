@@ -31,12 +31,15 @@ export default {
             const index = state.bookkeeping_accounts.findIndex(acct => acct.id == data.id)
             state.bookkeeping_accounts.splice(index, 1, data)
         },
+        UPDATE_BOOKKEEPING_ACCOUNT_NAMES(state, data) {
+            data.forEach(newAcct => {
+                const update = state.bookkeeping_accounts.find(acct => acct.id === newAcct.id);
+                Object.assign(update, newAcct, null) 
+            })
+        },
         DELETE_BOOKKEEPING_ACCOUNT(state, id) {
             const index = state.bookkeeping_accounts.findIndex(acct => acct.id == id)
             state.bookkeeping_accounts.splice(index, 1)
-        },
-        DELETE_ALL_BOOKKEEPING_ACCOUNTS(state, data) {
-
         },
         TOGGLE_ACCOUNT_MODAL(state) {
             state.account_modal = !state.account_modal
@@ -77,7 +80,7 @@ export default {
             }).then(response => {
                 context.commit('stopProcessing')
                 context.commit('UPDATE_BOOKKEEPING_MONTH', response.data)
-                context.commit('successAlert', 'Bookkeeping Accout Updated')
+                context.commit('successAlert', 'Bookkeeping Account Updated')
             }).catch(error => {
                 console.log(error.response.data)
                 context.commit('stopProcessing')
@@ -96,6 +99,24 @@ export default {
                 console.log(error.response.data)
                 context.commit('stopProcessing')
                 context.commit('errorMsgAlert', 'Error')
+            })
+        },
+        updateBookkeepingAccountName(context, account) {
+            context.commit('successAlert', null)
+            context.commit('startProcessing')
+            return new Promise((resolve, reject) => {
+                axios.post('/bookkeeping-account-name', account)
+                .then(response => {
+                    context.commit('UPDATE_BOOKKEEPING_ACCOUNT_NAMES', response.data)
+                    context.commit('successAlert', 'Bookkeeping Accounts Updated')
+                    context.commit('stopProcessing')
+                    resolve(response)
+                }).catch(error => {
+                    console.log(error.response.data)
+                    context.commit('stopProcessing')
+                    context.commit('errorMsgAlert', 'Error')
+                    reject(error)
+                })
             })
         },
         startNewBookkeepingAccountYear(context, data) {

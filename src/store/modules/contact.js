@@ -4,7 +4,7 @@ import router from '../../routes/router'
 
 export default {
     state: {
-        client: [],
+        client: null,
         clients: [],
         dependent: {
             first_name: '', 
@@ -122,8 +122,12 @@ export default {
             state.client.businesses.splice(index, 1)
         },
         updateBusiness(state, business) {
-            const index = state.client.businesses.findIndex(item => item.id == business.id)
-            state.client.businesses.splice(index, 1, business)
+            if(state.client) {
+                const index = state.client.businesses.findIndex(item => item.id == business.id)
+                state.client.businesses.splice(index, 1, business)
+            } else if(state.business) {
+                state.business = business
+            }
         },
         getDependent(state, dependent){
             if(dependent) {

@@ -3,7 +3,13 @@
         <div class="teamoverview-overview">
             <div class="teamoverview-body"  v-if="allEngagements && allEngagements.length > 0">
                 <div class="teamoverview-sidebar">
+                    <div class="teamoverview-sidebar-header">
+                        <span>Team Members</span>
+                    </div>
                     <ul class="teamoverview-sidebar-body">
+                        <li class="teamoverview-sidebar-hint">
+                            <span>Choose team member to view in progress and assigned tasks or today's history</span>
+                        </li>
                         <li class="teamoverview-sidebar-item" v-for="user in filteredUsers" :key="user.id" :class="{'selected-item': selectedUser.id == user.id}" @click="selectedUser = user">
                             <div class="teamoverview-sidebar-item-body">
                                 <span>{{user.name}}</span>
@@ -16,6 +22,7 @@
                    <SelectedUserTasks
                     :tasks="currentTasks"
                     :user="selectedUser"
+                    :workflows="allWorkflows"
                    />
                 </div>
             </div>
@@ -79,10 +86,28 @@ export default {
                     border-radius: 5px;
                     align-self: flex-start;
 
+                    .teamoverview-sidebar-header {
+                        background: rgb(236, 236, 236);
+                        padding: 10px 0;
+
+
+                        span {
+                            font-weight: bold;
+                            font-size: 1.2rem;
+                        }
+                    }
+
                     ul {
                         list-style: none;
                         margin: 0;
                         padding: 15px;
+
+                        .teamoverview-sidebar-hint {
+                            padding-top: 0;
+                            font-weight: bold;
+                            color: rgb(148, 148, 148);
+                            font-size: .9rem;
+                        }
 
                         li {
                             padding: 13px;

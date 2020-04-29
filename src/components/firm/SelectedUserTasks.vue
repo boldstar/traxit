@@ -27,27 +27,33 @@
 
 <script>
 import TeamUserTable from '@/components/firm/TeamUserTable.vue'
+import levels from '../../plugins/levels'
 import {mapGetters} from 'vuex'
 export default {
     name: 'SelectedUserTasks',
-    props: ['tasks', 'user'],
+    props: ['tasks', 'user', 'workflows'],
     components: {TeamUserTable},
+    data() {
+        return {
+            priority_levels: levels.priority_levels
+        }
+    },
     computed: {
         ...mapGetters(['userHistory']),
         in_progress() {
             return this.tasks.filter(task => task.in_progress).map(task => ({
                 value_one: task.name,
-                value_two: task.workflow_id,
+                value_two: this.workflows.filter(w => w.id == task.workflow_id)[0].workflow,
                 value_three: task.status,
-                value_four: task.priority
+                value_four: this.priority_levels.filter(l => l.level == task.priority)[0].value
             }))
         },
         assigned() {
             return this.tasks.map(task => ({
                 value_one: task.name,
-                value_two: task.workflow_id,
+                value_two: this.workflows.filter(w => w.id == task.workflow_id)[0].workflow,
                 value_three: task.status,
-                value_four: task.priority
+                value_four: task.priority > 0 ? this.priority_levels.filter(l => l.level == task.priority)[0].value : 'None'
             }))
         },
         history() {

@@ -5,12 +5,19 @@
               <th v-for="(header, index) in headers" :key="index">{{header}}</th>
           </tr>
       </thead>
-      <tbody>
+      <tbody v-if="list && list.length > 0">
           <tr v-for="(item, index) in list" :key="index">
               <th>{{item.value_one}}</th>
               <th>{{item.value_two}}</th>
               <th>{{item.value_three}}</th>
               <th>{{item.value_four}}</th>
+          </tr>
+      </tbody>
+      <tbody v-else>
+          <tr>
+              <td colspan="4" class="text-center">
+                  <span>There is zero items to list.</span>
+              </td>
           </tr>
       </tbody>
   </table>

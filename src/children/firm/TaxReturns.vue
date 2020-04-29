@@ -3,7 +3,13 @@
         <div class="taxreturns-overview">
             <div class="taxreturns-body"  v-if="allWorkflows && allWorkflows.length > 0">
                 <div class="taxreturns-sidebar" v-if="allWorkflows && allWorkflows.length > 0">
+                    <div class="taxreturns-sidebar-header">
+                        <span>Tax Returns</span>
+                    </div>
                     <ul class="taxreturns-sidebar-body">
+                        <li class="taxreturns-sidebar-hint">
+                            <span>Choose item to filter tax returns by engagement state.</span>
+                        </li>
                         <li class="taxreturns-sidebar-item" :class="{'selected-item': itemFilter == 'Pending'}" @click="changeItem('Pending')">
                             <div class="taxreturns-sidebar-item-body">
                                 <span>Pending</span>
@@ -123,10 +129,28 @@ export default {
                     border-radius: 5px;
                     align-self: flex-start;
 
+                    .taxreturns-sidebar-header {
+                        background: rgb(236, 236, 236);
+                        padding: 10px 0;
+
+
+                        span {
+                            font-weight: bold;
+                            font-size: 1.2rem;
+                        }
+                    }
+
                     ul {
                         list-style: none;
                         margin: 0;
                         padding: 15px;
+
+                        .taxreturns-sidebar-hint {
+                            padding-top: 0;
+                            font-weight: bold;
+                            color: rgb(148, 148, 148);
+                            font-size: .9rem;
+                        }
 
                         li {
                             padding: 13px;

@@ -1,20 +1,29 @@
 <template>
   <div class="selected-user-tasks">
-      <h5>In Progress</h5>
+      <div class="d-flex">
+        <h5>In Progress</h5>
+        <span class="badge bg-white ml-3 px-3 border">{{in_progress.length}}</span>
+      </div>
       <span class="text-secondary">A list of the tasks or engagements in progress by the user.</span>
       <TeamUserTable 
         :title="'In Progress'"
         :list="in_progress"
         :headers="['Name', 'Workflow', 'Task', 'Priority']"
       />
-      <h5>Assigned</h5>
+      <div class="d-flex">
+        <h5>Assigned</h5>
+        <span class="badge bg-white ml-3 px-3 border">{{assigned.length}}</span>
+      </div>
       <span class="text-secondary">A list of the currently assigned tasks for the selected user.</span>
       <TeamUserTable 
         :title="'Assigned'"
         :list="assigned" 
         :headers="['Name', 'Workflow', 'Task', 'Priority']"
       />
-      <h5>Todays History</h5>
+      <div class="d-flex">
+        <h5>Todays History</h5>
+        <span class="badge bg-white ml-3 px-3 border">{{history.length}}</span>
+      </div>
       <span class="text-secondary">A list of todays history for the user.</span>
       <TeamUserTable
         :title="'History'"

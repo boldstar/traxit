@@ -134,7 +134,7 @@
           <div class="d-flex p-2 custom-control custom-checkbox">
             <input type="checkbox" v-model="engagement.paid" class="custom-control-input" id="customPaidCheck">
             <label class="custom-control-label ml-3 align-self-start" for="customPaidCheck"></label>
-            <span class="mr-3 font-weight-bold mb-1">Engagement Paid</span>
+            <span class="mr-3 font-weight-bold mb-1">Invoice Paid</span>
           </div>
           <div class="d-flex p-2 custom-control custom-checkbox">
             <input type="checkbox" v-model="engagement.done" class="custom-control-input" id="customCompleteCheck">

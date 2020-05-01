@@ -45,6 +45,20 @@
                         <div class="selected-account-btns" v-if="mostRescentYear">
                             <button @click="startNewYear">Start New Year For {{JSON.parse(selectedYear) + 1}} <i class="far fa-calendar-alt ml-2"></i></button>
                         </div>
+                        <div class="selected-account-btns" v-if="filteredAccountName  && showActive">
+                            <button @click="showEditSelectedName">Edit</button>
+                        </div>
+                    </div>
+                    <div class="selected-account-header-edit" v-if="editSelectedName && showActive">
+                        <div class="custom-input-group text-left">
+                            <span class="text-capitalize">Name</span>
+                            <input type="text" v-model="nameToEdit" placeholder="Name">
+                        </div>
+                        <div class="selected-account-header-btns">
+                            <small class="mr-3 font-weight-bold text-secondary">This change does not effect the <br/> Contact or Business the account is created for.</small>
+                            <button class="btn btn-sm text-primary" @click="updateSelectedName">Save Changes</button>
+                            <button class="btn btn-sm text-secondary" @click="editSelectedName = false">Cancel</button>
+                        </div>
                     </div>
                     <table class="table table-bordered" ref="account-table">
                         <thead>
@@ -197,7 +211,7 @@
                                                 </li>
                                                 <li>
                                                     <div><strong>Closing Date: </strong>Not Required</div>
-                                                    <small>The date the account was open. If date is selected the fields after that date will be marked.</small>
+                                                    <small>The date the account was closed. If date is selected the fields after that date will be marked.</small>
                                                     <small>To remove simply delete the date and save your changes.</small>
                                                 </li>
                                             </ul>
@@ -238,9 +252,11 @@
 
                 <BookkeepingEngagements 
                     :client_id="selectedID" 
-                    :business_name="selectedName" 
+                    :business_name="filteredAccountName" 
                     :allEngagements="allEngagements"
                     :selected_year="selectedYear"
+                    :users="users"
+                    :workflows="allWorkflows"
                     v-if="accounts && accounts.length > 0" 
                 />
             </div>
@@ -263,13 +279,14 @@ import ProcessingBar from '@/components/loaders/ProcessingBar.vue'
 import BookkeepingEngagements from '@/components/firm/BookkeepingEngagements.vue'
 export default {
     name: 'Bookkeeping',
-    props: ['admin', 'allEngagements'],
+    props: ['admin', 'allEngagements', 'users', 'allWorkflows'],
     components: {AddAccountModal,Spinner,ProcessingBar,BookkeepingEngagements},
     data() {
         return {
             showActive: false,
             showContacts: false,
             showBusinessList: false,
+            editSelectedName: false,
             selectedID: null,
             selectedName: null,
             loadingData: false,
@@ -284,7 +301,8 @@ export default {
             startDate: null,
             closeDate: null,
             error: false,
-            errorMsg: ''
+            errorMsg: '',
+            nameToEdit: null
         }
     },
     computed: {
@@ -336,11 +354,15 @@ export default {
             }
         },
         filteredAccountName() {
-            if(this.showContacts || this.belongsToActive == 'contact') {
-                return this.contactName(this.allClients.filter(client => client.id == this.selectedID)[0])
-            } else if (this.showBusinessList || this.belongsToActive == 'business') {
-                return this.businessName(this.businessList.filter(business => business.client_id === this.selectedID && business.business_name == this.selectedName)[0])
-            } else return
+            if(this.accounts && this.accounts.length > 0) {
+                return this.accounts[0].business_name
+            } else {
+                if(this.showContacts || this.belongsToActive == 'contact') {
+                    return this.contactName(this.allClients.filter(client => client.id == this.selectedID)[0])
+                } else if (this.showBusinessList || this.belongsToActive == 'business') {
+                    return this.businessName(this.businessList.filter(business => business.client_id === this.selectedID && business.business_name == this.selectedName)[0])
+                } else return
+            } return
         },
         selectedAccount() {
             return this.bookkeepingAccounts.filter(account => account.id === this.accountID)[0]
@@ -412,6 +434,19 @@ export default {
             else if(account.account_start_date && getStartDate(mth, this.selectedYear, account.account_start_date)) return false;
             else return true;
         },
+        updateSelectedName() {
+            const id = this.selectedID
+            const name = this.nameToEdit
+            this.$store.dispatch('updateBookkeepingAccountName', {
+                client_id: this.selectedID,
+                old_name: this.selectedName,
+                name: this.nameToEdit
+            }).then(response => {
+                this.selectedID = id
+                this.selectedName = name
+                this.editSelectedName = false
+            })
+        },
         contactName(client) {
             if(client.has_spouse) {
                 return client.spouse_last_name != client.last_name ? client.last_name + ', ' + client.first_name + ' & ' +  client.spouse_last_name + ', ' + client.spouse_first_name : client.last_name + ', ' + client.first_name + ' & ' + client.spouse_first_name
@@ -425,6 +460,7 @@ export default {
         },
         show(list) {
             this.search = ''
+            this.editSelectedName = false
             if(list == 'active') {
                 this.showActive = true
                 this.showContacts = false
@@ -451,6 +487,10 @@ export default {
                 this.belongsTo = 'business'
             }
             return
+        },
+        showEditSelectedName() {
+            this.editSelectedName = true
+            this.nameToEdit = this.selectedName
         },
         addAccount(data) {
             this.$store.dispatch('addBookkeepingAccount', {
@@ -484,6 +524,7 @@ export default {
             } else return 'None'
         },
         editAccountRow(index, id) {
+            this.editSelectedName = false
             this.showEditRow = true
             this.accountID = id
             const toIndex = this.$refs['account-row' + index][0].rowIndex
@@ -725,6 +766,28 @@ export default {
                                 background: lightgray;
                             }
                         }   
+                    }
+                }
+
+                .selected-account-header-edit {
+                    border: 1px solid lightgray;
+                    display: flex;
+                    justify-content: space-between;
+
+                    .selected-account-header-btns {
+                        align-self: center;
+                        display: flex;
+                        margin-left: 10px;
+
+                        button {
+                            text-decoration: none;
+                            margin: 0 8px;
+                            background: white;
+                            color: black;
+                            font-weight: bold;
+                            box-shadow: 0 0 5px 0 rgba(0,0,0,.250);
+                            cursor: pointer;
+                        }
                     }
                 }
 

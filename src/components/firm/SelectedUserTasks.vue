@@ -54,7 +54,7 @@ export default {
                 value_one: task.name,
                 value_two: this.workflows.filter(w => w.id == task.workflow_id)[0].workflow,
                 value_three: task.status,
-                value_four: this.priority_levels.filter(l => l.level == task.priority)[0].value
+                value_four: task.priority > 0 ? this.priority_levels.filter(l => l.level == task.priority)[0].value : 'None'
             }))
         },
         assigned() {

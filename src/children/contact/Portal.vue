@@ -1,11 +1,12 @@
 <template>
-    <div class="portal">
-        <div class="header p-0 d-flex flex-row justify-content-between mt-2 shadow-sm mb-3 bg-white">
-            <div class="ml-3 pr-2  h3 align-self-center m-0">
-                <span>Portal</span>
+    <div class="contact-portal">
+        <div class="contact-portal-header">
+            <div>
+                <h5>Contact Portal</h5>
+                <p>A portal to share documents with the selected contact</p>
             </div>
-            <div class="btn-group dropleft  m-0 align-self-center mr-3 ">
-                <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="mr-2 fas fa-plus-square"></i></button>
+            <div class="btn-group dropleft align-self-center">
+                <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Options</button>
                 <div class="dropdown-menu">
                     <button class="btn dropdown-item font-weight-bold" type="button" @click="$store.commit('portal_upload')"><i class="fas fa-file-upload mr-2 text-success"></i>Share File</button>
                     <div class="dropdown-divider"></div>
@@ -18,9 +19,12 @@
             </div>
         </div>
         <div class="portal-body">
-            <div v-if="!inviteStatus && !loading && portalFiles.length < 1">
-                <FileShareSvg class="mt-5 mb-3" />
-                <button class="btn btn-primary font-weight-bold" @click="inviteContact">Invite Contact</button>
+            <div v-if="!inviteStatus && !loading && portalFiles.length < 1" class="card shadow-sm">
+                <p class="mt-3 font-weight-bold text-secondary">Hint: There is currently no portal setup for this contact. <br> Click "Invite Contact" to send email to either the tax payer, spouse, or both.</p>
+                <FileShareSvg class="m-3" />
+                <div class="p-3">
+                    <button class="btn btn-primary font-weight-bold" @click="inviteContact">Invite Contact</button>
+                </div>
             </div>
             <div v-else-if="portalFiles && portalFiles.length > 0 && !loading">
                 <PortalUploader v-if="portalUpload" @close-uploader="$store.commit('portal_upload')" />
@@ -141,8 +145,25 @@ export default {
 
 <style lang="scss" scoped>
 
-    .header {
-        height: 4em;
+    .contact-portal {
+
+        .contact-portal-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            div {
+                text-align: left;
+
+                h5 {
+                    margin-bottom: 0;
+                }
+
+                p {
+                    margin-bottom: 0;
+                    font-weight: 500;
+                }
+            }
+        }
     }
 
 </style>

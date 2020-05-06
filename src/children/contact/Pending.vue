@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div class="pending">
         <!-- this is the header for the contact engagements with the add engagement button -->
-        <div class="header p-0 d-flex flex-row justify-content-between mt-2 mb-4 shadow-sm bg-white">
-            <div class="ml-3 pr-2  h3 align-self-center m-0">
-                <span><i class="far fa-question-circle text-primary"></i></span> |
-                <span>{{ pendingQuestions.length }}</span>
+        <div class="pending-header">
+            <div>
+                <h5>Pending</h5>
+                <p>A list of the pending questions sent to or noted for the contact</p>
             </div>
         </div>
 
@@ -44,8 +44,8 @@
             </div>
         </div>
 
-        <div v-if="!loading && pendingQuestions.length < 1">
-            <p class="font-weight-bold">There are currently<br> no pending questions</p>
+        <div v-if="!loading && pendingQuestions.length < 1" class="card shadow-sm">
+            <p class="font-weight-bold p-3 mb-0">There are currently no pending questions</p>
         </div>
 
    <!-- this is the modal to update the question -->
@@ -151,9 +151,22 @@ created: function(){
 
 <style lang="scss" scoped>
 
-    .header {
-            height: 4em;
-        }
+   .pending {
+
+       .pending-header {
+           text-align: left;
+           margin-bottom: 10px;
+
+           h5 {
+               margin-bottom: 0;
+           }
+
+           p {
+               margin-bottom: 0;
+               font-weight: 500;
+           }
+       }
+   }
 
     .email-sent-flag {
         border: 1px solid #0077ff;

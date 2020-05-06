@@ -29,6 +29,9 @@
             <li class="list-group-item" v-bind:class="{ 'selected' : $route.name == 'account' }" @click="goTo('account')">
               <router-link :to="{ path: '/contact/' + client.id + '/account' }" class="contact-link" data-toggle="tab" role="tab">Account</router-link>
             </li>
+            <li class="list-group-item" v-bind:class="{ 'selected' : $route.name == 'contact-dependents' }" @click="goTo('contact-dependents')">
+              <router-link  :to="{ path: '/contact/' + client.id +'/contact-dependents' }" class="contact-link" data-toggle="tab" role="tab">Dependents</router-link>
+            </li>
             <li class="list-group-item" v-bind:class="{ 'selected' : $route.name == 'contact-businesses' }" @click="goTo('contact-businesses')">
               <router-link :to="{ path: '/contact/' + client.id +'/contact-businesses' }" class="contact-link" data-toggle="tab" role="tab" >Businesses</router-link>
             </li>
@@ -43,9 +46,6 @@
             </li>
             <li class="list-group-item" v-bind:class="{ 'selected' : $route.name == 'portal' }" @click="goTo('portal')">
               <router-link  :to="{ path: '/contact/' + client.id + '/portal' }" class="contact-link" data-toggle="tab" role="tab">Portal</router-link>
-            </li>
-            <li class="list-group-item" v-bind:class="{ 'selected' : $route.name == 'contact-dependents' }" @click="goTo('contact-dependents')">
-              <router-link  :to="{ path: '/contact/' + client.id +'/contact-dependents' }" class="contact-link" data-toggle="tab" role="tab">Dependents</router-link>
             </li>
             <li class="list-group-item" v-bind:class="{ 'selected' : $route.name == 'contact-settings' }" @click="goTo('contact-settings')">
               <router-link :to="{ path: '/contact/' + client.id +'/contact-settings' }" class="contact-link" data-toggle="tab" role="tab">Settings</router-link>

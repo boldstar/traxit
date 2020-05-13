@@ -5,7 +5,7 @@
             <p>The general information for the selected contact</p>
         </div>
 
-        <div class="contact-card card shadow-sm">
+        <div class="contact-card card shadow-sm" v-if="$route.name == 'account'">
             <h5>Tax Payer</h5>
             <div class="contact-card-content">
                 <ul class="contact-list">
@@ -88,35 +88,16 @@
                     </li>
                 </ul>
             </div>
-            <router-link class="contact-edit-btn" :to="{path: '/contact/' + client.id + '/account/edit'}">Edit Info</router-link>
+            <router-link class="contact-edit-btn" :to="{path: '/contact/' + client.id + '/account/edit'}">Edit Contact</router-link>
         </div>
-        <!-- list of businesses -->
-        <Business :businesses="businesses"  :client="client" />
 
         <!-- this is where the edit contact child view shows up -->
         <router-view></router-view>
-
-         <!-- this is the modal for deleting a dependent
-        <b-modal v-model="modalShow" id="myModal" ref="myModal" hide-footer title="Delete Dependent">
-            <div class="d-block text-left">
-                <h5>Are you sure you want to delete {{dependent.first_name}}?</h5>
-                <br>
-                <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
-            </div>
-            <div class="d-flex">
-                <b-btn class="mt-3" variant="danger" @click="modalShow = false">Cancel</b-btn>
-                <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteDependent(client, dependent.id)">Confirm</b-btn>
-            </div>
-        </b-modal> -->
     </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import bModal from 'bootstrap-vue/es/components/modal/modal'
-import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
-import Business from '@/components/contact/Business'
-
 
 export default {
     name: 'account',
@@ -125,13 +106,6 @@ export default {
             alert: '',
             modalShow: false,
         }
-    },
-     components:{
-        'b-modal': bModal,
-        Business
-    },
-    directives: {
-        'b-modal': bModalDirective
     },
     computed: {
     ...mapGetters(['client']),

@@ -25,15 +25,12 @@
             <div v-if="!notesLoaded">
                 <div v-if="$route.name == 'notes'">
                     <div class="card mb-3 shadow-sm p-0" v-for="(note, index) in clientNotes" :key="index">
-                        <div class="card-header text-left font-weight-bold">
-                            Note:
-                        </div>
                         <div class="card-body text-left">
                             <span v-html="note.note"></span>
                         </div>
-                        <div class="card-footer d-flex justify-content-between">
-                            <router-link :to="'/contact/' + client.id + '/notes/edit-note/' +note.id " class="btn btn-sm btn-primary ml-auto"><i class="far fa-edit mr-2"></i>Edit</router-link>
-                            <button class="btn btn-sm btn-outline-secondary ml-3" @click="modalShow = !modalShow">Delete</button>
+                        <div class="card-footer d-flex justify-content-between note-footer">
+                            <router-link :to="'/contact/' + client.id + '/notes/edit-note/' +note.id " class="btn btn-sm"><i class="far fa-edit mr-2"></i>Edit</router-link>
+                            <button class="btn btn-sm btn-danger ml-3" @click="modalShow = !modalShow">Delete</button>
                         </div>
 
                         <b-modal v-model="modalShow" id="myQuestion" ref="myQuestion" hide-footer title="Delete Question">
@@ -138,6 +135,16 @@ export default {
 
             a {
                 align-self: center;
+                font-weight: bold;
+            }
+        }
+
+
+        .note-footer {
+
+            a {
+                background: rgb(226, 226, 226);
+                color: black;
                 font-weight: bold;
             }
         }

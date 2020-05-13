@@ -34,8 +34,8 @@
                     <input type="text" class="form-control mb-3" v-model="business.state" placeholder="State">
                     <input type="text" class="form-control mb-3" v-model="business.postal_code" placeholder="Postal Code">
                     <input type="email" class="form-control mb-3" v-model="business.email" placeholder="Email">
-                    <number-input class="mb-3" v-model="business.phone_number" :placeholder="'Phone Number'" mask-type="number"></number-input>
-                    <number-input class="mb-3" v-model="business.fax_number" :placeholder="'Fax Number'" mask-type="number"></number-input>
+                    <number-input class="mb-3 form-control" v-model="business.phone_number" :placeholder="'Phone Number'" mask-type="number"></number-input>
+                    <number-input class="mb-3 form-control" v-model="business.fax_number" :placeholder="'Fax Number'" mask-type="number"></number-input>
                 </div>
 
 

@@ -1,6 +1,5 @@
 <template>
-    <input 
-    class="form-control"
+    <input
     :placeholder="placeholder" 
     v-model="addDashes" 
     @blur="handleInputState"

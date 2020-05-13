@@ -6,7 +6,7 @@
 
   <div class="contact-content">
     <div class="contact-content-header">
-      <span class="h4">{{client.last_name}}</span>
+      <span class="h4">{{contactName}}</span>
       <div class="dropdown">
         <button class="btn btn-sm btn-outline-primary dropdown-toggle settings-btn" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-cog mr-2"></i>
@@ -26,28 +26,28 @@
       <div class="d-flex contact-nav-links">
         <div class="col-2 mr-3 pl-0">
           <ul class="list-group contact-sidebar" id="myTab" role="tablist">
-            <li class="list-group-item" v-bind:class="{ 'selected' : $route.name == 'account' }" @click="goTo('account')">
-              <router-link :to="{ path: '/contact/' + client.id + '/account' }" class="contact-link" data-toggle="tab" role="tab">Account</router-link>
+            <li class="list-group-item" v-bind:class="{ 'selected-list-item' : $route.name == 'account' }" @click="goTo('account')">
+              <router-link :to="{ path: '/contact/' + client.id + '/account' }" class="contact-link" data-toggle="tab" role="tab">Contacts</router-link>
             </li>
-            <li class="list-group-item" v-bind:class="{ 'selected' : $route.name == 'contact-dependents' }" @click="goTo('contact-dependents')">
+            <li class="list-group-item" v-bind:class="{ 'selected-list-item' : $route.name == 'contact-dependents' }" @click="goTo('contact-dependents')">
               <router-link  :to="{ path: '/contact/' + client.id +'/contact-dependents' }" class="contact-link" data-toggle="tab" role="tab">Dependents</router-link>
             </li>
-            <li class="list-group-item" v-bind:class="{ 'selected' : $route.name == 'contact-businesses' }" @click="goTo('contact-businesses')">
+            <li class="list-group-item" v-bind:class="{ 'selected-list-item' : $route.name == 'contact-businesses' }" @click="goTo('contact-businesses')">
               <router-link :to="{ path: '/contact/' + client.id +'/contact-businesses' }" class="contact-link" data-toggle="tab" role="tab" >Businesses</router-link>
             </li>
-            <li class="list-group-item" v-bind:class="{ 'selected' : $route.name == 'contact-engagements' }" @click="goTo('engagements')">
+            <li class="list-group-item" v-bind:class="{ 'selected-list-item' : $route.name == 'contact-engagements' }" @click="goTo('engagements')">
               <router-link  :to="{ path: '/contact/' + client.id +'/engagements' }" class="contact-link" data-toggle="tab" role="tab" >Engagements</router-link>
             </li>
-            <li class="list-group-item" v-bind:class="{ 'selected' : $route.name == 'pending' }" @click="goTo('pending')">
+            <li class="list-group-item" v-bind:class="{ 'selected-list-item' : $route.name == 'pending' }" @click="goTo('pending')">
               <router-link  :to="{ path: '/contact/' + client.id + '/pending' }" class="contact-link" data-toggle="tab" role="tab">Pending</router-link>
             </li>
-            <li class="list-group-item" v-bind:class="{ 'selected' : $route.name == 'notes' }" @click="goTo('notes')">
+            <li class="list-group-item" v-bind:class="{ 'selected-list-item' : $route.name == 'notes' }" @click="goTo('notes')">
               <router-link  :to="{ path: '/contact/' + client.id + '/notes' }" class="contact-link" data-toggle="tab" role="tab">Notes</router-link>
             </li>
-            <li class="list-group-item" v-bind:class="{ 'selected' : $route.name == 'portal' }" @click="goTo('portal')">
+            <li class="list-group-item" v-bind:class="{ 'selected-list-item' : $route.name == 'portal' }" @click="goTo('portal')">
               <router-link  :to="{ path: '/contact/' + client.id + '/portal' }" class="contact-link" data-toggle="tab" role="tab">Portal</router-link>
             </li>
-            <li class="list-group-item" v-bind:class="{ 'selected' : $route.name == 'contact-settings' }" @click="goTo('contact-settings')">
+            <li class="list-group-item" v-bind:class="{ 'selected-list-item' : $route.name == 'contact-settings' }" @click="goTo('contact-settings')">
               <router-link :to="{ path: '/contact/' + client.id +'/contact-settings' }" class="contact-link" data-toggle="tab" role="tab">Settings</router-link>
             </li>
           </ul>
@@ -56,7 +56,11 @@
         <div class="tab-content flex-fill" id="myTabContent">   
           <!-- these are the panes for the different tab views -->
           <div class="tab-pane fade show active" role="tabpanel" v-if="client['id']">
-            <router-view  :clientDetails="client"></router-view>
+            <router-view  
+              :clientDetails="client" 
+              :businesses="client.businesses" 
+              :dependents="client.dependents"
+            ></router-view>
           </div>
         </div>
       </div>
@@ -103,10 +107,20 @@ export default {
     ...mapGetters(
         [
           'client',
-          'engagement',
           'successAlert'
         ]
-      )
+      ),
+      contactName() {
+        if(this.client) {
+          if(this.client.spouse_first_name && this.client.spouse_last_name) {
+            return  this.client.last_name + ', ' + this.client.first_name + ' & ' + this.client.spouse_last_name + ', ' + this.client.spouse_first_name
+          } else if (this.client.spouse_first_name) {
+            return  this.client.last_name + ', ' + this.client.first_name + ' & ' +  this.client.spouse_first_name 
+          } else {
+            return this.client.last_name + ', ' + this.client.first_name
+          }
+        }
+      }
   },
   methods: {
     deleteClient(id) {
@@ -135,7 +149,7 @@ export default {
   },
   created: function(){
     this.$store.dispatch('getDetails', this.$route.params.id)
-    }
+  }
 }
 </script>
 
@@ -185,7 +199,7 @@ export default {
     top: 0;
   }
 
-  .selected {
+  .selected-list-item {
     border-left: 3px solid #0077ff;
   }
 

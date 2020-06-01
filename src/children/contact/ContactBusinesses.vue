@@ -6,6 +6,7 @@
               <h5>Contact Businesses</h5>
               <p>A list of the businesses belonging to the contact</p>
           </div>
+          <router-link :to="{path: '/contact/' + clientDetails.id + '/account/business/' + 0}" class="btn btn-sm btn-secondary align-self-center font-weight-bold">Add Business</router-link>
       </div>
 
       <div class="contact-business-content" v-if="businesses.length > 0">
@@ -48,7 +49,7 @@
       </div>
 
       <div class="card shadow-sm p-3 font-weight-bold" v-else>
-          <span>This contact currently has no businesses listed</span>
+          <span>There are currently no businesses listed</span>
       </div>
   </div>
 </template>
@@ -56,7 +57,7 @@
 <script>
 export default {
     name: 'ContactBusinsses',
-    props: ['businesses'],
+    props: ['businesses', 'clientDetails'],
     methods: {
         deleteBusiness(id) {
 

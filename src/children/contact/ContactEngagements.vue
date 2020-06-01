@@ -44,14 +44,12 @@
                         </tr>
                     </tbody>
                 </table> 
+
+                <div v-if="noEngagements & !engagementLoaded && $route.name == 'contact-engagements'" class="mt-3">
+                    <span class="font-weight-bold">This Contact Has No Engagements...</span>
+                </div>
             </div>
 
-            <!-- this will show if there is no engagements only -->
-            <div v-else>
-                <div v-if="noEngagements & !engagementLoaded && $route.name == 'contact-engagements'" class="mt-5">
-                    This Contact Has No Engagements...
-                </div>
-            </div>  
         <!-- this is the loading ring for the engagements -->
         <spinner v-if="engagementLoaded"></spinner>
     </div>

@@ -15,8 +15,8 @@
         </transition>
 
         <!-- this will show if there is no notes only -->
-        <div v-if="noNotes & !notesLoaded" class="card shadow-sm p-3">
-            This Contact Has No Notes
+        <div v-if="noNotes & !notesLoaded && $route.name == 'notes'" class="card shadow-sm p-3">
+            <span class="font-weight-bold">There are currently no notes</span>
         </div>
 
         <!-- this shows if there is notes -->

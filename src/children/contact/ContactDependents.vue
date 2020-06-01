@@ -6,7 +6,7 @@
             <h5>Contact Dependents</h5>
             <p>A list of the dependents belonging to the contact</p>
         </div>
-        <router-link :to="{path: '/contact/' + clientDetails.id + '/add-dependent'}" class="btn btn-sm btn-secondary">Add Dependent</router-link>
+        <router-link :to="{path: '/contact/' + clientDetails.id + '/account/dependent/' + 0}" class="btn btn-sm btn-secondary">Add Dependent</router-link>
     </div>
 
     <div class="contact-dependent-content" v-if="dependents.length > 0">
@@ -90,8 +90,12 @@ export default {
             this.selectedDependent = dependent
         },
         deleteDependent() {
-
-        }
+            this.$store.dispatch('deleteDependent', this.selectedDependent.id)
+            .then(() => {
+                this.modal = false
+                this.$router.push({path: '/contact/' +this.clientDetails.id+ '/account', query: { alert: 'The dependent was succesfully deleted' }})
+            })
+        },
     }
 }
 </script>

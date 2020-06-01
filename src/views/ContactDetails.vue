@@ -4,9 +4,9 @@
 <Alert v-if="alert" v-bind:message="alert" />
 <Alert v-if="successAlert" v-bind:message="successAlert" />
 
-  <div class="contact-content">
+  <div class="contact-content"  v-if="client && client['id'] && !loading">
     <div class="contact-content-header">
-      <span class="h4">{{contactName}}</span>
+      <span class="h4" v-if="client && client.last_name">{{contactName}}</span>
       <div class="dropdown">
         <button class="btn btn-sm btn-outline-primary dropdown-toggle settings-btn" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-cog mr-2"></i>
@@ -24,25 +24,29 @@
 
     <!-- this is the tab links for the different views -->
       <div class="d-flex contact-nav-links">
-        <div class="col-2 mr-3 pl-0">
+        <div class="col-2 mr-3 pl-2">
           <ul class="list-group contact-sidebar" id="myTab" role="tablist">
             <li class="list-group-item" v-bind:class="{ 'selected-list-item' : $route.name == 'account' }" @click="goTo('account')">
               <router-link :to="{ path: '/contact/' + client.id + '/account' }" class="contact-link" data-toggle="tab" role="tab">Contacts</router-link>
             </li>
             <li class="list-group-item" v-bind:class="{ 'selected-list-item' : $route.name == 'contact-dependents' }" @click="goTo('contact-dependents')">
               <router-link  :to="{ path: '/contact/' + client.id +'/contact-dependents' }" class="contact-link" data-toggle="tab" role="tab">Dependents</router-link>
+               <span class="contact-sidebar-badge" v-if="client.dependents.length > 0">{{client.dependents.length}}</span>
             </li>
             <li class="list-group-item" v-bind:class="{ 'selected-list-item' : $route.name == 'contact-businesses' }" @click="goTo('contact-businesses')">
               <router-link :to="{ path: '/contact/' + client.id +'/contact-businesses' }" class="contact-link" data-toggle="tab" role="tab" >Businesses</router-link>
+              <span class="contact-sidebar-badge" v-if="client.businesses.length > 0">{{client.businesses.length}}</span>
             </li>
             <li class="list-group-item" v-bind:class="{ 'selected-list-item' : $route.name == 'contact-engagements' }" @click="goTo('engagements')">
               <router-link  :to="{ path: '/contact/' + client.id +'/engagements' }" class="contact-link" data-toggle="tab" role="tab" >Engagements</router-link>
+              <span class="contact-sidebar-badge" v-if="client.engagements.length > 0">{{client.engagements.length}}</span>
             </li>
             <li class="list-group-item" v-bind:class="{ 'selected-list-item' : $route.name == 'pending' }" @click="goTo('pending')">
               <router-link  :to="{ path: '/contact/' + client.id + '/pending' }" class="contact-link" data-toggle="tab" role="tab">Pending</router-link>
             </li>
             <li class="list-group-item" v-bind:class="{ 'selected-list-item' : $route.name == 'notes' }" @click="goTo('notes')">
               <router-link  :to="{ path: '/contact/' + client.id + '/notes' }" class="contact-link" data-toggle="tab" role="tab">Notes</router-link>
+              <span class="contact-sidebar-badge" v-if="client.notes.length > 0">{{client.notes.length}}</span>
             </li>
             <li class="list-group-item" v-bind:class="{ 'selected-list-item' : $route.name == 'portal' }" @click="goTo('portal')">
               <router-link  :to="{ path: '/contact/' + client.id + '/portal' }" class="contact-link" data-toggle="tab" role="tab">Portal</router-link>
@@ -55,27 +59,30 @@
 
         <div class="tab-content flex-fill" id="myTabContent">   
           <!-- these are the panes for the different tab views -->
-          <div class="tab-pane fade show active" role="tabpanel" v-if="client['id']">
+          <div class="tab-pane fade show active" role="tabpanel">
             <router-view  
               :clientDetails="client" 
               :businesses="client.businesses" 
               :dependents="client.dependents"
+              @delete-client="requestDelete"
             ></router-view>
           </div>
         </div>
       </div>
     </div>
 
+    <Spinner v-else/>
+
       <!-- this is the modal popup for confirming the delete action -->
     <b-modal v-model="showModal" id="myModal" ref="myModalRef" hide-footer title="Delete Client">
       <div class="d-block text-left">
-        <h5>Are you sure you want to delete the {{client.last_name}} account?</h5>
+        <h5 v-if="client">Are you sure you want to delete the {{client.last_name}} account?</h5>
         <br>
         <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
       </div>
       <div class="d-flex">
         <b-btn class="mt-3" variant="danger" @click="showModal = false">Cancel</b-btn>
-        <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteClient(client.id)">Confirm</b-btn>
+        <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteClient">Confirm</b-btn>
       </div>
     </b-modal>
   </div>
@@ -86,19 +93,21 @@ import { mapGetters } from 'vuex'
 import Alert from '@/components/alerts/Alert.vue'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
-
+import Spinner from '@/components/loaders/Spinner'
 export default {
   name: 'ContactDetails',
   data () {
     return {
       isClicked: false,
       showModal: false,
-      alert: ''
+      alert: '',
+      loading: false
     }
   },
   components:{
     'b-modal': bModal,
     Alert,
+    Spinner
   },
   directives: {
     'b-modal': bModalDirective
@@ -123,8 +132,11 @@ export default {
       }
   },
   methods: {
-    deleteClient(id) {
-      this.$store.dispatch('deleteClient', id)
+    requestDelete() {
+      this.showModal = true
+    },
+    deleteClient() {
+      this.$store.dispatch('deleteClient', this.client.id)
       .then(() => {
         this.$router.push({path: '/contacts'});
       })
@@ -147,8 +159,16 @@ export default {
         }    
     }
   },
+  beforeDestroy() {
+    this.$store.commit('getDetails', null)
+  },
   created: function(){
     this.$store.dispatch('getDetails', this.$route.params.id)
+    this.loading = true
+    var self = this
+    setTimeout(() => {
+      self.loading = false
+    }, 2000)
   }
 }
 </script>
@@ -197,6 +217,22 @@ export default {
     position: -webkit-sticky;
     position: sticky;
     top: 0;
+
+    li {
+      position: relative;
+
+    .contact-sidebar-badge {
+        position: absolute;
+        background: #0077ff;
+        color: white;
+        font-weight: bold;
+        padding: 0 10px;
+        border-radius: 5px;
+        font-size: .8rem;
+        right: 5px;
+        top: 15px;
+      }
+    }
   }
 
   .selected-list-item {

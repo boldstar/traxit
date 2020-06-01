@@ -1,7 +1,7 @@
 <template>
   <div class="page-wrapper mt-1">
 
-  <form @submit.prevent="updateThisClient" class="d-flex-column justify-content-center text-left card p-2 pt-3 shadow-sm">
+  <form @submit.prevent="updateThisClient" class="d-flex-column justify-content-center text-left card p-2 pt-3 shadow-sm mb-4">
       <div class="form-group">
 
         <div class="custom-input-group">
@@ -17,13 +17,8 @@
         </div>
         
         <div class="custom-checkbox-group mb-2">
-          <div class="d-flex p-2 custom-control custom-checkbox bg-light">
-            <span class="mr-3 font-weight-bold mb-1 h6">Is Contact Active?</span>
-            <input type="checkbox" v-model="client.active" class="custom-control-input" id="customCheck2">
-            <label class="custom-control-label ml-3 align-self-start" for="customCheck2"></label>
-          </div>
           <div class="d-flex bg-light p-2 custom-control custom-checkbox" v-bind:class="{'border-danger' : has_spouse_alert}">
-            <span class="mr-3 font-weight-bold mb-1 h6">Does Contact Have Spouse?</span>
+            <span class="mr-3 font-weight-bold mb-1 h6">Has Spouse: </span>
             <input type="checkbox" v-model="client.has_spouse" class="custom-control-input" id="customCheck1" @change="has_spouse_alert = false">
             <label class="custom-control-label ml-3 align-self-start" for="customCheck1"></label>
             <small v-if="has_spouse_alert" class="text-danger">If contact does not have spouse, please uncheck the has spouse checkbox</small>

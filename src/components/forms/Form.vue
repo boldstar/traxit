@@ -4,11 +4,11 @@
             <span>{{title}}</span>
             <button type="button" class="cancel-btn" @click="goBack">Cancel</button>
         </div>
-        <div v-for="(input, index) in inputFields" :key="index" class="input" v-show="crudRules(index)">
+        <div v-for="(input, index) in inputFields" :key="index" class="custom-input-group" v-show="crudRules(index)">
             <label :for="input.placeholder">{{input.placeholder}}</label>
             <input type="text" :value="model[property(index)]"  :placeholder="input.placeholder" @change="handleChange" @input="handleInput(index, $event)" :class="{'input-error': errs.length >= 1 && errs.includes(property(index)[0])}">
         </div>
-        <div v-for="(select, index) in selectFields" :key="select.label" class="select" v-show="selectFields.length >= 1">
+        <div v-for="(select, index) in selectFields" :key="select.label" class="custom-input-group" v-show="selectFields.length >= 1">
             <label :for="select">{{select.label}}</label>
             <select :name="select" :id="select" @change="handleSelect(index, $event)" v-model="model[selectValue(values)]" :class="{'input-error': errs.length >= 1 && errs.includes(values[index])}">
                 <option disabled value="">{{ selected }}</option>
@@ -138,40 +138,12 @@ export default {
     width: 100%;
     background: white;
     border-radius: 6px!important;
-    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.250);
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.250);
     text-align: left;
     margin-bottom: 30px;
 
-    input {
-        height: 40px;
-        padding-left: 10px;
-        border-radius: 5px;
-        border: 1px solid lightgray;
-    }
-
-    select {
-        height: 40px;
-        padding-left: 10px;
-        border-radius: 5px;
-        border: 1px solid lightgray;
-    }
-
-    .input {
-        display: flex;
-        flex-direction: column;
-        width: 95%;
-        margin: 5px auto;
-    }
-
     .input-error {
         border: 1px solid red;
-    }
-
-    .select {
-        display: flex;
-        flex-direction: column;
-        width: 95%;
-        margin: 10px auto;
     }
 
     .form-header {
@@ -182,6 +154,7 @@ export default {
         font-weight: bold;
         font-size: 1.25rem;
         padding: 8px 15px;
+        margin-bottom: 20px;
     }
 
     .cancel-btn {

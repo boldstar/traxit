@@ -1,6 +1,6 @@
 <template>
     <div class="w-100 mb-4">
-        <table class="table border">
+        <table class="table border bg-white shadow-sm">
             <thead>
                 <tr>
                     <td>Type</td>

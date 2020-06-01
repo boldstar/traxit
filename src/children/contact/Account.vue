@@ -1,94 +1,122 @@
 <template>
     <div class="contact-account">
-        <div class="contact-account-header">
+        <div class="contact-account-header" v-if="$route.name == 'account'">
             <h5>General Info</h5>
             <p>The general information for the selected contact</p>
         </div>
 
-        <div class="contact-card card shadow-sm" v-if="$route.name == 'account'">
+        <div class="contact-card card shadow-sm mb-4" v-if="$route.name == 'account'">
             <h5>Tax Payer</h5>
             <div class="contact-card-content">
                 <ul class="contact-list">
                     <li class="contact-list-item">
                         <div>
                             <span>Name:</span>
-                            <span class="font-weight-bold">{{client.last_name}}, {{client.first_name}}</span>
+                            <span class="font-weight-bold">{{clientDetails.last_name}}, {{clientDetails.first_name}}</span>
                         </div>
                     </li>
                     <li class="contact-list-item">
                         <div>
                             <span>Email:</span>
-                            <span class="font-weight-bold">{{client.email}}</span>
+                            <span class="font-weight-bold">{{clientDetails.email}}</span>
                         </div>
                     </li>
                     <li class="contact-list-item">
                         <div>
                             <span>Cell Phone:</span>
-                            <span class="font-weight-bold">{{client.cell_phone}}</span>
+                            <span class="font-weight-bold">{{clientDetails.cell_phone}}</span>
                         </div>
                     </li>
                     <li class="contact-list-item">
                         <div>
                             <span>Work Phone:</span>
-                            <span class="font-weight-bold">{{client.work_phone}}</span>
+                            <span class="font-weight-bold">{{clientDetails.work_phone}}</span>
                         </div>
                     </li>
                     <li class="contact-list-item">
                         <div>
                             <span>Date of Birth:</span>
-                            <span class="font-weight-bold">{{client.dob | formatDate }}</span>
+                            <span class="font-weight-bold">{{clientDetails.dob | formatDate }}</span>
                         </div>
                     </li>
                     <li class="contact-list-item">
                         <div>
                             <span>Occupation:</span>
-                            <span class="font-weight-bold">{{client.occupation}}</span>
+                            <span class="font-weight-bold">{{clientDetails.occupation}}</span>
                         </div>
                     </li>
                 </ul>
             </div>
-            <h5>Spouse</h5>
-            <div class="contact-card-content">
+            <h5 v-if="clientDetails.has_spouse">Spouse</h5>
+            <div class="contact-card-content" v-if="clientDetails.has_spouse">
                 <ul class="contact-list">
                     <li class="contact-list-item">
                         <div>
                             <span>Name:</span>
-                            <span class="font-weight-bold">{{client.spouse_last_name}}, {{client.spouse_first_name}}</span>
+                            <span class="font-weight-bold"><span v-if="clientDetails.spouse_last_name">{{clientDetails.spouse_last_name}},</span> {{clientDetails.spouse_first_name}}</span>
                         </div>
                     </li>
                     <li class="contact-list-item">
                         <div>
                             <span>Email:</span>
-                            <span class="font-weight-bold">{{client.spouse_email}}</span>
+                            <span class="font-weight-bold">{{clientDetails.spouse_email}}</span>
                         </div>
                     </li>
                     <li class="contact-list-item">
                         <div>
                             <span>Cell Phone:</span>
-                            <span class="font-weight-bold">{{client.spouse_cell_phone}}</span>
+                            <span class="font-weight-bold">{{clientDetails.spouse_cell_phone}}</span>
                         </div>
                     </li>
                     <li class="contact-list-item">
                         <div>
                             <span>Work Phone:</span>
-                            <span class="font-weight-bold">{{client.spouse_work_phone}}</span>
+                            <span class="font-weight-bold">{{clientDetails.spouse_work_phone}}</span>
                         </div>
                     </li>
                     <li class="contact-list-item">
                         <div>
                             <span>Date of Birth:</span>
-                            <span class="font-weight-bold">{{client.spouse_dob | formatDate }}</span>
+                            <span class="font-weight-bold">{{clientDetails.spouse_dob | formatDate }}</span>
                         </div>
                     </li>
                     <li class="contact-list-item">
                         <div>
                             <span>Occupation:</span>
-                            <span class="font-weight-bold">{{client.spouse_occupation}}</span>
+                            <span class="font-weight-bold">{{clientDetails.spouse_occupation}}</span>
                         </div>
                     </li>
                 </ul>
             </div>
-            <router-link class="contact-edit-btn" :to="{path: '/contact/' + client.id + '/account/edit'}">Edit Contact</router-link>
+            <router-link class="contact-edit-btn" :to="{path: '/contact/' + clientDetails.id + '/account/edit'}">Edit Contact</router-link>
+        </div>
+
+        <div class="contact-card card shadow-sm mb-3" v-if="$route.name == 'account'">
+            <h5>Details</h5>
+            <div class="contact-card-content">
+                <ul class="contact-list">
+                    <li class="contact-list-item">
+                        <div>
+                            <span>Address: </span>
+                            <span class="font-weight-bold text-right" v-if="clientDetails.street_address">{{clientDetails.street_address}} <br>{{clientDetails.city}} {{clientDetails.state}}, {{clientDetails.postal_code}}</span>
+                            <span class="font-weight-bold" v-else>N/A</span>
+                        </div>
+                    </li>
+                    <li class="contact-list-item">
+                        <div>
+                            <span>Referred By: </span>
+                            <span class="font-weight-bold">{{clientDetails.referral_type}}</span>
+                        </div>
+                    </li>
+                    <li class="contact-list-item">
+                        <div>
+                            <span>Category: </span>
+                            <span class="font-weight-bold">{{clientDetails.category}}</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <router-link class="contact-edit-btn" :to="{path: '/contact/' + clientDetails.id + '/account/edit'}">Edit Details</router-link>
         </div>
 
         <!-- this is where the edit contact child view shows up -->
@@ -101,40 +129,7 @@ import { mapGetters } from 'vuex'
 
 export default {
     name: 'account',
-    data() {
-        return {
-            alert: '',
-            modalShow: false,
-        }
-    },
-    computed: {
-    ...mapGetters(['client']),
-        businesses() {
-            return this.client.businesses
-        }
-    },
-    methods: {
-        deleteDependent(client, id) {
-            this.$store.dispatch('deleteDependent', id)
-            .then(() => {
-                this.modalShow = false
-                this.$router.push({path: '/contact/' +this.client.id+ '/account', query: { alert: 'The dependent was succesfully deleted' }})
-            })
-        },
-        showModal () {
-            this.$refs.myModal.show()
-        },
-        hideModal () {
-            this.$refs.myModal.hide()
-        },
-        isActive: function (menuItem) {
-            return this.activeItem === menuItem
-        },
-    },
-    created: function(){
-    this.$store.dispatch('getDetails', this.$route.params.id);
-  }
-    
+    props: ['clientDetails']
 }
 </script>
 

@@ -1,7 +1,12 @@
 <template>
   <div class="add-business-engagement-wrapper">        
     <div class="business-engagements" v-if="$route.name != 'add-business-engagement'">
-      <table class="table">
+      <div class="text-left">
+        <h5 class="mb-0">Business Engagements</h5>
+        <p>A list of the engagements for the selected business</p>
+      </div>
+
+      <table class="table bg-white shadow-sm">
         <thead class="border">
           <tr>
             <th>Engagement</th>
@@ -16,6 +21,9 @@
             <td>{{engagement.status}}</td>
             <td>{{engagement.assigned_to}}</td>
             <td><router-link :to="'/engagement/' + engagement.id +'/details'" class="font-weight-bold">View</router-link></td>
+          </tr>
+          <tr v-if="filteredEngagements.length < 1">
+            <td colspan="4"><span class="font-weight-bold">There are currently no engagements</span></td>
           </tr>
         </tbody>
       </table>
@@ -37,7 +45,3 @@ export default {
     }
 }
 </script>
-
-<style>
-
-</style>

@@ -23,7 +23,7 @@
     </div>
 
     <!-- this is the tab links for the different views -->
-      <div class="d-flex contact-nav-links">
+      <div class="d-flex">
         <div class="col-2 mr-3 pl-2">
           <ul class="list-group contact-sidebar" id="myTab" role="tablist">
             <li class="list-group-item" v-bind:class="{ 'selected-list-item' : $route.name == 'account' }" @click="goTo('account')">

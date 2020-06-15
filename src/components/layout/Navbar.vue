@@ -60,6 +60,7 @@
 <script>
 import {mapGetters} from 'vuex'
 import {trialPeriod} from '../../plugins/session.js'
+import {formatNumber} from '../../plugins/filters.js'
 export default {
     name: 'navbar',
     props: ['admin'],
@@ -90,6 +91,9 @@ export default {
         },
         searchDatabase() {
             if(this.search != '') {
+                if(this.category == 'number') {
+                    this.search = formatNumber(this.search)
+                }
                 this.$store.dispatch('searchDatabase', { keyword: this.search, category: this.category})
                 .then(() => {
                     this.$router.push({path: '/search', query: {keyword: this.search }})

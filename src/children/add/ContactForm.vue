@@ -51,8 +51,8 @@
 
         <div class="d-flex mb-3 flex-mobile">
           <input type="email" class="form-control input-margin" placeholder="email@example.com" v-model="client.email" name="Email" :class="{'border-danger':taxpayerEmailInvalid}" @change="taxpayerEmailInvalid = false">
-          <number-input :placeholder="'Cell Phone'" v-model="client.cell_phone" mask-type="number" class="mx-2 input-margin"></number-input>
-          <number-input :placeholder="'Work Phone'" v-model="client.work_phone" mask-type="number"></number-input>
+          <number-input :placeholder="'Cell Phone'" v-model="client.cell_phone" mask-type="number" class="mx-2 input-margin form-control"></number-input>
+          <number-input :placeholder="'Work Phone'" v-model="client.work_phone" mask-type="number" class="form-control"></number-input>
         </div>
         <label for="email" class="text-danger font-weight-bold" v-if="taxpayerEmailInvalid">Please Remove Or Provide A Valid Email</label>
 
@@ -80,8 +80,8 @@
 
         <div class="d-flex mb-3 flex-mobile" v-if="client.has_spouse == true">
           <input type="email" id="spouse_email" class="form-control input-margin" placeholder="email@example.com" v-model="client.spouse_email" name="Spouse Email" :class="{'border-danger': spouseEmailInvalid}" @change="spouseEmailInvalid = false">
-          <number-input :placeholder="'Cell Phone'"  v-model="client.spouse_cell_phone" mask-type="number" class="mx-2 input-margin"></number-input>
-          <number-input :placeholder="'Work Phone'"  v-model="client.spouse_work_phone" mask-type="number"></number-input>
+          <number-input :placeholder="'Cell Phone'"  v-model="client.spouse_cell_phone" mask-type="number" class="mx-2 input-margin form-control"></number-input>
+          <number-input :placeholder="'Work Phone'"  v-model="client.spouse_work_phone" mask-type="number" class="form-control"></number-input>
         </div>
         <label for="spouse_email" class="text-danger font-weight-bold" v-if="spouseEmailInvalid">Please Remove Or Provide A Valid Email</label>
 

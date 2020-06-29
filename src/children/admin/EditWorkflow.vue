@@ -10,7 +10,7 @@
                     <label for="workflow" class="font-weight-bold">Workflow Name</label>
                     <input class="form-control" type="text" v-model="workflow.workflow">
                     <label for="engagement-type" class="font-weight-bold mt-2">Engagement Type</label>
-                    <select name="" id="" class="form-control" v-model="workflow.engagement_type">
+                    <select name="" id="" class="form-control" v-model="workflow.engagement_type" :class="{'border-danger': typeError}" @change="typeError = false">
                         <option disabled>{{option}}</option>
                         <option :value="type" v-for="(type, index) in engagementTypes" :key="index">{{type}}</option>
                     </select>
@@ -32,7 +32,7 @@
                     <div v-for="(status, index) in workflowData.newStatuses" :key="index" class="d-flex mt-3">
                         <input class="form-control" type="text" placeholder="Add Status" v-model="status.value" :class="{'input-error': error && status.value == ''}" @change="error = false">
                          <select name="" id="" class="form-control state-select" v-model="status.state">
-                             <option disabled value="">{{option}}</option>
+                             <option disabled value="">{{option_state}}</option>
                             <option :value="state" v-for="(state, index) in states" :key="index">{{state}}</option>
                         </select>
                          <label class="check-container">
@@ -89,11 +89,13 @@ export default {
         return {
             modalShow: false,
             statusToDelete: null,
+            typeError: false,
             error: false,
             workflowLoaded: false,
             states: ['Staging', 'Active', 'Pending', 'Complete'],
             engagementTypes: ['Tax Return', 'Bookkeeping', 'Tax Resolution', 'Tax Notices', 'Payroll', 'Custom'],
             option: 'Choose Engagement Type..',
+            option_state: 'Choose Status State..',
             workflowData: {
                 newStatuses: []
             },
@@ -119,6 +121,10 @@ export default {
                     this.error = true
                     return
                 }
+            }
+            if(!this.workflow.engagement_type) {
+                this.typeError = true
+                return
             }
             this.editWorkflow({
             id: this.workflow.id,

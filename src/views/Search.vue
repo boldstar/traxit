@@ -129,6 +129,21 @@ export default {
             }
         }
     },
+    watch: {
+        '$route.query.keyword': function() {
+            console.log('im in')
+            this.processing = true
+            this.noResults = false
+        },
+        'searchResults': function(value) {
+            if(value.length > 0) {
+                this.processing = false
+            } else {
+                this.noResults = true
+                this.processing = false
+            }
+        }
+    },
     mounted() {
         setTimeout(() => {
             if(this.searchResults != '' ) {

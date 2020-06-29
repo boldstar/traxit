@@ -1,12 +1,12 @@
 <template>
-    <div>
+    <div class="contact-engagements">
         <!-- this is the header for the contact engagements with the add engagement button -->
-        <div class="header p-0 d-flex flex-row justify-content-between mt-2 shadow-sm bg-white">
-            <div class="ml-3 pr-2  h3 align-self-center m-0">
-                <i class=" far fa-folder-open text-primary"></i> |
-                <span>{{ clientEngagements.length }}</span>
+        <div class="contact-engagements-header">
+            <div class="text-left">
+                <h5>Contact Engagements</h5>
+                <p>A list of the engagements for the selected contact</p>
             </div>
-            <router-link :to=" { path: '/contact/' + client.id + '/engagements/add-engagement' }" class="mr-3 btn btn-primary btn-sm m-0 align-self-center"><i class="mr-2 fas fa-plus-square"></i>Engagement</router-link>
+            <router-link :to=" { path: '/contact/' + client.id + '/engagements/add-engagement' }" class="btn btn-primary btn-sm align-self-center font-weight-bold"> Add Engagement</router-link>
         </div>
 
         <!-- this is where the add-engagement route shows up if route is matched -->
@@ -15,59 +15,44 @@
         </transition>
 
         <!-- this shows if there is engagements -->
-
-    <div v-if="!engagementLoaded && $route.name == 'contact-engagements'">
-    
-            <table class="table table-hover">
-                <thead class="text-primary border">
-                    <tr>
-                    <th  scope="col">Name</th>
-                    <th  scope="col" class="hide-row">Category</th>
-                    <th  scope="col" class="hide-row">Type</th>
-                    <th  scope="col" class="hide-row">Return Type</th>
-                    <th  scope="col" class="hide-row">Time Period</th>
-                    <th  scope="col">Year</th>
-                    <th scope="col" class="mobile-hide-row">Assigned To</th>
-                    <th  scope="col">Status</th>
-                    <th  scope="col" class="mobile-hide-row">Created Date</th>
-                    <th  scope="col">Details</th>
-                    </tr>
-                </thead>
-                <tbody class="table-bordered">
-                    <tr v-for="(engagement, index) in clientEngagements" :key="index" @click="viewDetails(engagement.id)">
-                    <th class="text-capitalize">{{ engagement.name }}</th>
-                    <th class="text-capitalize hide-row">{{ engagement.category}}</th>
-                    <th class="text-capitalize hide-row" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</th>
-                    <th class="text-capitalize hide-row" v-else>{{ engagement.type }}</th>
-                    <th class="hide-row">{{ checkType(engagement.type, engagement.return_type) }}</th>
-                    <th v-if="engagement.type == 'bookkeeping'" class="hide-row">{{ engagement.title }}</th>
-                    <th v-else class="hide-row">None</th>
-                    <th>{{ engagement.year }}</th>
-                    <th class="mobile-hide-row">{{ engagement.assigned_to}}</th>
-                    <th>{{ engagement.status }}</th>
-                    <th class="mobile-hide-row">{{ engagement.created_at | formatDate }}</th>
-                    <th><router-link v-bind:to="'/engagement/' + engagement.id + '/details'" class="btn btn-primary btn-sm ml-auto"><i class="far fa-eye mr-2"></i>View</router-link></th>
-                    </tr>
-                </tbody>
-            </table> 
-        </div>
-
-                    <!-- this will show if there is no engagements only -->
-        <div v-else>
-            <div v-if="noEngagements & !engagementLoaded && $route.name == 'contact-engagements'" class="mt-5">
-                This Contact Has No Engagements...
-            </div>
-        </div>
-
-
+        <div v-if="!engagementLoaded && $route.name == 'contact-engagements'">
         
-    <!-- this is the loading ring for the engagements -->
-    <spinner v-if="engagementLoaded"></spinner>
+                <table class="table table-hover bg-white">
+                    <thead class="text-primary border">
+                        <tr>
+                        <th  scope="col">Name</th>
+                        <th  scope="col" class="hide-row">Category</th>
+                        <th  scope="col" class="hide-row">Type</th>
+                        <th  scope="col">Year</th>
+                        <th scope="col" class="mobile-hide-row">Assigned To</th>
+                        <th  scope="col">Status</th>
+                        <th  scope="col" class="mobile-hide-row">Created Date</th>
+                        <th  scope="col">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-bordered">
+                        <tr v-for="(engagement, index) in clientEngagements" :key="index" @click="viewDetails(engagement.id)">
+                        <th class="text-capitalize">{{ engagement.name }}</th>
+                        <td class="text-capitalize hide-row">{{ engagement.category}}</td>
+                        <td class="text-capitalize hide-row" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</td>
+                        <td class="text-capitalize hide-row" v-else>{{ engagement.type }}</td>
+                        <td>{{ engagement.year }}</td>
+                        <td class="mobile-hide-row">{{ engagement.assigned_to}}</td>
+                        <td>{{ engagement.status }}</td>
+                        <td class="mobile-hide-row">{{ engagement.created_at | formatDate }}</td>
+                        <th><router-link v-bind:to="'/engagement/' + engagement.id + '/details'" class="btn btn-primary btn-sm ml-auto"><i class="far fa-eye mr-2"></i>View</router-link></th>
+                        </tr>
+                    </tbody>
+                </table> 
 
+                <div v-if="noEngagements & !engagementLoaded && $route.name == 'contact-engagements'" class="mt-3">
+                    <span class="font-weight-bold">This Contact Has No Engagements...</span>
+                </div>
+            </div>
+
+        <!-- this is the loading ring for the engagements -->
+        <spinner v-if="engagementLoaded"></spinner>
     </div>
-
-
-
 </template>
 
 <script>
@@ -127,16 +112,25 @@ export default {
 
 <style lang="scss" scoped>
 
-    tr {
-        cursor: pointer;
-    }
+    .contact-engagements {
 
-    .header {
-        height: 4em;
-    }
+        .contact-engagements-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
 
-    .engagements {
-        overflow-y: scroll;
+            div {
+
+                h5 {
+                    margin-bottom: 0;
+                }
+
+                p {
+                    margin-bottom: 0;
+                    font-weight: 500;
+                }    
+            }
+        }
     }
 
    @media screen and (max-width: 1300px) {

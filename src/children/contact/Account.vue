@@ -1,128 +1,123 @@
 <template>
-    <div class="col-12 account">
-        <!-- this is the details of the account -->
-    <div class="row account-details" v-if="$route.name == 'account'">
-        <div class="col-6 contact-content">
-            <div class="mb-3">
-                <div class="card shadow-sm">
-                    <div class="card-header text-left d-flex justify-content-between py-0">
-                        <div class="d-flex h4 mt-2 align-items-center">
-                            <i class="fas fa-user-circle mr-2 fa-2x card-title"></i>
-                            <strong class="card-title text-primary mt-2 card-title">Taxpayer </strong>
-                        </div>
-                            <span class="card-title text-capitalize h4 mt-2 align-self-center card-title">{{ client.first_name }} {{client.middle_initial}} {{client.last_name}}</span>
-                    </div>
-                    <ul class="card-body px-5 h6 text-left">
-                        <li class=" justify-content-between d-flex mb-2">
-                            <span class="font-weight-bold">Date Of Birth </span>
-                            <span v-if="client.dob">{{client.dob | formatDate}}</span> 
-                        </li>
-                        <li class=" text-capitalize justify-content-between d-flex mb-2">
-                            <span class="font-weight-bold">Occupation </span>
-                            {{client.occupation}}
-                        </li>
-                        <li class=" justify-content-between d-flex mb-2">
-                            <span class="font-weight-bold">Email </span>
-                            {{client.email}}
-                        </li>
-                        <li class=" justify-content-between d-flex mb-2"><span class="font-weight-bold">Cell Phone </span>{{client.cell_phone}}</li>
-                        <li class=" justify-content-between d-flex mb-2"><span class="font-weight-bold">Work Phone </span>{{client.work_phone}}</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="mb-3" v-if="client.has_spouse == 1">
-                <div class="card">
-                    <div class="card-header text-left d-flex justify-content-between py-0">
-                        <div class="d-flex h4 mt-2 align-items-center">
-                            <i class="fas fa-user-circle mr-2 fa-2x card-title"></i>
-                            <strong class="card-title text-primary mt-2 card-title">Spouse </strong>
-                        </div>
-                            <span class="card-title text-capitalize h4 mt-2 align-self-center card-title">{{ client.spouse_first_name }} {{client.spouse_middle_initial}} {{client.spouse_last_name}}</span>
-                    </div>
-                    <ul class="card-body px-5 h6 text-left">
-                        <li class="justify-content-between d-flex mb-2">
-                            <span class="font-weight-bold">Date Of Birth </span>   
-                            <span v-if="client.spouse_dob != 'Invalid date'">{{client.spouse_dob | formatDate}}</span>
-                        </li>
-                        <li class="text-capitalize justify-content-between d-flex mb-2"><span class="font-weight-bold">Occupation </span> {{client.spouse_occupation}}</li>
-                        <li class="justify-content-between d-flex mb-2"><span class="font-weight-bold">Email </span> {{client.spouse_email}}</li>
-                        <li class="justify-content-between d-flex mb-2"><span class="font-weight-bold">Cell Phone </span> {{client.spouse_cell_phone}}</li>
-                        <li class="justify-content-between d-flex mb-2"><span class="font-weight-bold">Work Phone </span> {{client.spouse_work_phone}}</li>
-                    </ul>
-                </div>
-             </div>
-
-              <div class="card mb-3" v-for="dependent in client.dependents" :key="dependent.id" v-if="$route.name == 'account'">
-                <div class="card-header text-left text-primary font-weight-bold d-flex justify-content-between">
-                    <span class="card-title">
-                        Dependent
-                    </span>
-                    <div>
-                        <router-link class="btn btn-sm btn-outline-primary mr-2" :to="'/contact/' +client.id+'/account/dependent/' + dependent.id">Edit</router-link> 
-                        <b-btn class="outline-secondary" size="sm" @click="modalShow = !modalShow"><i class="fas fa-trash"></i><span class="ml-2">Delete</span></b-btn> 
-                    </div>
-                </div>
-                <div class="list-group">
-                    <div class="list-group-item text-left justify-content-between d-flex">
-                        <span class="font-weight-bold">
-                            Name 
-                        </span>
-                        <div>
-                            {{ dependent.first_name }} {{ dependent.middle_name }} {{ dependent.last_name }}
-                        </div>
-                    </div>
-                    <div class="list-group-item text-left justify-content-between d-flex">
-                        <span class="font-weight-bold">
-                            Date Of Birth
-                        </span>
-                        <div>
-                            {{ dependent.dob | formatDate }}
-                        </div>
-                    </div>
-                </div>
-
-                <!-- this is the modal for deleting a dependent -->
-                <b-modal v-model="modalShow" id="myModal" ref="myModal" hide-footer title="Delete Dependent">
-                <div class="d-block text-left">
-                    <h5>Are you sure you want to delete {{dependent.first_name}}?</h5>
-                    <br>
-                    <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
-                </div>
-                <div class="d-flex">
-                    <b-btn class="mt-3" variant="danger" @click="modalShow = false">Cancel</b-btn>
-                    <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteDependent(client, dependent.id)">Confirm</b-btn>
-                </div>
-                </b-modal>
-
-            </div>
-
-             
+    <div class="contact-account">
+        <div class="contact-account-header" v-if="$route.name == 'account'">
+            <h5>General Info</h5>
+            <p>The general information for the selected contact</p>
         </div>
-       
-        <div v-if="client" class="col-6 contact-content"> 
-            <div class="mb-3 card">
-                <div class="card-header text-left text-primary font-weight-bold card-title">
-                        Details
-                </div>
-                <ul class="list-group">
-                    <li class="list-group-item text-left justify-content-between d-flex">
-                        <span class="font-weight-bold">Category </span>
-                        <div class="text-right">{{ client.category }}</div>
+
+        <div class="contact-card card shadow-sm mb-4" v-if="$route.name == 'account'">
+            <h5>Tax Payer</h5>
+            <div class="contact-card-content">
+                <ul class="contact-list">
+                    <li class="contact-list-item">
+                        <div>
+                            <span>Name:</span>
+                            <span class="font-weight-bold">{{clientDetails.last_name}}, {{clientDetails.first_name}}</span>
+                        </div>
                     </li>
-                    <li class="list-group-item text-left justify-content-between d-flex">
-                        <span class="font-weight-bold">Referred By </span>
-                        <div class="text-capitalize">{{ client.referral_type }}</div>  
+                    <li class="contact-list-item">
+                        <div>
+                            <span>Email:</span>
+                            <span class="font-weight-bold">{{clientDetails.email}}</span>
+                        </div>
                     </li>
-                    <li class="list-group-item text-left justify-content-between d-flex">
-                        <span class="font-weight-bold">Address </span>
-                        <div class="text-right" v-if="client.street_address">{{ client.street_address }}, {{ client.city }}, {{ client.state }}, {{ client.postal_code }}</div>
+                    <li class="contact-list-item">
+                        <div>
+                            <span>Cell Phone:</span>
+                            <span class="font-weight-bold">{{clientDetails.cell_phone}}</span>
+                        </div>
+                    </li>
+                    <li class="contact-list-item">
+                        <div>
+                            <span>Work Phone:</span>
+                            <span class="font-weight-bold">{{clientDetails.work_phone}}</span>
+                        </div>
+                    </li>
+                    <li class="contact-list-item">
+                        <div>
+                            <span>Date of Birth:</span>
+                            <span class="font-weight-bold">{{clientDetails.dob | formatDate }}</span>
+                        </div>
+                    </li>
+                    <li class="contact-list-item">
+                        <div>
+                            <span>Occupation:</span>
+                            <span class="font-weight-bold">{{clientDetails.occupation}}</span>
+                        </div>
                     </li>
                 </ul>
             </div>
+            <h5 v-if="clientDetails.has_spouse">Spouse</h5>
+            <div class="contact-card-content" v-if="clientDetails.has_spouse">
+                <ul class="contact-list">
+                    <li class="contact-list-item">
+                        <div>
+                            <span>Name:</span>
+                            <span class="font-weight-bold"><span v-if="clientDetails.spouse_last_name">{{clientDetails.spouse_last_name}},</span> {{clientDetails.spouse_first_name}}</span>
+                        </div>
+                    </li>
+                    <li class="contact-list-item">
+                        <div>
+                            <span>Email:</span>
+                            <span class="font-weight-bold">{{clientDetails.spouse_email}}</span>
+                        </div>
+                    </li>
+                    <li class="contact-list-item">
+                        <div>
+                            <span>Cell Phone:</span>
+                            <span class="font-weight-bold">{{clientDetails.spouse_cell_phone}}</span>
+                        </div>
+                    </li>
+                    <li class="contact-list-item">
+                        <div>
+                            <span>Work Phone:</span>
+                            <span class="font-weight-bold">{{clientDetails.spouse_work_phone}}</span>
+                        </div>
+                    </li>
+                    <li class="contact-list-item">
+                        <div>
+                            <span>Date of Birth:</span>
+                            <span class="font-weight-bold">{{clientDetails.spouse_dob | formatDate }}</span>
+                        </div>
+                    </li>
+                    <li class="contact-list-item">
+                        <div>
+                            <span>Occupation:</span>
+                            <span class="font-weight-bold">{{clientDetails.spouse_occupation}}</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <router-link class="contact-edit-btn" :to="{path: '/contact/' + clientDetails.id + '/account/edit'}">Edit Contact</router-link>
+        </div>
 
-            <Business :businesses="businesses"  :client="client" />
-        </div> 
-    </div>
+        <div class="contact-card card shadow-sm mb-3" v-if="$route.name == 'account'">
+            <h5>Details</h5>
+            <div class="contact-card-content">
+                <ul class="contact-list">
+                    <li class="contact-list-item">
+                        <div>
+                            <span>Address: </span>
+                            <span class="font-weight-bold text-right" v-if="clientDetails.street_address">{{clientDetails.street_address}} <br>{{clientDetails.city}} {{clientDetails.state}}, {{clientDetails.postal_code}}</span>
+                            <span class="font-weight-bold" v-else>N/A</span>
+                        </div>
+                    </li>
+                    <li class="contact-list-item">
+                        <div>
+                            <span>Referred By: </span>
+                            <span class="font-weight-bold">{{clientDetails.referral_type}}</span>
+                        </div>
+                    </li>
+                    <li class="contact-list-item">
+                        <div>
+                            <span>Category: </span>
+                            <span class="font-weight-bold">{{clientDetails.category}}</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <router-link class="contact-edit-btn" :to="{path: '/contact/' + clientDetails.id + '/account/edit'}">Edit Details</router-link>
+        </div>
 
         <!-- this is where the edit contact child view shows up -->
         <router-view></router-view>
@@ -131,97 +126,80 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import bModal from 'bootstrap-vue/es/components/modal/modal'
-import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
-import Business from '@/components/contact/Business'
-
 
 export default {
     name: 'account',
-    data() {
-        return {
-            alert: '',
-            modalShow: false,
-        }
-    },
-     components:{
-        'b-modal': bModal,
-        Business
-    },
-    directives: {
-        'b-modal': bModalDirective
-    },
-    computed: {
-    ...mapGetters(['client']),
-    businesses() {
-        return this.client.businesses
-    }
-    },
-    methods: {
-        deleteDependent(client, id) {
-            this.$store.dispatch('deleteDependent', id)
-            .then(() => {
-                this.modalShow = false
-                this.$router.push({path: '/contact/' +this.client.id+ '/account', query: { alert: 'The dependent was succesfully deleted' }})
-            })
-        },
-        showModal () {
-            this.$refs.myModal.show()
-        },
-        hideModal () {
-            this.$refs.myModal.hide()
-        },
-        isActive: function (menuItem) {
-            return this.activeItem === menuItem
-        },
-    },
-    created: function(){
-    this.$store.dispatch('getDetails', this.$route.params.id);
-  }
-    
+    props: ['clientDetails']
 }
 </script>
 
 <style lang="scss">
-@media screen and (max-width: 1180px) {
-    .account {
-        font-size: 1.0rem!important;
+.contact-account {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .contact-account-header {
+        text-align: left;
+        margin-bottom: 15px;
+
+        h5 {
+            margin-bottom: 0;
+        }
+
+        p {
+            color: rgb(122, 122, 122);
+            font-weight: 500;
+            margin-bottom: 0;
+        }
     }
 
-    .card-title {
-        font-size: 1.0rem!important;
-    }
+    .contact-card {
+        text-align: left;
+        padding-bottom: 10px;
+         
+         h5 {
+             padding: 10px;
+             padding-bottom: 0;
+         }
 
-    .account-details {
-        flex-direction: column!important;
-        width: 100%!important;
-        margin-left: auto!important;
-    }
+        .contact-card-content {
+            
+            .contact-list {
+                list-style: none;
+                padding: 0;
 
-    .contact-content {
-        width: 100%!important;
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
-}
+                .contact-list-item {
+                    padding: 10px;
+                    padding-left: 20px;
 
-@media screen and (max-width: 767px) {
-    .account-details {
-        margin: 0 auto!important;
-    }
-}
+                    div {
+                        max-width: 350px;
+                        width: 100%;
+                        display: flex;
+                        justify-content: space-between;
+                    }
 
-@media screen and (max-width: 500px) {
-    span {
-        font-size: .8rem!important;
-    }
+                    &:nth-of-type(even) {
+                        background: rgb(243, 243, 243);
+                    }
+                }
+            }
+        }
 
-    .contact-content {
-        padding: 0!important;
-    }
+        .contact-edit-btn {
+            background: rgb(224, 224, 224);
+            border-radius: 5px;
+            color: black;
+            font-weight: bold;
+            padding: 10px 20px;
+            align-self: flex-start;
+            margin-left: 10px;
 
-    .card-body {
-        padding: 10px!important;
+            &:hover {
+                text-decoration: none;
+            }
+        }
     }
 }
 </style>

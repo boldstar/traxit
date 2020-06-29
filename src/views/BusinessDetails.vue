@@ -1,52 +1,52 @@
 <template>
-<div class="page-wrapper mt-1 business-details">
-<!-- this is the go back button -->
-<Alert v-if="alert" v-bind:message="alert" />
-<Alert v-if="successAlert" v-bind:message="successAlert" />
+  <div class="page-wrapper mt-1 business-details">
+  <!-- this is the go back button -->
+  <Alert v-if="alert" v-bind:message="alert" />
+  <Alert v-if="successAlert" v-bind:message="successAlert" />
 
-  <div class="business-content">
-    <div class="d-flex justify-content-between business-nav">
-    <div class="contacts-link">
-      <router-link class="float-left btn btn-secondary btn-sm mt-3" to="/contacts"><i class="far fa-arrow-alt-circle-left mr-2"></i>Business List</router-link>  
-    </div>
+    <div class="business-content" v-if="businessDetails">
+      <div class="business-content-header">
+        <h5>{{businessDetails.business_name}}</h5>
 
-    <!-- this is the tab links for the different views -->
-      <div class="d-flex justify-content-center business-nav-links" v-if="businessDetails">
-        <ul class="nav mb-3" id="myTab" role="tablist">
-          <li class="nav-item" v-bind:class="{ 'is-active' : isClicked }" >
-            <router-link :to="{ path: '/business/' + businessDetails.id + '/details' }" class="nav-link mx-3" data-toggle="tab" role="tab"><i class="pr-2 far fa-address-card"></i>Account</router-link>
-          </li>
-          <li class="nav-item" v-bind:class="{ 'is-active' : isClicked }">
-            <router-link  :to="{ path: '/business/' + businessDetails.id +'/engagements' }" class="nav-link mx-3" data-toggle="tab" role="tab" ><i class="pr-2 far fa-folder-open"></i>Engagements</router-link>
-          </li>
-        </ul>
+        <div class="float-right settings-dropdown">
+          <div class="dropdown">
+            <button class="btn btn-sm btn-outline-primary dropdown-toggle settings-btn" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-cog mr-2"></i>
+              Options
+            </button>
+            <div class="dropdown-menu dropdown-menu-right mr-0" aria-labelledby="dropdownMenu2">
+              <router-link :to="'/business/' + businessDetails.id + '/details/' + 'edit'" class="dropdown-item"><i class="fas fa-pencil-alt"></i><span class="ml-2 pl-4">Edit Business</span></router-link>
+              <router-link :to="'/business/' + businessDetails.id + '/engagements/add'" class="dropdown-item"><i class="fas fa-plus-square"></i><span class="ml-2 pl-4">Add Engagement</span></router-link>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="float-right mt-3 settings-dropdown" v-if="businessDetails">
-        <div class="dropdown">
-          <button class="btn btn-sm btn-outline-primary dropdown-toggle settings-btn" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-cog mr-2"></i>
-            Settings
-          </button>
-          <div class="dropdown-menu dropdown-menu-right mr-0" aria-labelledby="dropdownMenu2">
-            <router-link :to="'/business/' + businessDetails.id + '/details/' + 'edit'" class="dropdown-item"><i class="fas fa-pencil-alt"></i><span class="ml-2 pl-4">Edit Business</span></router-link>
-            <router-link :to="'/business/' + businessDetails.id + '/engagements/add'" class="dropdown-item"><i class="fas fa-plus-square"></i><span class="ml-2 pl-4">Add Engagement</span></router-link>
+      <div class="d-flex">
+        <div class="col-2 mr-3 pl-2">
+          <ul class="list-group business-sidebar" id="myTab" role="tablist">
+            <li class="list-group-item" :class="{ 'selected-list-item' : $route.name == 'account-details' }"  @click="goTo('details')">
+              <router-link :to="{ path: '/business/' + businessDetails.id + '/details' }" class="business-link" data-toggle="tab" role="tab">Details</router-link>
+            </li>
+            <li class="list-group-item" :class="{ 'selected-list-item' : $route.name == 'business-engagements' }"  @click="goTo('engagements')">
+              <router-link  :to="{ path: '/business/' + businessDetails.id +'/engagements' }" class="business-link" data-toggle="tab" role="tab" >Engagements</router-link>
+              <span class="business-sidebar-badge" v-if="engagementsLength > 0">{{engagementsLength}}</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" role="tabpanel">
+            <router-view  
+              :business="businessDetails" 
+              :engagements="businessEngagements"
+            >
+            </router-view>
           </div>
         </div>
       </div>
     </div>
-
-
-
-    <div class="tab-content" id="myTabContent">   
-      <!-- these are the panes for the different tab views -->
-      <div class="tab-pane fade show active" role="tabpanel" v-if="businessDetails">
-        <router-view  :business="businessDetails" :engagements="businessEngagements"></router-view>
-      </div>
-    </div>
   </div>
-
-</div>
 </template>
 
 <script>
@@ -78,12 +78,15 @@ export default {
           'businessEngagements',
           'successAlert'
         ]
-      )
+      ),
+      engagementsLength() {
+        return this.businessEngagements.filter(eng =>  eng.name == this.businessDetails.business_name).length
+      }
   },
   methods: {
-    isActive: function (menuItem) {
-      return this.activeItem === menuItem
-    },
+    goTo(path) {
+      this.$router.push({path: '/business/' + this.businessDetails.id + '/' + path})
+    }
   },
   created: function(){
     this.$store.dispatch('getBusinessDetails', this.$route.params.id)
@@ -99,29 +102,69 @@ export default {
   border: none;
   color:  rgb(29, 29, 29);
 }
-.nav-link {
- padding-left: 5px;
- padding-right: 5px;
- font-size: 18px;
- color: rgb(185, 179, 179);
-
- &:hover {
-   border-bottom: 3px solid #0077ff;
- }
-}
-
-.is-active {
-  border-bottom: 3px solid transparent;
-  color: #181818;
-
-  i {
-    color: #0077ff;
-  }
-}
 
 .business-content {
   display: flex;
   flex-direction: column;
+
+  .business-content-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .list-group-item {
+
+    .business-link {
+      color: rgb(158, 158, 158);
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+
+    .is-active {
+      color: #0077ff;
+      font-weight: bold;
+    }
+
+    &:hover {
+      background: rgb(235, 235, 235);
+      cursor: pointer;
+    }
+  }
+
+  .business-sidebar {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+
+    li {
+      position: relative;
+
+    .business-sidebar-badge {
+        position: absolute;
+        background: #0077ff;
+        color: white;
+        font-weight: bold;
+        padding: 0 10px;
+        border-radius: 5px;
+        font-size: .8rem;
+        right: 5px;
+        top: 15px;
+      }
+    }
+  }
+
+  .selected-list-item {
+    border-left: 3px solid #0077ff;
+  }
+
+}
+
+.tab-content {
+  flex-grow: 1;
 }
 
 @media screen and (max-width: 1300px) {

@@ -1,19 +1,19 @@
 <template>
-    <div>
+    <div class="pending">
         <!-- this is the header for the contact engagements with the add engagement button -->
-        <div class="header p-0 d-flex flex-row justify-content-between mt-2 mb-4 shadow-sm bg-white">
-            <div class="ml-3 pr-2  h3 align-self-center m-0">
-                <span><i class="far fa-question-circle text-primary"></i></span> |
-                <span>{{ pendingQuestions.length }}</span>
+        <div class="pending-header">
+            <div>
+                <h5>Pending</h5>
+                <p>A list of the pending questions sent to or noted for the contact</p>
             </div>
         </div>
 
         <div v-if="!loading">
             <div v-for="(engagement, index) in engagementQuestions" :key="index"> 
-                <div class="card mb-3"  v-for="(question, index) in engagement.questions" :key="index" v-show="question.answered != true">
-                    <div class="card-header d-flex justify-content-between">
+                <div class="card shadow-sm mb-3"  v-for="(question, index) in engagement.questions" :key="index" v-show="question.answered != true">
+                    <div class="card-header bg-white d-flex justify-content-between">
                         <div class="d-flex">
-                            <i class="far fa-folder-open align-self-center mr-2 text-primary"></i>
+                            <i class="far fa-folder-open align-self-center text-primary mr-2"></i> | <strong class="ml-2">{{engagement.name}}</strong>
                             <div class="font-weight-bold">
                                 <router-link :to="'/engagement/'+engagement.id">
                                     {{ engagement.return_type }}
@@ -32,38 +32,39 @@
                             </span>
                         </div>
                     </div>
-                    <div class="card-body bg-light d-flex justify-content-between">
-                        <div class="h4 mr-5 text-left">
+                    <div class="card-body bg-light d-flex justify-content-between  bg-white pb-1">
+                        <div class="mr-5 text-left">
                             <span v-html="question.question"></span>
                         </div>
-                        <div class="ml-5 d-flex align-self-center">
-                            <button class="btn btn-sm btn-primary font-weight-bold" @click="answerQuestion(question.id)">Answer</button>
-                        </div>
+                    </div>
+                    <div class="card-footer pending-btns">
+                        <button class="btn btn-sm" @click="answerQuestion(question.id)">Answer Question</button>
+                        <router-link :to="{path: '/engagement/' + engagement.id + '/details'}" class="btn btn-sm">View Engagement</router-link>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div v-if="!loading && pendingQuestions.length < 1">
-            <p class="font-weight-bold">There are currently<br> no pending questions</p>
+        <div v-if="!loading && pendingQuestions.length < 1" class="card shadow-sm">
+            <p class="font-weight-bold p-3 mb-0">There are currently no pending questions</p>
         </div>
 
-   <!-- this is the modal to update the question -->
-            <b-modal ref="modal" hide-footer title="Answer Question" size="lg">
-                    <form>
-                    <div>
-                    <vue-editor v-model="question.answer" :editorToolbar="customToolbar"></vue-editor>
-                    </div>
-                    <div class="text-left">
-                        <span class="font-weight-bold mr-2">Answered: </span>
-                        <input type="checkbox" v-model="question.answered">
-                    </div>
-                    <div class="d-flex">
-                    <b-btn class="mt-3" variant="secondary" @click="hideModal">Cancel</b-btn>
-                    <b-btn class="mt-3 ml-auto" variant="outline-primary" @click="acceptUpdate">Confirm</b-btn>
-                    </div>
-                    </form>
-            </b-modal>
+        <!-- this is the modal to update the question -->
+        <b-modal ref="modal" hide-footer title="Answer Question" size="lg">
+                <form>
+                <div>
+                <vue-editor v-model="question.answer" :editorToolbar="customToolbar"></vue-editor>
+                </div>
+                <div class="text-left">
+                    <span class="font-weight-bold mr-2">Answered: </span>
+                    <input type="checkbox" v-model="question.answered">
+                </div>
+                <div class="d-flex">
+                <b-btn class="mt-3" variant="secondary" @click="hideModal">Cancel</b-btn>
+                <b-btn class="mt-3 ml-auto" variant="outline-primary" @click="acceptUpdate">Confirm</b-btn>
+                </div>
+                </form>
+        </b-modal>
 
 
         <spinner v-if="loading"></spinner>
@@ -151,9 +152,41 @@ created: function(){
 
 <style lang="scss" scoped>
 
-    .header {
-            height: 4em;
-        }
+   .pending {
+
+       .pending-header {
+           text-align: left;
+           margin-bottom: 10px;
+
+           h5 {
+               margin-bottom: 0;
+           }
+
+           p {
+               margin-bottom: 0;
+               font-weight: 500;
+           }
+       }
+
+
+       .pending-btns {
+           display: flex;
+           justify-content: flex-start;
+
+           button {
+                background: #0077ff;
+                color: white;
+                font-weight: bold;
+                margin-right: 15px;
+           }
+
+           a {
+                background: rgb(226, 226, 226);
+                color: black;
+                font-weight: bold;
+           }
+       }
+   }
 
     .email-sent-flag {
         border: 1px solid #0077ff;

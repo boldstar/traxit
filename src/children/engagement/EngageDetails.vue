@@ -175,6 +175,7 @@ export default {
             return percentage
         },
         currentWidth() {
+            if(this.engagement.done) return 100
             const status = this.engagement.status
             const statuses = this.engagementWorkflow.statuses
             const index = statuses.findIndex(s => s.status == status)

@@ -60,7 +60,7 @@ export default {
     props: ['businesses', 'clientDetails'],
     methods: {
         deleteBusiness(id) {
-
+            this.$emit('delete-business', id)
         }
     }
 }

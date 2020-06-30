@@ -65,6 +65,7 @@
               :businesses="client.businesses" 
               :dependents="client.dependents"
               @delete-client="requestDelete"
+              @delete-business="requestDeleteBusiness"
             ></router-view>
           </div>
         </div>
@@ -85,6 +86,19 @@
         <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteClient">Confirm</b-btn>
       </div>
     </b-modal>
+
+      <!-- this is the modal popup for confirming the delete action -->
+    <b-modal v-model="showModalBusiness" id="myModal" ref="myModalRefBusiness" hide-footer title="Delete Business">
+      <div class="d-block text-left">
+        <h5 v-if="client">Are you sure you want to delete the business?</h5>
+        <br>
+        <p><strong>*Warning:</strong> Can not be undone once deleted.</p>
+      </div>
+      <div class="d-flex">
+        <b-btn class="mt-3" variant="danger" @click="showModalBusiness = false">Cancel</b-btn>
+        <b-btn class="mt-3 ml-auto" variant="outline-success" @click="deleteBusiness">Confirm</b-btn>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -100,6 +114,8 @@ export default {
     return {
       isClicked: false,
       showModal: false,
+      showModalBusiness: false,
+      selectedBusiness : null,
       alert: '',
       loading: false
     }
@@ -146,6 +162,14 @@ export default {
     },
     goTo(path) {
       this.$router.push({path: '/contact/' + this.client.id + '/' + path})
+    },
+    requestDeleteBusiness(id) {
+      this.selectedBusiness = id
+      this.showModalBusiness = true
+    },
+    deleteBusiness() {
+      this.$store.dispatch('deleteBusiness', this.selectedBusiness)
+      this.showModalBusiness = false
     }
   },
   watch: {

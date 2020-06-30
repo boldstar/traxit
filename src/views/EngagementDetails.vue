@@ -67,9 +67,9 @@
             <li class="list-group-item" :class="{'active-list-group-item': $route.name == 'history'}" @click="goTo('history')">
               <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'history'}" :to="{path: '/engagement/' + engagement.id + '/history'}">History</router-link>
             </li>
-            <li class="list-group-item" :class="{'active-list-group-item': $route.name == 'invoice'}" @click="goTo('invoice')">
+            <!-- <li class="list-group-item" :class="{'active-list-group-item': $route.name == 'invoice'}" @click="goTo('invoice')">
               <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'invoice'}" :to="{path: '/engagement/' + engagement.id + '/invoice'}">Invoice</router-link>
-            </li>
+            </li> -->
           </ul>
         </div>
 

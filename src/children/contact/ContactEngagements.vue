@@ -24,6 +24,7 @@
                         <th  scope="col" class="hide-row">Category</th>
                         <th  scope="col" class="hide-row">Type</th>
                         <th  scope="col">Year</th>
+                        <th  scope="col" class="mobile-hide-row">Time Period</th>
                         <th scope="col" class="mobile-hide-row">Assigned To</th>
                         <th  scope="col">Status</th>
                         <th  scope="col" class="mobile-hide-row">Created Date</th>
@@ -37,6 +38,8 @@
                         <td class="text-capitalize hide-row" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</td>
                         <td class="text-capitalize hide-row" v-else>{{ engagement.type }}</td>
                         <td>{{ engagement.year }}</td>
+                        <td v-if="engagement.title" class="mobile-hide-row">{{ engagement.title }}</td>
+                        <td v-else class="mobile-hide-row">None</td>
                         <td class="mobile-hide-row">{{ engagement.assigned_to}}</td>
                         <td>{{ engagement.status }}</td>
                         <td class="mobile-hide-row">{{ engagement.created_at | formatDate }}</td>

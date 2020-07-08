@@ -11,6 +11,8 @@
           <tr>
             <th>Engagement</th>
             <th>Status</th>
+            <th>Year</th>
+            <th>Time Period</th>
             <th>Assinged To</th>
             <th>View</th>
           </tr>
@@ -19,6 +21,9 @@
           <tr v-for="engagement in filteredEngagements" :key="engagement.id">
             <td>{{engagement.name}}</td>
             <td>{{engagement.status}}</td>
+            <td>{{engagement.year}}</td>
+            <td v-if="engagement.title">{{engagement.title}}</td>
+            <td v-else>None</td>
             <td>{{engagement.assigned_to}}</td>
             <td><router-link :to="'/engagement/' + engagement.id +'/details'" class="font-weight-bold">View</router-link></td>
           </tr>

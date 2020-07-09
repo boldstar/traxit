@@ -5,7 +5,7 @@
         <h5 class="mb-0">Business Engagements</h5>
         <p>A list of the engagements for the selected business</p>
       </div>
-  
+
       <table class="table bg-white shadow-sm">
         <thead class="border">
           <tr>
@@ -15,6 +15,7 @@
             <th>Year</th>
             <th>Time Period</th>
             <th>Assinged To</th>
+            <th>Created Date</th>
             <th>View</th>
           </tr>
         </thead>
@@ -28,6 +29,7 @@
             <td v-if="engagement.title">{{engagement.title}}</td>
             <td v-else>None</td>
             <td>{{engagement.assigned_to}}</td>
+            <td>{{engagement.created_at | formatDate }}</td>
             <td><router-link :to="'/engagement/' + engagement.id +'/details'" class="font-weight-bold">View</router-link></td>
           </tr>
           <tr v-if="filteredEngagements.length < 1">

@@ -6,6 +6,7 @@
                 <span class="success-message" v-if="successMessage">{{ successMessage }}</span>
                 <span class="server-error" v-if="serverError">{{ serverError }}</span>
                 <span class="server-error" v-if="errorAlert">{{ errorAlert }}</span>
+                <span class="server-error" v-if="sessionEndedMsg">{{ sessionEndedMsg }}</span>
             </div>
         </div>
 
@@ -76,7 +77,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['accountDetails', 'errorAlert']),
+        ...mapGetters(['accountDetails', 'errorAlert', 'sessionEndedMsg']),
     },
     methods: {
         validateBeforeSubmit() {
@@ -95,6 +96,7 @@ export default {
             })
             .then(response => {
                 this.building = true
+                this.$store.commit('sessionEndedMsg', null)
             })
             .catch(error => {
                 this.trying = false

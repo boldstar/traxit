@@ -21,7 +21,7 @@ export default [
                 requiresAuth: true,
                 layout: "default",
                 breadCrumb: [
-                    { name: 'Business Account' }
+                    { name: 'Business Details' }
                 ]
                 },
                 children: [
@@ -49,7 +49,7 @@ export default [
                 requiresAuth: true,
                 layout: "default",
                 breadCrumb: [
-                    { name: 'Engagements' }
+                    { name: 'Business Engagements' }
                 ]
                 },
                 children: [

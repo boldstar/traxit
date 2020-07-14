@@ -1,11 +1,12 @@
 <template>
     <div class="login-form page-wrapper col-lg-5 col-md-7 col-sm-12">
 
-        <div class="d-flex justify-content-center mb-3 p-0" v-if="successMessage || serverError && !building">
+        <div class="d-flex justify-content-center mb-3 p-0" v-if="successMessage || serverError || sessionEndedMsg && !building">
             <div class="col-lg-9 p-0">
                 <span class="success-message" v-if="successMessage">{{ successMessage }}</span>
                 <span class="server-error" v-if="serverError">{{ serverError }}</span>
                 <span class="server-error" v-if="errorAlert">{{ errorAlert }}</span>
+                <span class="server-error" v-if="sessionEndedMsg">{{ sessionEndedMsg }}</span>
             </div>
         </div>
 
@@ -76,7 +77,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['accountDetails', 'errorAlert']),
+        ...mapGetters(['accountDetails', 'errorAlert', 'sessionEndedMsg']),
     },
     methods: {
         validateBeforeSubmit() {
@@ -95,6 +96,7 @@ export default {
             })
             .then(response => {
                 this.building = true
+                this.$store.commit('sessionEndedMsg', null)
             })
             .catch(error => {
                 this.trying = false

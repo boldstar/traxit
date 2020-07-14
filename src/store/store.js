@@ -87,7 +87,8 @@ export default new Vuex.Store({
     timesheet: false,
     show_update_status_modal: false,
     delete_modal: false,
-    delete_modal_details: null
+    delete_modal_details: null,
+    sessionEndedMsg: null
   },
   getters: {
     chartDataLength(state) {
@@ -110,6 +111,9 @@ export default new Vuex.Store({
     },
     errorMsgAlert(state) {
       return state.errorAlert
+    },
+    sessionEndedMsg(state) {
+      return state.sessionEndedMsg
     },
     loading(state) {
       return state.loading
@@ -185,6 +189,9 @@ export default new Vuex.Store({
     },
     errorMsgAlert(state, alert) {
       state.errorAlert = alert
+    },
+    sessionEndedMsg(state, message) {
+      state.sessionEndedMsg = message
     },
     clearAlert(state) {
       state.alert = ''

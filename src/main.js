@@ -13,6 +13,7 @@ import 'v-calendar/lib/v-calendar.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import './plugins/filters.js';
+import './plugins/http.js';
 import plugins from './plugins/plugins.js';
 import setUp from  './plugins/setup.js';
 import { Button } from 'bootstrap-vue/es/components';

@@ -6,7 +6,10 @@
                 <h5>Contact Engagements</h5>
                 <p>A list of the engagements for the selected contact</p>
             </div>
-            <router-link :to=" { path: '/contact/' + client.id + '/engagements/add-engagement' }" class="btn btn-primary btn-sm align-self-center font-weight-bold"> Add Engagement</router-link>
+            <div class="d-flex">
+            <button class="btn btn-secondary btn-sm align-self-center font-weight-bold mr-3" @click="toggleFilters">Filter List</button>
+                <router-link :to=" { path: '/contact/' + client.id + '/engagements/add-engagement' }" class="btn btn-primary btn-sm align-self-center font-weight-bold"> Add Engagement</router-link>
+            </div>
         </div>
 
         <!-- this is where the add-engagement route shows up if route is matched -->
@@ -16,7 +19,40 @@
 
         <!-- this shows if there is engagements -->
         <div v-if="!engagementLoaded && $route.name == 'contact-engagements'">
-        
+
+                <div class="filter-contact-engagements" v-if="showFilters">
+                    <div class="custom-input-group text-left">
+                        <span for="name-filter">Name</span>
+                        <select name="name-filter" id="name-filter" v-model="nameFilter">
+                            <option disabled>{{defaultFilter}}</option>
+                            <option v-for="(name, index) in names" :key="index" :value="name">{{name}}</option>
+                        </select>
+                    </div>
+                    <div class="custom-input-group text-left">
+                        <span for="category-filter">Category</span>
+                        <select name="category-filter" id="category-filter" v-model="categoryFilter">
+                            <option disabled>{{defaultFilter}}</option>
+                            <option v-for="(category, index) in categories" :key="index" :value="category">{{category}}</option>
+                        </select>
+                    </div>
+                    <div class="custom-input-group text-left">
+                        <span for="type-filter">Type</span>
+                        <select name="type-filter" id="type-filter" v-model="typeFilter">
+                            <option disabled>{{defaultFilter}}</option>
+                            <option v-for="(type, index) in types" :key="index" :value="type">{{ type }}</option>
+                        </select>
+                    </div>
+                    <div class="custom-input-group text-left">
+                        <span for="year-filter">Year</span>
+                        <select name="year-filter" id="year-filter" v-model="yearFilter">
+                            <option disabled>{{defaultFilter}}</option>
+                            <option v-for="(year, index) in years" :key="index" :value="year">{{ year }}</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-sm btn-secondary align-self-center ml-3 font-weight-bold" @click="clearFilters">Clear Filters</button>
+                </div>
+
                 <table class="table table-hover bg-white">
                     <thead class="text-primary border">
                         <tr>
@@ -32,7 +68,7 @@
                         </tr>
                     </thead>
                     <tbody class="table-bordered">
-                        <tr v-for="(engagement, index) in clientEngagements" :key="index" @click="viewDetails(engagement.id)">
+                        <tr v-for="(engagement, index) in filteredEngagements" :key="index" @click="viewDetails(engagement.id)">
                         <th class="text-capitalize">{{ engagement.name }}</th>
                         <td class="text-capitalize hide-row">{{ engagement.category}}</td>
                         <td class="text-capitalize hide-row" v-if="engagement.type == 'taxreturn'">{{ fixCasing(engagement.type) }}</td>
@@ -71,10 +107,39 @@ export default {
         return {
             engagementLoaded: false,
             noEngagements: false,
+            nameFilter: null,
+            categoryFilter: null,
+            typeFilter: null,
+            yearFilter: null,
+            defaultFilter: 'Choose option...',
+            showFilters: false
         }
     },
     computed: {
     ...mapGetters(['clientEngagements', 'client']),
+        filteredEngagements() {
+            return this.clientEngagements.filter(eng =>  {
+            if(this.nameFilter != this.defaultFilter){ return eng.name == this.nameFilter } else{ return eng} 
+            }).filter(eng =>  {
+            if(this.categoryFilter != this.defaultFilter){ return eng.category == this.categoryFilter } else{ return eng} 
+            }).filter(eng =>  {
+            if(this.typeFilter != this.defaultFilter){ return eng.type == this.typeFilter } else{ return eng} 
+            }).filter(eng =>  {
+            if(this.yearFilter != this.defaultFilter){ return eng.year == this.yearFilter } else{ return eng} 
+            })
+        },
+        names() {
+            return this.clientEngagements.map(eng => eng.name)
+        },
+        categories() {
+            return this.clientEngagements.map(eng => eng.category)
+        },
+        types() {
+            return this.clientEngagements.map(eng => eng.type)
+        },
+        years() {
+            return this.clientEngagements.map(eng => eng.year)
+        }
     },
     methods: {
         fixCasing(string) {
@@ -95,11 +160,25 @@ export default {
             } else {
                 return 'None'
             }
+        },
+        clearFilters() {
+            this.nameFilter = this.defaultFilter
+            this.categoryFilter = this.defaultFilter
+            this.typeFilter = this.defaultFilter
+            this.yearFilter = this.defaultFilter
+        },
+        toggleFilters() {
+            this.clearFilters()
+            this.showFilters = !this.showFilters
         }
     },
     created() {
         this.$store.dispatch('getClientEngagements', this.$route.params.id);
         this.engagementLoaded = true;
+        this.nameFilter = this.defaultFilter
+        this.categoryFilter = this.defaultFilter
+        this.typeFilter = this.defaultFilter
+        this.yearFilter = this.defaultFilter
         var self = this;
         setTimeout(() => {
             self.engagementLoaded = false;
@@ -114,6 +193,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+    .filter-contact-engagements {
+        padding: 3px;
+        display: flex;
+        background: white;
+    }
 
     .contact-engagements {
 

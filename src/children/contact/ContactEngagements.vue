@@ -39,7 +39,7 @@
                         <span for="type-filter">Type</span>
                         <select name="type-filter" id="type-filter" v-model="typeFilter">
                             <option disabled>{{defaultFilter}}</option>
-                            <option v-for="(type, index) in types" :key="index" :value="type">{{ type }}</option>
+                            <option v-for="(type, index) in types" :key="index" :value="type" class="text-capitalize">{{ type }}</option>
                         </select>
                     </div>
                     <div class="custom-input-group text-left">
@@ -129,16 +129,24 @@ export default {
             })
         },
         names() {
-            return this.clientEngagements.map(eng => eng.name)
+            const names =  this.clientEngagements.map(eng => eng.name)
+            const result = names.filter((v, i) => names.indexOf(v) === i)
+            return result
         },
         categories() {
-            return this.clientEngagements.map(eng => eng.category)
+            const categories = this.clientEngagements.map(eng => eng.category)
+            const result = categories.filter((v, i) => categories.indexOf(v) === i)
+            return result
         },
         types() {
-            return this.clientEngagements.map(eng => eng.type)
+            const types = this.clientEngagements.map(eng => eng.type)
+            const result = types.filter((v, i) => types.indexOf(v) === i)
+            return result
         },
         years() {
-            return this.clientEngagements.map(eng => eng.year)
+            const years = this.clientEngagements.map(eng => eng.year)
+            const result = years.filter((v, i) => years.indexOf(v) === i)
+            return result
         }
     },
     methods: {

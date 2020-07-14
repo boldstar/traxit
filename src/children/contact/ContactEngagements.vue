@@ -39,7 +39,7 @@
                         <span for="type-filter">Type</span>
                         <select name="type-filter" id="type-filter" v-model="typeFilter">
                             <option disabled>{{defaultFilter}}</option>
-                            <option v-for="(type, index) in types" :key="index" :value="type">{{ type }}</option>
+                            <option v-for="(type, index) in types" :key="index" :value="type" class="text-capitalize">{{ type }}</option>
                         </select>
                     </div>
                     <div class="custom-input-group text-left">

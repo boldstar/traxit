@@ -92,6 +92,12 @@ export default [
             component: () => import('@/children/admin/Templates.vue'),
             meta: meta,
         },
+        {
+            path: 'customizations',
+            name: 'customizations',
+            component: () => import('@/children/admin/Customizations.vue'),
+            meta: meta,
+        },
     ]
     },
 ]

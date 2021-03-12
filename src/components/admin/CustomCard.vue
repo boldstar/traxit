@@ -8,7 +8,7 @@
                     <input type="checkbox">
                     <span class="slider slider-custom round font-weight-bold text-right pt-2 pr-2">Off</span>
                 </label>
-            <button class="btn btn-sm btn-primary font-weight-bold align-self-center">Edit</button>
+            <button class="btn btn-sm btn-primary font-weight-bold align-self-center" @click="editItems = true">Edit List</button>
           </div>
       </div>
       <div class="card-body text-left">
@@ -16,7 +16,7 @@
           <div></div>
           <ul>
               <i class="fas fa-list fa-5x ml-3 mt-3" v-if="loading || showMessage"></i>
-              <li class="font-weight-bold" v-for="(item, index) in categoryList" :key="index">{{index + 1}} {{item.name}}</li>
+              <li class="font-weight-bold" v-for="(item, index) in categoryList" :key="index"><input type="checkbox" :value="item.id" v-model="options_to_delete" v-if="editItems"> {{index + 1}} {{item.name}}</li>
               <li class="mt-3" v-if="addItem">
                   <input type="text" name="" id="" placeholder="Add Item" class="form-control" v-model="name" @change="inputError = false">
                 </li>
@@ -24,7 +24,8 @@
                   <button class="add-item-btn btn-link btn font-weight-bold" @click="saveItem">Save</button>
                   <button class="add-item-btn btn-link btn font-weight-bold text-danger" @click="addItem = false">Cancel</button>
             </li>
-              <li class="mt-2" v-if="!addItem && !saving && !loading"><button class="add-item-btn btn-link btn font-weight-bold" @click="showItemForm">Add Item <i class="fas fa-plus"></i></button></li>
+              <li class="mt-2" v-if="!addItem && !saving && !loading && !editItems"><button class="add-item-btn btn-link btn font-weight-bold pl-1" @click="showItemForm">Add Item <i class="fas fa-plus"></i></button></li>
+              <li class="mt-2" v-if="editItems && !saving && !loading"><button class="add-item-btn btn-link text-danger btn font-weight-bold pl-1" @click="removeItems">Remove Selected</button></li>
               <li v-if="saving" class="text-primary font-weight-bold">Saving...</li>
           </ul>
           <span v-if="loading && !showList" class="font-weight-bold text-primary p-3">Loading...</span>
@@ -50,7 +51,9 @@ export default {
             showMessage: false,
             loading: false,
             errorMessage: null,
-            inputError: false
+            inputError: false,
+            options_to_delete: [],
+            editItems: false
         }
     },
     computed: {
@@ -81,6 +84,9 @@ export default {
             })
 
             this.saving = false
+        },
+        removeItems() {
+            console.log(this.options_to_delete)
         }
     },
     created() {

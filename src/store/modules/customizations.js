@@ -15,26 +15,38 @@ export default {
         },
     },
     actions: {
-        getCategoryOptions(context) {
+        getCategoryOptions(context, data) {
             return new Promise((resolve, reject) => {
-                axios.get('/customizations')
+                axios.post('/customizations', data)
                 .then(response => {
                     context.commit('updateCategoryList', response.data)
                     resolve(response)
                 }).catch(error => {
-                    console.log(response.data.error)
-                    error(error)
+                    console.log(error)
+                    reject(error)
                 })
             })
         },
-        saveCategoryOption(context) {
-            axios.post('/customization')
-            .then(response => {
-                context.commit('updateCategoryList', response.data)
-            })
-            .catch(error => {
-              console.log(error.response.data)
+        saveCategoryOption(context, data) {
+            return new Promise((resolve, reject) => {
+                axios.post('/customization', data)
+                .then(response => {
+                    context.commit('updateCategoryList', response.data)
+                    resolve(response)
+                })
+                .catch(error => {
+                    reject(error)
+                    console.log(error)
+                })
             })
         },
+        deleteCategoryOption(context, data) {
+            axios.delete('/customization/', data)
+            .then(response => {
+                context.commit('updateCategoryList', response.data)
+            }).catch(error => {
+                console.log(error.response.data)
+            })
+        }
     }
 }

@@ -40,7 +40,7 @@
                   <input class="search-engagement-input" placeholder="Start Typing To Filter By Name..." v-model="searchEngagement">
                   <button class="btn btn-sm btn-secondary clear-sort-btn" @click="currentSort = null" v-if="currentSort">Clear Sort</button>
                   <div class="btn-group filter-category-btn">
-                  <button type="button" class="btn btn-sm btn-info dropdown-toggle font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-if="filteredEngagements && filteredEngagements.length > 0">
+                  <button type="button" class="btn btn-sm btn-info dropdown-toggle font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Filter Category <span v-if="categoryFilterSelection != 'All'">: {{categoryFilterSelection}}</span>
                   </button>
                   <div class="dropdown-menu dropdown-menu-right">

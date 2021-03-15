@@ -39,6 +39,16 @@
                 <div class="flex-fill search-engagements-body">
                   <input class="search-engagement-input" placeholder="Start Typing To Filter By Name..." v-model="searchEngagement">
                   <button class="btn btn-sm btn-secondary clear-sort-btn" @click="currentSort = null" v-if="currentSort">Clear Sort</button>
+                  <div class="btn-group filter-category-btn">
+                  <button type="button" class="btn btn-sm btn-info dropdown-toggle font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-if="filteredEngagements && filteredEngagements.length > 0">
+                    Filter Category <span v-if="categoryFilterSelection != 'All'">: {{categoryFilterSelection}}</span>
+                  </button>
+                  <div class="dropdown-menu dropdown-menu-right">
+                    <button class="dropdown-item font-weight-bold" type="button" v-for="(item, index) in filterCategory" :key="index" @click="filterBy(item)">{{item}}</button>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item font-weight-bold" type="button" @click="filterBy('All')">Show All</button>
+                  </div>
+                  </div>
                   <button class="btn btn-sm btn-outline-primary export-btn" @click="confirmEngagementsDownload" v-if="filteredEngagements && filteredEngagements.length > 0" data-toggle="tooltip" data-placement="bottom" title="Export Engagements List">Export<i class="fas fa-file-export ml-2"></i></button>
                 </div>  
             </div>           
@@ -236,7 +246,8 @@ export default {
             showList: false,
             dueDate: null,
             nothingSelected: false,
-            priority_levels: levels.priority_levels
+            priority_levels: levels.priority_levels,
+            categoryFilterSelection: 'All'
         }
     },
     computed: {
@@ -250,6 +261,13 @@ export default {
         filteredStatuses() {
             return this.filteredWorkflow[0].statuses
         },
+        filterCategory() {
+          const eng =  this.filteredEngagements.map(eng => eng.client.category)
+
+           const result = eng.filter((v, i) => eng.indexOf(v) === i)
+
+          return result
+        },
         filteredEngagements () {
             const distantFuture = new Date(8640000000000000)
             return this.allEngagements.sort((a,b) => {
@@ -262,15 +280,13 @@ export default {
                 } else {
                 let dateA = a[this.secondSort] ? new Date(a[this.secondSort]) : distantFuture
                 let dateB = b[this.secondSort] ? new Date(b[this.secondSort]) : distantFuture
-                // the first and second sort options is if I want a more complex sort
-                // return b[this.firstSort] - a[this.firstSort] ||
-                // dateA.getTime() - dateB.getTime() ||
                 return new Date(a[this.thirdSort]) - new Date(b[this.thirdSort])
             }
             })
             .filter(eng => eng.workflow_id === this.selectedWorkflowID)
             .filter(eng => eng.status === this.engagementFilterKey || eng.id == this.engagementId)
             .filter(eng => this.currentYear === 'All' ? eng : eng.year === this.currentYear)
+            .filter(eng => this.categoryFilterSelection === 'All' ? eng : eng.client.category === this.categoryFilterSelection)
             .filter(eng => {return !this.searchEngagement || eng.name.toLowerCase().indexOf(this.searchEngagement.toLowerCase()) >= 0 });
         },
         countEngagementsByStatus () {
@@ -401,6 +417,9 @@ export default {
                 left: 0,
                 behavior: 'smooth'
             })
+        },
+        filterBy(value) {
+          this.categoryFilterSelection = value
         }
     },
     watch: {
@@ -503,9 +522,15 @@ export default {
     top: 8px;
   }
 
-  .clear-sort-btn {
+  .filter-category-btn {
     position: absolute;
     right: 100px;
+    top: 8px;
+  }
+
+  .clear-sort-btn {
+    position: absolute;
+    right: 235px;
     top: 8px;
     font-weight: bold;
   }
@@ -584,6 +609,10 @@ export default {
 
   .sorted-row {
     background: rgb(238, 238, 238);
+  }
+
+  .dropdown-item {
+    cursor: pointer;
   }
 
   @media screen and (max-width: 1300px) {

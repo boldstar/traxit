@@ -8,7 +8,7 @@
                     <input type="checkbox">
                     <span class="slider slider-custom round font-weight-bold text-right pt-2 pr-2">Off</span>
                 </label>
-            <button class="btn btn-sm btn-primary font-weight-bold align-self-center" @click="editItems = true">Edit List</button>
+            <button class="btn btn-sm btn-primary font-weight-bold align-self-center" @click="editItems = true" v-if="categoryList.length > 0">Edit List</button>
           </div>
       </div>
       <div class="card-body text-left">
@@ -76,17 +76,28 @@ export default {
             }).then(response => {
                 if(response.data.length > 0) {
                     this.showMessage = false
+                    this.showList = true
                 }
                 this.addItem = false
                 this.name = null
+                this.saving = false
             }).catch(error => {
+                this.saving = false
                 this.errorMessage = 'New item did not save, please try again.'
             })
 
-            this.saving = false
         },
         removeItems() {
-            console.log(this.options_to_delete)
+            this.saving = true
+            this.$store.dispatch('deleteCategoryOptions', this.options_to_delete)
+            .then(response => {
+                this.editItems = false
+                this.saving = false
+                this.options_to_delete = []
+            }).catch(error=> {
+                this.saving = false
+                this.errorMessage = 'Oops something went wrong, please try again.'
+            })
         }
     },
     created() {

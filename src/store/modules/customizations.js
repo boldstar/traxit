@@ -40,12 +40,16 @@ export default {
                 })
             })
         },
-        deleteCategoryOption(context, data) {
-            axios.delete('/customization/', data)
-            .then(response => {
-                context.commit('updateCategoryList', response.data)
-            }).catch(error => {
-                console.log(error.response.data)
+        deleteCategoryOptions(context, data) {
+            return new Promise((resolve, reject) => {
+                axios.post('/customizations-delete', {list: data})
+                .then(response => {
+                    context.commit('updateCategoryList', response.data)
+                    resolve(response)
+                }).catch(error => {
+                    console.log(error)
+                    reject(error)
+                })
             })
         }
     }

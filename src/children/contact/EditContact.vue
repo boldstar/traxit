@@ -7,6 +7,7 @@
         <div class="custom-input-group">
           <label for="category">Category</label>
           <select id="category" v-model="client.category">
+            <option v-for="category in categoryList" :key="category.id + category.name" :value="category.name">{{ category.name }}</option>
             <option v-for="category in categories" :key="category.id" :value="category">{{ category }}</option>
           </select>
         </div>
@@ -165,7 +166,8 @@ export default {
   computed: {
     ...mapGetters(
         [
-          'client'
+          'client',
+          'categoryList'
         ]
       )
   },
@@ -250,6 +252,7 @@ export default {
     },
     created: function() {
       this.$store.dispatch('editDetails', this.$route.params.id);
+      this.$store.dispatch('getCategoryOptions', {belongs_to: 'contact_categories'})
       this.client.category = this.categories[0]
     }
 }

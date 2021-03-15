@@ -19,6 +19,7 @@
           </div>
           <select :class="{ 'input-error': errors.has('Category Type') }"  class="form-control" id="type" v-model="client.category" name="Category Type" v-validate="{ is_not: option }">
             <option disabled>{{option}}</option>
+            <option v-for="(category, index) in categoryList" :key="index + category.name" :value="category.name">{{ category.name }}</option>
             <option v-for="(category, index) in categories" :key="index" :value="category">{{ category }}</option>
           </select>
         </div>
@@ -100,7 +101,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import NumberInput from '@/components/forms/NumberInput.vue'
 import DateInput  from '@/components/forms/DateInput.vue'
 
@@ -146,6 +147,9 @@ export default {
         option: 'Choose..',
         serverError: '',
     }
+  },
+  computed: {
+    ...mapGetters(['categoryList'])
   },
   methods: {
     ...mapActions(['addClient']),
@@ -247,6 +251,7 @@ export default {
     },
   },
   created: function() {
+    this.$store.dispatch('getCategoryOptions', {belongs_to: 'contact_categories'})
     this.client.category = this.option
   }
 }

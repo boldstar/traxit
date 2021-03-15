@@ -7,7 +7,7 @@
         <div class="custom-input-group">
           <label for="category">Category</label>
           <select id="category" v-model="client.category">
-            <option v-for="category in categoryList" :key="category.id + category.name" :value="category.name">{{ category.name }}</option>
+            <option v-for="category in categoryList" :key="category.id + category.name" :value="category.name" v-show="categorySetting">{{ category.name }}</option>
             <option v-for="category in categories" :key="category.id" :value="category">{{ category }}</option>
           </select>
         </div>
@@ -167,9 +167,17 @@ export default {
     ...mapGetters(
         [
           'client',
-          'categoryList'
+          'categoryList',
+          'settingsList'
         ]
-      )
+      ),
+      categorySetting() {
+      if(this.settingsList && this.settingsList.length > 0) {
+        return this.settingsList.filter(setting => setting.name == 'contact_categories')[0].state
+      } else {
+        return 0
+      }
+    }
   },
   methods: {
     ...mapActions(['updateClient']),

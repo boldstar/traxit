@@ -4,15 +4,16 @@
           <h6 class="font-weight-bold m-0 align-self-center">Contact Category Options</h6>
 
           <div class="d-flex">
+                <span class="mr-3 align-self-center font-weight-bold text-success success-msg" v-if="successMessage">{{successMessage}}</span>
                 <label class="switch align-self-center mr-4 mt-2">
-                    <input type="checkbox">
+                    <input type="checkbox" v-model="settingState" @change="updateSetting">
                     <span class="slider slider-custom round font-weight-bold text-right pt-2 pr-2">Off</span>
                 </label>
-            <button class="btn btn-sm btn-primary font-weight-bold align-self-center" @click="editItems = true" v-if="categoryList.length > 0">Edit List</button>
+            <button class="btn btn-sm btn-primary font-weight-bold align-self-center" @click="editItems = true" v-if="categoryList && categoryList.length > 0">Edit List</button>
           </div>
       </div>
       <div class="card-body text-left">
-          <p>Use options listed here to add custom category selections for your contacts.</p>
+          <p>Use items listed here to create custom category options for your contacts.</p>
           <div></div>
           <ul>
               <i class="fas fa-list fa-5x ml-3 mt-3" v-if="loading || showMessage"></i>
@@ -39,6 +40,7 @@
 import {mapGetters} from 'vuex'
 export default {
     name: 'CustomCard',
+    props:['setting', 'state'],
     data() {
         return {
             options: [
@@ -53,11 +55,20 @@ export default {
             errorMessage: null,
             inputError: false,
             options_to_delete: [],
-            editItems: false
+            editItems: false,
+            successMessage: null
         }
     },
     computed: {
-        ...mapGetters(['categoryList'])
+        ...mapGetters(['categoryList']),
+        settingState: {
+            get: function() {
+                return this.state
+		},
+            set: function(newValue) {
+                return newValue
+            }
+        }
     },
     methods: {
         showItemForm() {
@@ -71,7 +82,7 @@ export default {
             this.saving = true
 
             this.$store.dispatch('saveCategoryOption',{
-                belongs_to: 'contact_categories',
+                belongs_to: this.setting,
                 name:  this.name
             }).then(response => {
                 if(response.data.length > 0) {
@@ -98,17 +109,25 @@ export default {
                 this.saving = false
                 this.errorMessage = 'Oops something went wrong, please try again.'
             })
+        },
+        updateSetting() {
+            this.$store.dispatch('updateSetting', {name: this.setting, state: !this.state})
+            .then(response => {
+                this.successMessage = 'Setting Updated!'
+                setTimeout(() => {
+                    this.successMessage = null
+                }, 3000)
+            })
         }
     },
     created() {
         this.loading = true
         this.errorMessage = null
-        this.$store.dispatch('getCategoryOptions', {belongs_to: 'contact_categories'})
+        this.$store.dispatch('getCategoryOptions', {belongs_to: this.setting})
         .then(response => {
             if(response.data.length > 0) {
                 this.showList = true
             } else {
-                console.log('test')
                 this.showMessage = true
             }
             this.loading = false
@@ -120,6 +139,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.success-msg {
+    transition: .3;
+}
+
 ul {
     list-style: none;
     background: rgb(248, 245, 245);

@@ -8,7 +8,8 @@
     </div>
     <hr>
     <div class="d-flex flex-column align-items-center">
-      <CustomizationsList />
+      <CustomizationsList v-if="show"/>
+      <Spinner v-else/>
     </div>
       <!-- this is for viewing children-->
       <router-view></router-view>
@@ -18,22 +19,27 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import CustomizationsList from '@/components/admin/CustomizationsList'
+import Spinner from '@/components/loaders/Spinner'
 export default {
   name: 'Customizations',
-  components: {CustomizationsList},
+  components: {CustomizationsList, Spinner},
   data() {
     return {
-     
+     show: false
     }
   },
   computed: {
-    
-  },
+   
+  },  
   methods: {
     
   },
   created: function() {
+    var self = this
     
+    setTimeout(() => {
+      self.show = true
+    }, 2000)
   },
 }
 </script>

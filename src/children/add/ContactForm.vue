@@ -19,7 +19,7 @@
           </div>
           <select :class="{ 'input-error': errors.has('Category Type') }"  class="form-control" id="type" v-model="client.category" name="Category Type" v-validate="{ is_not: option }">
             <option disabled>{{option}}</option>
-            <option v-for="(category, index) in categoryList" :key="index + category.name" :value="category.name">{{ category.name }}</option>
+            <option v-for="(category, index) in categoryList" :key="index + category.name" :value="category.name" v-show="categorySetting">{{ category.name }}</option>
             <option v-for="(category, index) in categories" :key="index" :value="category">{{ category }}</option>
           </select>
         </div>
@@ -149,7 +149,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['categoryList'])
+    ...mapGetters(['categoryList', 'settingsList']),
+    categorySetting() {
+      if(this.settingsList && this.settingsList.length > 0) {
+        return this.settingsList.filter(setting => setting.name == 'contact_categories')[0].state
+      }
+    }
   },
   methods: {
     ...mapActions(['addClient']),

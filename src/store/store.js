@@ -21,6 +21,8 @@ import portal from './modules/portal'
 import business from './modules/business'
 import bookkeeping from './modules/bookkeeping'
 import history from './modules/history'
+import customizations from './modules/customizations'
+import settings from './modules/settings'
 
 // this is for the abilities plug in.
 import { abilityPlugin, ability as appAbility } from './ability'
@@ -64,7 +66,9 @@ export default new Vuex.Store({
     portal,
     business,
     bookkeeping,
-    history
+    history,
+    customizations,
+    settings
   },
   state: {
     processing: false,

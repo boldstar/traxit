@@ -7,6 +7,7 @@
         <div class="custom-input-group">
           <label for="category">Category</label>
           <select id="category" v-model="client.category">
+            <option v-for="category in categoryList" :key="category.id + category.name" :value="category.name" v-show="categorySetting">{{ category.name }}</option>
             <option v-for="category in categories" :key="category.id" :value="category">{{ category }}</option>
           </select>
         </div>
@@ -165,9 +166,18 @@ export default {
   computed: {
     ...mapGetters(
         [
-          'client'
+          'client',
+          'categoryList',
+          'settingsList'
         ]
-      )
+      ),
+      categorySetting() {
+      if(this.settingsList && this.settingsList.length > 0) {
+        return this.settingsList.filter(setting => setting.name == 'contact_categories')[0].state
+      } else {
+        return 0
+      }
+    }
   },
   methods: {
     ...mapActions(['updateClient']),
@@ -250,6 +260,7 @@ export default {
     },
     created: function() {
       this.$store.dispatch('editDetails', this.$route.params.id);
+      this.$store.dispatch('getCategoryOptions', {belongs_to: 'contact_categories'})
       this.client.category = this.categories[0]
     }
 }

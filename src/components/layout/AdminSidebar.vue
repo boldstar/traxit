@@ -1,6 +1,6 @@
 <template>
     <div class="p-0 sidebar">
-        <ul class="admin-nav text-right h5 d-flex flex-column p-0 m-0">
+        <ul class="admin-nav text-right h6 d-flex flex-column p-0 m-0">
             <router-link class="py-3 text-muted pr-4 link" to="/administrator/account" :class="{ 'is-selected': $route.name === 'app-account' }">
                 <span class="link-span">Account</span>
                 <i class="fas fa-book-open ml-2"></i>
@@ -12,6 +12,11 @@
             <router-link class="py-3 text-muted pr-4 link" to="/administrator/workflows" :class="{ 'is-selected': $route.name === 'workflows' }">
                 <span class="link-span">Workflows</span>
                 <i class="fas fa-route ml-2"></i>
+            </router-link>
+            <router-link class="py-3 text-muted pr-4 link" to="/administrator/customizations" :class="{ 'is-selected': $route.name === 'customizations' }">
+                <span class="link-span">Customizations</span>
+                <i class="fas fa-cog ml-2"></i>
+                <span class="badge bg-danger text-white new-badge">New</span>
             </router-link>
             <router-link class="py-3 text-muted pr-4 link" to="/administrator/reports" :class="{ 'is-selected': $route.name === 'reports' }">
                 <span class="link-span">Reports</span>
@@ -68,6 +73,15 @@ export default {
      &:hover {
             background-color: #0077ff21;
             transition: 1s;
+        }
+
+        position: relative;
+
+        .new-badge {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            font-size: .6em;
         }
 }
 

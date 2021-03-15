@@ -43,6 +43,7 @@ export default {
     mounted() {
         //checks if session is expired
         this.destroySessionIfTokenIsExpired()
+        this.$store.dispatch('getSettings')
     },
 }
 </script>

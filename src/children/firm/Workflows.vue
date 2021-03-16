@@ -38,18 +38,20 @@
             <div class="d-flex">
                 <div class="flex-fill search-engagements-body">
                   <input class="search-engagement-input" placeholder="Start Typing To Filter By Name..." v-model="searchEngagement">
-                  <button class="btn btn-sm btn-secondary clear-sort-btn" @click="currentSort = null" v-if="currentSort">Clear Sort</button>
-                  <div class="btn-group filter-category-btn">
-                  <button type="button" class="btn btn-sm btn-info dropdown-toggle font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Filter Category <span v-if="categoryFilterSelection != 'All'">: {{categoryFilterSelection}}</span>
-                  </button>
-                  <div class="dropdown-menu dropdown-menu-right">
-                    <button class="dropdown-item font-weight-bold" type="button" v-for="(item, index) in filterCategory" :key="index" @click="filterBy(item)">{{item}}</button>
-                    <div class="dropdown-divider"></div>
-                    <button class="dropdown-item font-weight-bold" type="button" @click="filterBy('All')">Show All</button>
+                  <div class="d-flex list-btn-group">
+                    <button class="btn btn-sm btn-secondary mr-2 font-weight-bold" @click="currentSort = null, categoryFilterSelection = 'All'" v-if="currentSort || categoryFilterSelection != 'All'">Clear</button>
+                    <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-info dropdown-toggle font-weight-bold mr-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Filter Category <span v-if="categoryFilterSelection != 'All'">: {{categoryFilterSelection}}</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <button class="dropdown-item font-weight-bold" type="button" v-for="(item, index) in filterCategory" :key="index" @click="filterBy(item)">{{item}}</button>
+                      <div class="dropdown-divider"></div>
+                      <button class="dropdown-item font-weight-bold" type="button" @click="filterBy('All')">Show All</button>
+                    </div>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary" @click="confirmEngagementsDownload" v-if="filteredEngagements && filteredEngagements.length > 0" data-toggle="tooltip" data-placement="bottom" title="Export Engagements List">Export<i class="fas fa-file-export ml-2"></i></button>
                   </div>
-                  </div>
-                  <button class="btn btn-sm btn-outline-primary export-btn" @click="confirmEngagementsDownload" v-if="filteredEngagements && filteredEngagements.length > 0" data-toggle="tooltip" data-placement="bottom" title="Export Engagements List">Export<i class="fas fa-file-export ml-2"></i></button>
                 </div>  
             </div>           
           </div>
@@ -262,7 +264,7 @@ export default {
             return this.filteredWorkflow[0].statuses
         },
         filterCategory() {
-          const eng =  this.filteredEngagements.map(eng => eng.client.category)
+          const eng =  this.allEngagements.map(eng => eng.client.category)
 
            const result = eng.filter((v, i) => eng.indexOf(v) === i)
 
@@ -516,7 +518,7 @@ export default {
     z-index: 0;
   }
 
-  .export-btn {
+  .list-btn-group {
     position: absolute;
     right: 10px;
     top: 8px;

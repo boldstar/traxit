@@ -4,7 +4,7 @@
             <div v-html="subscribeView"></div>
         </component> 
         <component :is="layout" v-else> 
-                <router-view/>
+                <router-view id="page"/>
         </component>
     </div>
 </template>

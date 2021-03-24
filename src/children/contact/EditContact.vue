@@ -7,8 +7,8 @@
         <div class="custom-input-group">
           <label for="category">Category</label>
           <select id="category" v-model="client.category">
-            <option v-for="category in categoryList" :key="category.id + category.name" :value="category.name" v-show="categorySetting">{{ category.name }}</option>
             <option v-for="category in categories" :key="category.id" :value="category">{{ category }}</option>
+            <option v-for="category in categoryList" :key="category.id + category.name" :value="category.name" v-show="categorySetting">{{ category.name }}</option>
           </select>
         </div>
 

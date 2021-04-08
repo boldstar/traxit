@@ -237,6 +237,7 @@ export default {
         this.engagement = "" 
         this.idForEngagement++
         this.$router.push({path: '/add'});
+        this.$store.dispatch('retrieveTasks')
       })
     },
   },

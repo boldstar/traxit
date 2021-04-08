@@ -1,11 +1,8 @@
 import axios from 'axios'
-import moment from 'moment';
-import router from '../../routes/router'
 
 export default {
     state: {
-        tasks: [],
-        task: [],
+        tasks: []
     },
     getters: {
         tasks(state) {

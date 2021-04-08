@@ -123,11 +123,6 @@ export default {
             this.$store.commit('changeContactFilter', filter)
         }
     },
-    watch: {
-        'tasks': function() {
-            this.$store.dispatch('retrieveTasks')
-        }
-    },
     created() {
         this.$store.dispatch('filesLength')
         this.$store.dispatch('retrieveTasks')

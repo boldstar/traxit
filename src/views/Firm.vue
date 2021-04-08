@@ -68,7 +68,14 @@ export default {
         //filter duplicates
         const result = years.filter((v, i) => years.indexOf(v) === i)
 
-        return result.sort((a, b) => b - a)
+        return result.sort(function(a, b) {
+            var string1 = /[0-9]+/.exec(a);
+            var string2 = /[0-9]+/.exec(b);
+            if(string1 && string2) {
+                return string2[0].localeCompare(string1[0]);
+            } else {
+                return b - a
+        }})
     },
   },
   methods: {

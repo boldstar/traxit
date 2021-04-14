@@ -257,15 +257,17 @@ export default {
                     context.commit('addClientEngagement', response.data.engagement)
                     context.commit('successAlert', response.data.message)
                     context.commit('stopProcessing')
-                    if(router.history.current.path == '/add/engagement/form') {
-                        router.push('/add')
-                    } else {
-                        router.push('/contact/' + engagement.client_id + '/engagements')
+                    if(router.history.current.path != '/firm/workflow-overview') {
+                        if(router.history.current.path == '/add/engagement/form') {
+                            router.push('/add')
+                        } else {
+                            router.push('/contact/' + engagement.client_id + '/engagements')
+                        }
                     }
                     resolve(response)
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.log(error.response.data)
                     context.commit('stopProcessing')
                     context.commit('errorMsgAlert', error.response.data.message)
                     reject(error)

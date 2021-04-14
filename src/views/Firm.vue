@@ -15,7 +15,10 @@
                 </select>
               </div>
           </div>
-          <button class="btn btn-sm btn-outline-primary" @click="refresh"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
+          <div class="d-flex">
+            <button class="btn btn-sm btn-outline-secondary mr-2" @click="showEngagementForm">Add Engagement</button>
+            <button class="btn btn-sm btn-outline-primary" @click="refresh"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
+          </div>
       </div>
       
       <Alert v-if="successAlert" :message="successAlert" class="my-2" />
@@ -29,6 +32,16 @@
         :loading="loading"
       ></router-view>
 
+      <AddEngageModal 
+        :workflows="allWorkflows" 
+        :users="users" 
+        :years="years"
+        :clients="allClients"
+        :return_types="returnTypes"
+        v-if="showForm"
+        @close-modal="showForm = false"
+      />
+
   </div>
 </template>
 
@@ -36,20 +49,22 @@
 import { mapGetters, mapActions } from 'vuex'
 import Alert from '@/components/alerts/Alert.vue'
 import Spinner from '@/components/loaders/Spinner.vue'
-
+import AddEngageModal from '@/components/modals/AddEngageModal.vue'
 export default {
   name: 'FirmView',
   props: ['admin'],
   components: {
     Alert,
     Spinner,
+    AddEngageModal
   },
   data() {
     return {
       currentYear: 'All',
       allYears: 'All',
       selectedWorkflowID: null,
-      loading: false
+      loading: false,
+      showForm: false
     }
   },
   computed: {
@@ -60,7 +75,9 @@ export default {
       'successAlert', 
       'processing', 
       'confirmDownload', 
-      'timesheet'
+      'timesheet',
+      'returnTypes',
+      'allClients'
     ]),
     filterYears() {
         //map year
@@ -77,6 +94,14 @@ export default {
                 return b - a
         }})
     },
+    years() {
+        var currentYear = new Date().getFullYear(), years = [];
+        var startYear = currentYear - 10;  
+        while(startYear <= currentYear) {
+          years.push(startYear++)
+        } 
+        return years.reverse();
+    }
   },
   methods: {
     refresh() {
@@ -86,11 +111,16 @@ export default {
         self.loading = false;
       }, 3000);
     },
+    showEngagementForm() {
+      this.showForm = true
+    }
   },
   created() {
     this.$store.dispatch('retrieveEngagements')
     this.$store.dispatch('retrieveUsers')
     this.$store.dispatch('retrieveWorkflows')
+    this.$store.dispatch('getReturnTypes')
+    this.$store.dispatch('retrieveClientsWithBusinesses')
     this.currentYear = this.allYears
     this.loading = true
     var self = this

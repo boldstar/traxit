@@ -251,21 +251,27 @@ export default {
         },
         addEngagement(context, engagement) {
             context.commit('startProcessing')
-            axios.post(('/engagements'), engagement)
-            .then(response => {
-                context.commit('addClientEngagement', response.data.engagement)
-                context.commit('successAlert', response.data.message)
-                context.commit('stopProcessing')
-                if(router.history.current.path == '/add/engagement/form') {
-                    router.push('/add')
-                } else {
-                    router.push('/contact/' + engagement.client_id + '/engagements')
-                }
-            })
-            .catch(error => {
-                console.log(error.response.data)
-                context.commit('stopProcessing')
-                context.commit('errorMsgAlert', error.response.data.message)
+            return new Promise((resolve, reject) => {
+                axios.post(('/engagements'), engagement)
+                .then(response => {
+                    context.commit('addClientEngagement', response.data.engagement)
+                    context.commit('successAlert', response.data.message)
+                    context.commit('stopProcessing')
+                    if(router.history.current.path != '/firm/workflow-overview') {
+                        if(router.history.current.path == '/add/engagement/form') {
+                            router.push('/add')
+                        } else {
+                            router.push('/contact/' + engagement.client_id + '/engagements')
+                        }
+                    }
+                    resolve(response)
+                })
+                .catch(error => {
+                    console.log(error.response.data)
+                    context.commit('stopProcessing')
+                    context.commit('errorMsgAlert', error.response.data.message)
+                    reject(error)
+                })
             })
         },
         updateEngagement(context, engagement) {
@@ -345,13 +351,17 @@ export default {
             })
         },
         deleteEngagement(context, id) {
-            axios.delete('/engagements/' + id)
-            .then(() => {
-                context.commit('deleteEngagement', id)
+            return new Promise((resolve, reject) => {
+                axios.delete('/engagements/' + id)
+                .then(response => {
+                    context.commit('deleteEngagement', id)
+                    resolve(response)
+                })
+                .catch(error => {
+                    console.log(error)
+                    reject(error)
+                })                
             })
-            .catch(error => {
-                console.log(error.response.data)
-            })                
         },
         getQuestion({commit}, id) {
             axios.get('/questions/'+ id)

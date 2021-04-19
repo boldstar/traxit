@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="workflow">
       <div class="row d-flex justify-content-between card-body col-12 mx-auto mb-3 firm px-0" >
         <ProcessingBar v-if="processing && !timesheet"/>
         <NoFirm v-if="noEngagements && !listLoading && !loading" class="mx-auto align-self-center"/>
@@ -64,21 +64,50 @@
             <table class="table border table-hover" ref="engagement-table">
               <thead class="text-primary text-left">
                 <tr>
-                  <th scope="col">Batch</th>
-                  <th scope="col">Name</th>
-                  <th scope="col" @click="sort('created_at')" class="hide-row sort-btn" :class="{'sorted-row': !this.currentSort}">Created On<i class="fas fa-sort text-dark ml-3"></i></th>
-                  <th scope="col" @click="sort('estimated_date')" class="hide-row sort-btn" :class="{'sorted-row': this.currentSort == 'estimated_date'}">Due Date<i class="fas fa-sort text-dark ml-3"></i></th>
-                  <th scope="col" @click="sort('priority')" class="sort-btn" :class="{'sorted-row': this.currentSort == 'priority'}">Priority <i class="fas fa-sort text-dark ml-3"></i></th>
-                  <th scope="col" @click="sort('assigned_to')" class="sort-btn" :class="{'sorted-row': this.currentSort == 'assigned_to'}">Assigned To<i class="fas fa-sort text-dark ml-3"></i></th>
-                  <th scope="col" @click="sort('year')" class="hide-row sort-btn"  :class="{'sorted-row': this.currentSort == 'year'}">Tax Year<i class="fas fa-sort text-dark ml-3"></i></th>
-                  <th scope="col" class="hide-row">Status</th>
-                  <th class="hide-row" v-if="$can('delete', admin)">Edit</th>
+                  <th scope="col"><span class="table-header-text">Batch</span></th>
+                  <th scope="col"><span class="table-header-text">Name</span></th>
+                  <th scope="col" @click="sort('created_at')" class="hide-row hover-header" :class="{'sorted-row': !this.currentSort}">
+                    <div class="sort-btn">
+                      <i class="fas fa-sort text-dark"></i>
+                      <span>Created On</span>
+                    </div>
+                  </th>
+                  <th scope="col" @click="sort('estimated_date')" class="hide-row hover-header" :class="{'sorted-row': this.currentSort == 'estimated_date'}">
+                    <div class="sort-btn">
+                      <i class="fas fa-sort text-dark"></i>
+                      <span>Due Date</span>                      
+                    </div>
+                  </th>
+                  <th scope="col" @click="sort('priority')" class="hover-header" :class="{'sorted-row': this.currentSort == 'priority'}">
+                    <div class="sort-btn">
+                      <i class="fas fa-sort text-dark"></i>
+                      <span>Priority</span>                      
+                    </div>
+                  </th>
+                  <th scope="col" @click="sort('assigned_to')" class="hover-header" :class="{'sorted-row': this.currentSort == 'assigned_to'}">
+                    <div class="sort-btn">
+                      <i class="fas fa-sort text-dark"></i>
+                      <span>Assigned To</span>
+                    </div>
+                  </th>
+                  <th scope="col" @click="sort('year')" class="hide-row hover-header"  :class="{'sorted-row': this.currentSort == 'year'}">
+                    <div class="sort-btn">
+                      <i class="fas fa-sort text-dark"></i>
+                      <span>Tax Year</span>
+                    </div>
+                  </th>
+                  <th scope="col" class="hide-row">
+                    <span class="table-header-text">Status</span>
+                  </th>
+                  <th class="hide-row" v-if="$can('delete', admin)">
+                    <span class="table-header-text">Edit</span>
+                  </th>
                 </tr>
               </thead>
               <tbody class="text-left">
                 <tr v-for="(engagement, index) in filteredEngagements" :key="index" class="engagement-row" :ref="'engagement-row' + `${index}`">
-                  <th scope="row" class="custom-control custom-checkbox"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements.engagements" class="custom-control-input" :id="`${engagement.id}`"><label class="custom-control-label pb-2 ml-5" :for="`${engagement.id}`"></label></th>
-                  <th @click="viewDetails(engagement.id)">{{ engagement.name}}</th>
+                  <td scope="row"><input type="checkbox" :value="engagement.id" v-model="checkedEngagements.engagements" :id="`${engagement.id}`"></td>
+                  <td @click="viewDetails(engagement.id)" class="font-weight-bold">{{ engagement.name}}</td>
                   <td @click="viewDetails(engagement.id)" class="hide-row">{{ engagement.created_at | formatDate }}</td>
                   <td @click="viewDetails(engagement.id)" class="hide-row" v-if="engagement.estimated_date">{{ engagement.estimated_date | formatDate }}</td>
                   <td @click="viewDetails(engagement.id)" class="hide-row" v-else>None</td>
@@ -91,7 +120,7 @@
                 <tr v-if="filteredEngagements.length > 8">
                   <td colspan=9>
                   <div class="d-flex flex-column align-items-center justify-content-center">
-                    <span class="font-weight-bold">You Have Reached The End</span>
+                    <span class="font-weight-bold" @click="scrollToTop()">You Have Reached The End</span>
                     <!-- <button class="btn btn-sm btn-primary mt-2 font-weight-bold" @click="scrollToTop()">Back To Top</button> -->
                   </div>
                   </td>
@@ -413,16 +442,9 @@ export default {
                 return 'None'
             }
         },
-        scrollToTop() {
-            window.scrollTo({
-                top: 100,
-                left: 0,
-                behavior: 'smooth'
-            })
-        },
         filterBy(value) {
           this.categoryFilterSelection = value
-        }
+        },
     },
     watch: {
         'loading': function(value) {
@@ -465,10 +487,6 @@ export default {
     padding-right: 20px;
     padding-top: 12px;
     box-shadow: 5px -5px 15px 0 rgba(0,0,0,.25px);
-  }
-
-  tr {
-    cursor: pointer;
   }
 
 
@@ -515,7 +533,7 @@ export default {
 
   .search-engagements-body {
     position: relative;
-    z-index: 0;
+    z-index: 1000;
   }
 
   .list-btn-group {
@@ -548,16 +566,42 @@ export default {
     font-weight: bold;
   }
 
-  .table {
+  .table-responsive {
+    overflow: visible;
+    margin-bottom: 50px;
+  }
 
+  .table-header-text {
+    font-size: .8em;
+  }
+
+  .table {
+    position: relative;
+    thead{
+      tr {
+        cursor: pointer;
+        th {
+          position: -webkit-sticky;
+          position: sticky;
+          top: -20px;
+          background: white;
+          border-bottom: 2px solid lightgray;
+          box-shadow: 0 2px 2px -1px rgba(0,0,0,.2px);
+        }
+      }
+
+    }
     tbody {
       tr {
+        border-top: 1px solid lightgray;
         th {
           vertical-align: middle;
         }
         td {
           vertical-align: middle;
+          border-bottom: 1px solid lightgray;
         }
+
       }
       .edit-engagement-row {
         background: rgb(241, 241, 241);
@@ -598,19 +642,26 @@ export default {
     flex-wrap: nowrap!important;
   }
 
-  .table-responsive {
-    overflow: visible;
-    margin-bottom: 50px;
+  .sort-btn {
+    display: flex;
+    font-size: .8em;
+    i {
+      align-self: center;
+      margin-right: 8px;
+      margin-top: 3px;
+    }
+
   }
 
-  .sort-btn {
+  .hover-header {
+
     &:hover {
       background: lightgray;
     }
   }
 
   .sorted-row {
-    background: rgb(238, 238, 238);
+    background: rgb(238, 238, 238)!important;
   }
 
   .dropdown-item {

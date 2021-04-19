@@ -30,7 +30,10 @@
             </li>
             <li class="nav-item w-100" id="tasks" v-bind:class="{ 'is-active': isActive && sidebarOpen }">
                 <transition name="router-animation" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
-                    <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/tasks"><i class="fas fa-list-ul align-self-center"></i><span :class="sidebarOpen ? 'show-link' : 'hide-link'">Tasks</span></router-link>  
+                    <router-link class="nav-link border-right text-left pl-4 d-flex" :class="{'sidebar-collapsed-link': !sidebarOpen}" to="/tasks"><i class="fas fa-list-ul align-self-center"></i><span :class="sidebarOpen ? 'show-link' : 'hide-link'">Tasks</span>
+                    <span class="badge bg-primary task-badge" v-if="tasks && tasks.length > 0" :class="sidebarOpen ? 'show-link' : 'hide-link'">{{tasks.length}}</span>
+                    <span class="badge bg-primary task-badge" v-else :class="sidebarOpen ? 'show-link' : 'hide-link'">0</span>
+                    </router-link>  
                 </transition>
             </li>
             <li class="nav-item w-100" id="engagements" v-if="role != 'Outsource'"  v-bind:class="{ 'is-active': isActive && sidebarOpen }">
@@ -111,7 +114,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert', 'engagementFilter', 'contactFilter', 'sidebarOpen', 'files_length'])
+        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert', 'engagementFilter', 'contactFilter', 'sidebarOpen', 'files_length', 'tasks'])
     },
     methods: {
         filterEngagements(filter) {
@@ -123,6 +126,7 @@ export default {
     },
     created() {
         this.$store.dispatch('filesLength')
+        this.$store.dispatch('retrieveTasks')
     }
 }
 </script>
@@ -342,6 +346,16 @@ export default {
         left: 25px;
         top: 9px;
         font-size: .7rem!important;
+    }
+
+    .task-badge {
+        position: absolute;
+        right: 35px;
+        color: white;
+        font-weight: bold;
+        top: 25px;
+        padding: 3px 10px;
+        border-radius: 7px!important;
     }
 </style>
 

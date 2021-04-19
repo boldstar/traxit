@@ -250,12 +250,15 @@ export default {
           paid: this.engagement.paid,
           estimated_date: this.engagement.estimated_date,
           priority: this.engagement.priority
+        }).then(() => {
+          this.$store.dispatch('retrieveTasks')
         })  
     },
     deleteEngagement(id) {
       this.$store.dispatch('deleteEngagement', id)
       .then(() => {
         this.$router.push({path: '/engagements', query: {alert: 'Engagement Was Succesfully Deleted'}});
+        this.$store.dispatch('retrieveTasks')
       })
     },
     isActive: function (menuItem) {

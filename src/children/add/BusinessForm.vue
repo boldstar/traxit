@@ -111,6 +111,7 @@ export default {
         this.business = "" 
         this.idForBusiness++
         this.$router.push({path: '/add'});
+        this.$store.dispatch('retrieveTasks')
       })
     },
   },

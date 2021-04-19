@@ -300,6 +300,8 @@ export default {
         priority: this.engagement.priority == this.option ? 0 : this.engagement.priority,
         estimated_date: this.engagement.estimated_date == this.option ? null : this.engagement.estimated_date,
         done: false
+      }).then(() => {
+        this.$store.dispatch('retrieveTasks')
       })
     },
     selectedTax() {

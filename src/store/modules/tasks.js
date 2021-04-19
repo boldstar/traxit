@@ -1,11 +1,8 @@
 import axios from 'axios'
-import moment from 'moment';
-import router from '../../routes/router'
 
 export default {
     state: {
-        tasks: [],
-        task: [],
+        tasks: []
     },
     getters: {
         tasks(state) {
@@ -38,7 +35,7 @@ export default {
               context.commit('retrieveTasks', response.data)
             })
             .catch(error => {
-              console.log(error.response.data)
+              console.log(error)
             })
         },
         updateTask(context, task) {
@@ -57,9 +54,10 @@ export default {
                 context.commit('updateTask', response.data.task)
                 context.commit('successAlert', response.data.message)
                 context.commit('stopProcessing')
+                context.dispatch('retrieveTasks')
             })
             .catch(error => {
-                console.log(error.response.data)
+                console.log(error)
             })           
         },
         batchUpdateTasks(context, tasks) {
@@ -73,6 +71,7 @@ export default {
                 context.commit('successAlert', response.data.message)
                 context.commit('batchUpdateTasks', response.data.tasks)
                 context.commit('stopProcessing')
+                context.dispatch('retrieveTasks')
             })
             .catch(err => {
                 console.log(err)
@@ -87,7 +86,7 @@ export default {
                 context.commit('successAlert', response.data.message)
             })
             .catch(error => {
-                console.log(error.response.data)
+                console.log(error)
                 context.commit('errorMsgAlert', error.response.data.message)
             })
         }

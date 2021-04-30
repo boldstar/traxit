@@ -36,7 +36,10 @@
                     <span v-if="engagement.client.spouse_email != null">Spouse: {{ engagement.client.spouse_email }}</span>
                 </div>
                 <div class="p-3">
-                    <div>
+                    <div v-if="engagement.client.spouse_last_name && engagement.client.spouse_last_name != engagement.client.last_name">
+                        <span>Hi, <strong>{{ engagement.client.first_name }} {{ engagement.client.last_name}}<span v-if="engagement.client.spouse_first_name"> & {{engagement.client.spouse_first_name}} {{engagement.client.spouse_last_name}}</span>  </strong></span>
+                    </div>
+                    <div v-else>
                         <span>Hi, <strong>{{ engagement.client.first_name }} <span v-if="engagement.client.spouse_first_name"> & {{engagement.client.spouse_first_name}}</span> {{ engagement.client.last_name}} </strong></span>
                     </div>
                     <br>

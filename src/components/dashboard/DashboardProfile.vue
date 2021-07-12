@@ -42,7 +42,7 @@ import { mapGetters } from 'vuex'
 
 export default {
    name: 'DashboardProfile',
-   props: ['workflows', 'engagements', 'tax_year', 'details'],
+   props: ['workflows', 'engagements', 'tax_year', 'details', 'role'],
    components: {DashboardTotal},
     data () {
         return {

@@ -100,7 +100,7 @@ export default {
     this.$store.dispatch('getAccountDetails')
     if(localStorage.getItem('access_token') != null) {
       this.$store.dispatch('getTours')
-      this.$store.dispatch('checkGracePeriod');
+      this.$store.dispatch('checkGracePeriod')
     }
   }
 }

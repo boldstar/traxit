@@ -32,7 +32,7 @@ export const ability = appAbility
 Vue.use(Vuex)
 
 //this is the inital settings for axios requests dependent on local storage state
-localStorage.getItem('fqdn_api_url')!= null ? axios.defaults.baseURL = 'http://' + localStorage.getItem('fqdn_api_url') + '/api' : axios.defaults.baseURL = 'http://traxit.test/api';
+localStorage.getItem('fqdn_api_url')!= null ? axios.defaults.baseURL = 'http://' + localStorage.getItem('fqdn_api_url') + '/api' : axios.defaults.baseURL = 'http://traxit-laravel.test/api';
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access_token');
 
 

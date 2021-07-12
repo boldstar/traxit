@@ -7,6 +7,7 @@
         <div class="dashboard-grids" v-if="!loading && !noData">
             <div class="dashboard-section">
                 <DashboardProfile
+                    :role ="role"
                     :details="accountDetails"
                     :tax_year="currentYear"
                     :engagements="allEngagements"

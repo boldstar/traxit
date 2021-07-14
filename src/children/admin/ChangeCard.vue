@@ -8,7 +8,7 @@
     <hr>
     <div class="container d-flex flex-column align-items-center mt-4 cred-card-form">
         <div class="disclosure"><small>All payments are processed and stored by Stripe. <a href="https://stripe.com/privacy">Read More.</a></small></div>
-        <div v-if="!plan" class="d-flex justify-content-between bg-light subscribe-card-details">
+        <div v-if="!plan && plans" class="d-flex justify-content-between bg-light subscribe-card-details">
             <span>{{ plans.data[0].nickname }}</span> 
             <span>{{ plans.data[0].amount }}/mth</span>
         </div>

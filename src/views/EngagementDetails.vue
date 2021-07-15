@@ -50,7 +50,7 @@
         </div>
       </b-modal>
 
-      <div class="d-flex my-3"  v-if="!detailsLoaded">
+      <div class="d-flex my-3"  v-if="!detailsLoading">
          <div class="mr-3 col-2">
           <ul class="d-flex flex-column list-group engage-sidebar" >
             <li class="list-group-item" :class="{'active-list-group-item': $route.name == 'details'}" @click="goTo('details')">
@@ -76,7 +76,7 @@
         <router-view :engagement="engagement" :engagement-notes="engagementNotes" :workflow="engagementWorkflow" @delete-engagement="requestEngagementDelete"></router-view>
       </div>
 
-      <spinner v-if="detailsLoaded"></spinner>
+      <spinner v-if="detailsLoading"></spinner>
     </div>
 
     <UpdateStatusModal  :current_id="engagement.id" />
@@ -99,7 +99,7 @@ export default {
   name: 'EngagementDetails',
   data() {
     return {
-      detailsLoaded: false,
+      detailsLoading: false,
       idForModal: null,
       refForModal: null,
       modalEngage: false,
@@ -171,11 +171,11 @@ export default {
   },
   watch: {
     '$route': function(value) {
-      this.detailsLoaded = true
+      this.detailsLoading = true
       this.$store.dispatch('getEngagement', this.$route.params.id);
       this.$store.dispatch('getEngagementNotes', this.$route.params.id)
       setTimeout(() => {
-        this.detailsLoaded = false
+        this.detailsLoading = false
       }, 1000)
     }
   },
@@ -183,10 +183,10 @@ export default {
     this.$store.dispatch('getEngagement', this.$route.params.id);
     this.$store.dispatch('getEngagementNotes', this.$route.params.id)
     this.$store.dispatch('retrieveUsers');
-    this.detailsLoaded = true;
+    this.detailsLoading = true;
     var self = this;
     setTimeout(() => {
-        self.detailsLoaded = false;
+        self.detailsLoading = false;
     }, 3000)
   }
   

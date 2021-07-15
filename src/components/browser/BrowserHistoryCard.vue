@@ -41,7 +41,7 @@ export default {
             //filter duplicates
             const result = list.filter((v,i,a) => list.findIndex(t=>(JSON.stringify(t) === JSON.stringify(v)))===i)
 
-            return result
+            return result.sort((a, b) => (a.year > b.year) ? 1 : -1)
         }
     },
     methods: {

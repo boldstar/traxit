@@ -30,7 +30,12 @@
           <Timesheet v-if="timesheet" :key="timesheet" />
         </transition>
 
+        <transition name="router-animation" enter-active-class="animated slideInRight" leave-active-class="animated slideOutRight" mode="out-in">
+          <BrowserHistory v-if="browserHistory" :key="browserHistory" />
+        </transition>
+
         <div class="timesheet-bg" v-if="timesheet" @click="toggleTimesheet"></div>
+        <div class="timesheet-bg" v-if="browserHistory" @click="toggleBrowserHistory"></div>
       </main>
     </div>
         
@@ -48,6 +53,7 @@ import NotifyModal from '@/components/modals/NotifyModal.vue'
 import MobileLinks from '@/components/layout/MobileLinks.vue'
 import Setup from '@/components/onboard/Setup.vue'
 import Timesheet from '@/components/tsheets/Timesheet.vue'
+import BrowserHistory from '@/components/browser/BrowserHistory.vue'
 
 export default {
   props: ['admin'],
@@ -58,7 +64,8 @@ export default {
     NotifyModal,
     MobileLinks,
     Setup,
-    Timesheet
+    Timesheet,
+    BrowserHistory
   },
   data () {
     return {
@@ -74,11 +81,14 @@ export default {
     toggleSidebar() {
       return this.$store.getters.sidebarOpen
     },
-    ...mapGetters(['notify', 'mobileLinks', 'setupTour', 'role', 'subscribeView', 'timesheet', 'sidebarOpen']),
+    ...mapGetters(['notify', 'mobileLinks', 'setupTour', 'role', 'subscribeView', 'timesheet', 'sidebarOpen', 'browserHistory']),
   },
   methods: {
     toggleTimesheet() {
       this.$store.commit('toggleTimesheet')
+    },
+    toggleBrowserHistory() {
+      this.$store.commit('BROWSER_HISTORY')
     },
   },
   watch: {

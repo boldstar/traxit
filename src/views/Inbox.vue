@@ -9,7 +9,7 @@
             </div>
         </div>
         <processing-bar v-if="processing"></processing-bar>
-        <div class="files-body">
+        <div class="files-body" v-if="accountDetails">
             <InboxSidebar :selected="sidebar_item" @change-item="changeSelectedItem" :inbox_length="inboxFiles" :url="'https://fileshare.traxit.io/?fqdn='+account"/>
             <InboxManager :key="reset" :files="filteredFiles" :current_file="currentFile" :account_email="accountDetails.email" v-if="all_files" @select-file="changeCurrentFile" @search-input="search" :search="searchFile" :selected="sidebar_item"/>
         </div>

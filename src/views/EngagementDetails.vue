@@ -169,6 +169,16 @@ export default {
       this.$router.push({'path': '/engagement/' + this.engagement.id + '/' + path})
     }
   },
+  watch: {
+    '$route': function(value) {
+      this.detailsLoaded = true
+      this.$store.dispatch('getEngagement', this.$route.params.id);
+      this.$store.dispatch('getEngagementNotes', this.$route.params.id)
+      setTimeout(() => {
+        this.detailsLoaded = false
+      }, 1000)
+    }
+  },
   created() {
     this.$store.dispatch('getEngagement', this.$route.params.id);
     this.$store.dispatch('getEngagementNotes', this.$route.params.id)

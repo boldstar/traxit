@@ -1,15 +1,26 @@
 export function storeHistory(history) {
-    if(localStorage.getItem('browser_history')) {
-        var values = JSON.parse(localStorage.getItem('browser_history'))
-        values.push({
-            'path': history.fullPath
-        })
+    const current = localStorage.getItem('browser_history')
+    if(current) {
+        var values = JSON.parse(current)
+        if(!current.includes(history.fullPath) && /\d+/.test(history.fullPath)) {
+            values.push({
+                'id': history.fullPath.split('/')[2],
+                'path': history.fullPath,
+                'category': history.fullPath.split('/')[1],
+                'page': history.fullPath.split('/')[3]
+            })
+        }
         localStorage.setItem('browser_history', JSON.stringify(values))
     } else {
-        const value = {
-            'path': history.fullPath,
+        if(/\d+/.test(history.fullPath)) {
+            const value = {
+                'id': history.fullPath.split('/')[2],
+                'path': history.fullPath,
+                'category': history.fullPath.split('/')[1],
+                'page': history.fullPath.split('/')[3]
+            }
+            localStorage.setItem('browser_history', JSON.stringify([value]))
         }
-        localStorage.setItem('browser_history', JSON.stringify([value]))
     }
 
     return

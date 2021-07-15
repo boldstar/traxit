@@ -2,7 +2,7 @@
     <div class="bg-white browserhistory">
         <div class="browserhistory-sticky d-flex flex-column" :key="browserHistory">
             <div class="d-flex justify-content-between px-3">
-                <span class="align-self-center font-weight-bold"><i class="fas fa-stopwatch mr-2 text-primary"></i>Browser History</span>
+                <span class="align-self-center font-weight-bold">Browser History</span>
                 <button @click="closeBrowserHistory" class="btn btn-link text-danger font-weight-bold browserhistory-close-btn">X</button>
             </div>
            

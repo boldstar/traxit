@@ -101,7 +101,7 @@ export default {
             .catch(error => {
                 this.trying = false
                 this.loading = false
-                this.serverError = error.response.data
+                this.serverError = 'Something went wrong, please try again.'
                 this.password = ''
                 this.successMessage = ''
             })

@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default {
     state: {
-        account: '',
+        account: null,
         subscribe: null
     },
     getters: {

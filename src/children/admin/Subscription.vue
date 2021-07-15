@@ -119,7 +119,7 @@
       </b-modal>
 
       <!-- this is for viewing the subscription plans -->
-      <router-view :plans="plans" :plan="plan" :current="plan.id" v-if="$route.name == 'plans' || $route.name == 'update-card'"></router-view>
+      <router-view :plans="plans" :plan="plan" :current="plan ? plan.id : null" v-if="$route.name == 'plans' || $route.name == 'update-card'"></router-view>
   </div>
 </template>
 

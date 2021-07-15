@@ -93,7 +93,7 @@ export default {
                 })
                 .catch(error => {
                   console.log(error.response.data)
-                  commit('errorAlert', error.response.data)
+                  commit('errorAlert', 'Something went wrong, please try again')
                   reject(error)
                 })
             })

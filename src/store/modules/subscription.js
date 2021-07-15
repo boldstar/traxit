@@ -154,7 +154,7 @@ export default {
         checkGracePeriod(context) {
             axios.get('/grace')
             .then(response => {
-              if(response.data != false) {
+              if(response.data) {
                 context.commit('gracePeriod', response.data)
               }
             })

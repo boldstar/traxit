@@ -4,6 +4,7 @@ import store from '../store/store'
 import {destroySession} from './session'
 
 axios.interceptors.response.use((response) => {return response},(error) => {
+    return Promise.reject(error)
     if(error.response.status === 401) {
         destroySession()
         router.push('/login')

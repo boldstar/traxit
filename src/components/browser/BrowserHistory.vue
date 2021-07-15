@@ -1,12 +1,12 @@
 <template>
     <div class="bg-white browserhistory">
-        <div class="browserhistory-sticky d-flex flex-column" :key="browserhistory">
+        <div class="browserhistory-sticky d-flex flex-column" :key="browserHistory">
             <div class="d-flex justify-content-between px-3">
                 <span class="align-self-center font-weight-bold"><i class="fas fa-stopwatch mr-2 text-primary"></i>Browser History</span>
                 <button @click="closeBrowserHistory" class="btn btn-link text-danger font-weight-bold browserhistory-close-btn">X</button>
             </div>
            
-            <BrowserHistoryCard  />
+            <BrowserHistoryCard :contacts="allClients" :engagements="allEngagements" />
             
         </div>
     </div>
@@ -27,13 +27,17 @@ export default {
         BrowserHistoryCard,
     },
     computed: {
-        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert', 'browserHistory']),
+        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert', 'browserHistory', 'allEngagements', 'allClients']),
       
     },
     methods: {
         closeBrowserHistory() {
             this.$store.commit('BROWSER_HISTORY')
         }
+    },
+    created() {
+        this.$store.dispatch('retrieveEngagements')
+        this.$store.dispatch('retrieveClients')
     }
 }
 </script>

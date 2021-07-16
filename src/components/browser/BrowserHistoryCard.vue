@@ -57,14 +57,16 @@ export default {
         },
         engagementName(path) {
             if(path.includes('engagement')) {
-                var engagement = this.engagements.filter(e => path.includes(e.id))
+                var id = path.split('/')[2]
+                var engagement = this.engagements.filter(e => e.id == id)
                 if(engagement && engagement.length > 0) {
                     return engagement[0].name
                 }
             } return ''
         },
         engagementYear(path) {
-            var engagement = this.engagements.filter(e => path.includes(e.id)) 
+            var id = path.split('/')[2]
+            var engagement = this.engagements.filter(e => e.id == id) 
                 if(engagement && engagement.length > 0) {
                     return engagement[0].year
                 }

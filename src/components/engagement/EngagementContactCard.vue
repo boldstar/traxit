@@ -4,7 +4,7 @@
       <div class="contact-card-section">
           <span>Taxpayer</span>
             <ul>
-                <li><i class="fas fa-envelope"></i><span v-if="contact.email">{{contact.email}}</span>
+                <li><i class="fas fa-envelope"></i><span class="span_email" v-if="contact.email" @click="mailTo(contact.email)">{{contact.email}}</span>
                 <span v-else>None</span></li>
                 <li><i class="fas fa-phone"></i><span v-if="contact.cell_phone">{{contact.cell_phone}}</span>
                 <span v-else>None</span></li>
@@ -13,7 +13,7 @@
       <div class="contact-card-section has_spouse" v-if="contact.has_spouse">
           <span>Spouse</span>
             <ul>
-                <li><i class="fas fa-envelope"></i><span v-if="contact.spouse_email">{{contact.spouse_email}}</span>
+                <li><i class="fas fa-envelope"></i><span class="span_email" v-if="contact.spouse_email" @click="mailTo(contact.spouse_email)">{{contact.spouse_email}}</span>
                 <span v-else>None</span></li>
                 <li><i class="fas fa-phone"></i><span v-if="contact.spouse_cell_phone">{{contact.spouse_cell_phone}}</span>
                 <span v-else>None</span></li>
@@ -26,9 +26,18 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 export default {
     name: 'EngagementContactCard',
-    props: ['contact']
+    props: ['contact', 'engagement'],
+    computed: {
+        ...mapGetters(['accountDetails'])
+    },
+    methods: {
+        mailTo(email) {
+            window.location.href = "mailto:" + email + '?subject=' + this.accountDetails.business_name + ' Questions';
+        }
+    }
 }
 </script>
 
@@ -74,6 +83,10 @@ export default {
                     font-weight: bold;
                     color: black;
                     padding: 0;
+                }
+
+                .span_email {
+                    cursor: pointer;
                 }
             }
         }

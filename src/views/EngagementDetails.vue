@@ -72,7 +72,7 @@
             </li>
           </ul>
 
-          <EngagementContactCard :contact="engagement.client" class="contact-details-card"/>
+          <EngagementContactCard :contact="engagement.client" :engagement="engagement" class="contact-details-card"/>
         </div>
 
         <router-view :engagement="engagement" :engagement-notes="engagementNotes" :workflow="engagementWorkflow" @delete-engagement="requestEngagementDelete"></router-view>
@@ -128,7 +128,20 @@ export default {
     'b-modal': bModalDirective
   },
   computed: {
-    ...mapGetters(['engagement', 'successAlert', 'processing', 'errorMsgAlert', 'engagementWorkflow','archiving', 'engagementNotes', 'noteModal', 'editNoteModal', 'timesheet', 'users', 'engagementStatusModal']),
+    ...mapGetters(['engagement', 
+        'successAlert', 
+        'processing', 
+        'errorMsgAlert', 
+        'engagementWorkflow',
+        'archiving', 
+        'engagementNotes', 
+        'noteModal', 
+        'editNoteModal', 
+        'timesheet', 
+        'users', 
+        'engagementStatusModal',
+        'browserHistory'
+    ]),
     percentage() {
       const statuses = this.engagementWorkflow.statuses
       const percentage = this.calcPercent(statuses.length)
@@ -175,12 +188,14 @@ export default {
   },
   watch: {
     '$route': function(value) {
-      this.detailsLoading = true
-      this.$store.dispatch('getEngagement', this.$route.params.id);
-      this.$store.dispatch('getEngagementNotes', this.$route.params.id)
-      setTimeout(() => {
-        this.detailsLoading = false
-      }, 1000)
+      if(this.browserHistory) {
+        this.detailsLoading = true
+        this.$store.dispatch('getEngagement', this.$route.params.id);
+        this.$store.dispatch('getEngagementNotes', this.$route.params.id)
+        setTimeout(() => {
+          this.detailsLoading = false
+        }, 1000)
+      }
     }
   },
   created() {

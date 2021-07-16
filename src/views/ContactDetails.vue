@@ -174,6 +174,12 @@ export default {
   },
   watch: {
       $route (to, from) {
+        this.loading = true
+        var self = this
+        setTimeout(() => {
+          self.loading = false
+        }, 2000)
+        this.$store.dispatch('getDetails', this.$route.params.id)
         if(this.$route.query.alert) {
           this.alert  = this.$route.query.alert;
           this.$router.replace({path: '/contact/' +this.client.id+ '/account'});

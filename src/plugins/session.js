@@ -27,6 +27,7 @@ export function  destroySession() {
     localStorage.removeItem('expires_on')
     localStorage.removeItem('role')
     localStorage.removeItem('rules')
+    localStorage.removeItem('browser_history')
     return
 }
 

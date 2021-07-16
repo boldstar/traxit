@@ -49,7 +49,8 @@ export default {
            this.$router.replace({path: path})
         },
         contactName(path) {
-            var client  = this.contacts.filter(c => path.includes(c.id))[0]
+            var id = path.split('/')[2]
+            var client  = this.contacts.filter(c => c.id == id)[0]
             if(client) {
                 var name = client.spouse_first_name ? client.last_name +', ' + client.first_name + ' & ' + client.spouse_first_name : client.last_name +', ' + client.first_name
                 return name

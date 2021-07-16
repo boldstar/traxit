@@ -71,6 +71,8 @@
               <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'invoice'}" :to="{path: '/engagement/' + engagement.id + '/invoice'}">Invoice</router-link>
             </li>
           </ul>
+
+          <EngagementContactCard :contact="engagement.client" class="contact-details-card"/>
         </div>
 
         <router-view :engagement="engagement" :engagement-notes="engagementNotes" :workflow="engagementWorkflow" @delete-engagement="requestEngagementDelete"></router-view>
@@ -94,6 +96,7 @@ import EngagementStatusModal from '@/components/engagement/EngagementStatusModal
 import Spinner from '@/components/loaders/Spinner.vue'
 import NoteModal from '@/components/engagement/NoteModal.vue'
 import EditNoteModal from '@/components/engagement/EditNoteModal.vue'
+import EngagementContactCard from '@/components/engagement/EngagementContactCard.vue'
 
 export default {
   name: 'EngagementDetails',
@@ -118,7 +121,8 @@ export default {
     NoteModal,
     EditNoteModal,
     UpdateStatusModal,
-    EngagementStatusModal
+    EngagementStatusModal,
+    EngagementContactCard
   },
   directives: {
     'b-modal': bModalDirective
@@ -199,6 +203,12 @@ export default {
      position: -webkit-sticky;
     position: sticky;
     top: 0;
+  }
+
+  .contact-details-card {
+     position: -webkit-sticky;
+    position: sticky;
+    top: 250px;
   }
 
   .mail-sent-flag {

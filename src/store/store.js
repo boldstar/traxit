@@ -23,6 +23,7 @@ import bookkeeping from './modules/bookkeeping'
 import history from './modules/history'
 import customizations from './modules/customizations'
 import settings from './modules/settings'
+import browserhistory from './modules/browserhistory'
 
 // this is for the abilities plug in.
 import { abilityPlugin, ability as appAbility } from './ability'
@@ -68,7 +69,8 @@ export default new Vuex.Store({
     bookkeeping,
     history,
     customizations,
-    settings
+    settings,
+    browserhistory
   },
   state: {
     processing: false,

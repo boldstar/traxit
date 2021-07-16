@@ -15,8 +15,11 @@
         </div>
         <div>
             <div class="align-self-center" v-if="aewcpa == 'aewcpa.traxit.pro'">
-                <button class="bg-light" @click="handleClick" data-toggle="tooltip" data-placement="bottom" title="Toggle Timesheet">
+                <button class="bg-light" @click="handleClick('timesheet')" data-toggle="tooltip" data-placement="bottom" title="Toggle Timesheet">
                     <i class="fas fa-stopwatch text-primary"></i> <span v-if="current_time" :key="timesheet" class="ml-2 font-weight-bold text-dark">{{ current_time }}</span>
+                </button>
+                <button class="bg-light ml-2" @click="handleClick('browserhistory')" data-toggle="tooltip" data-placement="bottom" title="Toggle Browser History">
+                    <i class="fas fa-history text-primary"></i>
                 </button>
             </div>
         </div>
@@ -48,8 +51,12 @@ export default {
         }
     },
     methods: {
-        handleClick () {
-            this.$store.dispatch('toggleTimesheet')
+        handleClick (value) {
+            if(value == 'timesheet') {
+                this.$store.dispatch('toggleTimesheet')
+            } else {
+                this.$store.dispatch('toggleBrowserHistory')
+            }
         },
         toggleSidebar() {
             this.$store.commit('toggleSidebar')

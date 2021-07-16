@@ -1,5 +1,5 @@
 import store from '../store/store';
-
+import { storeHistory } from './helpers';
 //use this guard in various route files such as administrator.js
 //only admins can access routes protected by this guard
 // localstorage item is set set at login in the auth.js file
@@ -43,6 +43,7 @@ export function routeOutsourceGuard(to,from,next) {
 // requires auth only allows routes that contain the requires auth meta and is logged in
 // password reset is always allowed to be viewed however requires token in which is checked on that view passwordreset.vue
 export function beforeEachCustom(to, from, next) {
+    storeHistory(from)
     if (to.matched.some(record => record.meta.requiresAuth)) {
       var token = store.getters.loggedIn;
       if (!token || token == null || token == undefined ) {

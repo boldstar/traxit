@@ -139,14 +139,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.success-msg {
-    transition: .3;
-}
-
-ul {
-    list-style: none;
-    background: rgb(248, 245, 245);
-    padding: 10px;
+.custom-card {
+    .success-msg {
+        transition: .3;
+    }
+    
+    ul {
+        list-style: none;
+        background: rgb(248, 245, 245);
+        padding: 10px;
+    }
 }
 
 .slider-custom {

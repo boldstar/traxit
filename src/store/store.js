@@ -24,6 +24,7 @@ import history from './modules/history'
 import customizations from './modules/customizations'
 import settings from './modules/settings'
 import browserhistory from './modules/browserhistory'
+import rubex from './modules/rubex'
 
 // this is for the abilities plug in.
 import { abilityPlugin, ability as appAbility } from './ability'
@@ -68,7 +69,8 @@ export default new Vuex.Store({
     history,
     customizations,
     settings,
-    browserhistory
+    browserhistory,
+    rubex
   },
   state: {
     processing: false,

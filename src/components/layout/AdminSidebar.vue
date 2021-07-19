@@ -16,7 +16,11 @@
             <router-link class="py-3 text-muted pr-4 link" to="/administrator/customizations" :class="{ 'is-selected': $route.name === 'customizations' }">
                 <span class="link-span">Customizations</span>
                 <i class="fas fa-cog ml-2"></i>
-                <span class="badge bg-danger text-white new-badge">New</span>
+                <!-- <span class="badge bg-danger text-white new-badge">New</span> -->
+            </router-link>
+            <router-link class="py-3 text-muted pr-4 link" to="/administrator/integrations" :class="{ 'is-selected': $route.name === 'integrations' }">
+                <span class="link-span">Integrations</span>
+                <i class="fas fa-link ml-2"></i>
             </router-link>
             <router-link class="py-3 text-muted pr-4 link" to="/administrator/reports" :class="{ 'is-selected': $route.name === 'reports' }">
                 <span class="link-span">Reports</span>

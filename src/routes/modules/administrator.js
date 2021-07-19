@@ -98,6 +98,12 @@ export default [
             component: () => import('@/children/admin/Customizations.vue'),
             meta: meta,
         },
+        {
+            path: 'integrations',
+            name: 'integrations',
+            component: () => import('@/children/admin/Integrations.vue'),
+            meta: meta,
+        },
     ]
     },
 ]

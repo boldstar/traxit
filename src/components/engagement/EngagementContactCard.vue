@@ -1,6 +1,6 @@
 <template>
   <div class="engagement-contact-card card">
-      <span class="card-header">Contact Info</span>
+      <span class="card-header bg-white">Contact Info</span>
       <div class="contact-card-section">
           <span>Taxpayer</span>
             <ul>
@@ -19,7 +19,7 @@
                 <span v-else>None</span></li>
             </ul>
       </div>
-      <div class="card-footer">
+      <div class="card-footer bg-white">
           <router-link :to="{path: '/contact/' + contact.id + '/account'}">View Contact <i class="fas fa-sign-in-alt"></i></router-link>
       </div>
   </div>

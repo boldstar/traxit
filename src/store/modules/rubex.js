@@ -18,20 +18,24 @@ export default {
       // POST
       // Retrives token from rubex
       requestRubexToken({commit, dispatch}, params) {
-        const url = 'https://rubex.efilecabinet.net/token'
-        axios({
-          method: 'post',
-          url: url,
-          withCredentials: true,
-          data: encodeUrl(params),
-          headers: {
-              'Content-Type': "application/x-www-form-urlencoded",
-              'Authorization': 'Basic ' + btoa('1046:517ECA92-17B7-4311-882C-00C630223F4A')
-        }
-        }).then(res => {
-          console.log(res)
-        }).catch(err => {
-          console.log(err.response)
+        return new Promise((resolve, reject) => {
+          const url = 'https://rubex.efilecabinet.net/token'
+          axios({
+            method: 'post',
+            url: url,
+            withCredentials: true,
+            data: encodeUrl(params),
+            headers: {
+                'Content-Type': "application/x-www-form-urlencoded",
+                'Authorization': 'Basic ' + btoa('1046:517ECA92-17B7-4311-882C-00C630223F4A')
+          }
+          }).then(res => {
+            localStorage.setItem('rubex_access_tokens', JSON.stringify(res.data))
+            resolve(res)
+          }).catch(err => {
+            console.log(err.response)
+            reject(err)
+          })
         })
       },
     }

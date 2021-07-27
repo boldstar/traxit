@@ -1,5 +1,7 @@
 import axios from 'axios'
 import store from '../store'
+import automation_options from '../../plugins/automations'
+import {automate} from '../../plugins/automations'
 
 export default {
     state: {
@@ -61,6 +63,25 @@ export default {
                     reject(error)
                 })
             })
+       },
+       performAutomation(context, data) {
+           const options = automation_options.options
+           const automations = []
+           if(data.automations.length > 0) {
+               data.automations.forEach(d => {
+                   automations.push({ action_id: d.action_id, data: data})
+               });
+               automate(automations)
+               console.log('automations complete')
+           } else {
+               console.log('no automation')
+           }
+       },
+       removeFromCallList(context, data) {
+           console.log(data)
+       },
+       notifyAdminsOfStatusChange(context, data) {
+           console.log(data)
        }
     }
 }

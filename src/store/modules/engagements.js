@@ -300,6 +300,7 @@ export default {
                     priority: engagement.priority
                 })
                 .then(response => {
+                    context.dispatch('performAutomation', {automations: response.data.automation, data: response.data.engagement})
                     context.commit('updateEngagement', response.data.engagement)
                     context.commit('successAlert', response.data.message)
                     context.commit('stopProcessing')

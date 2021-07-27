@@ -46,6 +46,7 @@ export default {
                 done: task.done
             })
             .then(response => {
+                context.dispatch('performAutomation', {automations: response.data.automation, data: response.data.task})
                 if(response.data.notify) {
                 context.commit('notifyClientModal', response.data.task)
                 context.commit('notifyClientMessage', response.data.status)

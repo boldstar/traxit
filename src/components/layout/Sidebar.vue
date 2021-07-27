@@ -25,6 +25,9 @@
                         <li :class="{'sublist-link' : $route.name == 'team-overview'}" @click="$router.push({path: '/firm/team-overview'})">
                             Team Overview
                         </li>
+                        <li :class="{'sublist-link' : $route.name == 'call-list'}" @click="$router.push({path: '/firm/call-list'})">
+                            Call List
+                        </li>
                     </ul> 
                 </transition>  
             </li>

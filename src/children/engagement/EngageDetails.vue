@@ -124,6 +124,33 @@
             </div>
         </div>
 
+        <h4 class="mb-0">Call History</h4>
+        <span class="title-description text-secondary">The history of the contact calling for status update</span>
+
+        <div class="d-flex">
+            <div class="card px-0 mt-3 mb-5 shadow-sm w-100">
+                <div class="card-body p-0 py-2">
+                    <div class="px-3 pt-2 pb-3 border-bottom">
+                        <h5 class="mb-0">Last Called: {{engagement.status}}</h5>
+                        <span class="font-weight-bold text-secondary">Total Calls: {{engagement.updated_at | formatDate}}</span>
+                    </div>
+                    <ul class="m-0 p-0 details-list">
+                        <li class="details-list-item p-2">
+                            <div>
+                                <span>Comments:</span>
+                                <span class="font-weight-bold">{{ workflow.workflow }}</span>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="d-flex mt-3 ml-3 mb-2">
+                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="updateLastCalled" v-if="callListItem">Update Last Called</button>
+                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="removeFromCallList" v-if="callListItem">Remove From Call List</button>
+                        <button class="engage-edit-btn font-weight-bold" type="button" @click="addToCallList" v-else>Add To Call List</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <h4 class="mb-0">Danger Zone</h4>
         <span class="title-description text-secondary">Action taken past this point is irreversable</span>
         <div class="card px-0 mt-3 mb-5 shadow-sm w-100">
@@ -155,7 +182,7 @@ import EngagementDoughnut from '@/components/engagement/EngagementDoughnut.vue'
 
 export default {
     name: 'EngageDetails',
-    props: ['engagement', 'workflow'],
+    props: ['engagement', 'workflow', 'callListItem'],
     components:{
         'b-modal': bModal,
         Alert,
@@ -219,6 +246,21 @@ export default {
         showStatusModal() {
             this.$store.commit('showStatusModal', true)
         },
+        addToCallList() {
+            this.$store.dispatch('addToCallList', {
+                engagement_id: this.$route.params.id,
+                engagement_name: this.engagement.name,
+                current_status: this.engagement.status,
+                comments: null,
+
+            })
+        },
+        updateLastCalled() {
+
+        },
+        removeFromCallList() {
+            
+        }
     }
 }
 </script>

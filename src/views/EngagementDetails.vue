@@ -75,7 +75,13 @@
           <EngagementContactCard :contact="engagement.client" :engagement="engagement" class="contact-details-card"/>
         </div>
 
-        <router-view :engagement="engagement" :engagement-notes="engagementNotes" :workflow="engagementWorkflow" @delete-engagement="requestEngagementDelete"></router-view>
+        <router-view 
+        :engagement="engagement" 
+        :engagement-notes="engagementNotes" 
+        :workflow="engagementWorkflow"
+        :callListItem="callListItem" 
+        @delete-engagement="requestEngagementDelete"
+        ></router-view>
       </div>
 
       <spinner v-if="detailsLoading"></spinner>
@@ -140,7 +146,8 @@ export default {
         'timesheet', 
         'users', 
         'engagementStatusModal',
-        'browserHistory'
+        'browserHistory',
+        'callListItem'
     ]),
     percentage() {
       const statuses = this.engagementWorkflow.statuses
@@ -201,6 +208,7 @@ export default {
   created() {
     this.$store.dispatch('getEngagement', this.$route.params.id);
     this.$store.dispatch('getEngagementNotes', this.$route.params.id)
+    this.$store.dispatch('getCallListItem', this.$route.params.id)
     this.$store.dispatch('retrieveUsers');
     this.detailsLoading = true;
     var self = this;

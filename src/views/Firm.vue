@@ -29,6 +29,7 @@
         :users="users"
         :currentYear="currentYear"
         :selectedWorkflowID="selectedWorkflowID"
+        :callList="callList"
         :loading="loading"
       ></router-view>
 
@@ -77,7 +78,8 @@ export default {
       'confirmDownload', 
       'timesheet',
       'returnTypes',
-      'allClients'
+      'allClients',
+      'callList'
     ]),
     filterYears() {
         //map year
@@ -121,6 +123,7 @@ export default {
     this.$store.dispatch('retrieveWorkflows')
     this.$store.dispatch('getReturnTypes')
     this.$store.dispatch('retrieveClientsWithBusinesses')
+    this.$store.dispatch('getCallList')
     this.currentYear = this.allYears
     this.loading = true
     var self = this

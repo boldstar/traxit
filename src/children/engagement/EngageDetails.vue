@@ -131,20 +131,27 @@
             <div class="card px-0 mt-3 mb-5 shadow-sm w-100">
                 <div class="card-body p-0 py-2">
                     <div class="px-3 pt-2 pb-3 border-bottom">
-                        <h5 class="mb-0">Last Called: {{engagement.status}}</h5>
-                        <span class="font-weight-bold text-secondary">Total Calls: {{engagement.updated_at | formatDate}}</span>
+                        <h5 class="mb-0">Last Called: {{callListItem.last_called_date | formatDate}}</h5>
+                        <span class="font-weight-bold text-secondary">Total Calls: {{callListItem.total_calls}}</span>
                     </div>
                     <ul class="m-0 p-0 details-list">
-                        <li class="details-list-item p-2">
-                            <div>
-                                <span>Comments:</span>
-                                <span class="font-weight-bold">{{ workflow.workflow }}</span>
+                        <li class="details-list-item p-2 pb-0">
+                            <div class="d-flex flex-column">
+                                <span class="py-2">First Called: <strong>{{callListItem.first_called_date | formatDate}}</strong></span>
+                                <span>Comments: <button class="btn btn-link p-0 font-weight-bold comments-btn" @click="addComments"> Add/Edit</button></span> 
+                                <div class="font-weight-bold" v-html="callListItem.comments" v-if="callListItem.comments">
+                                </div>
+                                <div v-else class="font-weight-bold w-100">
+                                     <p class="text-nowrap">There are currently no comments 
+                                    </p>
+                                </div>
                             </div>
                         </li>
                     </ul>
-                    <div class="d-flex mt-3 ml-3 mb-2">
-                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="updateLastCalled" v-if="callListItem">Update Last Called</button>
-                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="removeFromCallList" v-if="callListItem">Remove From Call List</button>
+                    <div class="d-flex ml-3 mb-2">
+                        <button class="engage-edit-btn font-weight-bold" type="button" @click="updateLastCalled" v-if="callListItem">Update Last Called</button>
+                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="removeFromCallList(callListItem.id)" v-if="callListItem">Remove From Call List</button>
+                        <button class="engage-edit-btn bg-danger text-white font-weight-bold ml-3" type="button" @click="deleteCallListHistory(callListItem.id)" v-if="callListItem">Delete History</button>
                         <button class="engage-edit-btn font-weight-bold" type="button" @click="addToCallList" v-else>Add To Call List</button>
                     </div>
                 </div>
@@ -251,15 +258,26 @@ export default {
                 engagement_id: this.$route.params.id,
                 engagement_name: this.engagement.name,
                 current_status: this.engagement.status,
-                comments: null,
-
+                first_called_date: new Date(),
+                last_called_date: new Date(),
+                total_calls: 1
             })
         },
         updateLastCalled() {
+            this.$store.dispatch('updateLastCalled', {
+                id: this.callListItem.id,
+                last_called_date: new Date(),
+                total_calls: this.callListItem.total_calls + 1
+            })
+        },
+        removeFromCallList(id) {
+            this.$store.dispatch('removeFromCallList', id)
+        },
+        addComments() {
 
         },
-        removeFromCallList() {
-            
+        deleteCallListHistory(id) {
+            this.$store.dispatch('deleteCallHistoryItem', id)
         }
     }
 }
@@ -298,5 +316,9 @@ export default {
             background: rgb(218, 218, 218);
             color: black;
         }
+    }
+
+    .comments-btn {
+        font-size: .9rem;
     }
 </style>

@@ -19,6 +19,22 @@ export default {
         },
         CALL_LIST_ITEM(state, data) {
             state.call_list_item = data
+        },
+        UPDATE_CALL_LIST(state, data) {
+            const index = state.call_list.findIndex(s => s.id === data.id)
+            state.call_list.splice(index, 1, data)
+        },
+        UPDATE_CALL_LIST_ITEM(state, data) {
+            state.call_list_item = data
+        },
+        DELETE_CALL_LIST_ITEM(state, id) {
+            state.callListItem = null
+            const index = state.call_list.findIndex(c => c.id === id)
+            state.call_list.splice(index, 1)
+        },
+        REMOVE_FROM_CALL_LIST(state, id) {
+            const index = state.call_list.findIndex(c => c.id === id)
+            state.call_list.splice(index, 1)
         }
     },
     actions: {
@@ -26,7 +42,7 @@ export default {
             return new Promise((resolve, reject) => {
                 axios.get('call-list')
                 .then(res => {
-                    console.log(res.data)
+                    context.commit('CALL_LIST', res.data)
                     resolve(res)
                 }).catch(err => {
                     console.log(err.response.data)
@@ -39,6 +55,69 @@ export default {
                 axios.get('call-list-item/' + id)
                 .then(res => {
                     context.commit('CALL_LIST_ITEM', res.data)
+                    resolve(res)
+                }).catch(err => {
+                    console.log(err.response.data)
+                    reject(err)
+                })
+            })
+        },
+        addToCallList(context, data) {
+            return new Promise((resolve, reject) => {
+                axios.post('call-list', data)
+                .then(res => {
+                    context.commit('UPDATE_CALL_LIST_ITEM', res.data)
+                    resolve(res)
+                }).catch(err => {
+                    console.log(err.response.data)
+                    reject(err)
+                })
+            })
+        },
+        updateCallListItem(context, data) {
+            return new Promise((resolve, reject) => {
+                axios.post('call-list-update-item', data)
+                .then(res => {
+                    context.commit('UPDATE_CALL_LIST_ITEM', res.data)
+                    context.commit('UPDATE_CALL_LIST', res.data)
+                    resolve(res)
+                }).catch(err => {
+                    console.log(err.response.data)
+                    reject(err)
+                })
+            })
+        },
+        updateLastCalled(context, data) {
+            return new Promise((resolve, reject) => {
+                axios.post('call-list-item', data)
+                .then(res => {
+                    context.commit('UPDATE_CALL_LIST_ITEM', res.data)
+                    context.commit('UPDATE_CALL_LIST', res.data)
+                    resolve(res)
+                }).catch(err => {
+                    console.log(err.response.data)
+                    reject(err)
+                })
+            })
+        },
+        removeFromCallList(context, id) {
+            return new Promise((resolve, reject) => {
+                axios.post('remove-from-call-list', {id: id})
+                .then(res => {
+                    context.commit('REMOVE_FROM_CALL_LIST', id)
+                    resolve(res)
+                }).catch(err => {
+                    console.log(err.response.data)
+                    reject(err)
+                })
+            })
+        },
+        deleteCallListItem(context, id) {
+            return new Promise((resolve, reject) => {
+                axios.delete('call-list/' + id)
+                .then(res => {
+                    console.log(res.data)
+                    context.commit('DELETE_CALL_LIST_ITEM', id)
                     resolve(res)
                 }).catch(err => {
                     console.log(err.response.data)

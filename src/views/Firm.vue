@@ -129,7 +129,7 @@ export default {
     var self = this
     setTimeout(() => {
       self.loading= false
-    }, 1000)
+    }, 2000)
   }
 }
 </script>

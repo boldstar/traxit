@@ -6,7 +6,6 @@
                 <input class="bookkeeping-list-input" type="text" placeholder="Filter By Name..." v-model="search">
                 <div class="bookkeeping-list-tabs">
                     <button :class="{'selected': showActive}" @click="show('active')">Active</button>
-                    <button :class="{'selected': showContacts}" @click="show('contacts')">Contact</button>
                     <button :class="{'selected': showBusinessList}" @click="show('businesses')">Business</button>
                 </div>
                 <ul class="bookkeeping-list-body">
@@ -15,11 +14,12 @@
                     <li class="bookkeeping-list-item" :class="{'selected-item': account.id == selectedID && account.belongs_to == belongsToActive && account.name == selectedName}" v-for="(account, index) in activeAccounts" :key="'current' + `${index}`" v-show="showActive && activeAccounts.length > 0" @click="changeSelectedItem(account.id, account.belongs_to, account.name)">
                         <span>{{ account.name }}</span>
                     </li>
-                    <li class="bookkeeping-list-item" :class="{'selected-item': client.id == selectedID}" v-for="(client, index) in filteredContacts" :key="'client' + `${index}`" v-show="showContacts" @click="changeSelectedItem(client.id, null, client.name)">
-                        <span>{{ client.name }}</span>
-                    </li>
                     <li class="bookkeeping-list-item" :class="{'selected-item': business.client_id == selectedID && business.name == selectedName}" v-for="(business, index) in filteredBusinessList" :key="index" v-show="showBusinessList" @click="changeSelectedItem(business.client_id, null, business.name)">
                         <span>{{ business.name }}</span>
+                    </li>
+                    <li v-if="showBusinessList && businessList.length < 1">
+                        <span>There are currently no busiesses available.</span>
+                        <router-link to="/add" class="btn btn-link">Add Business</router-link>
                     </li>
                 </ul>
             </div>
@@ -306,25 +306,34 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['bookkeepingAccounts', 'allClients', 'businessList', 'addAccountModal', 'timesheet', 'processing']),
+        ...mapGetters([
+            'bookkeepingAccounts',
+            'allClients',
+            'businessList',
+            'addAccountModal',
+            'timesheet',
+            'processing'
+        ]),
         activeAccounts() {
-            const mapped = this.bookkeepingAccounts.map(a => ({
-                id: a.client_id,
-                belongs_to: a.belongs_to,
-                name: a.business_name
-            }))
-
-            return mapped.filter(function({id, belongs_to, name}) {
-
-            const key =`${id}${belongs_to}${name}`;
-
-            return !this.has(key) && this.add(key);
-
-            }, new Set).filter(account => { return !this.search || account.name.toLowerCase().indexOf(this.search.toLowerCase()) >= 0 }).sort(function(a, b){
-                if(a.name < b.name) { return -1; }
-                if(a.name > b.name) { return 1; }
-                return 0;
-            })
+            if(this.bookkeepingAccounts && this.bookkeepingAccounts.length > 0) {
+                const mapped = this.bookkeepingAccounts.map(a => ({
+                    id: a.client_id,
+                    belongs_to: a.belongs_to,
+                    name: a.business_name
+                }))
+    
+                return mapped.filter(function({id, belongs_to, name}) {
+    
+                const key =`${id}${belongs_to}${name}`;
+    
+                return !this.has(key) && this.add(key);
+    
+                }, new Set).filter(account => { return !this.search || account.name.toLowerCase().indexOf(this.search.toLowerCase()) >= 0 }).sort(function(a, b){
+                    if(a.name < b.name) { return -1; }
+                    if(a.name > b.name) { return 1; }
+                    return 0;
+                })
+            }
         },
         filteredContacts() {
             return this.allClients.reduce((acc, client) => {
@@ -347,14 +356,16 @@ export default {
             }, []).filter(business => { return !this.search || business.name.toLowerCase().indexOf(this.search.toLowerCase()) >= 0 })
         },
         accounts() {
-            if(this.belongsTo != 'active') {
-                return this.bookkeepingAccounts
-                        .filter(account => account.client_id == this.selectedID && account.belongs_to == this.belongsTo && account.business_name == this.selectedName)
-                        .filter(acct => acct.year == this.selectedYear)
-            } else {
-                return this.bookkeepingAccounts
-                        .filter(account => account.client_id == this.selectedID && account.belongs_to == this.belongsToActive && account.business_name == this.selectedName)
-                        .filter(acct => acct.year == this.selectedYear)
+            if(this.bookkeepingAccounts && this.bookkeepingAccounts.length > 0) {
+                if(this.belongsTo != 'active') {
+                    return this.bookkeepingAccounts
+                            .filter(account => account.client_id == this.selectedID && account.belongs_to == this.belongsTo && account.business_name == this.selectedName)
+                            .filter(acct => acct.year == this.selectedYear)
+                } else {
+                    return this.bookkeepingAccounts
+                            .filter(account => account.client_id == this.selectedID && account.belongs_to == this.belongsToActive && account.business_name == this.selectedName)
+                            .filter(acct => acct.year == this.selectedYear)
+                }
             }
         },
         filteredAccountName() {
@@ -372,20 +383,22 @@ export default {
             return this.bookkeepingAccounts.filter(account => account.id === this.accountID)[0]
         },
         selectedAccountYears() {
-            const years = this.bookkeepingAccounts.filter(acct => acct.client_id == this.selectedID)
-                        .filter(acct => this.belongsTo != 'active' ? acct.belongs_to == this.belongsTo : acct.belongs_to == this.belongsToActive)
-                        .filter(acct => acct.business_name == this.selectedName)
-                        .map(account => account.year)
-            //filter duplicates
-            const result = years.filter((v, i) => years.indexOf(v) === i)
-
-            const sorted =  result.sort((a, b) => b - a)
-
-            if(sorted.length > 0) {
-                this.selectedYear = sorted[0]
+            if(this.bookkeepingAccounts && this.bookkeepingAccounts.length > 0) {
+                const years = this.bookkeepingAccounts.filter(acct => acct.client_id == this.selectedID)
+                            .filter(acct => this.belongsTo != 'active' ? acct.belongs_to == this.belongsTo : acct.belongs_to == this.belongsToActive)
+                            .filter(acct => acct.business_name == this.selectedName)
+                            .map(account => account.year)
+                //filter duplicates
+                const result = years.filter((v, i) => years.indexOf(v) === i)
+    
+                const sorted =  result.sort((a, b) => b - a)
+    
+                if(sorted.length > 0) {
+                    this.selectedYear = sorted[0]
+                }
+    
+                return sorted
             }
-
-            return sorted
         },
         mostRescentYear() {
             if(this.selectedYear && this.selectedAccountYears && this.selectedAccountYears.length > 0) {
@@ -473,18 +486,13 @@ export default {
                 this.belongsToActive = this.activeAccounts.length > 0 ? this.activeAccounts[0].belongs_to : null
                 this.selectedName = this.activeAccounts.length > 0 ? this.activeAccounts[0].name : null
                 this.belongsTo = 'active'
-            } else if(list == 'contacts') {
-                this.selectedID = this.allClients[0].id
-                this.selectedName = this.contactName(this.allClients[0])
-                this.showContacts = true
-                this.showBusinessList = false
-                this.showActive = false
-                this.belongsToActive = null
-                this.belongsTo = 'contact'
             } else if(list == 'businesses') {
-                this.selectedID = this.businessList[0].client_id
-                this.selectedName = this.businessName(this.businessList[0])
-                this.showContacts = false
+                if(this.businessList && this.businessList.length > 0) {
+                    this.selectedID = this.businessList[0].client_id
+                    this.selectedName = this.businessName(this.businessList[0])
+                }
+                this.selectedID = null
+                this.selectedName = null
                 this.showBusinessList = true
                 this.showActive = false
                 this.belongsToActive = null
@@ -581,39 +589,9 @@ export default {
                     return true
                 }
             } return false
-        },
-        dataLoaded(key) {
-            this.loaded.push(key)
-            if(this.loaded.includes('accounts') && this.loaded.includes('clients') && this.loaded.includes('businesses')) {
-                this.loadingData = false
-                this.belongsTo = 'active'
-                if(this.activeAccounts && this.activeAccounts.length > 0) {
-                    this.selectedID = this.activeAccounts[0].id
-                    this.belongsToActive = this.activeAccounts[0].belongs_to
-                    this.selectedName = this.activeAccounts[0].name
-                }
-            }
-        },
-    },
-    watch: {
-        'allClients': function(value) {
-            if(!this.loaded.includes('clients') && value && value.length > 0) {
-                this.dataLoaded('clients')
-            }
-        },
-        'bookkeepingAccounts': function(value) {
-            if(!this.loaded.includes('accounts') && value) {
-                this.dataLoaded('accounts')
-            }
-        },
-        'businessList': function(value) {
-            if(!this.loaded.includes('businesses') && value && value.length > 0) {
-                this.dataLoaded('businesses')
-            }
         }
     },
     created() {
-        this.loadingData = true
         this.showActive = true
         this.$store.dispatch('getBookkeepingAccounts')
         this.$store.dispatch('retrieveClients')
@@ -659,7 +637,7 @@ export default {
                 button {
                     border: none;
                     font-weight: bold;
-                    width: 33.3%;
+                    width: 50%;
                     padding: 15px;
                     outline: none;
                     cursor: pointer;

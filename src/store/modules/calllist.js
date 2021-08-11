@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+import store from '../../store/store'
 export default {
     state: {
         call_list: null,
@@ -28,13 +28,18 @@ export default {
             state.call_list_item = data
         },
         DELETE_CALL_LIST_ITEM(state, id) {
-            state.callListItem = null
-            const index = state.call_list.findIndex(c => c.id === id)
-            state.call_list.splice(index, 1)
+            state.call_list_item = null
+            if(state.call_list) {
+                const index = state.call_list.findIndex(c => c.id === id)
+                state.call_list.splice(index, 1)
+            }
         },
-        REMOVE_FROM_CALL_LIST(state, id) {
-            const index = state.call_list.findIndex(c => c.id === id)
-            state.call_list.splice(index, 1)
+        REMOVE_FROM_CALL_LIST(state, data) {
+            state.call_list_item = data
+            if(state.call_list) {       
+                const index = state.call_list.findIndex(c => c.id === data.id)
+                state.call_list.splice(index, 1)
+            }
         }
     },
     actions: {
@@ -67,6 +72,7 @@ export default {
                 axios.post('call-list', data)
                 .then(res => {
                     context.commit('UPDATE_CALL_LIST_ITEM', res.data)
+                    context.commit('successAlert', 'Call List Item Added')
                     resolve(res)
                 }).catch(err => {
                     console.log(err.response.data)
@@ -80,6 +86,7 @@ export default {
                 .then(res => {
                     context.commit('UPDATE_CALL_LIST_ITEM', res.data)
                     context.commit('UPDATE_CALL_LIST', res.data)
+                    context.commit('successAlert', 'Call List Item Updated')
                     resolve(res)
                 }).catch(err => {
                     console.log(err.response.data)
@@ -93,6 +100,7 @@ export default {
                 .then(res => {
                     context.commit('UPDATE_CALL_LIST_ITEM', res.data)
                     context.commit('UPDATE_CALL_LIST', res.data)
+                    context.commit('successAlert', 'Call List Item Updated')
                     resolve(res)
                 }).catch(err => {
                     console.log(err.response.data)
@@ -104,7 +112,8 @@ export default {
             return new Promise((resolve, reject) => {
                 axios.post('remove-from-call-list', {id: id})
                 .then(res => {
-                    context.commit('REMOVE_FROM_CALL_LIST', id)
+                    context.commit('REMOVE_FROM_CALL_LIST', res.data)
+                    context.commit('successAlert', 'Call List Item Archived')
                     resolve(res)
                 }).catch(err => {
                     console.log(err.response.data)
@@ -116,8 +125,9 @@ export default {
             return new Promise((resolve, reject) => {
                 axios.delete('call-list/' + id)
                 .then(res => {
-                    console.log(res.data)
                     context.commit('DELETE_CALL_LIST_ITEM', id)
+                    store.commit('toggleDeleteModal', null)
+                    context.commit('successAlert', 'Call History Deleted')
                     resolve(res)
                 }).catch(err => {
                     console.log(err.response.data)

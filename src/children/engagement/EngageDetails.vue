@@ -130,16 +130,20 @@
         <div class="d-flex">
             <div class="card px-0 mt-3 mb-5 shadow-sm w-100">
                 <div class="card-body p-0 py-2">
-                    <div class="px-3 pt-2 pb-3 border-bottom">
+                    <div class="px-3 pt-2 pb-3 border-bottom" v-if="callListItem">
                         <h5 class="mb-0">Last Called: {{callListItem.last_called_date | formatDate}}</h5>
                         <span class="font-weight-bold text-secondary">Total Calls: {{callListItem.total_calls}}</span>
+                    </div>
+                    <div class="px-3 pt-2 pb-3 border-bottom" v-else>
+                        <h5 class="mb-0">No Call History</h5>
                     </div>
                     <ul class="m-0 p-0 details-list">
                         <li class="details-list-item p-2 pb-0">
                             <div class="d-flex flex-column">
-                                <span class="py-2">First Called: <strong>{{callListItem.first_called_date | formatDate}}</strong></span>
-                                <span>Comments: <button class="btn btn-link p-0 font-weight-bold comments-btn" @click="addComments"> Add/Edit</button></span> 
-                                <div class="font-weight-bold" v-html="callListItem.comments" v-if="callListItem.comments">
+                                <span class="py-2" v-if="callListItem">First Called: <strong>{{callListItem.first_called_date | formatDate}}</strong></span>
+                                <span class="py-2" v-else>First Called: <strong>N/A</strong></span>
+                                <span>Comments: <button class="btn btn-link p-0 font-weight-bold comments-btn" @click="addComments" v-if="callListItem"> Add/Edit</button></span> 
+                                <div class="font-weight-bold" v-html="callListItem.comments" v-if="callListItem && callListItem.comments">
                                 </div>
                                 <div v-else class="font-weight-bold w-100">
                                      <p class="text-nowrap">There are currently no comments 
@@ -150,8 +154,9 @@
                     </ul>
                     <div class="d-flex ml-3 mb-2">
                         <button class="engage-edit-btn font-weight-bold" type="button" @click="updateLastCalled" v-if="callListItem">Update Last Called</button>
-                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="removeFromCallList(callListItem.id)" v-if="callListItem">Remove From Call List</button>
-                        <button class="engage-edit-btn bg-danger text-white font-weight-bold ml-3" type="button" @click="deleteCallListHistory(callListItem.id)" v-if="callListItem">Delete History</button>
+                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="removeFromCallList(callListItem.id)" v-if="!callListItem.archive">Remove From Call List</button>
+                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="removeFromCallList(callListItem.id)" v-if="callListItem.archive">Add To Call List</button>
+                        <button class="engage-edit-btn bg-danger text-white font-weight-bold ml-3" type="button" @click="requestDelete(callListItem.id)" v-if="callListItem">Delete History</button>
                         <button class="engage-edit-btn font-weight-bold" type="button" @click="addToCallList" v-else>Add To Call List</button>
                     </div>
                 </div>
@@ -186,7 +191,6 @@ import Spinner from '@/components/loaders/Spinner.vue'
 import NoteModal from '@/components/engagement/NoteModal.vue'
 import EditNoteModal from '@/components/engagement/EditNoteModal.vue'
 import EngagementDoughnut from '@/components/engagement/EngagementDoughnut.vue'
-
 export default {
     name: 'EngageDetails',
     props: ['engagement', 'workflow', 'callListItem'],
@@ -276,9 +280,12 @@ export default {
         addComments() {
 
         },
-        deleteCallListHistory(id) {
-            this.$store.dispatch('deleteCallHistoryItem', id)
-        }
+        requestDelete(id) {
+        this.$store.commit('toggleDeleteModal', {
+          action: 'deleteCallListItem',
+          id: id
+        })
+      },
     }
 }
 </script>

@@ -21,7 +21,7 @@
             <td>{{item.user_name}}</td>
             <td>{{item.current_status}}</td>
             <td>{{item.first_called_date | formatDate }}</td>
-            <td @click="openComment(item.comments)" class="comment-cursor">
+            <td @click="openComment(item)" class="comment-cursor">
               <div v-if="item.comments" v-html="chop(item.comments)"></div>
               <div v-else>N/A</div>
             </td>
@@ -55,7 +55,6 @@
         </tbody>
       </table>
 
-      <DeleteModal />
       <EditCallListItemModal 
         :item="call_list_item" 
         :key="call_list_item.id"
@@ -74,13 +73,12 @@
 </template>
 
 <script>
-import DeleteModal from '@/components/modals/DeleteModal'
 import EditCallListItemModal from '@/components/modals/EditCallListItemModal'
 import CallListCommentsModal from '@/components/modals/CallListCommentsModal'
 export default {
     name: 'CallList',
     props: ['callList', 'loading'],
-    components: {DeleteModal,EditCallListItemModal,CallListCommentsModal},
+    components: {EditCallListItemModal,CallListCommentsModal},
     data() {
       return {
         search: '',
@@ -120,12 +118,13 @@ export default {
       },
       requestDelete(item) {
         this.$store.commit('toggleDeleteModal', {
-          action: 'removeFromCallList',
+          action: 'deleteCallListItem',
           id: item.id
         })
       },
-      openComment(comments) {
-
+      openComment(item) {
+        this.call_list_item = item
+        this.showCommentModal = true
       },
       viewEngagement(id) {
         this.$router.push({'path': '/engagement/' + id + '/details'})

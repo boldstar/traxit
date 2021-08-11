@@ -1,8 +1,9 @@
 <template>
-    <b-modal v-model="modal" hide-footer title='Edit Call List Item'>
+    <b-modal v-model="modal" hide-footer title='Add Comments' class="text-left">
+        <span>Call List Item For: <strong>{{item.engagement_name}}</strong></span>
         <div class="text-center my-4">
-            <div class="px-2 pt-0 text-left">
-                <span class="font-weight-bold pl-3">Comments</span>
+            <div class="pt-0 text-left">
+                <span class="font-weight-bold">Comments</span>
                 <vue-editor v-model="item.comments" :editorToolbar="customToolbar"></vue-editor>
             </div>
         </div>

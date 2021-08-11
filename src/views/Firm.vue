@@ -4,8 +4,8 @@
       <div class="card-header bg-white shadow w-100 d-flex justify-content-between border">
           <div class="d-flex">
               <span class="h5 mb-0 align-self-center">Firm</span>
-              <span class="h5 mb-0 align-self-center mx-2" v-if="$route.name != 'bookkeeping-overview'">|</span>
-              <div class="input-group input-group-sm" v-if="$route.name != 'bookkeeping-overview'">
+              <span class="h5 mb-0 align-self-center mx-2">|</span>
+              <div class="input-group input-group-sm" v-if="$route.name != 'bookkeeping-overview' && $route.name != 'call-list'">
                 <div class="input-group-prepend">
                   <label class="input-group-text text-secondary bg-white font-weight-bold" for="option">Tax Year</label>
                 </div>
@@ -14,9 +14,10 @@
                     <option v-for="(year, index) in filterYears" :value="year" :key="index">{{year}}</option>
                 </select>
               </div>
+              <div class="d-flex" v-else><span class="h5 mb-0 align-self-center">{{$route.meta.breadCrumb[0].name}}</span></div>
           </div>
           <div class="d-flex">
-            <button class="btn btn-sm btn-outline-secondary mr-2" @click="showEngagementForm">Add Engagement</button>
+            <button class="btn btn-sm btn-outline-secondary mr-2" @click="showEngagementForm" v-if="$route.name != 'bookkeeping-overview' && $route.name != 'call-list'">Add Engagement</button>
             <button class="btn btn-sm btn-outline-primary" @click="refresh"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
           </div>
       </div>
@@ -123,6 +124,7 @@ export default {
     this.$store.dispatch('retrieveWorkflows')
     this.$store.dispatch('getReturnTypes')
     this.$store.dispatch('retrieveClientsWithBusinesses')
+    this.$store.dispatch('getBookkeepingAccounts')
     this.$store.dispatch('getCallList')
     this.currentYear = this.allYears
     this.loading = true

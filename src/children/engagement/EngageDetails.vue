@@ -142,8 +142,8 @@
                             <div class="d-flex flex-column">
                                 <span class="py-2" v-if="callListItem">First Called: <strong>{{callListItem.first_called_date | formatDate}}</strong></span>
                                 <span class="py-2" v-else>First Called: <strong>N/A</strong></span>
-                                <span>Comments: <button class="btn btn-link p-0 font-weight-bold comments-btn" @click="addComments" v-if="callListItem"> Add/Edit</button></span> 
-                                <div class="font-weight-bold" v-html="callListItem.comments" v-if="callListItem && callListItem.comments">
+                                <span>Comments: <button class="btn btn-link p-0 font-weight-bold comments-btn" @click="showModal = true" v-if="callListItem"> Add/Edit</button></span> 
+                                <div class="font-weight-bold d-flex flex-column" v-html="callListItem.comments" v-if="callListItem && callListItem.comments">
                                 </div>
                                 <div v-else class="font-weight-bold w-100">
                                      <p class="text-nowrap">There are currently no comments 
@@ -154,10 +154,11 @@
                     </ul>
                     <div class="d-flex ml-3 mb-2">
                         <button class="engage-edit-btn font-weight-bold" type="button" @click="updateLastCalled" v-if="callListItem">Update Last Called</button>
-                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="removeFromCallList(callListItem.id)" v-if="!callListItem.archive">Remove From Call List</button>
-                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="removeFromCallList(callListItem.id)" v-if="callListItem.archive">Add To Call List</button>
+                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="removeFromCallList(callListItem.id)" v-if="callListItem && !callListItem.archive">Remove From Call List</button>
+                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="removeFromCallList(callListItem.id)" v-if="callListItem && callListItem.archive">Add To Call List</button>
+                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="showModal = true" v-if="callListItem">Edit History</button>
                         <button class="engage-edit-btn bg-danger text-white font-weight-bold ml-3" type="button" @click="requestDelete(callListItem.id)" v-if="callListItem">Delete History</button>
-                        <button class="engage-edit-btn font-weight-bold" type="button" @click="addToCallList" v-else>Add To Call List</button>
+                        <button class="engage-edit-btn font-weight-bold" type="button" @click="addToCallList" v-else>Add Call List Item</button>
                     </div>
                 </div>
             </div>
@@ -179,6 +180,14 @@
                 </div>
             </div>
         </div>
+
+        <EditCallListItemModal 
+        :item="callListItem" 
+        :key="callListItem.id"
+        v-if="showModal" 
+        @close-modal="showModal = false"
+        @save-changes="saveCallListItemChanges" 
+      />
     </div>
 </template>
 
@@ -191,6 +200,7 @@ import Spinner from '@/components/loaders/Spinner.vue'
 import NoteModal from '@/components/engagement/NoteModal.vue'
 import EditNoteModal from '@/components/engagement/EditNoteModal.vue'
 import EngagementDoughnut from '@/components/engagement/EngagementDoughnut.vue'
+import EditCallListItemModal from '@/components/modals/EditCallListItemModal'
 export default {
     name: 'EngageDetails',
     props: ['engagement', 'workflow', 'callListItem'],
@@ -200,10 +210,16 @@ export default {
         Spinner,
         NoteModal,
         EditNoteModal,
-        EngagementDoughnut
+        EngagementDoughnut,
+        EditCallListItemModal
     },
     directives: {
         'b-modal': bModalDirective
+    },
+    data() {
+        return {
+            showModal: false
+        }
     },
     computed: {
         ...mapGetters(['successAlert', 'processing', 'errorMsgAlert', 'engagementWorkflow', 'engagementStatusModal']),
@@ -284,6 +300,12 @@ export default {
         this.$store.commit('toggleDeleteModal', {
           action: 'deleteCallListItem',
           id: id
+        })
+      },
+        saveCallListItemChanges(item) {
+        this.$store.dispatch('updateCallListItem', item)
+        .then(res => {
+          this.showModal = false
         })
       },
     }

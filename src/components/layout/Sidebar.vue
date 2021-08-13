@@ -116,7 +116,16 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert', 'engagementFilter', 'contactFilter', 'sidebarOpen', 'files_length', 'tasks'])
+        ...mapGetters([
+            'successAlert', 
+            'errorAlert', 
+            'errorMsgAlert', 
+            'engagementFilter', 
+            'contactFilter', 
+            'sidebarOpen', 
+            'files_length', 
+            'tasks'
+        ])
     },
     methods: {
         filterEngagements(filter) {

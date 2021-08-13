@@ -77,10 +77,19 @@ export default {
                console.log('no automation')
            }
        },
-       removeFromCallList(context, data) {
-           console.log(data)
+       automatedRemoveFromCallList(context, data) {
+           return new Promise((resolve, reject) => {
+               axios.get('call-list-item/'+ data.id)
+               .then(res => {
+                    store.dispatch('removeFromCallList', res.data.id)
+                    resolve(res)
+               }).catch(err => {
+                    console.log(err.response.data)
+                    reject(err)
+               })
+           })
        },
-       notifyAdminsOfStatusChange(context, data) {
+       automatedNotifyAdminsOfStatusChange(context, data) {
            console.log(data)
        }
     }

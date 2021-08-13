@@ -46,7 +46,7 @@
               </div>
             </td>
           </tr>
-          <tr v-show="filteredCallList.length < 1">
+          <tr v-show="filteredCallList.length < 1 && !loading">
             <td colspan=8>Sorry, there are currently no call list items</td>
           </tr>
           <tr v-show="loading" :key="loading">
@@ -133,8 +133,11 @@ export default {
         var str = string.replace(/<\/?[^>]+(>|$)/g, "")
         return str.substring(0,5) + '...'
       },
-      saveCallListComments() {
-
+      saveCallListComments(item) {
+        this.$store.dispatch('updateCallListItem', item)
+        .then(res => {
+          this.showCommentModal = false
+        })
       },
       archive(id) {
         this.$store.dispatch('removeFromCallList', id)

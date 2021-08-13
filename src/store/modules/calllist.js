@@ -68,69 +68,84 @@ export default {
             })
         },
         addToCallList(context, data) {
+            context.commit('startProcessing')
             return new Promise((resolve, reject) => {
                 axios.post('call-list', data)
                 .then(res => {
                     context.commit('UPDATE_CALL_LIST_ITEM', res.data)
                     context.commit('successAlert', 'Call List Item Added')
+                    context.commit('stopProcessing')
                     resolve(res)
                 }).catch(err => {
+                    context.commit('stopProcessing')
                     console.log(err.response.data)
                     reject(err)
                 })
             })
         },
         updateCallListItem(context, data) {
+            context.commit('startProcessing')
             return new Promise((resolve, reject) => {
                 axios.post('call-list-update-item', data)
                 .then(res => {
                     context.commit('UPDATE_CALL_LIST_ITEM', res.data)
                     context.commit('UPDATE_CALL_LIST', res.data)
                     context.commit('successAlert', 'Call List Item Updated')
+                    context.commit('stopProcessing')
                     resolve(res)
                 }).catch(err => {
+                    context.commit('stopProcessing')
                     console.log(err.response.data)
                     reject(err)
                 })
             })
         },
         updateLastCalled(context, data) {
+            context.commit('startProcessing')
             return new Promise((resolve, reject) => {
                 axios.post('call-list-item', data)
                 .then(res => {
                     context.commit('UPDATE_CALL_LIST_ITEM', res.data)
                     context.commit('UPDATE_CALL_LIST', res.data)
                     context.commit('successAlert', 'Call List Item Updated')
+                    context.commit('stopProcessing')
                     resolve(res)
                 }).catch(err => {
+                    context.commit('stopProcessing')
                     console.log(err.response.data)
                     reject(err)
                 })
             })
         },
         removeFromCallList(context, id) {
+            context.commit('startProcessing')
             return new Promise((resolve, reject) => {
                 axios.post('remove-from-call-list', {id: id})
                 .then(res => {
                     context.commit('REMOVE_FROM_CALL_LIST', res.data)
                     context.commit('successAlert', 'Call List Item Archived')
+                    context.commit('stopProcessing')
                     resolve(res)
                 }).catch(err => {
+                    context.commit('stopProcessing')
                     console.log(err.response.data)
                     reject(err)
                 })
             })
         },
         deleteCallListItem(context, id) {
+            context.commit('startProcessing')
             return new Promise((resolve, reject) => {
                 axios.delete('call-list/' + id)
                 .then(res => {
                     context.commit('DELETE_CALL_LIST_ITEM', id)
                     store.commit('toggleDeleteModal', null)
                     context.commit('successAlert', 'Call History Deleted')
+                    context.commit('stopProcessing')
                     resolve(res)
                 }).catch(err => {
                     console.log(err.response.data)
+                    context.commit('stopProcessing')
                     reject(err)
                 })
             })

@@ -39,6 +39,7 @@
       </main>
     </div>
         
+    <approval-modal @reset-modal="resetApprovalModal" @close-modal="closeApprovalModal"></approval-modal>    
     <notify-modal v-if="notify"></notify-modal>
     <delete-modal></delete-modal>
   </div>
@@ -54,7 +55,7 @@ import MobileLinks from '@/components/layout/MobileLinks.vue'
 import Setup from '@/components/onboard/Setup.vue'
 import Timesheet from '@/components/tsheets/Timesheet.vue'
 import BrowserHistory from '@/components/browser/BrowserHistory.vue'
-
+import ApprovalModal from '@/components/modals/ApprovalModal.vue'
 export default {
   props: ['admin'],
   components: {
@@ -65,7 +66,8 @@ export default {
     MobileLinks,
     Setup,
     Timesheet,
-    BrowserHistory
+    BrowserHistory,
+    ApprovalModal
   },
   data () {
     return {
@@ -90,6 +92,12 @@ export default {
     toggleBrowserHistory() {
       this.$store.commit('BROWSER_HISTORY')
     },
+    resetApprovalModal() {
+      this.$store.commit('showAutomationApprovalModal', null)
+    },
+    closeApprovalModal() {
+      this.$store.commit('showAutomationApprovalModal', null)
+    }
   },
   watch: {
     subscribeView: function(val) {

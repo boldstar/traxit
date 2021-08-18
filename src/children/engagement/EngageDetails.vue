@@ -142,7 +142,7 @@
                             <div class="d-flex flex-column">
                                 <span class="py-2" v-if="callListItem">First Called: <strong>{{callListItem.first_called_date | formatDate}}</strong></span>
                                 <span class="py-2" v-else>First Called: <strong>N/A</strong></span>
-                                <span>Comments: <button class="btn btn-link p-0 font-weight-bold comments-btn" @click="showModal = true" v-if="callListItem"> Add/Edit</button></span> 
+                                <span>Comments: <button class="btn btn-link p-0 font-weight-bold comments-btn" @click="showEditModal()" v-if="callListItem"> Add/Edit</button></span> 
                                 <div class="font-weight-bold d-flex flex-column" v-html="callListItem.comments" v-if="callListItem && callListItem.comments">
                                 </div>
                                 <div v-else class="font-weight-bold w-100">
@@ -153,12 +153,29 @@
                         </li>
                     </ul>
                     <div class="d-flex ml-3 mb-2">
-                        <button class="engage-edit-btn font-weight-bold" type="button" @click="updateLastCalled" v-if="callListItem">Update Last Called</button>
-                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="removeFromCallList(callListItem.id)" v-if="callListItem && !callListItem.archive">Remove From Call List</button>
-                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="removeFromCallList(callListItem.id)" v-if="callListItem && callListItem.archive">Add To Call List</button>
-                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="showModal = true" v-if="callListItem">Edit History</button>
-                        <button class="engage-edit-btn bg-danger text-white font-weight-bold ml-3" type="button" @click="requestDelete(callListItem.id)" v-if="callListItem">Delete History</button>
-                        <button class="engage-edit-btn font-weight-bold" type="button" @click="addToCallList" v-else>Add Call List Item</button>
+                        <button class="engage-edit-btn font-weight-bold" type="button" @click="updateLastCalled" v-if="callListItem" :disabled="updating">
+                            <span v-if="updating">Updating...</span>
+                            <span v-else>Update Last Called</span>
+                        </button>
+                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="removeFromCallList(callListItem.id)" v-if="callListItem && !callListItem.archive" :disabled="removing">
+                            <span v-if="removing">Removing...</span>
+                            <span v-else>Remove From Call List</span>
+                        </button>
+                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="removeFromCallList(callListItem.id)" v-if="callListItem && callListItem.archive" :disabled="adding">
+                            <span v-if="adding">Adding...</span>
+                            <span v-else>Add To Call List</span>
+                        </button>
+                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="showEditModal()" v-if="callListItem">
+                            <span>Edit History</span>
+                        </button>
+                        <button class="engage-edit-btn bg-danger text-white font-weight-bold ml-3" type="button" @click="requestDelete(callListItem.id)" v-if="callListItem" :disabled="deleteModal && processing && deleting">
+                            <span v-if="deleteModal && processing && deleting">Deleting...</span>
+                            <span v-else>Delete History</span>
+                        </button>
+                        <button class="engage-edit-btn font-weight-bold" type="button" @click="addToCallList" v-else :disabled="adding">
+                            <span v-if="adding">Adding...</span>
+                            <span v-else>Add Call List Item</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -183,10 +200,11 @@
 
         <EditCallListItemModal 
         :item="callListItem" 
-        :key="callListItem.id"
+        :key="showModal"
         v-if="showModal" 
         @close-modal="showModal = false"
         @save-changes="saveCallListItemChanges" 
+        @reset-modal="resetCallListModal"
       />
     </div>
 </template>
@@ -218,11 +236,22 @@ export default {
     },
     data() {
         return {
-            showModal: false
+            showModal: false,
+            updating: false,
+            removing: false,
+            deleting: false,
+            adding: false
         }
     },
     computed: {
-        ...mapGetters(['successAlert', 'processing', 'errorMsgAlert', 'engagementWorkflow', 'engagementStatusModal']),
+        ...mapGetters([
+            'successAlert',
+            'processing', 
+            'errorMsgAlert', 
+            'engagementWorkflow', 
+            'engagementStatusModal', 
+            'deleteModal'
+        ]),
         percentage() {
             const statuses = this.engagementWorkflow.statuses
             const percentage = this.calcPercent(statuses.length)
@@ -274,6 +303,7 @@ export default {
             this.$store.commit('showStatusModal', true)
         },
         addToCallList() {
+            this.adding = true
             this.$store.dispatch('addToCallList', {
                 engagement_id: this.$route.params.id,
                 engagement_name: this.engagement.name,
@@ -281,20 +311,36 @@ export default {
                 first_called_date: new Date(),
                 last_called_date: new Date(),
                 total_calls: 1
+            }).then(res => {
+                this.adding = false
             })
         },
         updateLastCalled() {
+            this.updating = true
             this.$store.dispatch('updateLastCalled', {
                 id: this.callListItem.id,
                 last_called_date: new Date(),
                 total_calls: this.callListItem.total_calls + 1
+            }).then(res => {
+                this.updating = false
             })
         },
         removeFromCallList(id) {
+            this.removing = true
+            this.adding = true
             this.$store.dispatch('removeFromCallList', id)
+            .then(res => {
+                this.removing = false
+                this.adding = false
+            })
         },
-        addComments() {
-
+        showEditModal() {
+            if(this.showModal) {
+                this.showModal = false
+            } this.showModal = true
+        },
+        resetCallListModal() {
+            this.showModal = false
         },
         requestDelete(id) {
         this.$store.commit('toggleDeleteModal', {

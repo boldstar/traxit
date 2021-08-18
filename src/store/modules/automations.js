@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '../store'
 import automation_options from '../../plugins/automations'
-import {automate} from '../../plugins/automations'
+import {automate, approveAutomationModal} from '../../plugins/automations'
 
 export default {
     state: {
@@ -65,14 +65,16 @@ export default {
             })
        },
        performAutomation(context, data) {
+           context.commit('startProcessing')
            const options = automation_options.options
            const automations = []
-           if(data.automations.length > 0) {
-               data.automations.forEach(d => {
-                   automations.push({ action_id: d.action_id, data: data})
+           if(data.length > 0) {
+               data.forEach(d => {
+                   if(d.approved) {
+                       automations.push({ action_id: d.action_id, data: data})
+                   }
                });
                automate(automations)
-               console.log('automations complete')
            } else {
                console.log('no automation')
            }
@@ -90,7 +92,18 @@ export default {
            })
        },
        automatedNotifyAdminsOfStatusChange(context, data) {
-           console.log(data)
+           return new Promise((resolve, reject) => {
+               axios.post('notify-admin', data)
+               .then(res => {
+                   context.commit('successAlert', res.data)
+                   context.commit('stopProcessing')
+                   resolve(res)
+                }).catch(err => {
+                   context.commit('stopProcessing')
+                   console.log(err.response.data)
+                   reject(err)
+               })
+           })
        }
     }
 }

@@ -57,17 +57,19 @@
 
       <EditCallListItemModal 
         :item="call_list_item" 
-        :key="call_list_item.id"
+        :key="showModal + 1"
         v-if="showModal" 
         @close-modal="showModal = false"
-        @save-changes="saveCallListItemChanges" 
+        @save-changes="saveCallListItemChanges"
+        @reset-modal="resetCallListModal" 
       />
       <CallListCommentsModal
         :item="call_list_item" 
-        :key="call_list_item.id"
+        :key="showCommentModal + 2"
         v-if="showCommentModal" 
         @close-modal="showCommentModal = false"
         @save-changes="saveCallListComments" 
+        @reset-modal="resetCallListModal" 
       />
   </div>
 </template>
@@ -141,6 +143,11 @@ export default {
       },
       archive(id) {
         this.$store.dispatch('removeFromCallList', id)
+      },
+      resetCallListModal() {
+        this.showModal = false
+        this.showCommentModal = false
+        this.call_list_item = null
       }
     }
 }

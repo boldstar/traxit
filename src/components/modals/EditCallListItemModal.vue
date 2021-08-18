@@ -1,5 +1,5 @@
 <template>
-    <b-modal v-model="modal" hide-footer title='Edit Call List Item'>
+    <b-modal v-model="modal" id="edit-call-list-modal" hide-footer title='Edit Call List Item' @hidden="resetModal">
         <div class="text-center my-4">
             <div class="custom-input-group">
                 <label for="last-called">First Called Date</label>
@@ -88,6 +88,9 @@ export default {
       },
       confirm() {
         this.$emit('save-changes', this.item)
+      },
+      resetModal() {
+        this.$emit('reset-modal')
       }
     },
 }

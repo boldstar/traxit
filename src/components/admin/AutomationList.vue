@@ -24,6 +24,7 @@
                 <th scope="col">When Changed To Status</th>
                 <th scope="col">Perform This Action</th>
                 <th scope="col">Active</th>
+                <th scope="col">Options</th>
                 </tr>
             </thead>
                 <tbody>
@@ -36,6 +37,16 @@
                                 <input type="checkbox" v-model="automation.active" @change="activeSwitch(automation.id)">
                                 <span class="slider round"></span>
                             </label>
+                        </td>
+                        <td class="p-0">
+                            <div class="d-flex justify-content-around">
+                                <button data-toggle="tooltip" data-placement="bottom" title="Delete Automation" class="btn btn-link text-danger font-weight-bold call-list-btn">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                                <button data-toggle="tooltip" data-placement="bottom" title="Edit Automation" class="btn btn-link text-primary">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 </tbody>

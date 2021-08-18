@@ -1,5 +1,5 @@
 <template>
-    <b-modal v-model="modal" hide-footer title='Add Comments' class="text-left">
+    <b-modal v-model="modal" hide-footer title='Add Comments' class="text-left" @hidden="resetModal">
         <span>Call List Item For: <strong>{{item.engagement_name}}</strong></span>
         <div class="text-center my-4">
             <div class="pt-0 text-left">
@@ -51,6 +51,9 @@ export default {
       },
       confirm() {
         this.$emit('save-changes', this.item)
+      },
+      resetModal() {
+        this.$emit('reset-modal')
       }
     },
 }

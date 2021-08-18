@@ -6,7 +6,7 @@
 
       <!-- this is the header section of the engagement details -->
       <div class="flex-row justify-content-between d-flex mt-0 card-body py-2 px-0">
-        <span class="h5 align-self-center m-0 text-left engagement-name">Engagement | <strong class="text-primary"><router-link :to="'/contact/' +engagement.client.id + '/account'">{{engagement.name}}</router-link></strong></span>
+        <span class="h5 align-self-center m-0 text-left engagement-name">Engagement | <strong class="text-primary"><router-link v-if="engagement.client" :to="'/contact/' +engagement.client.id + '/account'">{{engagement.name}}</router-link></strong></span>
 
         <div class="d-flex">
         <div v-if="engagement.type == 'taxreturn' && engagement.balance != null" class="mr-3 d-flex engagement-balance">
@@ -21,7 +21,7 @@
             <i class="fas fa-cogs mr-2"></i>  Options
           </button>
           <div class="dropdown-menu mr-4">
-            <router-link class="dropdown-item" :to="'/engagement/' +engagement.id+ '/edit'" v-if="engagement.done == false"><i class="far fa-edit mr-2" ></i>Edit</router-link>
+            <router-link class="dropdown-item" :to="'/engagement/' +engagement.id+ '/edit'" v-if="engagement && engagement.done == false"><i class="far fa-edit mr-2" ></i>Edit</router-link>
             <button type="button" class="dropdown-item" @click="archiveEngagement"><i class="fas fa-archive"></i><span class="ml-2">
               <span v-if="!engagement.archive">Archive</span>
               <span v-else>Unarchive</span>

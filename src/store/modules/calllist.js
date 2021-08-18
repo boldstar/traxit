@@ -21,8 +21,10 @@ export default {
             state.call_list_item = data
         },
         UPDATE_CALL_LIST(state, data) {
-            const index = state.call_list.findIndex(s => s.id === data.id)
-            state.call_list.splice(index, 1, data)
+            if(state.call_list && state.call_list.length > 0) {
+                const index = state.call_list.findIndex(s => s.id === data.id)
+                state.call_list.splice(index, 1, data)
+            }
         },
         UPDATE_CALL_LIST_ITEM(state, data) {
             state.call_list_item = data

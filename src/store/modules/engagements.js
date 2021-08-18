@@ -1,5 +1,6 @@
 import axios from 'axios'
 import router from '../../routes/router'
+import {automate, approveAutomationModal} from '../../plugins/automations'
 
 export default {
     state: {
@@ -300,7 +301,7 @@ export default {
                     priority: engagement.priority
                 })
                 .then(response => {
-                    context.dispatch('performAutomation', {automations: response.data.automation, data: response.data.engagement})
+                    approveAutomationModal('performAutomation', {automations: response.data.automation, data: response.data.engagement}, 'Engagement')
                     context.commit('updateEngagement', response.data.engagement)
                     context.commit('successAlert', response.data.message)
                     context.commit('stopProcessing')

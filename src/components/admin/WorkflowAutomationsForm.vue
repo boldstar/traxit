@@ -1,7 +1,7 @@
 <template>
   <div class="custom-card shadow-sm">
       <div class="card-body text-left">
-          <p>Set automations for workflow statuses. Ex: Remove contact from call list when engagement is set to certain status.</p>
+          <p>Set automations for workflow statuses. Ex: Remove engagement from call list when set to certain status.</p>
           <p class="text-danger font-weight-bold pt-0" v-if="error">Please select all available options.</p>
           <ul>
               <li class="d-flex">
@@ -34,11 +34,19 @@
                     </select>
                 </div>
                 <div class="align-self-center ml-3">
-                    <div class="d-flex">
-                      <button class="btn btn-primary font-weight-bold mr-3" @click="saveEdit" v-if="editAutomation">Save</button>
-                      <button class="btn btn-secondary font-weight-bold" @click="closeEdit" v-if="editAutomation">Cancel</button>
+                    <div class="d-flex" v-if="editAutomation">
+                        <button class="btn btn-primary font-weight-bold mr-3" @click="saveEdit" v-if="editAutomation">
+                          <span v-if="processing">Saving...</span>
+                          <span v-else>Save</span>
+                        </button>
+                        <button class="btn btn-secondary font-weight-bold" @click="closeEdit" v-if="editAutomation">
+                          <span>Cancel</span>
+                        </button>
                     </div>
-                    <button class="btn btn-primary font-weight-bold" @click="addAutomation" v-if="!editAutomation">Add</button>
+                    <button class="btn btn-primary font-weight-bold" @click="addAutomation" v-else>
+                      <span v-if="processing && !showEditRow">Adding...</span>
+                      <span v-else>Add</span>
+                    </button>
                 </div>
               </li>
           </ul>
@@ -51,7 +59,7 @@ import {mapGetters} from 'vuex'
 import automation_options from '../../plugins/automations'
 export default {
     name: 'WorkflowAutomations',
-    props: ['setting', 'state', 'workflows', 'editAutomation'],
+    props: ['setting', 'state', 'workflows', 'editAutomation', 'showEditRow'],
     data() {
       return {
         automation: {
@@ -65,7 +73,7 @@ export default {
       }
     },
     computed: {
-        ...mapGetters(['successMessage']),
+        ...mapGetters(['successMessage', 'processing']),
         selectedWorkflowStatuses() {
           if(this.automation.workflow_id && this.automation.workflow_id != this.select_option) {
             return this.workflows.filter(w => w.id === this.automation.workflow_id)[0].statuses

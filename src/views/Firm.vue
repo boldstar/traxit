@@ -14,7 +14,10 @@
                     <option v-for="(year, index) in filterYears" :value="year" :key="index">{{year}}</option>
                 </select>
               </div>
-              <div class="d-flex" v-else><span class="h5 mb-0 align-self-center">{{$route.meta.breadCrumb[0].name}}</span></div>
+              <div class="d-flex" v-else>
+                <span class="h5 mb-0 align-self-center">{{$route.meta.breadCrumb[0].name}}</span>
+                <span v-if="$route.name == 'call-list' && callList" class="align-self-center text-primary font-weight-bold">: {{callList.length}}</span>
+                </div>
           </div>
           <div class="d-flex">
             <button class="btn btn-sm btn-outline-secondary mr-2" @click="showEngagementForm" v-if="$route.name != 'bookkeeping-overview' && $route.name != 'call-list'">Add Engagement</button>
@@ -22,7 +25,11 @@
           </div>
       </div>
       
-      <Alert v-if="successAlert" :message="successAlert" class="my-2" />
+      <Alert 
+        v-if="successAlert" 
+        :message="successAlert" 
+        class="my-2" 
+      />
 
       <router-view
         :allWorkflows="allWorkflows"

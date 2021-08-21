@@ -130,6 +130,7 @@ export default {
                     resolve(res)
                 }).catch(err => {
                     context.commit('stopProcessing')
+                    context.commit('errorMsgAlert', err.response.data)
                     console.log(err.response.data)
                     reject(err)
                 })

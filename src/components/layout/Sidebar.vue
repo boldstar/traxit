@@ -90,10 +90,10 @@
         </ul>
         <div class="mt-auto mb-3">
             <transition name="router-animation" enter-active-class="animated bounceInLeft" leave-active-class="animated fadeOut" mode="out-in">
-                <Toaster :message="successAlert" :type="'success'" v-if="successAlert" />
+                <Toaster :message="successAlert" :type="'success'" v-if="successAlert" class="mt-2" />
             </transition>   
             <transition name="router-animation" enter-active-class="animated bounceInLeft" leave-active-class="animated fadeOut" mode="out-in">
-                <Toaster :message="errorMsgAlert" :type="'error'" v-if="errorMsgAlert" />
+                <Toaster :message="errorMsgAlert" :type="'error'" v-if="errorMsgAlert" class="mt-2" />
             </transition>   
         </div>
         </div>

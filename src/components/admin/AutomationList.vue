@@ -28,7 +28,7 @@
                 </tr>
             </thead>
                 <tbody>
-                    <tr v-for="(automation, index) in automations" :key="index" class="automation-row" :ref="'automation-row' + `${index}`">
+                    <tr v-for="(automation, index) in sortedAutomations" :key="index" class="automation-row" :ref="'automation-row' + `${index}`">
                         <th scope="row">{{automation.workflow}}</th>
                         <td>{{automation.status}}</td>
                         <td>{{automation.action}}</td>
@@ -58,6 +58,7 @@
                                 class="mt-3" 
                                 :state="false" 
                                 @cancel-edit="closeEditRow"
+                                :showEditRow="showEditRow"
                             />
                         </td>
                     </tr>
@@ -94,6 +95,13 @@ export default {
                 return newValue
             }
         },
+        sortedAutomations() {
+            return this.automations.sort(function(a, b){
+                if(a.workflow < b.workflow) { return -1; }
+                if(a.workflow > b.workflow) { return 1; }
+                return 0;
+            })
+        }
     },
     methods: {
         activeSwitch(id) {

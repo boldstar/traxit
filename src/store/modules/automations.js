@@ -44,24 +44,33 @@ export default {
            })
        },
        addAutomation(context, data) {
+           context.commit('startProcessing')
            return new Promise((resolve, reject) => {
                axios.post('/automation', data)
                .then(res => {
-                    context.commit('ADD_AUTOMATION', res.data)
-                    resolve(res)
+                   context.commit('ADD_AUTOMATION', res.data)
+                   context.commit('successAlert', 'Automation Added')
+                   context.commit('stopProcessing')
+                   resolve(res)
                 }).catch(err => {
+                    context.commit('stopProcessing')
                     console.log(err.response.data)
                     reject(err)
                 })
             })
         },
         updateAutomation(context, data) {
+            context.commit('startProcessing')
             return new Promise((resolve, reject) => {
                 axios.patch('/update-automation/' + data.id, data)
                 .then(res => {
                     context.commit('UPDATE_AUTOMATIONS', res.data)
+                    context.commit('successAlert', 'Automation Updated')
+                    context.commit('stopProcessing')
                     resolve(res)
                 }).catch(err => {
+                    context.commit('stopProcessing')
+                    context.commit('errorMsgAlert', 'Automation Already Exists')
                     console.log(err.response.data)
                     reject(err)
                 })

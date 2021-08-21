@@ -9,6 +9,7 @@
     <hr>
     <div class="d-flex flex-column align-items-center">
       <Alert v-if="successAlert" :message="successAlert" class="my-2 w-100" />
+      <Alert v-else-if="errorMsgAlert" :message="errorMsgAlert" class="my-2 w-100" />
       <AutomationList :automations="automations" :workflows="allWorkflows" :state="automationSetting" v-if="show"/>
       <Spinner v-else/>
     </div>
@@ -31,7 +32,7 @@ export default {
     }
   },
   computed: {
-   ...mapGetters(['automations', 'allWorkflows', 'successAlert', 'settingsList']),
+   ...mapGetters(['automations', 'allWorkflows', 'successAlert', 'settingsList', 'errorMsgAlert']),
        automationSetting() {
          if(this.settingsList && this.settingsList.length > 0) {
              if(this.settingsList.findIndex(s => s.name === 'workflow_automations') != -1) {

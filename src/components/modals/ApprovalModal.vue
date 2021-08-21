@@ -51,7 +51,7 @@ export default {
         'b-modal': bModalDirective
     },
     computed: {
-      ...mapGetters(['processing', 'approvalModal', 'approvalModalData']),
+      ...mapGetters(['processing', 'approvalModal', 'approvalModalData', 'errorMsgAlert']),
       automationsList() {
               return this.approvalModalData.data.automations.map(a => ({
                   action_id: a.action_id,
@@ -77,17 +77,25 @@ export default {
                     this.$store.commit('showAutomationApprovalModal', null)
                 }, 2000)
             }
+        },
+        'errorMsgAlert': function(value) {
+            console.log(value)
+            if(value) {
+                 this.$store.commit('showAutomationApprovalModal', null)
+            }
         }
     },
     methods: {
       closeModal() {
+        this.automationApproved = false
         this.$emit('close-modal')
       },
       confirm() {
-        this.automationApproved = true
+          this.automationApproved = true
         this.$store.dispatch(this.approvalModalData.action, this.automationsList)
       },
       resetModal() {
+        this.automationApproved = false
         this.$emit('reset-modal')
       }
     },

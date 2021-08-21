@@ -11,7 +11,7 @@
             <th>First Called</th>
             <th>Comments</th>
             <th>Total Calls</th>
-            <th>Quick Action</th>
+            <th>Options</th>
           </tr>
         </thead>
         <tbody>
@@ -27,7 +27,7 @@
             </td>
             <td>{{item.total_calls}}</td>
             <td class="text-danger font-weight-bold action-btns">
-              <div class="d-flex">
+              <div class="d-flex justify-content-around">
                 <button data-toggle="tooltip" data-placement="bottom" title="Update Last Called" class="btn btn-link text-success font-weight-bold call-list-btn" @click="updateCallList(item)">
                   <i class="fas fa-plus"></i>
                 </button>

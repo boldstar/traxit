@@ -17,18 +17,18 @@
         </div>
         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
         <WorkflowAutomationsForm :workflows="workflows" class="mt-3" :state="false" />
-        <table class="table table-sm table-bordered mb-0">
+        <table class="table table-sm table-bordered mb-0" ref="automation-table">
             <thead>
                 <tr>
                 <th scope="col">On Workflow</th>
-                <th scope="col">When Changed To Status</th>
+                <th scope="col">When Status Is Changed To</th>
                 <th scope="col">Perform This Action</th>
                 <th scope="col">Active</th>
                 <th scope="col">Options</th>
                 </tr>
             </thead>
                 <tbody>
-                    <tr v-for="(automation, index) in automations" :key="index">
+                    <tr v-for="(automation, index) in automations" :key="index" class="automation-row" :ref="'automation-row' + `${index}`">
                         <th scope="row">{{automation.workflow}}</th>
                         <td>{{automation.status}}</td>
                         <td>{{automation.action}}</td>
@@ -40,13 +40,25 @@
                         </td>
                         <td class="p-0">
                             <div class="d-flex justify-content-around">
-                                <button data-toggle="tooltip" data-placement="bottom" title="Delete Automation" class="btn btn-link text-danger font-weight-bold call-list-btn">
+                                <button data-toggle="tooltip" data-placement="bottom" title="Delete Automation" class="btn btn-link text-danger font-weight-bold call-list-btn" @click="requestDelete(automation)">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
-                                <button data-toggle="tooltip" data-placement="bottom" title="Edit Automation" class="btn btn-link text-primary">
+                                <button data-toggle="tooltip" data-placement="bottom" title="Edit Automation" class="btn btn-link text-primary" @click="editThis(index, automation)">
                                     <i class="fas fa-pencil-alt"></i>
                                 </button>
                             </div>
+                        </td>
+                    </tr>
+                    <tr class="edit-automation-row" ref="edit-automation-row" v-show="showEditRow" :key="showEditRow">
+                        <td :class="{'edit-automation-row-body': showEditRow}" colspan=9 v-if="selectedAutomation">
+                            <WorkflowAutomationsForm 
+                                :key="automationId" 
+                                :workflows="workflows" 
+                                :editAutomation="selectedAutomation" 
+                                class="mt-3" 
+                                :state="false" 
+                                @cancel-edit="closeEditRow"
+                            />
                         </td>
                     </tr>
                 </tbody>
@@ -58,11 +70,20 @@
 
 <script>
 import WorkflowAutomationsForm from '@/components/admin/WorkflowAutomationsForm'
+import {moveRow} from '../../plugins/insert_row'
 import {mapGetters} from 'vuex'
 export default {
     props: ['automations', 'workflows', 'state'],
     name: 'AutomationList',
     components: {WorkflowAutomationsForm},
+    data() {
+        return {
+            showEditRow: false,
+            automationId: null,
+            editRowIndex: null,
+            selectedAutomation: null
+        }
+    },
     computed: {
         ...mapGetters(['successAlert', 'successMessage']),
           settingState: {
@@ -80,6 +101,27 @@ export default {
         },
         switchAutomationsList() {
             this.$store.dispatch('switchAutomationsListState')
+        },
+        editThis(index, item) {
+            this.selectedAutomation = item
+            this.showEditRow = true
+            this.automationId = item.id
+            const toIndex = this.$refs['automation-row' + index][0].rowIndex
+            const fromIndex = document.getElementsByClassName('edit-automation-row')[0].rowIndex
+            this.editRowIndex = fromIndex
+            const table = this.$refs['automation-table']
+            moveRow(table, fromIndex, toIndex, false);
+        },
+        requestDelete(item) {
+            this.$store.commit('toggleDeleteModal', {
+                action: 'deleteAutomation',
+                id: item.id
+            })
+        },
+        closeEditRow() {
+            this.selectedAutomation = null
+            this.showEditRow = false
+            this.automationId = null
         }
     }
 }
@@ -155,6 +197,39 @@ export default {
         .slider.round:before {
         border-radius: 50%;
         }
+
+        .edit-automation-row {
+        background: rgb(241, 241, 241);
+        width: 100%;
+        box-sizing: border-box;
+
+        .edit-automation-row-body {
+          width: 100%;
+          box-sizing: border-box;
+          
+          .edit-automation-row-body-content {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+
+            .edit-row-btns {
+              align-self: center;
+              display: flex;
+              margin-left: 10px;
+
+              .edit-row-btn {
+                text-decoration: none;
+                margin: 0 8px;
+                background: white;
+                color: black;
+                font-weight: bold;
+                box-shadow: 0 0 5px 0 rgba(0,0,0,.250);
+                cursor: pointer;
+              }
+            }
+          }
+        }
+      }
     }
 }
 

@@ -239,7 +239,7 @@
 
 <script>
 import {mapActions, mapGetters} from 'vuex'
-import {detach, move, moveRow, children, row} from '../../plugins/insert_row'
+import {moveRow} from '../../plugins/insert_row'
 import levels from '../../plugins/levels'
 import Spinner from '@/components/loaders/Spinner.vue'
 import NoFirm from '@/components/placeholders/NoFirm.vue'

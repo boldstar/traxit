@@ -34,7 +34,11 @@
                     </select>
                 </div>
                 <div class="align-self-center ml-3">
-                    <button class="btn btn-primary font-weight-bold" @click="addAutomation">Add</button>
+                    <div class="d-flex">
+                      <button class="btn btn-primary font-weight-bold mr-3" @click="saveEdit" v-if="editAutomation">Save</button>
+                      <button class="btn btn-secondary font-weight-bold" @click="closeEdit" v-if="editAutomation">Cancel</button>
+                    </div>
+                    <button class="btn btn-primary font-weight-bold" @click="addAutomation" v-if="!editAutomation">Add</button>
                 </div>
               </li>
           </ul>
@@ -47,7 +51,7 @@ import {mapGetters} from 'vuex'
 import automation_options from '../../plugins/automations'
 export default {
     name: 'WorkflowAutomations',
-    props: ['setting', 'state', 'workflows'],
+    props: ['setting', 'state', 'workflows', 'editAutomation'],
     data() {
       return {
         automation: {
@@ -88,12 +92,36 @@ export default {
             active: true
           })
         }
+      },
+      closeEdit() {
+        this.$emit('cancel-edit')
+      },
+      saveEdit() {
+        this.$store.dispatch('updateAutomation', {
+            id: this.editAutomation.id,
+            category: 'workflow',
+            workflow_id: this.automation.workflow_id,
+            workflow: this.workflows.filter(w => w.id == this.automation.workflow_id)[0].workflow,
+            status_id: this.automation.status_id,
+            status: this.selectedWorkflowStatuses.filter(s => s.id === this.automation.status_id)[0].status,
+            action_id: this.automation.action_id,
+            action: this.options.filter(a => a.id === this.automation.action_id)[0].option,
+            active: true
+        }).then(res => {
+          this.$emit('cancel-edit')
+        })
       }
     },
     created() {
-      this.automation.workflow_id = this.select_option
-      this.automation.status_id = this.select_option
-      this.automation.action_id = this.select_option
+      if(this.editAutomation) {
+        this.automation.workflow_id = this.editAutomation.workflow_id
+        this.automation.status_id = this.editAutomation.status_id
+        this.automation.action_id = this.editAutomation.action_id
+      } else {
+        this.automation.workflow_id = this.select_option
+        this.automation.status_id = this.select_option
+        this.automation.action_id = this.select_option
+      }
     }
 }
 </script>

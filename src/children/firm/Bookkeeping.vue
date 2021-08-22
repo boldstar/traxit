@@ -589,9 +589,39 @@ export default {
                     return true
                 }
             } return false
+        },
+        dataLoaded(key) {
+            this.loaded.push(key)
+            if(this.loaded.includes('accounts') && this.loaded.includes('clients') && this.loaded.includes('businesses')) {
+                this.loadingData = false
+                this.belongsTo = 'active'
+                if(this.activeAccounts && this.activeAccounts.length > 0) {
+                    this.selectedID = this.activeAccounts[0].id
+                    this.belongsToActive = this.activeAccounts[0].belongs_to
+                    this.selectedName = this.activeAccounts[0].name
+                }
+            }
+        },
+    },
+    watch: {
+        'allClients': function(value) {
+            if(!this.loaded.includes('clients') && value && value.length > 0) {
+                this.dataLoaded('clients')
+            }
+        },
+        'bookkeepingAccounts': function(value) {
+            if(!this.loaded.includes('accounts') && value) {
+                this.dataLoaded('accounts')
+            }
+        },
+        'businessList': function(value) {
+            if(!this.loaded.includes('businesses') && value && value.length > 0) {
+                this.dataLoaded('businesses')
+            }
         }
     },
     created() {
+        this.loadingData = true
         this.showActive = true
         this.$store.dispatch('getBookkeepingAccounts')
         this.$store.dispatch('retrieveClients')

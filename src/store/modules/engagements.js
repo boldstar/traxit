@@ -328,6 +328,11 @@ export default {
                 priority: checkedEngagements.priority
             })
             .then(response => {
+                if(response.data.engagements.length === 1) {
+                    approveAutomationModal('performAutomation', 
+                    {automations: response.data.automation, data: response.data.engagements[0]}, 
+                    'Engagement')
+                }
                 context.commit('updateCheckedEngagements', response.data.engagements)
                 context.commit('successAlert', response.data.message)
                 context.commit('stopProcessing')

@@ -22,7 +22,11 @@ export function automate(data) {
 }
 
 export function approveAutomationModal(action, data, type) {
-    store.commit('showAutomationApprovalModal', {data: data, action: action, type: type})
+    if(data.automations.length > 0) {
+        store.commit('showAutomationApprovalModal', {data: data, action: action, type: type})
+    } else {
+        console.log('no automations')
+    }
 }   
 
 

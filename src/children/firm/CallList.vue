@@ -142,7 +142,7 @@ export default {
         })
       },
       archive(id) {
-        this.$store.dispatch('removeFromCallList', id)
+        this.$store.dispatch('removeFromCallList', {id: id, automated: false})
       },
       resetCallListModal() {
         this.showModal = false

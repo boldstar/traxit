@@ -13,6 +13,7 @@
       </main>
     </div>
 
+    <delete-modal></delete-modal>
           
   </div>
 </template>

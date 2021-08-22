@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {automate, approveAutomationModal} from '../../plugins/automations'
 
 export default {
     state: {
@@ -46,11 +47,14 @@ export default {
                 done: task.done
             })
             .then(response => {
-                if(response.data.notify) {
-                context.commit('notifyClientModal', response.data.task)
-                context.commit('notifyClientMessage', response.data.status)
-                context.commit('stopProcessing')
-            }
+                approveAutomationModal('performAutomation', 
+                {automations: response.data.automation, data: response.data.engagement}, 
+                'Engagement')
+                // if(response.data.notify) {
+                //     context.commit('notifyClientModal', response.data.task)
+                //     context.commit('notifyClientMessage', response.data.status)
+                //     context.commit('stopProcessing')
+                // }
                 context.commit('updateTask', response.data.task)
                 context.commit('successAlert', response.data.message)
                 context.commit('stopProcessing')

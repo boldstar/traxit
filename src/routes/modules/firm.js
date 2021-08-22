@@ -63,6 +63,18 @@ export default [
               ]
             },
           },
+          {
+            path: 'call-list',
+            name: 'call-list',
+            component: () => import('@/children/firm/CallList.vue'),
+              meta: {
+                requiresAuth: true,
+                layout: "default",
+                breadCrumb: [
+                  { name: 'Call List' }
+              ]
+            },
+          },
         ]
       },
 ]

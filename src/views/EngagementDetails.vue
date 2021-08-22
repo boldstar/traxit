@@ -6,7 +6,7 @@
 
       <!-- this is the header section of the engagement details -->
       <div class="flex-row justify-content-between d-flex mt-0 card-body py-2 px-0">
-        <span class="h5 align-self-center m-0 text-left engagement-name">Engagement | <strong class="text-primary"><router-link :to="'/contact/' +engagement.client.id + '/account'">{{engagement.name}}</router-link></strong></span>
+        <span class="h5 align-self-center m-0 text-left engagement-name">Engagement | <strong class="text-primary"><router-link v-if="engagement.client" :to="'/contact/' +engagement.client.id + '/account'">{{engagement.name}}</router-link></strong></span>
 
         <div class="d-flex">
         <div v-if="engagement.type == 'taxreturn' && engagement.balance != null" class="mr-3 d-flex engagement-balance">
@@ -21,7 +21,7 @@
             <i class="fas fa-cogs mr-2"></i>  Options
           </button>
           <div class="dropdown-menu mr-4">
-            <router-link class="dropdown-item" :to="'/engagement/' +engagement.id+ '/edit'" v-if="engagement.done == false"><i class="far fa-edit mr-2" ></i>Edit</router-link>
+            <router-link class="dropdown-item" :to="'/engagement/' +engagement.id+ '/edit'" v-if="engagement && engagement.done == false"><i class="far fa-edit mr-2" ></i>Edit</router-link>
             <button type="button" class="dropdown-item" @click="archiveEngagement"><i class="fas fa-archive"></i><span class="ml-2">
               <span v-if="!engagement.archive">Archive</span>
               <span v-else>Unarchive</span>
@@ -71,9 +71,17 @@
               <router-link class="engagement-link" :class="{'active-engagement-link': $route.name == 'invoice'}" :to="{path: '/engagement/' + engagement.id + '/invoice'}">Invoice</router-link>
             </li> -->
           </ul>
+
+          <EngagementContactCard :contact="engagement.client" :engagement="engagement" class="contact-details-card"/>
         </div>
 
-        <router-view :engagement="engagement" :engagement-notes="engagementNotes" :workflow="engagementWorkflow" @delete-engagement="requestEngagementDelete"></router-view>
+        <router-view 
+        :engagement="engagement" 
+        :engagement-notes="engagementNotes" 
+        :workflow="engagementWorkflow"
+        :callListItem="callListItem" 
+        @delete-engagement="requestEngagementDelete"
+        ></router-view>
       </div>
 
       <spinner v-if="detailsLoading"></spinner>
@@ -94,6 +102,7 @@ import EngagementStatusModal from '@/components/engagement/EngagementStatusModal
 import Spinner from '@/components/loaders/Spinner.vue'
 import NoteModal from '@/components/engagement/NoteModal.vue'
 import EditNoteModal from '@/components/engagement/EditNoteModal.vue'
+import EngagementContactCard from '@/components/engagement/EngagementContactCard.vue'
 
 export default {
   name: 'EngagementDetails',
@@ -118,13 +127,28 @@ export default {
     NoteModal,
     EditNoteModal,
     UpdateStatusModal,
-    EngagementStatusModal
+    EngagementStatusModal,
+    EngagementContactCard
   },
   directives: {
     'b-modal': bModalDirective
   },
   computed: {
-    ...mapGetters(['engagement', 'successAlert', 'processing', 'errorMsgAlert', 'engagementWorkflow','archiving', 'engagementNotes', 'noteModal', 'editNoteModal', 'timesheet', 'users', 'engagementStatusModal']),
+    ...mapGetters(['engagement', 
+        'successAlert', 
+        'processing', 
+        'errorMsgAlert', 
+        'engagementWorkflow',
+        'archiving', 
+        'engagementNotes', 
+        'noteModal', 
+        'editNoteModal', 
+        'timesheet', 
+        'users', 
+        'engagementStatusModal',
+        'browserHistory',
+        'callListItem'
+    ]),
     percentage() {
       const statuses = this.engagementWorkflow.statuses
       const percentage = this.calcPercent(statuses.length)
@@ -171,17 +195,20 @@ export default {
   },
   watch: {
     '$route': function(value) {
-      this.detailsLoading = true
-      this.$store.dispatch('getEngagement', this.$route.params.id);
-      this.$store.dispatch('getEngagementNotes', this.$route.params.id)
-      setTimeout(() => {
-        this.detailsLoading = false
-      }, 1000)
+      if(this.browserHistory) {
+        this.detailsLoading = true
+        this.$store.dispatch('getEngagement', this.$route.params.id);
+        this.$store.dispatch('getEngagementNotes', this.$route.params.id)
+        setTimeout(() => {
+          this.detailsLoading = false
+        }, 1000)
+      }
     }
   },
   created() {
     this.$store.dispatch('getEngagement', this.$route.params.id);
     this.$store.dispatch('getEngagementNotes', this.$route.params.id)
+    this.$store.dispatch('getCallListItem', this.$route.params.id)
     this.$store.dispatch('retrieveUsers');
     this.detailsLoading = true;
     var self = this;
@@ -199,6 +226,12 @@ export default {
      position: -webkit-sticky;
     position: sticky;
     top: 0;
+  }
+
+  .contact-details-card {
+     position: -webkit-sticky;
+    position: sticky;
+    top: 250px;
   }
 
   .mail-sent-flag {

@@ -24,6 +24,9 @@ import history from './modules/history'
 import customizations from './modules/customizations'
 import settings from './modules/settings'
 import browserhistory from './modules/browserhistory'
+import rubex from './modules/rubex'
+import automations from './modules/automations'
+import calllist from './modules/calllist'
 
 // this is for the abilities plug in.
 import { abilityPlugin, ability as appAbility } from './ability'
@@ -70,7 +73,10 @@ export default new Vuex.Store({
     history,
     customizations,
     settings,
-    browserhistory
+    browserhistory,
+    rubex,
+    automations,
+    calllist
   },
   state: {
     processing: false,
@@ -94,7 +100,9 @@ export default new Vuex.Store({
     show_update_status_modal: false,
     delete_modal: false,
     delete_modal_details: null,
-    sessionEndedMsg: null
+    sessionEndedMsg: null,
+    approval_modal: false,
+    approval_modal_data: null
   },
   getters: {
     chartDataLength(state) {
@@ -159,6 +167,12 @@ export default new Vuex.Store({
     },
     deleteModalDetails(state) {
       return state.delete_modal_details
+    },
+    approvalModal(state) {
+      return state.approval_modal
+    },
+    approvalModalData(state) {
+      return state.approval_modal_data
     }
   },
   mutations: {
@@ -233,6 +247,13 @@ export default new Vuex.Store({
     toggleDeleteModal(state, data) {
       state.delete_modal = !state.delete_modal
       state.delete_modal_details = data
+    },
+    showAutomationApprovalModal(state, data) {
+      state.approval_modal_data = data
+      state.approval_modal = !state.approval_modal
+      if(!data) {
+        state.approval_modal = false
+      }
     }
   },
   actions: {

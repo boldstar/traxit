@@ -25,6 +25,9 @@
                         <li :class="{'sublist-link' : $route.name == 'team-overview'}" @click="$router.push({path: '/firm/team-overview'})">
                             Team Overview
                         </li>
+                        <li :class="{'sublist-link' : $route.name == 'call-list'}" @click="$router.push({path: '/firm/call-list'})">
+                            <span class="badge badge-dark px-2 mr-2" v-if="callList">{{callList.length}}</span><span>Call List</span>
+                        </li>
                     </ul> 
                 </transition>  
             </li>
@@ -87,10 +90,10 @@
         </ul>
         <div class="mt-auto mb-3">
             <transition name="router-animation" enter-active-class="animated bounceInLeft" leave-active-class="animated fadeOut" mode="out-in">
-                <Toaster :message="successAlert" :type="'success'" v-if="successAlert" />
+                <Toaster :message="successAlert" :type="'success'" v-if="successAlert" class="mt-2" />
             </transition>   
             <transition name="router-animation" enter-active-class="animated bounceInLeft" leave-active-class="animated fadeOut" mode="out-in">
-                <Toaster :message="errorMsgAlert" :type="'error'" v-if="errorMsgAlert" />
+                <Toaster :message="errorMsgAlert" :type="'error'" v-if="errorMsgAlert" class="mt-2" />
             </transition>   
         </div>
         </div>
@@ -114,7 +117,17 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['successAlert', 'errorAlert', 'errorMsgAlert', 'engagementFilter', 'contactFilter', 'sidebarOpen', 'files_length', 'tasks'])
+        ...mapGetters([
+            'successAlert', 
+            'errorAlert', 
+            'errorMsgAlert', 
+            'engagementFilter', 
+            'contactFilter', 
+            'sidebarOpen', 
+            'files_length', 
+            'tasks',
+            'callList'
+        ])
     },
     methods: {
         filterEngagements(filter) {
@@ -127,6 +140,7 @@ export default {
     created() {
         this.$store.dispatch('filesLength')
         this.$store.dispatch('retrieveTasks')
+        this.$store.dispatch('getCallList')
     }
 }
 </script>

@@ -39,5 +39,17 @@ export default {
                 })
             })
         },
+        switchAutomationsListState(context) {
+            return new Promise((resolve, reject) => {
+                axios.post('/switch-automations-setting')
+                .then(res => {
+                    context.commit('updateSettingsList', res.data)
+                    resolve(res)
+                }).catch(err => {
+                    console.log(err.response.data)
+                    reject(err)
+                })
+            })
+        }
     }
 }

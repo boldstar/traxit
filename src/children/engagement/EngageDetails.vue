@@ -124,6 +124,63 @@
             </div>
         </div>
 
+        <h4 class="mb-0">Call History</h4>
+        <span class="title-description text-secondary">The history of the contact calling for status update</span>
+
+        <div class="d-flex">
+            <div class="card px-0 mt-3 mb-5 shadow-sm w-100">
+                <div class="card-body p-0 py-2">
+                    <div class="px-3 pt-2 pb-3 border-bottom" v-if="callListItem">
+                        <h5 class="mb-0">Last Called: {{callListItem.last_called_date | formatDate}}</h5>
+                        <span class="font-weight-bold text-secondary">Total Calls: {{callListItem.total_calls}}</span>
+                    </div>
+                    <div class="px-3 pt-2 pb-3 border-bottom" v-else>
+                        <h5 class="mb-0">No Call History</h5>
+                    </div>
+                    <ul class="m-0 p-0 details-list">
+                        <li class="details-list-item p-2 pb-0">
+                            <div class="d-flex flex-column">
+                                <span class="py-2" v-if="callListItem">First Called: <strong>{{callListItem.first_called_date | formatDate}}</strong></span>
+                                <span class="py-2" v-else>First Called: <strong>N/A</strong></span>
+                                <span>Comments: <button class="btn btn-link p-0 font-weight-bold comments-btn" @click="showEditModal()" v-if="callListItem"> Add/Edit</button></span> 
+                                <div class="font-weight-bold d-flex flex-column" v-html="callListItem.comments" v-if="callListItem && callListItem.comments">
+                                </div>
+                                <div v-else class="font-weight-bold w-100">
+                                     <p class="text-nowrap">There are currently no comments 
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="d-flex ml-3 mb-2">
+                        <button class="engage-edit-btn font-weight-bold" type="button" @click="updateLastCalled" v-if="callListItem" :disabled="updating">
+                            <span v-if="updating">Updating...</span>
+                            <span v-else>Update Last Called</span>
+                        </button>
+                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="removeFromCallList(callListItem.id)" v-if="callListItem && !callListItem.archive" :disabled="removing">
+                            <span v-if="removing">Removing...</span>
+                            <span v-else>Remove From Call List</span>
+                        </button>
+                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="removeFromCallList(callListItem.id)" v-if="callListItem && callListItem.archive" :disabled="adding">
+                            <span v-if="adding">Adding...</span>
+                            <span v-else>Add To Call List</span>
+                        </button>
+                        <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="showEditModal()" v-if="callListItem">
+                            <span>Edit History</span>
+                        </button>
+                        <button class="engage-edit-btn bg-danger text-white font-weight-bold ml-3" type="button" @click="requestDelete(callListItem.id)" v-if="callListItem && $can('delete', engagement)" :disabled="deleteModal && processing && deleting">
+                            <span v-if="deleteModal && processing && deleting">Deleting...</span>
+                            <span v-else>Delete History</span>
+                        </button>
+                        <button class="engage-edit-btn font-weight-bold" type="button" @click="addToCallList" v-if="!callListItem" :disabled="adding">
+                            <span v-if="adding">Adding...</span>
+                            <span v-else>Add Call List Item</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <h4 class="mb-0">Danger Zone</h4>
         <span class="title-description text-secondary">Action taken past this point is irreversable</span>
         <div class="card px-0 mt-3 mb-5 shadow-sm w-100">
@@ -140,6 +197,15 @@
                 </div>
             </div>
         </div>
+
+        <EditCallListItemModal 
+        :item="callListItem" 
+        :key="showModal"
+        v-if="showModal" 
+        @close-modal="showModal = false"
+        @save-changes="saveCallListItemChanges" 
+        @reset-modal="resetCallListModal"
+      />
     </div>
 </template>
 
@@ -152,23 +218,40 @@ import Spinner from '@/components/loaders/Spinner.vue'
 import NoteModal from '@/components/engagement/NoteModal.vue'
 import EditNoteModal from '@/components/engagement/EditNoteModal.vue'
 import EngagementDoughnut from '@/components/engagement/EngagementDoughnut.vue'
-
+import EditCallListItemModal from '@/components/modals/EditCallListItemModal'
 export default {
     name: 'EngageDetails',
-    props: ['engagement', 'workflow'],
+    props: ['engagement', 'workflow', 'callListItem'],
     components:{
         'b-modal': bModal,
         Alert,
         Spinner,
         NoteModal,
         EditNoteModal,
-        EngagementDoughnut
+        EngagementDoughnut,
+        EditCallListItemModal
     },
     directives: {
         'b-modal': bModalDirective
     },
+    data() {
+        return {
+            showModal: false,
+            updating: false,
+            removing: false,
+            deleting: false,
+            adding: false
+        }
+    },
     computed: {
-        ...mapGetters(['successAlert', 'processing', 'errorMsgAlert', 'engagementWorkflow', 'engagementStatusModal']),
+        ...mapGetters([
+            'successAlert',
+            'processing', 
+            'errorMsgAlert', 
+            'engagementWorkflow', 
+            'engagementStatusModal', 
+            'deleteModal'
+        ]),
         percentage() {
             const statuses = this.engagementWorkflow.statuses
             const percentage = this.calcPercent(statuses.length)
@@ -219,6 +302,58 @@ export default {
         showStatusModal() {
             this.$store.commit('showStatusModal', true)
         },
+        addToCallList() {
+            this.adding = true
+            this.$store.dispatch('addToCallList', {
+                engagement_id: this.$route.params.id,
+                engagement_name: this.engagement.name,
+                current_status: this.engagement.status,
+                first_called_date: new Date(),
+                last_called_date: new Date(),
+                total_calls: 1
+            }).then(res => {
+                this.adding = false
+            })
+        },
+        updateLastCalled() {
+            this.updating = true
+            this.$store.dispatch('updateLastCalled', {
+                id: this.callListItem.id,
+                last_called_date: new Date(),
+                total_calls: this.callListItem.total_calls + 1
+            }).then(res => {
+                this.updating = false
+            })
+        },
+        removeFromCallList(id) {
+            this.removing = true
+            this.adding = true
+            this.$store.dispatch('removeFromCallList', {id: id, automated: false})
+            .then(res => {
+                this.removing = false
+                this.adding = false
+            })
+        },
+        showEditModal() {
+            if(this.showModal) {
+                this.showModal = false
+            } this.showModal = true
+        },
+        resetCallListModal() {
+            this.showModal = false
+        },
+        requestDelete(id) {
+        this.$store.commit('toggleDeleteModal', {
+          action: 'deleteCallListItem',
+          id: id
+        })
+      },
+        saveCallListItemChanges(item) {
+        this.$store.dispatch('updateCallListItem', item)
+        .then(res => {
+          this.showModal = false
+        })
+      },
     }
 }
 </script>
@@ -256,5 +391,9 @@ export default {
             background: rgb(218, 218, 218);
             color: black;
         }
+    }
+
+    .comments-btn {
+        font-size: .9rem;
     }
 </style>

@@ -132,7 +132,8 @@ export default {
     ...mapGetters(
         [
           'client',
-          'successAlert'
+          'successAlert',
+          'browserHistory'
         ]
       ),
       contactName() {
@@ -174,12 +175,14 @@ export default {
   },
   watch: {
       $route (to, from) {
-        this.loading = true
-        var self = this
-        setTimeout(() => {
-          self.loading = false
-        }, 2000)
-        this.$store.dispatch('getDetails', this.$route.params.id)
+        if(this.browserHistory) {
+          this.loading = true
+          var self = this
+          this.$store.dispatch('getDetails', this.$route.params.id)
+          setTimeout(() => {
+            self.loading = false
+          }, 2000)
+        }
         if(this.$route.query.alert) {
           this.alert  = this.$route.query.alert;
           this.$router.replace({path: '/contact/' +this.client.id+ '/account'});

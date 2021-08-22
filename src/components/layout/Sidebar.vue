@@ -26,7 +26,7 @@
                             Team Overview
                         </li>
                         <li :class="{'sublist-link' : $route.name == 'call-list'}" @click="$router.push({path: '/firm/call-list'})">
-                            Call List
+                            <span class="badge badge-dark px-2 mr-2" v-if="callList">{{callList.length}}</span><span>Call List</span>
                         </li>
                     </ul> 
                 </transition>  
@@ -124,7 +124,8 @@ export default {
             'contactFilter', 
             'sidebarOpen', 
             'files_length', 
-            'tasks'
+            'tasks',
+            'callList'
         ])
     },
     methods: {
@@ -138,6 +139,7 @@ export default {
     created() {
         this.$store.dispatch('filesLength')
         this.$store.dispatch('retrieveTasks')
+        this.$store.dispatch('getCallList')
     }
 }
 </script>

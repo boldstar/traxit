@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { data } from 'jquery'
 import store from '../../store/store'
 export default {
     state: {
@@ -119,13 +120,13 @@ export default {
                 })
             })
         },
-        removeFromCallList(context, id) {
+        removeFromCallList(context, data) {
             context.commit('startProcessing')
             return new Promise((resolve, reject) => {
-                axios.post('remove-from-call-list', {id: id})
+                axios.post('remove-from-call-list', {id: data.id, automated: data.automated})
                 .then(res => {
                     context.commit('REMOVE_FROM_CALL_LIST', res.data)
-                    context.commit('successAlert', 'Call List Item Archived')
+                    context.commit('successAlert', res.data.archive ? 'Call List Item Archived' : 'Item Added To Call List')
                     context.commit('stopProcessing')
                     resolve(res)
                 }).catch(err => {

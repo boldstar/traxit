@@ -31,7 +31,7 @@
                 <button data-toggle="tooltip" data-placement="bottom" title="Update Last Called" class="btn btn-link text-success font-weight-bold call-list-btn" @click="updateCallList(item)">
                   <i class="fas fa-plus"></i>
                 </button>
-                <button data-toggle="tooltip" data-placement="bottom" title="Delete Call List History" class="btn btn-link text-danger font-weight-bold call-list-btn" @click="requestDelete(item)">
+                <button data-toggle="tooltip" data-placement="bottom" title="Delete Call List History" class="btn btn-link text-danger font-weight-bold call-list-btn" @click="requestDelete(item)" v-if="$can('delete', admin)">
                   <i class="fas fa-trash-alt"></i>
                 </button>
                 <button data-toggle="tooltip" data-placement="bottom" title="Edit Call List Item" class="btn btn-link text-primary" @click="openEditModal(item)">
@@ -79,7 +79,7 @@ import EditCallListItemModal from '@/components/modals/EditCallListItemModal'
 import CallListCommentsModal from '@/components/modals/CallListCommentsModal'
 export default {
     name: 'CallList',
-    props: ['callList', 'loading'],
+    props: ['callList', 'loading', 'admin'],
     components: {EditCallListItemModal,CallListCommentsModal},
     data() {
       return {

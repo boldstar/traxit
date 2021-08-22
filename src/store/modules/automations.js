@@ -108,7 +108,7 @@ export default {
            return new Promise((resolve, reject) => {
                axios.get('call-list-item/'+ data.id)
                .then(res => {
-                    store.dispatch('removeFromCallList', res.data.id)
+                    store.dispatch('removeFromCallList', {id: res.data.id, automated: true})
                     resolve(res)
                }).catch(err => {
                     console.log(err.response.data)

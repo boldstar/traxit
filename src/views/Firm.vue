@@ -16,7 +16,7 @@
               </div>
               <div class="d-flex" v-else>
                 <span class="h5 mb-0 align-self-center">{{$route.meta.breadCrumb[0].name}}</span>
-                <span v-if="$route.name == 'call-list' && callList" class="align-self-center text-primary font-weight-bold">: {{callList.length}}</span>
+                <span v-if="$route.name == 'call-list' && callList" class="align-self-center text-primary font-weight-bold h5 mb-0 ml-1">: {{callList.length}}</span>
                 </div>
           </div>
           <div class="d-flex">

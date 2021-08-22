@@ -168,11 +168,11 @@
                         <button class="engage-edit-btn font-weight-bold ml-3" type="button" @click="showEditModal()" v-if="callListItem">
                             <span>Edit History</span>
                         </button>
-                        <button class="engage-edit-btn bg-danger text-white font-weight-bold ml-3" type="button" @click="requestDelete(callListItem.id)" v-if="callListItem" :disabled="deleteModal && processing && deleting">
+                        <button class="engage-edit-btn bg-danger text-white font-weight-bold ml-3" type="button" @click="requestDelete(callListItem.id)" v-if="callListItem && $can('delete', engagement)" :disabled="deleteModal && processing && deleting">
                             <span v-if="deleteModal && processing && deleting">Deleting...</span>
                             <span v-else>Delete History</span>
                         </button>
-                        <button class="engage-edit-btn font-weight-bold" type="button" @click="addToCallList" v-else :disabled="adding">
+                        <button class="engage-edit-btn font-weight-bold" type="button" @click="addToCallList" v-if="!callListItem" :disabled="adding">
                             <span v-if="adding">Adding...</span>
                             <span v-else>Add Call List Item</span>
                         </button>
@@ -328,7 +328,7 @@ export default {
         removeFromCallList(id) {
             this.removing = true
             this.adding = true
-            this.$store.dispatch('removeFromCallList', id)
+            this.$store.dispatch('removeFromCallList', {id: id, automated: false})
             .then(res => {
                 this.removing = false
                 this.adding = false

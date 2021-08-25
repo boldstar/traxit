@@ -105,7 +105,8 @@ export default {
         this.$store.dispatch('updateLastCalled', {
           id: item.id,
           last_called_date: new Date(),
-          total_calls: item.total_calls + 1
+          total_calls: item.total_calls + 1,
+          engagement_id: item.engagement_id
         })
       },
       saveCallListItemChanges(item) {

@@ -320,7 +320,8 @@ export default {
             this.$store.dispatch('updateLastCalled', {
                 id: this.callListItem.id,
                 last_called_date: new Date(),
-                total_calls: this.callListItem.total_calls + 1
+                total_calls: this.callListItem.total_calls + 1,
+                engagement_id: this.callListItem.engagement_id
             }).then(res => {
                 this.updating = false
             })

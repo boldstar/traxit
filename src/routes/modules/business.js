@@ -13,7 +13,6 @@ export default [
         },
         children: [          
             {
-            // this is the path to view the account of the client
             path: 'details',
             name: 'account-details',
             component: () => import('@/children/business/BusinessAccount.vue'),
@@ -26,7 +25,6 @@ export default [
                 },
                 children: [
                     {
-                    // this is the path to edit contact
                     path: 'edit',
                     name: 'edit-business',
                     component: () => import('@/children/business/BusinessDetailsCrud.vue'),
@@ -41,7 +39,6 @@ export default [
                 ]
             },
             {
-            // this is the path to view the engagements that belong to the client
             path: 'engagements',
             name: 'business-engagements',
             component: () => import('@/children/business/BusinessEngagements.vue'),
@@ -54,7 +51,6 @@ export default [
                 },
                 children: [
                 {
-                    // this is the path to add an engagement to singel client
                     path: 'add',
                     name: 'add-business-engagement',
                     component: () => import('@/children/business/AddBusinessEngagement.vue'),
@@ -67,6 +63,54 @@ export default [
                     },
                     },
                 ],
+            },
+            {
+            path: 'services',
+            name: 'business-services',
+            component: () => import('@/children/business/BusinessServices.vue'),
+                meta: {
+                requiresAuth: true,
+                layout: "default",
+                breadCrumb: [
+                    { name: 'Business Services Provided' }
+                ]
+                },
+            },
+            {
+            path: 'notes',
+            name: 'business-notes',
+            component: () => import('@/children/business/BusinessNotes.vue'),
+                meta: {
+                requiresAuth: true,
+                layout: "default",
+                breadCrumb: [
+                    { name: 'Business Notes' }
+                ]
+                },
+            },
+            {
+            path: 'owner',
+            name: 'business-owner',
+            component: () => import('@/children/business/BusinessOwner.vue'),
+                meta: {
+                requiresAuth: true,
+                layout: "default",
+                breadCrumb: [
+                    { name: 'Business Owner' }
+                ]
+                },
+            },
+            {
+            path: 'bookkeeping',
+            name: 'business-bookkeeping',
+            component: () => import('@/children/business/BusinessBookkeeping.vue'),
+                meta: {
+                requiresAuth: true,
+                layout: "default",
+                breadCrumb: [
+                    { name: 'Business Bookkeeping' }
+                ]
+                },
             },
         ],
         },

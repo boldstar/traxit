@@ -42,6 +42,7 @@
     <approval-modal @reset-modal="resetApprovalModal" @close-modal="closeApprovalModal"></approval-modal>    
     <notify-modal v-if="notify"></notify-modal>
     <delete-modal></delete-modal>
+    <rubex-integration-modal :modal="true" @reset_modal="resetRubexModal" @close-modal="closeRubexModal"></rubex-integration-modal>
   </div>
 </template>
 
@@ -56,6 +57,7 @@ import Setup from '@/components/onboard/Setup.vue'
 import Timesheet from '@/components/tsheets/Timesheet.vue'
 import BrowserHistory from '@/components/browser/BrowserHistory.vue'
 import ApprovalModal from '@/components/modals/ApprovalModal.vue'
+import RubexIntegrationModal from '../components/modals/RubexIntegrationModal.vue'
 export default {
   props: ['admin'],
   components: {
@@ -67,11 +69,13 @@ export default {
     Setup,
     Timesheet,
     BrowserHistory,
-    ApprovalModal
+    ApprovalModal,
+    RubexIntegrationModal
   },
   data () {
     return {
-      closedSidebar: ['col-lg-12', 'page-wrapper'],
+      
+    RubexIntegrationModalclosedSidebar: ['col-lg-12', 'page-wrapper'],
       openSidebar: ['col-lg-10', 'page-wrapper'],
       showTour: false
     }
@@ -97,6 +101,12 @@ export default {
     },
     closeApprovalModal() {
       this.$store.commit('showAutomationApprovalModal', null)
+    },
+    resetRubexModal() {
+      this.$store.dispatch('showRubexIntegrationModal', null)
+    },
+    closeRubexModal() {
+      this.$store.dispatch('showRubexIntegrationModal', null)
     }
   },
   watch: {

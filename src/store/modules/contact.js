@@ -1,6 +1,7 @@
 import axios from 'axios'
 import moment from 'moment';
 import router from '../../routes/router'
+import store from '../store';
 
 export default {
     state: {
@@ -256,6 +257,9 @@ export default {
             .then(response => {
                 context.commit('addClient', response.data.contact)
                 context.commit('successAlert', response.data.message)
+                if(localStorage.getItem('rubex_access_tokens')) {
+                    context.dispatch('showRubexIntegrationModal', response.data)
+                }
             })
             .catch(error => {
                 console.log(error.response.data)
@@ -322,8 +326,9 @@ export default {
             .then(response => {
                 context.commit('stopProcessing')
                 context.commit('successAlert', response.data.message)
-                context.commit('addNewBusiness', response.data.business)
-                router.push('/contact/' + business.client_id + '/account')
+                if(localStorage.getItem('rubex_access_tokens')) {
+                    context.dispatch('showRubexIntegrationModal', response.data)
+                }
             })
             .catch(error => {
                 console.log(error.response.data)

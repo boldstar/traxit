@@ -19,6 +19,54 @@
             </li>
             <li class="business-account-item">
               <div>
+                <span >EIN:</span>
+                <span class="font-weight-bold"></span>
+              </div>
+            </li>
+            <li class="business-account-item">
+              <div>
+                <span >Tax Return Type:</span>
+                <span class="font-weight-bold"></span>
+              </div>
+            </li>
+            <li class="business-account-item">
+              <div>
+                <span >State Tax ID:</span>
+                <span class="font-weight-bold"></span>
+              </div>
+            </li>
+            <li class="business-account-item">
+              <div>
+                <span >XT Number:</span>
+                <span class="font-weight-bold"></span>
+              </div>
+            </li>
+            <li class="business-account-item">
+              <div>
+                <span >RT Number:</span>
+                <span class="font-weight-bold"></span>
+              </div>
+            </li>
+            <li class="business-account-item">
+              <div>
+                <span >Formation Date:</span>
+                <span class="font-weight-bold"></span>
+              </div>
+            </li>
+            <li class="business-account-item">
+              <div>
+                <span >TWC Account:</span>
+                <span class="font-weight-bold"></span>
+              </div>
+            </li>
+            <li class="business-account-item">
+              <div>
+                <span >QB Password:</span>
+                <span class="font-weight-bold"></span>
+              </div>
+            </li>
+            <li class="business-account-item">
+              <div>
                 <span>Phone:</span>
                 <span class="font-weight-bold">{{business.phone}}</span>
               </div>

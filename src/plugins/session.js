@@ -1,3 +1,5 @@
+import store from '../store/store'
+
 const moment  = require('moment')
 const axios = require('axios')
 
@@ -69,4 +71,30 @@ export function trialPeriod(date) {
      } else {
          return true
      };
+}
+
+export function checkIfExpired() {
+     // get current date stored in local storage
+     const expiresOn = JSON.parse(localStorage.getItem('rubex_access_tokens'))['.expires']
+     // create current date to compare too
+     const formDate = new Date(expiresOn)
+     const expiresDate = moment(formDate).format('YYYYMMDDHHMMSS')
+     // dont check date if expiresOn is null
+     if(expiresOn == null) return;
+     const current = new Date(moment())
+     const currentDate = moment(current).format('YYYYMMDDHHMMSS')
+     // if current date exceed expired date destroy token else don't
+     const diff = expiresDate - currentDate 
+     if(diff < 5000 && diff > 0) {
+         store.dispatch('getRefreshToken')
+         console.log('requested refresh token')
+         return
+     } else if(diff < 0) {
+         store.dispatch('notifyRubexAdmins')
+         console.log('connection expired')
+         return
+     } else {
+         console.log('still good')
+         return
+     }
 }

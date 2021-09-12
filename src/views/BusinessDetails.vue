@@ -52,6 +52,7 @@
             <router-view  
               :business="businessDetails" 
               :engagements="businessEngagements"
+              :contact="businessDetails.client"
             >
             </router-view>
           </div>

@@ -89,50 +89,6 @@
             <router-link :to="'/business/' +business.id+ '/details/edit'" class="btn btn-secondary btn-sm font-weight-bold">Edit</router-link>
           </div>
         </div>
-
-
-        <div class="business-account-section card shadow-sm">
-          <div class="business-account-section-header">
-            <h5>Contact</h5>
-          </div>
-          <ul class="business-account-section-list">
-            <li class="business-account-item">
-              <div>
-                <span>Owner:</span>
-                <span class="font-weight-bold">{{ business.client.last_name }}, {{business.client.first_name}} <span v-if="business.client.has_spouse == true">&</span> <span v-if="business.client.last_name != business.client.spouse_last_name && business.client.has_spouse == true && business.client.spouse_last_name != null"> {{business.client.spouse_last_name}},</span> {{ business.client.spouse_first_name }}</span>
-              </div>
-            </li>
-            <li class="business-account-item">
-              <div>
-                <span >Taxpayer Phone:</span>
-                <span class="font-weight-bold">{{business.client.phone}}</span>
-              </div>
-            </li>
-            <li class="business-account-item">
-              <div>
-                <span >Taxpayer Email:</span>
-                <span class="font-weight-bold">{{business.client.email}}</span>
-              </div>
-            </li>
-            <li class="business-account-item">
-              <div>
-                <span >Spouse Phone:</span>
-                <span class="font-weight-bold">{{business.client.spouse_phone}}</span>
-              </div>
-            </li>
-            <li class="business-account-item">
-              <div>
-                <span >Spouse Email:</span>
-                <span class="font-weight-bold">{{business.client.spouse_email}}</span>
-              </div>
-            </li>
-          </ul>
-          <div class="business-account-section-footer">
-            <router-link :to="'/contact/' +business.client.id+ '/account'" class="btn btn-sm btn-primary font-weight-bold">View</router-link>
-          </div>
-        </div>
-
-
     </div>
 
     <div v-else>

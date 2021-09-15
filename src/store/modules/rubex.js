@@ -77,6 +77,7 @@ export default {
           }
           }).then(res => {
             localStorage.setItem('rubex_access_tokens', JSON.stringify(res.data))
+            context.dispatch('saveIntegrationToken', res.data)
             setTimeout(() => {
               context.dispatch('getRefreshToken')
             }, res.data.expires_in - 10000)
@@ -234,6 +235,28 @@ export default {
           }).then(res => {
             context.commit('successAlert', res.data.name + ' Was Added To Rubex!')
             context.dispatch('showRubexIntegrationModal', null)
+            resolve(res)
+          }).catch(err => {
+            console.log(err.response.data)
+            reject(err)
+          })
+        })
+      },
+      saveIntegrationToken(context, data) {
+        return new Promise((resolve, reject) => {
+          axios.post('integration', {
+            name: 'rubex',
+            expires: data['.expires'],
+            issued: data['.issued'],
+            expires_in: data.expires_in,
+            access_token: data.access_token,
+            mfa_token: data.mfa_token,
+            refresh_token: data.refresh_token,
+            token_type: data.token_type,
+            user_id: data.user_id,
+          })
+          .then(res => {
+            console.log(res.data)
             resolve(res)
           }).catch(err => {
             console.log(err.response.data)

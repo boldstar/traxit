@@ -38,11 +38,11 @@
             <li class="list-group-item" :class="{ 'selected-list-item' : $route.name == 'business-notes' }"  @click="goTo('notes')">
               <router-link  :to="{ path: '/business/' + businessDetails.id +'/notes' }" class="business-link" data-toggle="tab" role="tab" >Notes</router-link>
             </li>
-            <li class="list-group-item" :class="{ 'selected-list-item' : $route.name == 'business-owner' }"  @click="goTo('owner')">
-              <router-link  :to="{ path: '/business/' + businessDetails.id +'/owner' }" class="business-link" data-toggle="tab" role="tab" >Owner</router-link>
-            </li>
             <li class="list-group-item" :class="{ 'selected-list-item' : $route.name == 'business-bookkeeping' }"  @click="goTo('bookkeeping')">
               <router-link  :to="{ path: '/business/' + businessDetails.id +'/bookkeeping' }" class="business-link" data-toggle="tab" role="tab" >Bookkeeping</router-link>
+            </li>
+            <li class="list-group-item" :class="{ 'selected-list-item' : $route.name == 'business-owner' }"  @click="goTo('owner')">
+              <router-link  :to="{ path: '/business/' + businessDetails.id +'/owner' }" class="business-link" data-toggle="tab" role="tab" >Owner</router-link>
             </li>
           </ul>
         </div>

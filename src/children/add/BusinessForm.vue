@@ -34,6 +34,15 @@
                     <input type="text" class="form-control mb-3" v-model="business.state" placeholder="State">
                     <input type="text" class="form-control mb-3" v-model="business.postal_code" placeholder="Postal Code">
                     <input type="email" class="form-control mb-3" v-model="business.email" placeholder="Email">
+                    <input type="text" class="form-control mb-3" v-model="business.ein" placeholder="Employment Identification Number">
+                    <input type="text" class="form-control mb-3" v-model="business.tax_return_type" placeholder="Tax Return Type">
+                    <input type="text" class="form-control mb-3" v-model="business.state_tax_id" placeholder="State Tax ID">
+                    <input type="text" class="form-control mb-3" v-model="business.xt_number" placeholder="XT Number">
+                    <input type="text" class="form-control mb-3" v-model="business.rt_number" placeholder="RT Number">
+                    <input type="text" class="form-control mb-3" v-model="business.formation_date" placeholder="Formation Date">
+                    <input type="text" class="form-control mb-3" v-model="business.twc_account" placeholder="TWC Account">
+                    <input type="text" class="form-control mb-3" v-model="business.qb_password" placeholder="QB Password">
+                    <input type="text" class="form-control mb-3" v-model="business.sos_file_number" placeholder="SOS File Number">
                     <number-input class="mb-3 form-control" v-model="business.phone_number" :placeholder="'Phone Number'" mask-type="number"></number-input>
                     <number-input class="mb-3 form-control" v-model="business.fax_number" :placeholder="'Fax Number'" mask-type="number"></number-input>
                 </div>
@@ -68,7 +77,16 @@ export default {
                 postal_code: '',
                 email: '',
                 phone_number: '',
-                fax_number: ''
+                fax_number: '',
+                ein: '',
+                tax_return_type: '',
+                state_tax_id: '',
+                xt_number: '',
+                rt_number: '',
+                formation_date: '',
+                twc_account: '',
+                qb_password: '',
+                sos_file_number: ''
             },
             option: 'Choose...'
         }
@@ -95,18 +113,7 @@ export default {
     
     addNewBusiness() {
       
-      this.addBusiness({
-        id: this.idForBusiness,
-        client_id: this.business.client_id,
-        business_name: this.business.business_name,
-        address: this.business.address,
-        city: this.business.city,
-        state: this.business.state,
-        postal_code: this.business.postal_code,
-        email: this.business.email,
-        phone_number: this.business.phone_number,
-        fax_number: this.business.fax_number
-      })   
+      this.addBusiness(this.business)   
       .then(() => {
         this.business = "" 
         this.idForBusiness++

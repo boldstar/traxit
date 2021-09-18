@@ -6,12 +6,16 @@
                <p>Bookkeeping account tracking for the business</p>
             </div>
       </div>
+      <Bookkeeping :business="business"/>
   </div>
 </template>
 
 <script>
+import Bookkeeping from '../../children/firm/Bookkeeping'
 export default {
-    name: 'BusinessBookkeeping'
+    name: 'BusinessBookkeeping',
+    props: ['business'],
+    components: {Bookkeeping}
 }
 </script>
 

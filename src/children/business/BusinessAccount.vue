@@ -20,49 +20,49 @@
             <li class="business-account-item">
               <div>
                 <span >EIN:</span>
-                <span class="font-weight-bold"></span>
+                <span class="font-weight-bold">{{business.ein}}</span>
               </div>
             </li>
             <li class="business-account-item">
               <div>
                 <span >Tax Return Type:</span>
-                <span class="font-weight-bold"></span>
+                <span class="font-weight-bold">{{business.tax_return_type}}</span>
               </div>
             </li>
             <li class="business-account-item">
               <div>
                 <span >State Tax ID:</span>
-                <span class="font-weight-bold"></span>
+                <span class="font-weight-bold">{{business.state_tax_id}}</span>
               </div>
             </li>
             <li class="business-account-item">
               <div>
                 <span >XT Number:</span>
-                <span class="font-weight-bold"></span>
+                <span class="font-weight-bold">{{business.xt_number}}</span>
               </div>
             </li>
             <li class="business-account-item">
               <div>
                 <span >RT Number:</span>
-                <span class="font-weight-bold"></span>
+                <span class="font-weight-bold">{{business.rt_number}}</span>
               </div>
             </li>
             <li class="business-account-item">
               <div>
                 <span >Formation Date:</span>
-                <span class="font-weight-bold"></span>
+                <span class="font-weight-bold">{{business.formation_date}}</span>
               </div>
             </li>
             <li class="business-account-item">
               <div>
                 <span >TWC Account:</span>
-                <span class="font-weight-bold"></span>
+                <span class="font-weight-bold">{{business.twc_account}}</span>
               </div>
             </li>
             <li class="business-account-item">
               <div>
                 <span >QB Password:</span>
-                <span class="font-weight-bold"></span>
+                <span class="font-weight-bold">{{business.qb_password}}</span>
               </div>
             </li>
             <li class="business-account-item">

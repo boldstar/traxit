@@ -8,6 +8,7 @@ export default {
         business_engagements: [],
         business_details: null,
         businesses: [],
+        business_services: null,
         business: {
             business_name: '',
             address: '',
@@ -31,6 +32,9 @@ export default {
         },
         businessEngagements(state) {
             return state.business_engagements
+        },
+        businessServices(state) {
+            return state.business_servcies
         }
     },
     mutations: {
@@ -72,6 +76,12 @@ export default {
                 state.business = business
             }
         },
+        UPDATE_BUSINESS_SERVICE(state, data) {
+            state.business_details.services = data
+        },
+        BUSINESS_SERVICES(state, data) {
+            state.business_servcies = data
+        }
     },
     actions: {
         retrieveBusinessList(context) {
@@ -125,20 +135,10 @@ export default {
             })
         },
         updateBusiness(context, business) {
-            axios.patch(('/businesses/' + business.id ), {
-                client_id: business.client_id,
-                business_name: business.business_name,
-                address: business.address,
-                city: business.city,
-                state: business.state,
-                postal_code: business.postal_code,
-                email: business.email,
-                phone_number: business.phone_number,
-                fax_number: business.fax_number
-            })
+            axios.patch(('/businesses/' + business.id ), business)
             .then(response => {
                 context.commit('updateBusiness', response.data)
-                router.push('/contact/' + business.client_id + '/account')
+                router.push('/business/' + business.id + '/account')
             })
             .catch(error => {
                 console.log(error)
@@ -158,5 +158,30 @@ export default {
                 console.log(error)
             })
         },
+        updateBusinessServices(context, data) {
+            return new Promise((resolve, reject) => {
+                axios.post('/update-business-services', data)
+                .then(res => {
+                    context.commit('successAlert', 'Business Service Updated')
+                    context.commit('UPDATE_BUSINESS_SERVICE', res.data)
+                    resolve(res)
+                }).catch(err => {
+                    console.log(err.response.data)
+                    reject(err)
+                })
+            })
+        },
+        getBusinessServices(context, id) {
+            return new Promise((resolve, reject) => {
+                axios.get('/business-services/' + id)
+                .then(res => {
+                    context.commit('BUSINESS_SERVICES', res.data)
+                    resolve(res)
+                }).catch(err => {
+                    console.log(err.response.data)
+                    reject(err)
+                })
+            })
+        }
     }
 }

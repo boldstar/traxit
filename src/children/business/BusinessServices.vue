@@ -5,15 +5,21 @@
                <h5>Business Services Provided</h5>
                <p>Services provided for the business</p>
             </div>
-            <div class="business-services-card card shadow-sm mb-3">
+            <div class="business-services-card card shadow-sm mb-3" v-for="(service, index) in serviceKeys" :key="index">
                 <div class="d-flex justify-content-between">
                         <div class="text-left">
-                            <h5 class="mb-0">Payroll</h5>
+                            <h5 class="mb-0">{{service.name}}</h5>
                             <p class="text-secondary">Switch to toggle if service is provided.</p>
                         </div>
-                        <div class="align-self-center">
+                        <div class="align-self-center" v-if="services">
                             <label class="switch">
-                                <input type="checkbox" v-model="businessService" @change="changeActive">
+                                <input type="checkbox" v-model="services[service.key]" @change="changeActive($event, service.key)">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="align-self-center" v-else>
+                            <label class="switch">
+                                <input type="checkbox" :v-model="serviceState(service.key)" @change="changeActive($event, service.key)">
                                 <span class="slider round"></span>
                             </label>
                         </div>
@@ -26,14 +32,47 @@
 <script>
 export default {
     name: 'BusinessServices',
+    props: ['services', 'business'],
     data() {
         return {
-            businessService: true
+            businessService: true,
+            serviceKeys: [
+              {
+                name: 'Payroll',
+                key: 'payroll'
+              },
+              {
+                name: 'Sales Tax',
+                key: 'sales_tax'
+              },
+              {
+                name: 'Tax Return',
+                key: 'tax_return'
+              },
+              {
+                name: 'Bookkeeping',
+                key: 'bookkeeping'
+              },
+              {
+                name: 'Tax Planning',
+                key: 'tax_planning'
+              }
+            ]
         }
     },
     methods: {
-        changeActive() {
-
+        changeActive(event, service) {
+          const state = event.target.checked
+          this.$store.dispatch('updateBusinessServices', {
+            business_id: this.business.id, 
+            name: service,
+            state, state
+          })
+        },
+        serviceState(service) {
+          if(this.services) {
+            return this.services[service]
+          } else return false
         }
     }
 }

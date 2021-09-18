@@ -50,6 +50,8 @@
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active" role="tabpanel">
             <router-view  
+              :services="businessDetails.services"
+              :notes="businessDetails.notes"
               :business="businessDetails" 
               :engagements="businessEngagements"
               :contact="businessDetails.client"
@@ -89,7 +91,8 @@ export default {
         [
           'businessDetails',
           'businessEngagements',
-          'successAlert'
+          'successAlert',
+          'businessServices'
         ]
       ),
       engagementsLength() {
@@ -104,6 +107,7 @@ export default {
   created: function(){
     this.$store.dispatch('getBusinessDetails', this.$route.params.id)
     this.$store.dispatch('getBusinessEngagements', this.$route.params.id)
+    this.$store.dispatch('getBusinessServices', this.$route.params.id)
   }
 }
 </script>

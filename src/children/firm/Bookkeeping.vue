@@ -39,7 +39,7 @@
                         <select name="tax_year" id="tax_year" v-model="selectedYear">
                             <option v-for="(year, index) in selectedAccountYears" :key="index" :value="year">{{year}}</option>
                         </select>
-                        <div class="selected-account-btns" v-if="filteredAccountName">
+                        <div class="selected-account-btns" v-if="filteredAccountName || businessViewName">
                             <button @click="addAccountRequest">Add Account</button>
                         </div>
                         <div class="selected-account-btns" v-if="mostRescentYear">
@@ -302,7 +302,8 @@ export default {
             closeDate: null,
             error: false,
             errorMsg: '',
-            nameToEdit: null
+            nameToEdit: null,
+            businessViewName: null
         }
     },
     computed: {
@@ -508,7 +509,7 @@ export default {
             this.$store.dispatch('addBookkeepingAccount', {
                 client_id: this.selectedID,
                 belongs_to: this.belongsToActive ? this.belongsToActive : this.belongsTo,
-                business_name: this.filteredAccountName,
+                business_name: this.businessViewName ? this.businessViewName : this.filteredAccountName,
                 account_name: data.account_name,
                 account_type: data.account_type,
                 year:  JSON.stringify(data.year),
@@ -595,14 +596,16 @@ export default {
             if(this.loaded.includes('accounts') && this.loaded.includes('clients') && this.loaded.includes('businesses')) {
                 this.loadingData = false
                 this.belongsTo = 'active'
+                const businessAccount = this.activeAccounts.filter(a => a.name == this.business.business_name)
                 if(this.activeAccounts && this.activeAccounts.length > 0 && this.$route.name != 'business-bookkeeping') {
                     this.selectedID = this.activeAccounts[0].id
                     this.belongsToActive = this.activeAccounts[0].belongs_to
                     this.selectedName = this.activeAccounts[0].name
                 } else if(this.activeAccounts && this.activeAccounts.length > 0 && this.$route.name == 'business-bookkeeping'){
                     this.belongsToActive = 'business'
-                    this.selectedID = this.activeAccounts.filter(a => a.name == this.business.business_name)[0].id
+                    this.selectedID = this.business ? this.business.client_id : businessAccount[0].id
                     this.selectedName = this.business.business_name
+                    this.businessViewName = this.business.business_name
                 }
             }
         },

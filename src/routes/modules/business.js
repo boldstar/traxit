@@ -50,7 +50,7 @@ export default [
                 ]
                 },
                 children: [
-                {
+                    {
                     path: 'add',
                     name: 'add-business-engagement',
                     component: () => import('@/children/business/AddBusinessEngagement.vue'),
@@ -77,21 +77,35 @@ export default [
                 },
             },
             {
-            path: 'notes',
-            name: 'business-notes',
-            component: () => import('@/children/business/BusinessNotes.vue'),
+                path: 'notes',
+                name: 'business-notes',
+                component: () => import('@/children/business/BusinessNotes.vue'),
                 meta: {
-                requiresAuth: true,
-                layout: "default",
-                breadCrumb: [
-                    { name: 'Business Notes' }
-                ]
+                    requiresAuth: true,
+                    layout: "default",
+                    breadCrumb: [
+                        { name: 'Business Notes' }
+                    ]
                 },
+                children: [
+                    {
+                        path: 'edit',
+                        name: 'edit-business-note',
+                        component: () => import('@/children/business/EditBusinessNote.vue'),
+                        meta: {
+                            requiresAuth: true,
+                            layout: "default",
+                            breadCrumb: [
+                            { name: 'Edit Business Note' }
+                            ]
+                        },
+                    }
+                ]
             },
             {
-            path: 'owner',
-            name: 'business-owner',
-            component: () => import('@/children/business/BusinessOwner.vue'),
+                path: 'owner',
+                name: 'business-owner',
+                component: () => import('@/children/business/BusinessOwner.vue'),
                 meta: {
                 requiresAuth: true,
                 layout: "default",

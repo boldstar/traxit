@@ -1,6 +1,7 @@
 import axios from 'axios'
 import moment from 'moment';
 import router from '../../routes/router'
+import store from '../store';
 
 export default {
     state: {
@@ -81,6 +82,13 @@ export default {
         },
         BUSINESS_SERVICES(state, data) {
             state.business_servcies = data
+        },
+        UPDATE_BUSINESS_NOTES(state, data) {
+            state.business_details.notes = data
+        },
+        DELETE_BUSINESS_NOTE(state, id) {
+            const index = state.business_details.notes.findIndex(n => n.id === id)
+            state.business_details.notes.splice(index, 1)
         }
     },
     actions: {
@@ -176,6 +184,33 @@ export default {
                 axios.get('/business-services/' + id)
                 .then(res => {
                     context.commit('BUSINESS_SERVICES', res.data)
+                    resolve(res)
+                }).catch(err => {
+                    console.log(err.response.data)
+                    reject(err)
+                })
+            })
+        },
+        updateBusinessNotes(context, note) {
+            return new Promise((resolve, reject) => {
+                axios.post('business-note', note)
+                .then(res => {
+                    context.commit('successAlert', 'Business Notes Updated')
+                    context.commit('UPDATE_BUSINESS_NOTES', res.data)
+                    router.push('/business/' + note.business_id + '/notes')
+                    resolve(res)
+                }).catch(err => {
+                    console.log(err.response.data)
+                    reject(err)
+                })
+            })
+        },
+        deleteBusinessNote(context, id) {
+            return new Promise((resolve, reject) => {
+                axios.delete('business-note/' + id)
+                .then(res => {
+                    context.commit('DELETE_BUSINESS_NOTE', id)
+                    context.commit('successAlert', res.data)
                     resolve(res)
                 }).catch(err => {
                     console.log(err.response.data)

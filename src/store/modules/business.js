@@ -146,7 +146,7 @@ export default {
             axios.patch(('/businesses/' + business.id ), business)
             .then(response => {
                 context.commit('updateBusiness', response.data)
-                router.push('/business/' + business.id + '/account')
+                router.push('/business/' + business.id + '/details')
             })
             .catch(error => {
                 console.log(error)

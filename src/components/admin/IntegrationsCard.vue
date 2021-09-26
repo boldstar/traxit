@@ -38,6 +38,7 @@
 
 export default {
     name: 'IntegrationsCard',
+    props: ['token'],
     data() {
         return {
             credentials: {
@@ -89,6 +90,12 @@ export default {
                 this.processing = true
                 localStorage.removeItem('rubex_access_tokens')
                 this.tokens = null
+                this.$store.dispatch('removeRubexIntegrationToken')
+                .then(res => {
+                    this.processing = false
+                }).catch(err => {
+                    this.processing = false
+                })
             }
         }
     }

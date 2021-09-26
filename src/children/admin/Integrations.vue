@@ -9,7 +9,7 @@
     <hr>
     <div class="d-flex flex-column align-items-start">
       <div v-if="true">
-          <IntegrationsCard />
+          <IntegrationsCard :token="rubexToken" />
       </div>
       <Spinner v-else/>
     </div>
@@ -21,10 +21,18 @@
 <script>
 import Spinner from '@/components/loaders/Spinner'
 import IntegrationsCard from '@/components/admin/IntegrationsCard'
-
+import {mapGetters} from 'vuex'
 export default {
     name: 'Integrations',
-    components: {Spinner, IntegrationsCard}
+    components: {Spinner, IntegrationsCard},
+    computed: {
+      ...mapGetters([
+        'rubexToken'
+      ])
+    },
+    created() {
+      this.$store.dispatch('getRubexIntegrationToken')
+    }
 }
 </script>
 

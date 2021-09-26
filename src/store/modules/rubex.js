@@ -5,6 +5,7 @@ axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getIte
 
 export default {
     state: {
+        rubex_token: localStorage.getItem('rubex_access_token') || null,
         rubex_access_token: localStorage.getItem('rubex_access_token') || null,
         rubex_refresh_token: localStorage.getItem('rubex_refresh_token') || null,
         rubex_portfolios: null,
@@ -15,6 +16,9 @@ export default {
         rubex_account_setting: null
     },
     getters: {
+      rubexToken(state) {
+        return state.rubex_token
+      },
       rubexPortfolios(state) {
         return state.rubex_portfolios
       },
@@ -50,6 +54,12 @@ export default {
       },
       RUBEX_ACCOUNT_SETTING(state, data) {
         state.rubex_account_setting = data
+      },
+      SET_RUBEX_TOKEN(state, data){
+        state.rubex_token = data
+      },
+      REMOVE_RUBEX_TOKEN(state, data) {
+        state.rubex_token = data
       }
     },
     actions: {
@@ -77,10 +87,10 @@ export default {
           }
           }).then(res => {
             localStorage.setItem('rubex_access_tokens', JSON.stringify(res.data))
-            context.dispatch('saveIntegrationToken', res.data)
-            setTimeout(() => {
+            context.dispatch('saveRubexIntegrationToken', res.data)
+            setInterval(() => {
               context.dispatch('getRefreshToken')
-            }, res.data.expires_in - 10000)
+            }, res.data.expires_in - 50)
             resolve(res)
           }).catch(err => {
             console.log(err.response)
@@ -105,9 +115,7 @@ export default {
           }
           }).then(res => {
             localStorage.setItem('rubex_access_tokens', JSON.stringify(res.data))
-            setTimeout(() => {
-              context.dispatch('getRefreshToken')
-            }, res.data.expires_in - 10000)
+            context.dispatch('updateRubexIntegrationToken', res.data)
             resolve(res)
           }).catch(err => {
             console.log(err.response)
@@ -242,7 +250,7 @@ export default {
           })
         })
       },
-      saveIntegrationToken(context, data) {
+      saveRubexIntegrationToken(context, data) {
         return new Promise((resolve, reject) => {
           axios.post('integration', {
             name: 'rubex',
@@ -256,7 +264,53 @@ export default {
             user_id: data.user_id,
           })
           .then(res => {
-            console.log(res.data)
+            context.commit('SET_RUBEX_TOKEN', res.data)
+            resolve(res)
+          }).catch(err => {
+            console.log(err.response.data)
+            reject(err)
+          })
+        })
+      },
+      getRubexIntegrationToken(context) {
+        return new Promise((resolve, reject) => {
+          axios.get('rubex-token')
+          .then(res => {
+            context.commit('SET_RUBEX_TOKEN', res.data)
+            resolve(res)
+          }).catch(err => {
+            console.log(err.response.data)
+            reject(err)
+          })
+        })
+      },
+      removeRubexIntegrationToken(context) {
+        return new Promise((resolve, reject) => {
+          axios.delete('rubex-token')
+          .then(res => {
+            context.commit('REMOVE_RUBEX_TOKEN', null)
+            resolve(res)
+          }).catch(err => {
+            console.log(err.response.data)
+            reject(err)
+          })
+        })
+      },
+      updateRubexIntegrationToken(context, data) {
+        return new Promise((resolve, reject) => {
+          axios.post('update-integration', {
+            name: 'rubex',
+            expires: data['.expires'],
+            issued: data['.issued'],
+            expires_in: data.expires_in,
+            access_token: data.access_token,
+            mfa_token: data.mfa_token,
+            refresh_token: data.refresh_token,
+            token_type: data.token_type,
+            user_id: data.user_id,
+          })
+          .then(res => {
+            context.commit('SET_RUBEX_TOKEN', res.data)
             resolve(res)
           }).catch(err => {
             console.log(err.response.data)
@@ -264,5 +318,5 @@ export default {
           })
         })
       }
-    }
+  }
 }

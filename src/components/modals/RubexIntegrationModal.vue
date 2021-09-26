@@ -1,5 +1,8 @@
 <template>
     <b-modal v-model="computedModal" hide-footer title='Rubex Integration' @hidden="resetModal" class="automation-approval">
+        <div class="bg-primary p-3 mb-3">
+            <img src="../../assets/RubexLogo.png" alt="rubex" class="integration-logo">
+        </div>
         <div class="text-left d-flex flex-column">
             <span class="pb-3 border-bottom">Would you like to create drawer in <strong>Rubex</strong> for 
             <strong v-if="rubexModalData && rubexModalData.contact">{{fullName(rubexModalData.contact)}}</strong>
@@ -28,7 +31,7 @@
                 <span v-if="!processing">Add Drawer</span>
                 <span v-if="processing">Adding...</span>
             </button>
-            <button class="btn btn-sm btn-secondary font-weight-bold mr-2" type="button" @click="closeModal">Cancel</button>
+            <button class="btn btn-sm btn-secondary font-weight-bold px-4" type="button" @click="closeModal">No</button>
         </div>
       </b-modal>
 </template>
@@ -130,9 +133,11 @@ export default {
       }
     },
     created() {
-        this.$store.dispatch('getRubexPortfolios')
-        this.$store.dispatch('getRubexNodes')
-        this.$store.dispatch('getRubexAccountSetting')
+        if(localStorage.getItem('rubex_access_tokens')) {
+            this.$store.dispatch('getRubexPortfolios')
+            this.$store.dispatch('getRubexNodes')
+            this.$store.dispatch('getRubexAccountSetting')
+        }
     }
 }
 </script>
@@ -150,5 +155,10 @@ export default {
                 border-radius: 3px;
             }
         }
+    }
+
+    .integration-logo {
+        height: 50px;
+        width: auto;
     }
 </style>

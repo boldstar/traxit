@@ -1,8 +1,8 @@
 <template>
   <div class="bookkeeping-wrapper">
         <Spinner v-if="loadingData" class="mx-auto" />
-        <div class="bookkeeping-overview" v-else>
-            <div class="bookkeeping-list">
+        <div class="bookkeeping-overview" :class="{'business-bookkeeping-overview' : $route.name == 'business-bookkeeping'}" v-else>
+            <div class="bookkeeping-list" v-if="$route.name != 'business-bookkeeping'">
                 <input class="bookkeeping-list-input" type="text" placeholder="Filter By Name..." v-model="search">
                 <div class="bookkeeping-list-tabs">
                     <button :class="{'selected': showActive}" @click="show('active')">Active</button>
@@ -23,8 +23,8 @@
                     </li>
                 </ul>
             </div>
-            <div class="selected-bookkeeping-list-account" v-if="!loadingData">
-                <div class="text-left mb-2 d-flex flex-column">
+            <div class="selected-bookkeeping-list-account" :class="{'selected-bookkeeping-list-margin': $route.name != 'business-bookkeeping'}" v-if="!loadingData">
+                <div class="text-left mb-2 d-flex flex-column" v-if="$route.name != 'business-bookkeeping'">
                     <h5 class="mb-0">Bookkeeping Accounts</h5>
                     <span class="text-secondary font-weight-bold">A list of accounts filtered by year for the selected contact or business.</span>
                 </div>
@@ -39,13 +39,13 @@
                         <select name="tax_year" id="tax_year" v-model="selectedYear">
                             <option v-for="(year, index) in selectedAccountYears" :key="index" :value="year">{{year}}</option>
                         </select>
-                        <div class="selected-account-btns" v-if="filteredAccountName">
+                        <div class="selected-account-btns" v-if="filteredAccountName || businessViewName">
                             <button @click="addAccountRequest">Add Account</button>
                         </div>
                         <div class="selected-account-btns" v-if="mostRescentYear">
                             <button @click="startNewYear">Start New Year For {{JSON.parse(selectedYear) + 1}} <i class="far fa-calendar-alt ml-2"></i></button>
                         </div>
-                        <div class="selected-account-btns" v-if="filteredAccountName  && showActive">
+                        <div class="selected-account-btns" v-if="filteredAccountName  && showActive && $route.name != 'business-bookkeeping'">
                             <button @click="showEditSelectedName">Edit</button>
                         </div>
                     </div>
@@ -257,7 +257,7 @@
                     :selected_year="selectedYear"
                     :users="users"
                     :workflows="allWorkflows"
-                    v-if="accounts && accounts.length > 0" 
+                    v-if="accounts && accounts.length > 0 && $route.name != 'business-bookkeeping'" 
                 />
             </div>
             <AddAccountModal 
@@ -279,7 +279,7 @@ import ProcessingBar from '@/components/loaders/ProcessingBar.vue'
 import BookkeepingEngagements from '@/components/firm/BookkeepingEngagements.vue'
 export default {
     name: 'Bookkeeping',
-    props: ['admin', 'allEngagements', 'users', 'allWorkflows'],
+    props: ['admin', 'allEngagements', 'users', 'allWorkflows', 'business'],
     components: {AddAccountModal,Spinner,ProcessingBar,BookkeepingEngagements},
     data() {
         return {
@@ -302,7 +302,8 @@ export default {
             closeDate: null,
             error: false,
             errorMsg: '',
-            nameToEdit: null
+            nameToEdit: null,
+            businessViewName: null
         }
     },
     computed: {
@@ -508,7 +509,7 @@ export default {
             this.$store.dispatch('addBookkeepingAccount', {
                 client_id: this.selectedID,
                 belongs_to: this.belongsToActive ? this.belongsToActive : this.belongsTo,
-                business_name: this.filteredAccountName,
+                business_name: this.businessViewName ? this.businessViewName : this.filteredAccountName,
                 account_name: data.account_name,
                 account_type: data.account_type,
                 year:  JSON.stringify(data.year),
@@ -595,10 +596,16 @@ export default {
             if(this.loaded.includes('accounts') && this.loaded.includes('clients') && this.loaded.includes('businesses')) {
                 this.loadingData = false
                 this.belongsTo = 'active'
-                if(this.activeAccounts && this.activeAccounts.length > 0) {
+                const businessAccount = this.activeAccounts.filter(a => a.name == this.business.business_name)
+                if(this.activeAccounts && this.activeAccounts.length > 0 && this.$route.name != 'business-bookkeeping') {
                     this.selectedID = this.activeAccounts[0].id
                     this.belongsToActive = this.activeAccounts[0].belongs_to
                     this.selectedName = this.activeAccounts[0].name
+                } else if(this.activeAccounts && this.activeAccounts.length > 0 && this.$route.name == 'business-bookkeeping'){
+                    this.belongsToActive = 'business'
+                    this.selectedID = this.business ? this.business.client_id : businessAccount[0].id
+                    this.selectedName = this.business.business_name
+                    this.businessViewName = this.business.business_name
                 }
             }
         },
@@ -634,12 +641,17 @@ export default {
 .bookkeeping-wrapper {
     width: 100%;
 
+    .business-bookkeeping-overview {
+        grid-template-columns: 1fr!important;
+    }
+
     .bookkeeping-overview {
         display: grid;
         grid-template-columns: 1fr 3fr;
         width: 100%;
         margin-top: 20px;
         z-index: 1;
+        box-sizing: border-box;
 
         .bookkeeping-list {
             background: white;
@@ -716,9 +728,13 @@ export default {
             }
         }
 
-        .selected-bookkeeping-list-account {
-            margin-left: 50px;
+        .selected-bookkeeping-list-margin {
+            padding-left: 50px;
+        }
 
+        .selected-bookkeeping-list-account {
+            box-sizing: border-box;
+            width: 100%;
             .error-close-btn {
                 color: red;
                 font-weight: bold;

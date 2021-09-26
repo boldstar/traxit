@@ -4,7 +4,7 @@
          <Form
             v-if="dataSet"
             :title="formName"
-            :inputs="8"
+            :inputs="dataKeys.length"
             :placeholders="placeHolders" 
             :data="business"
             :datakeys="dataKeys"
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import {mapActions } from 'vuex'
 import Form from '@/components/forms/Form.vue'
 import {validate} from '../../plugins/validate.js'
 import Spinner from '@/components/loaders/Spinner.vue'
@@ -34,8 +34,44 @@ export default {
       return {
         dataSet: false,
         key: false,
-        placeHolders: ['Business Name', 'Address', 'City', 'State', 'Postal Code', 'Email', 'Phone Number', 'Fax Number'],
-        dataKeys: ['business_name', 'address', 'city', 'state', 'postal_code', 'email', 'phone_number', 'fax_number'],
+        placeHolders: [
+          'Business Name', 
+          'Address', 
+          'City', 
+          'State', 
+          'Postal Code', 
+          'Email', 
+          'Phone Number', 
+          'Fax Number',
+          'EIN',
+          'Tax Return Type',
+          'SOS File Number',
+          'State Tax ID',
+          'XT Number',
+          'RT Number',
+          'Formation Date',
+          'TWC Account',
+          'QB Password'
+        ],
+        dataKeys: [
+          'business_name', 
+          'address', 
+          'city', 
+          'state', 
+          'postal_code', 
+          'email', 
+          'phone_number', 
+          'fax_number',
+          'ein',
+          'tax_return_type',
+          'state_tax_id',
+          'sos_file_number',
+          'xt_number',
+          'rt_number',
+          'formation_date',
+          'twc_account',
+          'qb_password'
+        ],
         required: ['business_name'],
         errorArray: [],
       }

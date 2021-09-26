@@ -19,6 +19,54 @@
             </li>
             <li class="business-account-item">
               <div>
+                <span >EIN:</span>
+                <span class="font-weight-bold">{{business.ein}}</span>
+              </div>
+            </li>
+            <li class="business-account-item">
+              <div>
+                <span >Tax Return Type:</span>
+                <span class="font-weight-bold">{{business.tax_return_type}}</span>
+              </div>
+            </li>
+            <li class="business-account-item">
+              <div>
+                <span >State Tax ID:</span>
+                <span class="font-weight-bold">{{business.state_tax_id}}</span>
+              </div>
+            </li>
+            <li class="business-account-item">
+              <div>
+                <span >XT Number:</span>
+                <span class="font-weight-bold">{{business.xt_number}}</span>
+              </div>
+            </li>
+            <li class="business-account-item">
+              <div>
+                <span >RT Number:</span>
+                <span class="font-weight-bold">{{business.rt_number}}</span>
+              </div>
+            </li>
+            <li class="business-account-item">
+              <div>
+                <span >Formation Date:</span>
+                <span class="font-weight-bold">{{business.formation_date}}</span>
+              </div>
+            </li>
+            <li class="business-account-item">
+              <div>
+                <span >TWC Account:</span>
+                <span class="font-weight-bold">{{business.twc_account}}</span>
+              </div>
+            </li>
+            <li class="business-account-item">
+              <div>
+                <span >QB Password:</span>
+                <span class="font-weight-bold">{{business.qb_password}}</span>
+              </div>
+            </li>
+            <li class="business-account-item">
+              <div>
                 <span>Phone:</span>
                 <span class="font-weight-bold">{{business.phone}}</span>
               </div>
@@ -41,50 +89,6 @@
             <router-link :to="'/business/' +business.id+ '/details/edit'" class="btn btn-secondary btn-sm font-weight-bold">Edit</router-link>
           </div>
         </div>
-
-
-        <div class="business-account-section card shadow-sm">
-          <div class="business-account-section-header">
-            <h5>Contact</h5>
-          </div>
-          <ul class="business-account-section-list">
-            <li class="business-account-item">
-              <div>
-                <span>Owner:</span>
-                <span class="font-weight-bold">{{ business.client.last_name }}, {{business.client.first_name}} <span v-if="business.client.has_spouse == true">&</span> <span v-if="business.client.last_name != business.client.spouse_last_name && business.client.has_spouse == true && business.client.spouse_last_name != null"> {{business.client.spouse_last_name}},</span> {{ business.client.spouse_first_name }}</span>
-              </div>
-            </li>
-            <li class="business-account-item">
-              <div>
-                <span >Taxpayer Phone:</span>
-                <span class="font-weight-bold">{{business.client.phone}}</span>
-              </div>
-            </li>
-            <li class="business-account-item">
-              <div>
-                <span >Taxpayer Email:</span>
-                <span class="font-weight-bold">{{business.client.email}}</span>
-              </div>
-            </li>
-            <li class="business-account-item">
-              <div>
-                <span >Spouse Phone:</span>
-                <span class="font-weight-bold">{{business.client.spouse_phone}}</span>
-              </div>
-            </li>
-            <li class="business-account-item">
-              <div>
-                <span >Spouse Email:</span>
-                <span class="font-weight-bold">{{business.client.spouse_email}}</span>
-              </div>
-            </li>
-          </ul>
-          <div class="business-account-section-footer">
-            <router-link :to="'/contact/' +business.client.id+ '/account'" class="btn btn-sm btn-primary font-weight-bold">View</router-link>
-          </div>
-        </div>
-
-
     </div>
 
     <div v-else>

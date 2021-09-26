@@ -1,12 +1,12 @@
 <template>
-  <div class="integrations-card">
+  <div class="integrations-card" :key="processing">
       <div class="card w-25">
           <div class="card-header bg-primary"><img src="../../assets/RubexLogo.png" alt="rubex" class="integration-logo"></div>
           <div class="card-body pb-0">
               <p class="font-weight-bold px-0">Document Management System</p>
               <span v-if="error" class="text-danger">{{error}}</span>
           </div>
-          <div class="card-body pt-0 px-4" v-if="!rubex_access.access_token">
+          <div class="card-body pt-0 px-4" v-if="!tokens">
               <div class="custom-input-group">
                   <label for="username">Username</label>
                   <input @change="clear" type="text" id="username" placeholder="Username" v-model="credentials.username">
@@ -25,6 +25,7 @@
                   <li>Refresh Token: <strong>{{chop(rubex_access.refresh_token)}}</strong></li>
                   <li>Expires On: <strong>{{rubex_access['.expires'] | formatDate }}</strong></li>
               </ul>
+              <button :disabled="processing" class="btn btn-block btn-secondary font-weight-bold mt-2" @click="disconnect('rubex')">Disconnect</button>
           </div>
           <div class="card-footer text-left">
               <small>Note: By signing in you are creating a connection between Traxit and Rubex. The quality of this integration can vary. Use this to create automations between your workflow and document management systems.</small>
@@ -34,8 +35,10 @@
 </template>
 
 <script>
+
 export default {
     name: 'IntegrationsCard',
+    props: ['token'],
     data() {
         return {
             credentials: {
@@ -44,12 +47,18 @@ export default {
                 grant_type: 'password'
             },
             processing: false,
-            error: null
+            error: null,
+            tokens: JSON.parse(localStorage.getItem('rubex_access_tokens'))
         }
     },
     computed: {
-        rubex_access() {
-            return JSON.parse(localStorage.getItem('rubex_access_tokens')) || null
+        rubex_access: {
+            get() {
+                return JSON.parse(localStorage.getItem('rubex_access_tokens'))
+            },
+            set(newValue) {
+                return newValue
+            }
         }
     },
     methods: {
@@ -61,8 +70,9 @@ export default {
                 } else {
                     this.processing = true
                     this.$store.dispatch('requestRubexToken', this.credentials)
-                    .then(() => {
+                    .then(res => {
                         this.processing = false
+                        this.tokens = res.data
                     }).catch(err => {
                         this.error = err.response.data
                     })
@@ -74,6 +84,19 @@ export default {
         },
         chop(str) {
             return str.substring(0,4) + '...' + str.substring(str.length - 3)
+        },
+        disconnect(integration) {
+            if(integration == 'rubex') {
+                this.processing = true
+                localStorage.removeItem('rubex_access_tokens')
+                this.tokens = null
+                this.$store.dispatch('removeRubexIntegrationToken')
+                .then(res => {
+                    this.processing = false
+                }).catch(err => {
+                    this.processing = false
+                })
+            }
         }
     }
 }

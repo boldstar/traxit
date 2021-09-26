@@ -230,7 +230,7 @@ export default {
         client_id: this.engagement.client_id,
         name: this.engagement.name,
         workflow_id: this.workflow.id,
-        return_type: this.engagement.return_type == this.option ? null : this.engagement.return_type,
+        return_type: this.workflow.engagement_type == 'Custom'&&this.engagement.return_type == this.option || this.engagement.return_type == this.option ? null : this.engagement.return_type,
         year: this.engagement.year,
         assigned_to: this.engagement.assigned_to,
         status: this.engagement.status,

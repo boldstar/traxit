@@ -41,3 +41,15 @@ export function formatFileName(name) {
   const index = name.indexOf('.')
   return name.slice(index + 1)
 }
+
+export function contactFullName(contact) {
+  if(contact) {
+    if(contact.spouse_first_name && contact.spouse_last_name) {
+      return  contact.last_name + ', ' + contact.first_name + ' & ' + contact.spouse_last_name + ', ' + contact.spouse_first_name
+    } else if (contact.spouse_first_name) {
+      return  contact.last_name + ', ' + contact.first_name + ' & ' +  contact.spouse_first_name 
+    } else {
+      return contact.last_name + ', ' + contact.first_name
+    }
+  }
+}

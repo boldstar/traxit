@@ -44,7 +44,12 @@
                     </div>
                     <br>
                     <div>
-                        <p>We are currently working on your {{ engagement.year }}, {{ engagement.return_type }} tax return for the name of "{{ engagement.name }}". The following questions and issues were raised during the performance of our work. Please provide responses to the following items so that we can continue.</p>
+                        <p><span v-if="workflow.engagement_type != 'Custom'">We are currently working on your 
+                            {{ engagement.year }}, {{ engagement.return_type }} 
+                            for the name of "{{ engagement.name }}".</span>The following questions and issues 
+                            were raised during the performance of our work. 
+                            Please provide responses to the following items so that we can continue.
+                        </p>
                     </div>
                     <div class="questions-border">
                         <h5>Pending Questions:</h5>
@@ -81,7 +86,7 @@
                 <p class="h3  mx-2">|</p>
                 <button @click="addNewQuestionWithEmail('spouse')" v-if="engagement.client.spouse_email" class="btn btn-info font-weight-bold">Spouse Only</button>
             </div>
-            <div v-if="verify && !invalid">
+            <div v-if="verify && !invalidEmail">
                 <button class="btn mt-1 btn-secondary font-weight-bold" @click="verify = false">Back</button>
             </div>
             <div v-if="invalidEmail" class="d-flex">
@@ -105,6 +110,7 @@ import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
 
 export default {
     name: 'AddQuestion',
+    props: ['workflow'],
      components: {
         VueEditor,
         'b-modal': bModal,

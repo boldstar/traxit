@@ -1,6 +1,7 @@
 import axios from 'axios'
 import moment from 'moment';
 import router from '../../routes/router'
+import store from '../store';
 
 export default {
     state: {
@@ -16,17 +17,6 @@ export default {
         note: [],
         notes: [],
         clientnotes: [],
-        businesses: [],
-        business: {
-            business_name: '',
-            address: '',
-            city: '',
-            state: '',
-            postal_code: '',
-            email: '',
-            phone_number: '',
-            fax_number: ''
-        },
     },
     getters: {
         allClients(state) {
@@ -40,9 +30,6 @@ export default {
         },
         clientDependents(state) {
             return state.dependents
-        },
-        business(state) {
-            return state.business
         },
         clientNotes(state) {
             return state.clientnotes
@@ -99,35 +86,6 @@ export default {
                 'state': client.state,
                 'postal_code': client.postal_code,           
             })
-        },
-        getBusiness(state, business) {
-            if(business) {
-                state.business = business
-            } else state.business = {
-                business_name: '',
-                address: '',
-                city: '',
-                state: '',
-                postal_code: '',
-                email: '',
-                phone_number: '',
-                fax_number: ''
-            }
-        },
-        addNewBusiness(state, business) {
-            state.client.businesses.push(business);
-        },
-        deleteBusiness(state, id) {
-            const index = state.client.businesses.findIndex(business => business.id == id)
-            state.client.businesses.splice(index, 1)
-        },
-        updateBusiness(state, business) {
-            if(state.client) {
-                const index = state.client.businesses.findIndex(item => item.id == business.id)
-                state.client.businesses.splice(index, 1, business)
-            } else if(state.business) {
-                state.business = business
-            }
         },
         getDependent(state, dependent){
             if(dependent) {
@@ -256,6 +214,9 @@ export default {
             .then(response => {
                 context.commit('addClient', response.data.contact)
                 context.commit('successAlert', response.data.message)
+                if(localStorage.getItem('rubex_access_tokens')) {
+                    context.dispatch('showRubexIntegrationModal', response.data)
+                }
             })
             .catch(error => {
                 console.log(error.response.data)
@@ -306,64 +267,6 @@ export default {
             .catch(error => {
                 console.log(error.response.data)
             })                
-        },
-        getBusiness({commit}, id) {
-            axios.get('/businesses/'+ id)
-            .then(response => {
-                commit('getBusiness', response.data)
-            })
-            .catch(error => {
-                console.log(error)
-            })
-        },
-        addBusiness(context, business) {
-            context.commit('startProcessing')
-            axios.post(('/businesses'), business)
-            .then(response => {
-                context.commit('stopProcessing')
-                context.commit('successAlert', response.data.message)
-                context.commit('addNewBusiness', response.data.business)
-                router.push('/contact/' + business.client_id + '/account')
-            })
-            .catch(error => {
-                console.log(error.response.data)
-                context.commit('stopProcessing')
-                context.commit('errorMsgAlert', error.response.data.message)
-            })
-        },
-        updateBusiness(context, business) {
-            axios.patch(('/businesses/' + business.id ), {
-                client_id: business.client_id,
-                business_name: business.business_name,
-                address: business.address,
-                city: business.city,
-                state: business.state,
-                postal_code: business.postal_code,
-                email: business.email,
-                phone_number: business.phone_number,
-                fax_number: business.fax_number
-            })
-            .then(response => {
-                context.commit('updateBusiness', response.data)
-                router.push('/contact/' + business.client_id + '/account')
-            })
-            .catch(error => {
-                console.log(error)
-                context.commit('errorMsgAlert', error.response.data.message)
-            })
-        },
-        deleteBusiness(context, id) {
-            context.commit('startProcessing')
-            axios.delete('/businesses/' + id)
-            .then(response => {
-                context.commit('deleteBusiness', id)
-                context.commit('successAlert', response.data)
-                context.commit('stopProcessing')
-            })
-            .catch(error => {
-                context.commit('stopProcessing')
-                console.log(error)
-            })
         },
         getDependent({commit}, id) {
             axios.get('/dependents/'+ id)

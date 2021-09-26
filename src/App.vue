@@ -12,7 +12,7 @@
 <script>
 const landing_layout = "landing";
 import {mapActions, mapGetters} from 'vuex'
-import {destroyToken} from './plugins/session.js'
+import {destroyToken, checkIfExpired} from './plugins/session.js'
 import axios from 'axios'
 export default {
     computed: {
@@ -44,6 +44,9 @@ export default {
         //checks if session is expired
         this.destroySessionIfTokenIsExpired()
         this.$store.dispatch('getSettings')
+        if(localStorage.getItem('rubex_access_tokens')) {
+            checkIfExpired()
+        }
     },
 }
 </script>

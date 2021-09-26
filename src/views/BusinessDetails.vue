@@ -32,14 +32,29 @@
               <router-link  :to="{ path: '/business/' + businessDetails.id +'/engagements' }" class="business-link" data-toggle="tab" role="tab" >Engagements</router-link>
               <span class="business-sidebar-badge" v-if="engagementsLength > 0">{{engagementsLength}}</span>
             </li>
+            <li class="list-group-item" :class="{ 'selected-list-item' : $route.name == 'business-services' }"  @click="goTo('services')">
+              <router-link  :to="{ path: '/business/' + businessDetails.id +'/services' }" class="business-link" data-toggle="tab" role="tab" >Services</router-link>
+            </li>
+            <li class="list-group-item" :class="{ 'selected-list-item' : $route.name == 'business-notes' }"  @click="goTo('notes')">
+              <router-link  :to="{ path: '/business/' + businessDetails.id +'/notes' }" class="business-link" data-toggle="tab" role="tab" >Notes</router-link>
+            </li>
+            <li class="list-group-item" :class="{ 'selected-list-item' : $route.name == 'business-bookkeeping' }"  @click="goTo('bookkeeping')">
+              <router-link  :to="{ path: '/business/' + businessDetails.id +'/bookkeeping' }" class="business-link" data-toggle="tab" role="tab" >Bookkeeping</router-link>
+            </li>
+            <li class="list-group-item" :class="{ 'selected-list-item' : $route.name == 'business-owner' }"  @click="goTo('owner')">
+              <router-link  :to="{ path: '/business/' + businessDetails.id +'/owner' }" class="business-link" data-toggle="tab" role="tab" >Owner</router-link>
+            </li>
           </ul>
         </div>
 
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active" role="tabpanel">
             <router-view  
+              :services="businessDetails.services"
+              :notes="businessDetails.notes"
               :business="businessDetails" 
               :engagements="businessEngagements"
+              :contact="businessDetails.client"
             >
             </router-view>
           </div>
@@ -76,7 +91,8 @@ export default {
         [
           'businessDetails',
           'businessEngagements',
-          'successAlert'
+          'successAlert',
+          'businessServices'
         ]
       ),
       engagementsLength() {
@@ -91,6 +107,7 @@ export default {
   created: function(){
     this.$store.dispatch('getBusinessDetails', this.$route.params.id)
     this.$store.dispatch('getBusinessEngagements', this.$route.params.id)
+    this.$store.dispatch('getBusinessServices', this.$route.params.id)
   }
 }
 </script>

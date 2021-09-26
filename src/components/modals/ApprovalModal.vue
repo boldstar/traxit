@@ -53,7 +53,6 @@ export default {
     computed: {
       ...mapGetters(['processing', 'approvalModal', 'approvalModalData', 'errorMsgAlert']),
       automationsList() {
-                console.log(this.approvalModalData)
               return this.approvalModalData.data.automations.map(a => ({
                   action_id: a.action_id,
                   action: a.action,
@@ -80,7 +79,6 @@ export default {
             }
         },
         'errorMsgAlert': function(value) {
-            console.log(value)
             if(value) {
                  this.$store.commit('showAutomationApprovalModal', null)
             }
